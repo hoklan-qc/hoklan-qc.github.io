@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="9.3">
+<meta name="app-version" content="9.4">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -581,6 +581,7 @@ const CONFIG = {
     "FM-007":{"en":"Station next / back does not work","zh":"上/下一台按键无效","es":"Emisora siguiente / anterior no funciona"},
     "FM-008":{"en":"Does not keep the last station","zh":"不记忆上次电台","es":"No memoriza la última emisora"},
     "FM-009":{"en":"Lights do not switch off in radio mode","zh":"收音模式灯光未关闭","es":"Las luces no se apagan en modo radio"},
+    "FM-010":{"en":"The wireless receiver module interferes with FM reception","zh":"无线接收模块干扰调频接收","es":"El módulo receptor inalámbrico interfiere la recepción FM"},
     "AUX-001":{"en":"AUX input not detected","zh":"未检测到 AUX 输入","es":"No detecta la entrada AUX"},
     "AUX-002":{"en":"No audio on AUX","zh":"AUX 无声音","es":"Sin audio en AUX"},
     "AUX-003":{"en":"Hum or noise on AUX","zh":"AUX 有杂音","es":"Zumbido o ruido en AUX"},
@@ -708,7 +709,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 60,
+      "plan_version": 61,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1324,6 +1325,64 @@ const CONFIG = {
            {"id":"mem_mic_treble","code":"AUD-011","skip_factory":["RHY"],"label":{"en":"Microphone treble is kept after power off","zh":"关机后保留麦克风高音设置"},
             "help":{"en":"Same check on the microphone treble. Mark N/A if this reference has no separate microphone tone controls.",
                     "zh":"对麦克风高音做同样的检查。本型号没有独立的麦克风音调调节时标记为“不适用”。"}}]},
+
+        /* ===== Compatibility · wireless receiver against FM =================
+           Compatibilidad, no función. El receptor de micrófono inalámbrico va
+           montado a centímetros del sintonizador y su propio oscilador cae
+           dentro de la banda de radiodifusión: un módulo perfectamente bueno
+           por sí solo puede hacer silbar la radio en cuanto se le da corriente.
+
+           Se comprueba sobre una emisora débil porque una fuerte tapa la
+           interferencia por completo. El que sufre la falla es el cliente
+           lejos del transmisor, que es justamente el que nunca se prueba.
+
+           Y se comprueba en cada inspección, no solo en la muestra: la muestra
+           es lo que se aprueba, pero el proveedor del módulo cambia entre lotes
+           y el lote es lo que se embarca. */
+        {"id":"RX_FM_COMPAT","optional":false,"only_factory":["YIS"],
+         "skip":["HK-KAP103","HK-KAP330"],"evidence":[],
+         "label":{"en":"COMPATIBILITY · WIRELESS RECEIVER AND FM",
+                  "zh":"兼容性 · 无线接收模块与调频",
+                  "es":"COMPATIBILIDAD · RECEPTOR INALÁMBRICO Y FM"},
+         "steps":[
+           {"en":"Fit the wireless microphone receiver module as it ships","zh":"按出厂状态装入无线麦克风接收模块","es":"Instale el módulo receptor de micrófono inalámbrico tal como sale de fábrica"},
+           {"en":"Tune a weak FM station, not a strong local one","zh":"调到一个信号较弱的电台，不要用本地强台","es":"Sintonice una emisora FM débil, no una local fuerte"},
+           {"en":"Listen with the receiver off, then switch it on","zh":"先在接收模块关闭时试听，再将其开启","es":"Escuche con el receptor apagado y luego enciéndalo"},
+           {"en":"Judge the difference between the two","zh":"比较两者的差异后判定","es":"Juzgue la diferencia entre los dos"}],
+         "points":[
+           {"section":{"en":"Setting it up","zh":"准备","es":"Preparación"},
+            "help":{"en":"The module fitted, and a station chosen for being weak. On a strong station this test always passes and proves nothing.",
+                    "zh":"装好模块，并选择一个信号弱的电台。在强台上本测试总是合格，但什么也证明不了。",
+                    "es":"El módulo instalado, y una emisora elegida por ser débil. Sobre una emisora fuerte esta prueba siempre aprueba y no demuestra nada."}},
+           {"id":"rx_fitted","code":"FM-010",
+            "label":{"en":"Receiver module fitted as it ships","zh":"接收模块按出厂状态装好","es":"Módulo receptor instalado como sale de fábrica"},
+            "help":{"en":"In its place inside the speaker, with its own wiring and its antenna routed as production routes it. A module held in the hand beside the cabinet is a different measurement.",
+                    "zh":"装在机内应有的位置，线束与天线走向与量产一致。用手拿在箱体旁边测得的是另一回事。",
+                    "es":"En su sitio dentro del parlante, con su cableado y su antena tendida como la tiende producción. Un módulo sostenido en la mano junto a la cabina es otra medición."}},
+           {"id":"rx_station","code":"FM-002","measure":{"unit":"MHz","step":"0.1"},
+            "label":{"en":"Weak station tuned — frequency","zh":"已调到的弱信号电台 — 频率","es":"Emisora débil sintonizada — frecuencia"},
+            "help":{"en":"Tune a station that comes in weak but intelligible, and write its frequency in the box. Recording which one was used is what lets two inspections be compared.",
+                    "zh":"调到一个信号较弱但仍可听清的电台，并将其频率填入方框。记录所用电台，才能让两次检验之间具有可比性。",
+                    "es":"Sintonice una emisora que entre débil pero se entienda, y escriba su frecuencia en el recuadro. Anotar cuál se usó es lo que permite comparar dos inspecciones."}},
+           {"id":"rx_baseline","code":"FM-010",
+            "label":{"en":"Reference heard with the receiver off","zh":"已在接收模块关闭时听取基准","es":"Referencia escuchada con el receptor apagado"},
+            "help":{"en":"With the module unpowered, listen to that station for twenty seconds and keep in mind how it sounds. Without this the noise of a distant station and the noise of the module cannot be told apart.",
+                    "zh":"在模块未通电的状态下，试听该电台二十秒，记住其声音。缺少这一步，就无法区分远距离电台本身的噪声与模块产生的噪声。",
+                    "es":"Con el módulo sin corriente, escuche esa emisora veinte segundos y retenga cómo suena. Sin esto no se distingue el ruido de una emisora lejana del ruido del módulo."}},
+           {"section":{"en":"With the receiver on","zh":"接收模块开启后","es":"Con el receptor encendido"},
+            "help":{"en":"Switch the module on without touching the tuning or the volume. Anything that appears now comes from the module.",
+                    "zh":"在不改动调台与音量的前提下开启模块。此时出现的任何变化都来自模块。",
+                    "es":"Encienda el módulo sin tocar la sintonía ni el volumen. Lo que aparezca ahora viene del módulo."}},
+           {"id":"rx_no_noise","code":"FM-010",
+            "label":{"en":"No added background noise","zh":"未增加背景噪声","es":"Sin ruido de fondo añadido"},
+            "help":{"en":"The station must sound the same as it did with the module off. A hiss that rises, or reception that becomes unstable, is the module.",
+                    "zh":"电台的声音应与模块关闭时一致。若嘶声变大，或接收变得不稳定，即为模块所致。",
+                    "es":"La emisora debe sonar igual que con el módulo apagado. Un siseo que sube, o una recepción que se vuelve inestable, es el módulo."}},
+           {"id":"rx_no_whistle","code":"FM-010",
+            "label":{"en":"No whistle or tone","zh":"无啸叫或单音干扰","es":"Sin silbido ni tono"},
+            "help":{"en":"Listen for a fixed tone behind the programme, of the kind that does not change with the music. It usually appears at some points of the dial and not at others, so go over the band before passing this.",
+                    "zh":"注意节目声背后是否有固定的单音，且不随音乐变化。它通常只出现在频段的某些位置，因此判定合格前应在整个频段上扫查。",
+                    "es":"Escuche si aparece un tono fijo detrás del programa, de los que no cambian con la música. Suele salir en unos puntos del dial y no en otros, así que recorra la banda antes de aprobar esto."}}]},
 
         {/* RHYME's back panels carry no antenna, no antenna connector, no dial
               and no band markings: the four LEDs that look like a source

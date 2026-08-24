@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="9.2">
+<meta name="app-version" content="9.3">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -708,7 +708,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 59,
+      "plan_version": 60,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2442,8 +2442,9 @@ const CONFIG = {
 
         /* ===== Voltage selector =============================================
            Salió de ALIMENTACIÓN AC, donde era un punto sin fotografía, y quedó
-           como prueba propia justo antes de PARTES INTERNAS. En todas las
-           fábricas: la referencia que no lleve selector se marca N/A.
+           como prueba propia justo antes de PARTES INTERNAS. Sólo RHYME: son
+           sus paneles los que llevan selector, y en YISION la prueba aparecía
+           para marcarse N/A cada vez, que es peor que no estar.
 
            La posición no se juzga contra un voltaje "correcto" sino contra el
            país al que va la orden, que es el dato que el operador tiene delante
@@ -2451,7 +2452,7 @@ const CONFIG = {
            los dos grupos escritos: preguntar "¿coincide con el destino?" sin
            decir cuál es el destino no es una comprobación, es una adivinanza. */
         {"id":"VOLT_SELECT","optional":false,"evidence":[],
-         "only_factory":["YIS","RHY","EAG"],
+         "only_factory":["RHY"],
          "label":{"en":"VOLTAGE SELECTOR","zh":"电压选择开关","es":"SELECTOR DE VOLTAJE"},
          "steps":[
            {"en":"Find the selector on the panel with the speaker unplugged","zh":"在断电状态下，在面板上找到电压选择开关","es":"Con el equipo desconectado, ubique el selector en el panel"},

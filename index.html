@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="9.0">
+<meta name="app-version" content="9.2">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -38,6 +38,10 @@ h2{font-size:19px;margin:0 0 4px;color:var(--accent)}
   font-weight:600}
 .brw span{display:block;color:var(--grey);font-size:12.5px;line-height:1.5;
   margin-top:5px}
+/* Red inside an amber box on purpose: the amber line is advice, this one is a
+   prohibition, and the operator has to be able to tell them apart at a glance. */
+.brw u.no{display:block;color:var(--red);font-size:13px;line-height:1.45;
+  font-weight:600;text-decoration:none;margin-top:6px}
 /* A PDF where a photograph would go. It fills the same tile the pictures use,
    so the evidence strip keeps one shape whatever was attached. */
 u.doc{display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -540,8 +544,6 @@ const CONFIG = {
   "failure_codes": {
     "PWR-001":{"en":"No power","zh":"无法开机","es":"No enciende"},
     "PWR-005":{"en":"Voltage selector in the wrong position","zh":"电压选择开关位置错误","es":"Selector de voltaje en la posición equivocada"},
-    "PWR-006":{"en":"Fuse missing or holder does not close","zh":"缺少保险丝或保险丝座盖不上","es":"Falta el fusible o el portafusible no cierra"},
-    "PWR-007":{"en":"Power cable missing or wrong","zh":"缺少电源线或规格错误","es":"Falta el cable de alimentación o es el equivocado"},
     "PWR-008":{"en":"Power switch faulty","zh":"电源开关异常","es":"El interruptor de encendido falla"},
     "PWR-009":{"en":"AC output does not deliver power","zh":"交流输出无电","es":"La salida de CA no entrega corriente"},
     "USB-001":{"en":"USB not recognised","zh":"无法识别 U 盘","es":"No reconoce la memoria USB"},
@@ -706,15 +708,14 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 57,
+      "plan_version": 59,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
 
            None of these carries a battery. They do not switch on, and nothing
            else in the plan can be checked, until the cabinet is plugged into
-           the wall - which is why this test runs first and why the voltage
-           selector is read before the cable goes in rather than after.
+           the wall, which is why this test runs first.
 
            The two BAS references are powered subwoofers and share almost
            nothing else with the rest of the factory: no USB, no Bluetooth, no
@@ -727,31 +728,16 @@ const CONFIG = {
         {"id":"POWER_AC","optional":false,"only_factory":["RHY"],"evidence":["photo"],
          "label":{"en":"AC POWER","zh":"交流供电","es":"ALIMENTACIÓN AC"},
          "steps":[
-           {"en":"Keep the cabinet unplugged until the first two points are done","zh":"完成前两项之前，先不要接电源","es":"Mantenga la cabina desconectada hasta terminar los dos primeros puntos"},
-           {"en":"Read the voltage selector and check the fuse holder","zh":"读取电压选择开关，并检查保险丝座","es":"Lea el selector de voltaje y revise el portafusible"},
-           {"en":"Then connect the power cable and switch it on","zh":"随后接上电源线并开机","es":"Después conecte el cable de alimentación y encienda"},
-           {"en":"The final photo must show the panel with the selector visible","zh":"最后的照片需拍到面板并能看清电压开关","es":"La foto final debe mostrar el panel con el selector a la vista"}],
+           {"en":"Connect the power cable and switch the cabinet on","zh":"接上电源线并开机","es":"Conecte el cable de alimentación y encienda la cabina"},
+           {"en":"Check the switch, the start-up and the outputs","zh":"检查开关、开机过程与输出","es":"Revise el interruptor, el arranque y las salidas"}],
          "points":[
-           {"section":{"en":"Before plugging in","zh":"接电之前","es":"Antes de conectar"},
-            "help":{"en":"These two are checked with the cabinet disconnected. Once it is plugged in at the wrong voltage there is nothing left to inspect.",
-                    "zh":"这两项须在断电状态下检查。一旦以错误电压接入市电，就没有什么可检验的了。",
-                    "es":"Estos dos se revisan con la cabina desconectada. Una vez enchufada al voltaje equivocado ya no queda nada que inspeccionar."}},
-           {"id":"volt_select","code":"PWR-005","label":{"en":"Voltage selector set for the destination market","zh":"电压选择开关与目的地市场一致","es":"Selector de voltaje en la posición del mercado de destino"},
-            "help":{"en":"With the cabinet unplugged, read the position of the selector and compare it against the destination on the order. Photograph it. A cabinet set to 115 V plugged into 230 V burns in the first second, and the selector moves on its own in transit.",
-                    "zh":"在断电状态下读取电压开关的位置，并与订单的目的地核对，然后拍照。设在 115 V 的机器接入 230 V 会在一秒内烧毁，而该开关在运输中会自行移位。",
-                    "es":"Con la cabina desconectada, lea la posición del selector y compárela con el destino de la orden. Fotografíela. Una cabina en 115 V enchufada a 230 V se quema en el primer segundo, y el selector se mueve solo en el transporte."}},
-           {"id":"fuse","code":"PWR-006","label":{"en":"Fuse present and holder closed","zh":"保险丝齐全，保险丝座盖好","es":"Fusible puesto y portafusible cerrado"},
-            "help":{"en":"The fuse must be fitted, of the rating printed on the panel, and the holder must close and stay firm. A holder that does not close leaves the live side reachable.",
-                    "zh":"保险丝必须装好，规格与面板标示一致，保险丝座应能盖紧并保持牢固。盖不上的保险丝座会使带电部分外露。",
-                    "es":"El fusible debe estar puesto, del valor impreso en el panel, y la tapa debe cerrar y quedar firme. Un portafusible que no cierra deja el vivo al alcance."}},
-           {"id":"power_cable","code":"PWR-007","label":{"en":"Power cable","zh":"电源线","es":"Cable de alimentación"},
-            "help":{"en":"Present, of the type this panel takes - IEC or POWERCON - with no cuts or splices, and with the plug of the destination country.",
-                    "zh":"电源线齐全，类型与本面板接口一致（IEC 或 POWERCON），无破损、无接驳，插头符合目的地国家标准。",
-                    "es":"Presente, del tipo que recibe este panel —IEC o POWERCON—, sin cortes ni empalmes, y con el enchufe del país de destino."}},
-           {"section":{"en":"Powered on","zh":"通电后","es":"Con la cabina encendida"},
-            "help":{"en":"Now the cabinet can be plugged in and switched on.",
-                    "zh":"此时可以接入市电并开机。",
-                    "es":"Ahora sí se puede conectar y encender la cabina."}},
+           {/* El selector de voltaje salió de aquí a su propia prueba, que corre
+                antes de PARTES INTERNAS y pide la fotografía. El fusible y el
+                cable de alimentación salieron por decisión de HOKLAN. */
+            "section":{"en":"Powered on","zh":"通电后","es":"Con la cabina encendida"},
+            "help":{"en":"Plug the cabinet in and switch it on.",
+                    "zh":"接入市电并开机。",
+                    "es":"Conecte la cabina y enciéndala."}},
            {"id":"power_switch","code":"PWR-008","label":{"en":"POWER switch","zh":"电源开关","es":"Interruptor ENCENDIDO"},
             "help":{"en":"It must switch on and off firmly, without stopping halfway. If the switch has a pilot lamp, the lamp must light with it.",
                     "zh":"开关应干脆地开和关，不应停在中间位置。若开关带指示灯，指示灯应随之点亮。",
@@ -884,7 +870,8 @@ const CONFIG = {
            {"en":"Wait until it reads the USB drive and starts playing","zh":"等待识别 U 盘并开始播放","es":"Espere hasta que lea la memoria y empiece a reproducir"},
            {"en":"Let the HOKLAN USB play, listening for dropouts","zh":"让测试音频播放，注意是否有中断","es":"Deje reproducir la USB HOKLAN, atento a cortes"},
            {"en":"With the USB drive playing, check each control on the list","zh":"在播放状态下，逐项检查下列功能","es":"Con la memoria reproduciendo, verifique cada control de la lista"},
-           {"en":"Finally, switch the speaker off and on to see if it starts in USB","zh":"最后重新开机，确认是否自动进入 USB 模式","es":"Por último, apague y encienda el parlante para ver si arranca en USB"}],
+           {"en":"Switch it off and on twice: on battery and on mains","zh":"关机再开机两次：一次用电池，一次接市电","es":"Apague y encienda dos veces: con batería y conectado a la red"},
+           {"en":"Finish with Testing_Vol_Max at maximum volume","zh":"最后以最大音量播放 Testing_Vol_Max","es":"Termine con Testing_Vol_Max a volumen máximo"}],
          "points":[
            {"section":{"en":"Playback","zh":"播放","es":"Reproducción"},
             "help":{"en":"Insert the HOKLAN test USB and select USB mode. Wait until it reads the USB drive and plays. At the end, switch the speaker off and on to see whether it starts in USB by itself.",
@@ -1057,11 +1044,32 @@ const CONFIG = {
            {"section":{"en":"Power on","zh":"开机","es":"Encendido"},
             "help":{"en":"The only power cycle of this test, kept for the end so that nothing already set up has to be built again.",
                     "zh":"本测试中唯一一次关机再开机，放在最后，以免已经搭好的状态需要重做。",
-                    "es":"El único apagado de esta prueba, dejado para el final para no tener que volver a montar nada de lo ya dispuesto."}},
-           {"id":"autostart","code":"USB-014","label":{"en":"Starts in USB automatically on power on","zh":"开机自动进入 USB 播放","es":"Arranca en USB automáticamente al encender"},
-            "help":{"en":"With the USB drive still inserted, switch the speaker off and on. It must return to USB mode and start playing without pressing anything.",
-                    "zh":"U 盘保持插入，关机后再开机。应自动回到 USB 模式并开始播放，无需按任何键。",
-                    "es":"Con la memoria aún insertada, apague y encienda el parlante. Debe volver al modo USB y empezar a reproducir sin pulsar nada."}}]},
+                    "es":"Dos apagados, uno con batería y otro conectado a la red, dejados para el final para no tener que volver a montar nada de lo ya dispuesto."}},
+           {/* Two power cycles, not one, and the difference between them is the
+                point. A speaker can come back into USB on battery and fail to
+                on mains, or the other way round: the two paths are different
+                firmware branches, and one of them ships untested if only one is
+                checked. The battery one comes first because it needs the cable
+                out, and pulling it is easier than finding a socket. */
+            "id":"autostart","code":"USB-014","skip_factory":["RHY"],
+            "label":{"en":"Starts in USB on power on — on battery","zh":"电池供电开机自动进入 USB 播放","es":"Arranca en USB al encender — con batería"},
+            "help":{"en":"Unplug the AC cable so the speaker runs on its battery alone, with the USB drive still inserted. Switch it off and on. It must return to USB mode and start playing without pressing anything.",
+                    "zh":"拔掉 AC 电源线，使音箱仅由电池供电，U 盘保持插入。关机后再开机，应自动回到 USB 模式并开始播放，无需按任何键。",
+                    "es":"Desconecte el cable AC para que el parlante quede solo con su batería, con la memoria aún insertada. Apague y encienda. Debe volver al modo USB y empezar a reproducir sin pulsar nada."}},
+           {"id":"autostart_ac","code":"USB-014",
+            "label":{"en":"Starts in USB on power on — connected to AC","zh":"接入市电开机自动进入 USB 播放","es":"Arranca en USB al encender — conectado a AC"},
+            "help":{"en":"Now with the AC cable connected and the USB drive still inserted, switch it off and on again. It must do the same: back into USB mode, playing, with nothing pressed.",
+                    "zh":"再接上 AC 电源线，U 盘保持插入，关机后再开机。结果应相同：自动回到 USB 模式并开始播放，无需按任何键。",
+                    "es":"Ahora con el cable AC conectado y la memoria aún insertada, apague y encienda otra vez. Debe hacer lo mismo: volver al modo USB y reproducir, sin pulsar nada."}},
+           {"section":{"en":"Maximum volume","zh":"最大音量","es":"Volumen máximo"},
+            "help":{"en":"Left for last on purpose: it is the loudest thing in the test and it is where a speaker that has passed everything else still breaks up.",
+                    "zh":"特意放在最后：这是本测试中声音最大的一项，也是通过了其他所有项目的音箱仍可能破音的地方。",
+                    "es":"Se deja de último a propósito: es lo más fuerte de la prueba y es donde un parlante que pasó todo lo demás todavía se quiebra."}},
+           {"id":"usb_vol_max","code":"AUD-003",
+            "label":{"en":"Maximum volume functional — Testing_Vol_Max","zh":"最大音量正常 — Testing_Vol_Max","es":"Volumen máximo funcional — Testing_Vol_Max"},
+            "help":{"en":"Play the Testing_Vol_Max track from the USB drive and take the volume to maximum. It must hold there: no distortion, no crackling, no cutting out and no shutting down. Leave it playing for a minute before judging it — the fault usually appears after a few seconds, not at once.",
+                    "zh":"播放 U 盘中的 Testing_Vol_Max 曲目，并将音量调到最大。应能稳定播放：不失真、无爆音、不断续、不关机。判定前先让其播放一分钟——此类问题通常在数秒后才出现，而非立即。",
+                    "es":"Reproduzca la pista Testing_Vol_Max de la memoria USB y suba el volumen al máximo. Debe sostenerse ahí: sin distorsión, sin crujidos, sin cortes y sin apagarse. Déjelo sonando un minuto antes de juzgarlo — la falla suele aparecer a los pocos segundos, no de inmediato."}}]},
 
         {/* RHYME's cabinets carry no SD slot, so the test is filtered out rather
               than left for the inspector to mark N/A thirty times. */
@@ -2432,6 +2440,39 @@ const CONFIG = {
             "help":{"en":"Reconnect the internal battery, set the switch back to internal and close the speaker. Confirm it still works before finishing.",
                     "zh":"重新接上内置电池，将开关拨回内置，并装回箱体。确认恢复后仍能正常工作再结束。"}}]},
 
+        /* ===== Voltage selector =============================================
+           Salió de ALIMENTACIÓN AC, donde era un punto sin fotografía, y quedó
+           como prueba propia justo antes de PARTES INTERNAS. En todas las
+           fábricas: la referencia que no lleve selector se marca N/A.
+
+           La posición no se juzga contra un voltaje "correcto" sino contra el
+           país al que va la orden, que es el dato que el operador tiene delante
+           y el único que decide si 120 o 220 está bien. Por eso la ayuda lleva
+           los dos grupos escritos: preguntar "¿coincide con el destino?" sin
+           decir cuál es el destino no es una comprobación, es una adivinanza. */
+        {"id":"VOLT_SELECT","optional":false,"evidence":[],
+         "only_factory":["YIS","RHY","EAG"],
+         "label":{"en":"VOLTAGE SELECTOR","zh":"电压选择开关","es":"SELECTOR DE VOLTAJE"},
+         "steps":[
+           {"en":"Find the selector on the panel with the speaker unplugged","zh":"在断电状态下，在面板上找到电压选择开关","es":"Con el equipo desconectado, ubique el selector en el panel"},
+           {"en":"Check its position against the country the order ships to","zh":"将其位置与订单目的地国家核对","es":"Compare su posición con el país de destino de la orden"},
+           {"en":"Photograph it so the position can be read in the picture","zh":"拍照，照片中须能看清开关位置","es":"Fotografíelo de modo que la posición se lea en la foto"}],
+         "points":[
+           {"section":{"en":"Position and destination","zh":"位置与目的地","es":"Posición y destino"},
+            "help":{"en":"Read with the speaker unplugged. Once it is plugged in at the wrong voltage there is nothing left to inspect.",
+                    "zh":"须在断电状态下读取。一旦以错误电压接入市电，就没有什么可检验的了。",
+                    "es":"Se lee con el equipo desconectado. Una vez enchufado al voltaje equivocado ya no queda nada que inspeccionar."}},
+           {"id":"volt_select","code":"PWR-005",
+            "label":{"en":"Selector set for the destination country","zh":"选择开关与目的地国家一致","es":"Selector en la posición del país de destino"},
+            "help":{"en":"120 V for Colombia, the Dominican Republic, Ecuador and Venezuela. 220 V for Argentina, Chile, Peru and Uruguay. Read the position and compare it with the destination on the order. A speaker set to 120 V plugged into 220 V burns in the first second, and the selector moves on its own in transit.",
+                    "zh":"哥伦比亚、多米尼加、厄瓜多尔、委内瑞拉为 120 V；阿根廷、智利、秘鲁、乌拉圭为 220 V。读取开关位置并与订单目的地核对。设在 120 V 的机器接入 220 V 会在一秒内烧毁，而该开关在运输中会自行移位。",
+                    "es":"120 V para Colombia, República Dominicana, Ecuador y Venezuela. 220 V para Argentina, Chile, Perú y Uruguay. Lea la posición y compárela con el destino de la orden. Un equipo en 120 V enchufado a 220 V se quema en el primer segundo, y el selector se mueve solo en el transporte."}},
+           {"id":"volt_photo","code":"PWR-005","photo":true,
+            "label":{"en":"Photo of the selector","zh":"选择开关照片","es":"Foto del selector"},
+            "help":{"en":"Photograph the selector close enough that its position can be read in the picture, and with enough of the panel around it to show where on the speaker it is.",
+                    "zh":"拍摄选择开关，须足够近以便在照片中读出其位置，同时保留周围部分面板，以显示其在机器上的位置。",
+                    "es":"Fotografíe el selector lo bastante cerca para que la posición se lea en la foto, y con panel suficiente alrededor para ver en qué parte del equipo está."}}]},
+
         {"id":"INTERNAL","optional":false,"type":"photos","no_na":true,
          "only_factory":["YIS","RHY","EAG"],
          "skip":["HK-KAP103","HK-KAP330"],   // see EXTERNAL above
@@ -2554,7 +2595,8 @@ const CONFIG = {
            {"en":"Take the woofer out and put a load resistor of the same impedance in its place","zh":"拆下低音单元，换上同阻抗的负载电阻","es":"Saque el woofer y ponga en su lugar una carga de la misma impedancia"},
            {"en":"Put the oscilloscope on CH1 across the load","zh":"将示波器 CH1 接到负载两端","es":"Conecte el osciloscopio en CH1 sobre la carga"},
            {"en":"Send a 1 kHz tone over Bluetooth with the tone controls at maximum","zh":"通过蓝牙播放 1 kHz 测试音，音调旋钮全部开到最大","es":"Envíe un tono de 1 kHz por Bluetooth con los controles de tono al máximo"},
-           {"en":"Raise the volume to just before the wave clips and read V RMS","zh":"缓慢提高音量至波形即将削顶，读取 V RMS","es":"Suba el volumen hasta justo antes de que la onda recorte y lea V RMS"}],
+           {"en":"Raise the volume to just before the wave clips and read V RMS","zh":"缓慢提高音量至波形即将削顶，读取 V RMS","es":"Suba el volumen hasta justo antes de que la onda recorte y lea V RMS"},
+           {"en":"Photograph the bench, the screen and the calculation","zh":"拍摄测试台、示波器屏幕和计算过程","es":"Fotografíe el montaje, la pantalla y el cálculo"}],
          "points":[
            {"section":{"en":"Setting up","zh":"montaje","es":"Montaje"},
             "help":{"en":"The woofer is replaced by a resistor so the amplifier works into a known impedance and nothing depends on the speaker moving air.",
@@ -2609,15 +2651,39 @@ const CONFIG = {
                     "zh":"读取示波器显示的 RMS 电压并填入方框。请确认读的是 RMS 值，而不是峰值或峰峰值。",
                     "es":"Lea el voltaje RMS que muestra el osciloscopio y escríbalo en el recuadro. Asegúrese de que es el valor RMS y no el pico ni el pico a pico."}},
            {"id":"rms_watts","code":"AUD-020","measure":{"unit":"W","step":"0.1"},
+            "sample":"rms_calculo",
             "label":{"en":"RMS power","zh":"RMS 功率","es":"Potencia RMS"},
-            "help":{"en":"V RMS multiplied by itself, divided by the impedance. 8.0 V into 4 Ω → 8.0 × 8.0 ÷ 4 = 16 W. Write the result in the box.",
-                    "zh":"V RMS 自乘后除以阻抗。8.0 V、4 Ω → 8.0 × 8.0 ÷ 4 = 16 W。将结果填入方框。",
-                    "es":"V RMS multiplicado por sí mismo, dividido entre la impedancia. 8,0 V sobre 4 Ω → 8,0 × 8,0 ÷ 4 = 16 W. Escriba el resultado en el recuadro."}},
+            "help":{"en":"V RMS multiplied by itself, divided by the impedance, times two. 8.4 V into 4 Ω → 8.4 × 8.4 ÷ 4 × 2 = 35.28 W. Write the result in the box. The example photograph shows the whole operation on the calculator.",
+                    "zh":"V RMS 自乘，除以阻抗，再乘以二。8.4 V、4 Ω → 8.4 × 8.4 ÷ 4 × 2 = 35.28 W。将结果填入方框。示例照片展示了计算器上的完整算式。",
+                    "es":"V RMS multiplicado por sí mismo, dividido entre la impedancia, por dos. 8,4 V sobre 4 Ω → 8,4 × 8,4 ÷ 4 × 2 = 35,28 W. Escriba el resultado en el recuadro. La foto de ejemplo muestra la operación completa en la calculadora."}},
+           {/* Three photographs, and each answers a different question. The
+                bench says the measurement was set up the way the procedure
+                describes; the screen says what the instrument actually read;
+                the calculator says the number in the box came out of that
+                reading and was not estimated. Any one of them alone can be
+                argued with. */
+            "section":{"en":"Evidence","zh":"证据","es":"Evidencia"},
+            "help":{"en":"Three photographs: the bench, the screen and the calculation. Each has an example beside it showing what it should look like.",
+                    "zh":"三张照片：测试台、示波器屏幕和计算过程。每一项旁边都有示例照片说明应当拍成什么样。",
+                    "es":"Tres fotografías: el montaje, la pantalla y el cálculo. Cada una lleva al lado un ejemplo de cómo debe verse."}},
+           {"id":"rms_photo_bench","code":"AUD-020","photo":true,"gallery":true,
+            "sample":"rms_montaje",
+            "label":{"en":"Photo of the bench","zh":"测试台照片","es":"Foto del montaje"},
+            "help":{"en":"One picture of the whole set-up: the load in place of the speaker, the probe on its terminals, the oscilloscope and the power supply, with their readings visible.",
+                    "zh":"拍摄整个测试台：替代喇叭的负载、接在其端子上的探头、示波器与电源，各自读数须清晰可见。",
+                    "es":"Una foto del montaje completo: la carga en lugar del parlante, la punta sobre sus bornes, el osciloscopio y la fuente, con sus lecturas a la vista."}},
            {"id":"rms_photo","code":"AUD-020","photo":true,"gallery":true,
+            "sample":"rms_osciloscopio",
             "label":{"en":"Photo of the oscilloscope screen","zh":"示波器屏幕照片","es":"Foto de la pantalla del osciloscopio"},
             "help":{"en":"Photograph the screen with the wave and the V RMS reading both visible. The wave in the picture must be the clean one, with rounded tips.",
                     "zh":"拍摄屏幕，波形与 V RMS 读数须同时入镜。照片中的波形应为波峰圆滑的干净波形。",
-                    "es":"Fotografíe la pantalla con la onda y el valor de V RMS a la vista. La onda de la foto debe ser la limpia, con las puntas redondeadas."}}]},
+                    "es":"Fotografíe la pantalla con la onda y el valor de V RMS a la vista. La onda de la foto debe ser la limpia, con las puntas redondeadas."}},
+           {"id":"rms_photo_calc","code":"AUD-020","photo":true,"gallery":true,
+            "sample":"rms_calculo",
+            "label":{"en":"Photo of the calculation","zh":"计算过程照片","es":"Foto del cálculo"},
+            "help":{"en":"Photograph the calculator with the operation and the result both on screen. The voltage in it must be the one read off the oscilloscope and the result the one written in the box above.",
+                    "zh":"拍摄计算器，算式与结果须同时显示在屏幕上。其中的电压值须与示波器读数一致，结果须与上方方框中填写的数值一致。",
+                    "es":"Fotografíe la calculadora con la operación y el resultado en pantalla. El voltaje debe ser el leído en el osciloscopio y el resultado el que escribió en el recuadro de arriba."}}]},
 
         /* ===== Aging · four hours ===========================================
            Four hours of continuous playing, flat out. The test either survives
@@ -4325,6 +4391,7 @@ const T = {
   dur_hms:"%h h %m min %s s", dur_ms:"%m min %s s", dur_s:"%s s",
   test_time_note:"The time is how long the inspector had the test open in the app, from start to finish.",
   browser_hint_t:"Open this app in an external browser of your choice.",
+  browser_hint_no:"Do not use the WeChat browser.",
   sto_shots_t:"The photos are not being saved on this phone",
   sto_shots:"They are still on screen, but they would not survive closing the tab. Finish and download the packet before closing anything.",
   sto_draft_t:"This phone is not saving the inspection",
@@ -4541,6 +4608,7 @@ const T = {
   dur_hms:"%h h %m min %s s", dur_ms:"%m min %s s", dur_s:"%s s",
   test_time_note:"El tiempo es el que el inspector tuvo la prueba abierta en la app, de principio a fin.",
   browser_hint_t:"Abra esta app en un navegador externo de su preferencia.",
+  browser_hint_no:"No usar el navegador de WeChat.",
   sto_shots_t:"Las fotos no se están guardando en este teléfono",
   sto_shots:"Siguen en pantalla, pero no sobrevivirían al cerrar la pestaña. Termine y descargue el paquete antes de cerrar nada.",
   sto_draft_t:"Este teléfono no está guardando la inspección",
@@ -4746,6 +4814,7 @@ const T = {
   dur_hms:"%h 小时 %m 分 %s 秒", dur_ms:"%m 分 %s 秒", dur_s:"%s 秒",
   test_time_note:"此时间为检验员在应用中打开该测试至结束所用的时长。",
   browser_hint_t:"请在您习惯使用的外部浏览器中打开本应用。",
+  browser_hint_no:"请勿使用微信内置浏览器。",
   sto_shots_t:"本机未能保存照片",
   sto_shots:"照片仍显示在屏幕上，但关闭页面后将无法恢复。请先完成检验并下载资料包，再关闭页面。",
   sto_draft_t:"本机未能保存本次检验",
@@ -8638,7 +8707,8 @@ function renderSetup(){
           running the advice is useless, because moving browsers now would throw
           the work away. It is placed above the code field so it is read before
           anything is typed rather than after. */""}
-    <div class="brw"><b>${tr("browser_hint_t")}</b></div>
+    <div class="brw"><b>${tr("browser_hint_t")}</b>
+      <u class="no">${tr("browser_hint_no")}</u></div>
     <div class="card">
       <label>${tr("test_id")}</label>
       <input id="idDigits" inputmode="numeric" maxlength="3" autocomplete="off"

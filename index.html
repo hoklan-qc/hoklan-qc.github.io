@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="8.8">
+<meta name="app-version" content="9.0">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -38,6 +38,16 @@ h2{font-size:19px;margin:0 0 4px;color:var(--accent)}
   font-weight:600}
 .brw span{display:block;color:var(--grey);font-size:12.5px;line-height:1.5;
   margin-top:5px}
+/* A PDF where a photograph would go. It fills the same tile the pictures use,
+   so the evidence strip keeps one shape whatever was attached. */
+u.doc{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;width:100%;height:100%;background:#0a1523;text-decoration:none;padding:4px}
+u.doc b{color:var(--amber);font-size:11px;letter-spacing:1px;font-weight:600}
+u.doc i{font-style:normal;color:var(--grey);font-size:9.5px;line-height:1.25;
+  text-align:center;word-break:break-all;max-height:26px;overflow:hidden}
+.ri-zoom .doc-open{color:var(--accent);font-size:15px;text-align:center;
+  padding:14px 18px;border:1px solid var(--border);border-radius:10px;
+  background:var(--panel);max-width:80vw;word-break:break-all}
 /* Storage trouble, on the checklist. Amber for the photographs, red for the
    answers: they are not the same size of problem and must not look alike. */
 .swarn{background:rgba(196,132,26,.15);border:1px solid rgba(214,158,60,.5);
@@ -696,7 +706,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 55,
+      "plan_version": 57,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2479,106 +2489,42 @@ const CONFIG = {
            being reviewed separately — the numbers are what this test produces,
            and a picture of the screen is not the same as the reading typed into
            a box that can be compared, summed and put in a column. */
+        /* Hasta la versión 55 esta prueba llevaba el procedimiento completo de
+           descarga en el RK8510D: doce puntos, cuatro horas de espera y tres
+           cifras medidas en fábrica. La medición la hace ahora el proveedor y
+           entrega su informe, así que aquí sólo queda registrar lo que declara
+           y guardar el documento que lo respalda. Dejó de ser una prueba larga:
+           por eso ya no lleva `first` ni el aviso `long`. El procedimiento y sus
+           seis fotos de referencia quedan en el historial de git por si algún
+           día vuelve a medirse en casa. */
         {"id":"BAT_CAPACITY","optional":true,"only_factory":["YIS"],
          "skip":["HK-KAP103","HK-KAP330"],"evidence":[],
-         "first":2,
-         "long":{"t":{"en":"The discharge is running","zh":"放电正在进行中","es":"La descarga está en curso"},
-                 "n":{"en":"Come back when the load stops on its own — about four hours — to write the figures down. Meanwhile you can carry on with the rest of the plan.",
-                      "zh":"待负载自动停止后（约四小时）再回来填写数值。期间可继续进行计划中的其他测试。",
-                      "es":"Vuelva cuando la carga se detenga sola —unas cuatro horas— para anotar las cifras. Mientras tanto puede seguir con el resto del plan."}},
          "label":{"en":"SPECIFICATION CHECK · BATTERY CAPACITY",
                   "zh":"规格验证 · 电池容量",
                   "es":"VERIFICACIÓN DE ESPECIFICACIONES · CAPACIDAD DE BATERÍA"},
          "steps":[
-           {"en":"Charge one production pack to full with the speaker's own charger","zh":"用音箱原装充电器将一只量产电池组充满","es":"Cargue al máximo un pack de producción con el cargador del propio parlante"},
-           {"en":"Connect it to CH1 of the RK8510D electronic load","zh":"将其接到 RK8510D 电子负载的 CH1","es":"Conéctelo al CH1 de la carga electrónica RK8510D"},
-           {"en":"Set the mode, the current and the cut-off voltage","zh":"设置模式、电流和截止电压","es":"Ajuste el modo, la corriente y el voltaje de corte"},
-           {"en":"Start the discharge and come back when it has finished","zh":"启动放电，结束后再回来","es":"Inicie la descarga y vuelva cuando haya terminado"}],
+           {"en":"Ask the supplier for the report of their capacity test","zh":"向供应商索取其容量测试报告","es":"Pida al proveedor el informe de su prueba de capacidad"},
+           {"en":"Write down the capacity the report declares","zh":"填写报告中声明的容量","es":"Escriba la capacidad que declara el informe"},
+           {"en":"Attach the report: a photo or the PDF","zh":"上传该报告：照片或 PDF","es":"Adjunte el informe: una foto o el PDF"}],
          "points":[
-           {"section":{"en":"Preparation","zh":"准备","es":"Preparación"},
-            "help":{"en":"A production pack, assembled as it ships, charged to full.",
-                    "zh":"量产电池组，按出厂状态装配，充满电。",
-                    "es":"Un pack de producción, ensamblado como se despacha, cargado al máximo."}},
-           {"id":"bat_pack","code":"BAT-009",
-            "label":{"en":"Assembled production pack","zh":"量产已装配电池组","es":"Pack de producción, ensamblado"},
-            "help":{"en":"Take a pack off the production line, just as it goes into the speaker: with its wiring and its connector already fitted.",
-                    "zh":"从产线上取一只电池组，与装入音箱时的状态相同：线束和接头均已装配到位。",
-                    "es":"Tome un pack de la línea de producción, tal como se instala en el parlante: con su cableado y su conector ya puestos."}},
-           {"id":"bat_full","code":"CHG-001",
-            "label":{"en":"Charged to full with the speaker's charger","zh":"用音箱充电器充满","es":"Cargado al máximo con el cargador del parlante"},
-            "help":{"en":"With the charger the product ships with, not a bench supply, until the charger says it has finished.",
-                    "zh":"使用随机出厂的充电器，而非实验室电源，充到充电器显示已完成为止。",
-                    "es":"Con el cargador que sale con el producto, no una fuente de banco, hasta que el cargador indique que terminó."}},
-           {"section":{"en":"Setting the load up","zh":"设置电子负载","es":"Ajuste del instrumento"},
-            "help":{"en":"Four settings on the RK8510D. The example photographs show each screen.",
-                    "zh":"RK8510D 上的四项设置。示例照片展示了每个界面。",
-                    "es":"Cuatro ajustes en el RK8510D. Las fotos de ejemplo muestran cada pantalla."}},
-           {"id":"bat_conn","code":"BAT-009","sample":"bat_conexion",
-            "label":{"en":"Pack connected to CH1","zh":"电池组已接入 CH1","es":"Pack conectado a CH1"},
-            "help":{"en":"Red to the red terminal, black to the black one, on channel 1. Check the polarity before switching on.",
-                    "zh":"红线接红端子，黑线接黑端子，接在通道 1。通电前先确认极性。",
-                    "es":"Rojo al borne rojo y negro al negro, en el canal 1. Verifique la polaridad antes de encender."}},
-           {"id":"bat_mode","code":"BAT-009","sample":"bat_menu",
-            "label":{"en":"Mode 07 Bat Cap selected","zh":"已选择 07 Bat Cap 模式","es":"Modo 07 Bat Cap seleccionado"},
-            "help":{"en":"Press Mode, turn the knob to 07 Bat Cap and press OK. The header must read [BatCap] and the channel CH1.",
-                    "zh":"按 Mode，旋转旋钮选到 07 Bat Cap，按 OK。顶部应显示 [BatCap]，通道应为 CH1。",
-                    "es":"Pulse Mode, gire la perilla hasta 07 Bat Cap y pulse OK. La cabecera debe decir [BatCap] y el canal CH1."}},
-           {"id":"bat_current","code":"BAT-009","sample":"bat_corriente",
-            "measure":{"unit":"mA","step":"1"},
-            "label":{"en":"Discharge current — a quarter of the rated capacity","zh":"放电电流 — 标称容量的四分之一","es":"Corriente de descarga — la cuarta parte de la capacidad nominal"},
-            "help":{"en":"Divide the capacity printed on the pack by four and set it in LoadVal. 3600 mAh → 900 mA. 4400 mAh → 1100 mA. Write the value in the box.",
-                    "zh":"将电池组标示容量除以四，填入 LoadVal。3600 mAh → 900 mA。4400 mAh → 1100 mA。将数值填入方框。",
-                    "es":"Divida entre cuatro la capacidad impresa en el pack y póngala en LoadVal. 3600 mAh → 900 mA. 4400 mAh → 1100 mA. Escriba el valor en el recuadro."}},
-           {"id":"bat_cutoff","code":"BAT-009","sample":"bat_corte",
-            "measure":{"unit":"V","step":"0.1"},
-            "label":{"en":"Cut-off voltage","zh":"截止电压","es":"Voltaje de corte"},
-            "help":{"en":"Set it in StopVolt and write it in the box. 7.4 V pack → 5.8 V. 4.2 V pack → 2.9 V. 12.6 V pack → 8.7 V.",
-                    "zh":"在 StopVolt 中设定并填入方框。7.4 V 电池组 → 5.8 V。4.2 V 电池组 → 2.9 V。12.6 V 电池组 → 8.7 V。",
-                    "es":"Póngalo en StopVolt y escríbalo en el recuadro. Pack de 7,4 V → 5,8 V. De 4,2 V → 2,9 V. De 12,6 V → 8,7 V."}},
-           {"section":{"en":"Discharge","zh":"放电","es":"Descarga"},
-            "help":{"en":"About four hours on a 3600 mAh pack. Start it, leave the bench and come back when it has finished.",
-                    "zh":"3600 mAh 的电池组约需四小时。启动后即可离开，结束后再回来。",
-                    "es":"Unas cuatro horas en un pack de 3600 mAh. Inicie, deje el equipo y vuelva al terminar."}},
-           {"id":"bat_start","code":"BAT-009","sample":"bat_iniciar",
-            "label":{"en":"Discharge started with ON1","zh":"已用 ON1 启动放电","es":"Descarga iniciada con ON1"},
-            "help":{"en":"Press ON1. The box under CH1 must change from Load Off to Load On, the timer must start counting and the capacity must climb. All three.",
-                    "zh":"按 ON1。CH1 下方的方框应由 Load Off 变为 Load On，计时应开始走动，容量应开始上升。三者缺一不可。",
-                    "es":"Pulse ON1. Bajo CH1 el recuadro debe pasar de Load Off a Load On, el tiempo debe correr y la capacidad subir. Las tres cosas."}},
-           {"id":"bat_auto_stop","code":"BAT-009",
-            "label":{"en":"It stopped on its own at the cut-off","zh":"到达截止电压后自动停止","es":"Se detuvo sola al llegar al corte"},
-            "help":{"en":"The load must stop by itself at the cut-off voltage. If it had to be stopped by hand, the cut-off was set wrong.",
-                    "zh":"负载应在达到截止电压时自动停止。若需手动停止，说明截止电压设置有误。",
-                    "es":"La carga debe detenerse sola al llegar al voltaje de corte. Si hubo que pararla a mano, el corte estaba mal puesto."}},
-           {"section":{"en":"Result","zh":"结果","es":"Resultado"},
-            "help":{"en":"Three figures off the screen, written into the boxes.",
-                    "zh":"从屏幕读取三个数值，填入方框。",
-                    "es":"Tres cifras de la pantalla, escritas en los recuadros."}},
-           {"id":"bat_nominal","measure":{"unit":"mAh","step":"1"},"sample":"bat_nominal",
-            "label":{"en":"Rated capacity printed on the pack","zh":"电池组标称容量","es":"Capacidad nominal impresa en el pack"},
-            "help":{"en":"Copy it from the pack label, exactly as printed.",
-                    "zh":"照电池组标签原样抄录。",
-                    "es":"Cópiela de la etiqueta del pack, tal como está impresa."}},
-           {"id":"bat_measured","measure":{"unit":"mAh","step":"1"},
-            "label":{"en":"Measured capacity","zh":"实测容量","es":"Capacidad medida"},
-            "help":{"en":"The figure the load shows as Cap when the discharge has finished. Write it as it reads.",
-                    "zh":"放电结束时负载显示的 Cap 数值。照读数填写。",
-                    "es":"La cifra que muestra la carga en Cap al terminar la descarga. Escríbala tal como se lee."}},
-           {"id":"bat_time","measure":{"unit":{"en":"s","zh":"秒","es":"s"},"step":"1"},
-            "label":{"en":"Total discharge time","zh":"总放电时间","es":"Tiempo total de descarga"},
-            "help":{"en":"The seconds the load counted, from Time on the screen.",
-                    "zh":"负载累计的秒数，取屏幕上的 Time。",
-                    "es":"Los segundos que contó la carga, del campo Time de la pantalla."}},
-           {/* The one photograph the test asks for, and it comes last: the
-                screen at the end, with the two figures that were just typed
-                into the boxes above visible in it. Written down and
-                photographed are not the same thing — the numbers are what can
-                be compared between packs, and the picture is what says those
-                numbers were read off this instrument and not remembered. */
-            "id":"bat_final_photo","code":"BAT-009","photo":true,"gallery":true,
-            "label":{"en":"Photo of the final screen","zh":"最终界面照片","es":"Foto de la pantalla final"},
-            "help":{"en":"Photograph the load's screen once the discharge has stopped. Cap and Time must both be legible in the picture, and must match what you wrote in the boxes above.",
-                    "zh":"放电停止后拍摄负载的显示屏。照片中 Cap 与 Time 均须清晰可读，并与上方方框中填写的数值一致。",
-                    "es":"Fotografíe la pantalla de la carga una vez detenida la descarga. En la foto deben quedar legibles Cap y Time, y coincidir con lo que escribió en los recuadros de arriba."}}]},
+           {"id":"bat_supplier","code":"BAT-009","measure":{"unit":"mAh","step":"1"},
+            "label":{"en":"Capacity declared by the supplier","zh":"供应商声明的容量","es":"Capacidad de batería informada por el proveedor"},
+            "help":{"en":"Write the capacity the supplier declares from their own experimental tests, exactly as it appears in their report. It is their figure, not a measurement made here.",
+                    "zh":"填写供应商依据其实验测试所声明的容量，须与其报告中的数值完全一致。这是供应商提供的数据，并非本厂实测值。",
+                    "es":"Escriba la capacidad que el proveedor declara según sus pruebas experimentales, tal como aparece en su informe. Es la cifra del proveedor, no una medición hecha aquí."}},
+           {/* `doc` is what adds PDF to what the file picker will accept, and
+                `gallery` is what keeps the phone from opening the camera: the
+                report arrives by e-mail and lives in the phone's files, not in
+                front of the operator. A figure typed into a box and a document
+                that backs it are not the same thing — the number is what can be
+                compared between packs, the document is what says where it came
+                from. */
+            "id":"bat_report","code":"BAT-009",
+            "photo":true,"gallery":true,"doc":true,
+            "label":{"en":"Supplier's report","zh":"供应商报告","es":"Informe del proveedor"},
+            "help":{"en":"Attach the report of the capacity test: a photo of it, or the PDF the supplier sent. The declared capacity must be legible in it and must match the figure written above.",
+                    "zh":"上传容量测试报告：可以是照片，也可以是供应商发送的 PDF。报告中声明的容量须清晰可读，并与上方填写的数值一致。",
+                    "es":"Adjunte el informe de la prueba de capacidad: una foto de él, o el PDF que envió el proveedor. La capacidad declarada debe quedar legible y coincidir con la cifra escrita arriba."}}]},
 
         /* ===== Specification check · RMS power ==============================
            The second of the two measurements that answer a printed figure. The
@@ -2674,19 +2620,24 @@ const CONFIG = {
                     "es":"Fotografíe la pantalla con la onda y el valor de V RMS a la vista. La onda de la foto debe ser la limpia, con las puntas redondeadas."}}]},
 
         /* ===== Aging · four hours ===========================================
-           Four hours of continuous playing, flat out, in a warm room, with the
-           speaker listened to on the hour. Nothing here is measured: the test
-           either survives it or it does not, and what it looks for is the fault
-           that only shows up once everything inside has come up to temperature.
+           Four hours of continuous playing, flat out. The test either survives
+           it or it does not, and what it looks for is the fault that only shows
+           up once everything inside has come up to temperature.
 
-           Four hours, and the hourly checks stop at the fourth. The source
-           procedure says five in one step, lists checks to the fifth hour in
-           the next, and then closes with "after completing 4 hours" — HOKLAN
-           settled it at four. Worth correcting at the source.
+           Recortada a dos puntos por HOKLAN: la foto del inicio y la del final.
+           Salieron la temperatura del área, el sitio de trabajo, el selector de
+           voltaje, la conexión AC, la USB, los controles al máximo, el arranque
+           de la lista, las cuatro escuchas por hora y la revisión final. La
+           prueba sigue durando cuatro horas — por eso conserva `first` y el
+           aviso `long` —, pero lo que queda registrado son las dos fotografías
+           y la distancia entre sus dos horas.
 
-           Sampling, like the two measurements above it, and last in the plan
-           with them: a unit that has run flat out for four hours is not the
-           unit that goes into the box. */
+           Ojo con una consecuencia: el selector de voltaje ya no se lee aquí.
+           En las RHYME sigue estando en ALIMENTACIÓN AC, pero el envejecimiento
+           corre antes, así que la cabina se enchufa antes de que nadie lo mire.
+
+           Sampling, like the measurement above it: a unit that has run flat out
+           for four hours is not the unit that goes into the box. */
         {/* Not the subwoofers. The test runs the speaker off a playlist on the
               USB D drive, and a BAS has neither a USB socket nor a playback
               mode — its signal comes in over XLR from something else. Aging one
@@ -2695,70 +2646,19 @@ const CONFIG = {
          "skip":["HK-KAP103","HK-KAP330","HK-BAS115A1","HK-BAS118A1"],"evidence":[],
          "first":1,
          "long":{"t":{"en":"This test is still running","zh":"本测试仍在进行中","es":"Esta prueba sigue en curso"},
-                 "n":{"en":"Come back on each hour to answer the checks. Meanwhile you can carry on with the rest of the plan.",
-                      "zh":"请每小时回来填写检查项。期间可继续进行计划中的其他测试。",
-                      "es":"Vuelva cada hora a responder las revisiones. Mientras tanto puede seguir con el resto del plan."}},
+                 "n":{"en":"Come back when the four hours are up to take the second photograph. Meanwhile you can carry on with the rest of the plan.",
+                      "zh":"四小时结束后再回来拍摄第二张照片。期间可继续进行计划中的其他测试。",
+                      "es":"Vuelva al cumplirse las cuatro horas para tomar la segunda fotografía. Mientras tanto puede seguir con el resto del plan."}},
          "label":{"en":"AGING · 4 HOURS","zh":"老化测试 · 4 小时","es":"ENVEJECIMIENTO · 4 HORAS"},
          "steps":[
-           {"en":"Put the speaker in a warm, well-ventilated place","zh":"将音箱置于温暖且通风良好的场所","es":"Ponga el parlante en un sitio cálido y bien ventilado"},
-           {"en":"Play the USB D playlist with everything at maximum","zh":"播放 USB D 中的曲目，所有旋钮开到最大","es":"Reproduzca la lista de la USB D con todo al máximo"},
+           {"en":"Set the speaker going and photograph it","zh":"启动音箱并拍照","es":"Ponga el parlante a sonar y fotografíelo"},
            {"en":"Leave it running four hours without stopping it","zh":"连续运行四小时，中途不得停止","es":"Déjelo sonando cuatro horas sin detenerlo"},
-           {"en":"Listen for 20 seconds on each hour","zh":"每小时试听 20 秒","es":"Escuche 20 segundos en cada hora"}],
+           {"en":"Photograph it again when the four hours are up","zh":"四小时结束后再次拍照","es":"Fotografíelo otra vez al cumplirse las cuatro horas"}],
          "points":[
-           {/* Humidity came out at HOKLAN's request. The source procedure asks
-                for more than 50%, and measuring it needs a hygrometer the
-                factory does not necessarily have on the bench — a condition
-                nobody can read is a condition everybody marks N/A. Temperature
-                stays, and it is the one that stresses the amplifier. */
-            "section":{"en":"The test area","zh":"测试场所","es":"El área de prueba"},
-            "help":{"en":"Warm on purpose. Read the temperature before starting and write it down.",
-                    "zh":"刻意选择高温环境。开始前测量温度并记录。",
-                    "es":"Cálido a propósito. Lea la temperatura antes de empezar y anótela."}},
-           {"id":"age_temp","code":"AGE-001","measure":{"unit":"°C","step":"0.1"},
-            "label":{"en":"Temperature between 35 °C and 45 °C","zh":"温度介于 35 °C 与 45 °C 之间","es":"Temperatura entre 35 °C y 45 °C"},
-            "help":{"en":"Measure it where the speaker is going to sit and write it in the box. Outside that range the test does not count.",
-                    "zh":"在音箱放置位置测量并填入方框。超出该范围，本次测试无效。",
-                    "es":"Mídala donde va a quedar el parlante y escríbala en el recuadro. Fuera de ese rango la prueba no cuenta."}},
-           {"id":"age_place","code":"AGE-001",
-            "label":{"en":"Stable, well-ventilated spot","zh":"稳固、通风良好的位置","es":"Sitio estable y bien ventilado"},
-            "help":{"en":"On a firm surface where nobody will move it for four hours, with air around it. Not shut in a box and not against a wall.",
-                    "zh":"放在四小时内不会被移动的稳固台面上，四周须留有空气流通。不得封闭在箱内，也不得紧贴墙面。",
-                    "es":"Sobre una superficie firme donde nadie lo vaya a mover en cuatro horas, con aire alrededor. No encerrado en una caja ni contra la pared."}},
-           {"section":{"en":"Setting it going","zh":"启动","es":"Puesta en marcha"},
-            "help":{"en":"Everything at maximum: this is the hardest the speaker will ever work.",
-                    "zh":"全部开到最大：这是音箱所能承受的最严苛工况。",
-                    "es":"Todo al máximo: es lo más duro que va a trabajar el parlante."}},
-           {/* First point of the group, and it has to be. This test used to run
-                after ALIMENTACIÓN AC, which reads the voltage selector before
-                anything is plugged in. Now aging runs first, so the check comes
-                with it: a cabinet set to 115 V and plugged into 230 V burns in
-                the first second, and four hours of aging would never start.
-                RHYME only — its panels are the ones with the selector. */
-            "id":"age_volt","code":"PWR-005","only_factory":["RHY"],
-            "label":{"en":"Voltage selector set for the destination market","zh":"电压选择开关与目的地市场一致","es":"Selector de voltaje en la posición del mercado"},
-            "help":{"en":"With the cabinet unplugged, read the position of the selector and compare it against the destination on the order. Do it before plugging it in.",
-                    "zh":"在断电状态下读取电压开关的位置，并与订单目的地核对。务必在接电之前完成。",
-                    "es":"Con la cabina desconectada, lea la posición del selector y compárela con el destino de la orden. Hágalo antes de enchufarla."}},
-           {"id":"age_ac","code":"PWR-001",
-            "label":{"en":"Connected to AC power","zh":"已接入市电","es":"Conectado a la red AC"},
-            "help":{"en":"Mains, not battery. Four hours on a battery is a battery test, not an aging test.",
-                    "zh":"使用市电，而非电池。用电池运行四小时属于电池测试，而非老化测试。",
-                    "es":"A la red, no a batería. Cuatro horas con batería es una prueba de batería, no de envejecimiento."}},
-           {"id":"age_usb","code":"USB-001",
-            "label":{"en":"USB D inserted and USB mode selected","zh":"已插入 USB D 并切换到 USB 模式","es":"USB D insertada y modo USB seleccionado"},
-            "help":{"en":"The USB D drive with the aging playlist. The speaker must read it and show USB mode.",
-                    "zh":"使用装有老化测试曲目的 USB D。音箱应能识别并显示 USB 模式。",
-                    "es":"La memoria USB D con la lista de envejecimiento. El parlante debe leerla y mostrar el modo USB."}},
-           {"id":"age_max","code":"AGE-001",
-            "label":{"en":"Volume, bass and treble at maximum","zh":"音量、低音、高音全部开到最大","es":"Volumen, graves y agudos al máximo"},
-            "help":{"en":"Master volume fully up, and every tone control fully up with it.",
-                    "zh":"主音量旋到最大，所有音调旋钮同样旋到最大。",
-                    "es":"Volumen maestro arriba del todo, y con él todos los controles de tono."}},
-           {"id":"age_start","code":"AGE-001",
-            "label":{"en":"Playlist started","zh":"曲目已开始播放","es":"Lista iniciada"},
-            "help":{"en":"Start the playlist and note the time. From here it must not be stopped, paused or touched for four hours.",
-                    "zh":"开始播放并记录时间。此后四小时内不得停止、暂停或触碰。",
-                    "es":"Inicie la lista y anote la hora. A partir de aquí no debe detenerse, pausarse ni tocarse durante cuatro horas."}},
+           {"section":{"en":"The four hours","zh":"四小时","es":"Las cuatro horas"},
+            "help":{"en":"Two photographs, four hours apart. The speaker plays flat out throughout and must not be stopped, paused or touched between them.",
+                    "zh":"两张照片，相隔四小时。其间音箱须以最大状态持续播放，不得停止、暂停或触碰。",
+                    "es":"Dos fotografías, separadas por cuatro horas. En medio el parlante suena al máximo y no debe detenerse, pausarse ni tocarse."}},
            {/* Taken with the camera and not from the gallery, unlike the two
                 measurement tests. The app stamps a photograph with the moment
                 it was attached, not the moment it was shot, so two pictures
@@ -2770,44 +2670,6 @@ const CONFIG = {
             "help":{"en":"Photograph the speaker in the test area, connected and playing, with the display showing USB mode. Take it now, with the camera.",
                     "zh":"在测试场所拍摄音箱：已接电、正在播放，显示屏显示 USB 模式。请当场用相机拍摄。",
                     "es":"Fotografíe el parlante en el área de prueba, conectado y sonando, con la pantalla mostrando el modo USB. Tómela ahora, con la cámara."}},
-           {"section":{"en":"On the hour","zh":"每小时检查","es":"Cada hora"},
-            "help":{"en":"Four visits, 20 seconds of listening each. The same four things every time: it is playing, without cuts, without switching off or restarting, and without noise or distortion.",
-                    "zh":"共四次，每次试听 20 秒。每次检查同样四项：有声音、无断续、未关机或重启、无异响或失真。",
-                    "es":"Cuatro visitas, 20 segundos de escucha cada una. Las mismas cuatro cosas siempre: suena, sin cortes, sin apagarse ni reiniciarse, y sin ruidos ni distorsión."}},
-           {"id":"age_h1","code":"AGE-001",
-            "label":{"en":"Hour 1","zh":"第 1 小时","es":"Hora 1"},
-            "help":{"en":"Listen for 20 seconds. Sound present, no cuts, no shutdown or restart, no abnormal noise or distortion.",
-                    "zh":"试听 20 秒。有声音，无断续，未关机或重启，无异响或失真。",
-                    "es":"Escuche 20 segundos. Hay sonido, sin cortes, sin apagones ni reinicios, sin ruidos anormales ni distorsión."}},
-           {"id":"age_h2","code":"AGE-001",
-            "label":{"en":"Hour 2","zh":"第 2 小时","es":"Hora 2"},
-            "help":{"en":"The same four checks, 20 seconds.",
-                    "zh":"同样四项检查，试听 20 秒。",
-                    "es":"Las mismas cuatro comprobaciones, 20 segundos."}},
-           {"id":"age_h3","code":"AGE-001",
-            "label":{"en":"Hour 3","zh":"第 3 小时","es":"Hora 3"},
-            "help":{"en":"The same four checks, 20 seconds.",
-                    "zh":"同样四项检查，试听 20 秒。",
-                    "es":"Las mismas cuatro comprobaciones, 20 segundos."}},
-           {"id":"age_h4","code":"AGE-001",
-            "label":{"en":"Hour 4","zh":"第 4 小时","es":"Hora 4"},
-            "help":{"en":"The same four checks, 20 seconds. This is the last one.",
-                    "zh":"同样四项检查，试听 20 秒。这是最后一次。",
-                    "es":"Las mismas cuatro comprobaciones, 20 segundos. Esta es la última."}},
-           {"section":{"en":"At the end","zh":"结束时","es":"Al terminar"},
-            "help":{"en":"Four hours completed and the speaker gone over once more, cold judgement rather than relief.",
-                    "zh":"四小时结束后，再整体检查一遍，应冷静判断，而非因结束而放松。",
-                    "es":"Cuatro horas cumplidas y una última revisión del parlante."}},
-           {"id":"age_done","code":"AGE-001",
-            "label":{"en":"Four hours completed without interruption","zh":"连续完成四小时，未中断","es":"Cuatro horas completas sin interrupción"},
-            "help":{"en":"It ran the whole four hours without stopping, switching off or being touched. If it was interrupted for any reason, the test does not count and starts again.",
-                    "zh":"整个四小时连续运行，未停止、未关机、未被触碰。若因任何原因中断，本次测试无效，须重新开始。",
-                    "es":"Sonó las cuatro horas sin detenerse, sin apagarse y sin que nadie lo tocara. Si se interrumpió por cualquier motivo, la prueba no cuenta y se repite desde el principio."}},
-           {"id":"age_after","code":"AGE-001",
-            "label":{"en":"Nothing damaged after the test","zh":"测试后无部件损坏","es":"Ningún componente dañado al terminar"},
-            "help":{"en":"Go over the speaker once the four hours are up: no smell of heat, no deformed or discoloured part, no loose or rattling component, and it still plays as it did at the start.",
-                    "zh":"四小时结束后整体检查：无焦糊气味，无部件变形或变色，无松动或异响部件，且播放状态与开始时一致。",
-                    "es":"Revise el parlante al cumplirse las cuatro horas: sin olor a caliente, sin piezas deformadas ni descoloridas, sin componentes flojos ni traqueteando, y sigue sonando como al principio."}},
            {"id":"age_photo_end","code":"AGE-001","photo":true,
             "label":{"en":"Photo at the end","zh":"结束时的照片","es":"Foto al terminar"},
             "help":{"en":"Photograph the same speaker in the same place, still playing, with the four hours completed. Take it now, with the camera: the two times are what say how long it ran.",
@@ -4430,6 +4292,7 @@ const T = {
   rm_report_zh:"— the same report in Chinese.",
   rm_csv:"— one row per point checked, in Spanish, opens in Excel.",
   rm_photos:"— %n photo(s), named by test.",
+  rm_docs:"— %n document(s) attached to the inspection, named by test.",
   rm_naming:"File names: evidence of a defect reads TEST_point_FAIL_speakerN; general evidence of a test reads TEST only.",
   wm_line:"HOKLAN · Official quality document", incomplete:"INCOMPLETE",
   rm_videos:"— %n video(s) recorded during the inspection.",
@@ -4473,7 +4336,7 @@ const T = {
   tap_close:"tap anywhere to close",
   sample_hint:"Example — take the photo like this. Tap to enlarge.",
   sample_ref:"Reference — this is how the setting should look. Tap to enlarge.",
-  photo_pick:"PHOTO OR GALLERY",
+  photo_pick:"PHOTO OR GALLERY", photo_doc:"ATTACH PHOTO OR PDF", doc:"Document",
   concl_pass:"All applicable points passed.",
   footer_note:"Generated by HOKLAN QC. Photo timestamps come from the phone at the moment of capture.",
   th_test:"Test", th_result:"Result", th_point:"Point",
@@ -4645,6 +4508,7 @@ const T = {
   rm_report_es:"— el mismo informe en español. Los tres van siempre incluidos.",
   rm_csv:"— una fila por punto verificado, en español, se abre en Excel.",
   rm_photos:"— %n foto(s), nombradas por prueba.",
+  rm_docs:"— %n documento(s) adjuntos a la inspección, nombrados por prueba.",
   rm_naming:"Nombres de archivo: la evidencia de un defecto se lee PRUEBA_punto_FAIL_parlanteN; la evidencia general de una prueba lleva solo PRUEBA.",
   wm_line:"HOKLAN · Documento oficial de calidad", incomplete:"INCOMPLETA",
   rm_videos:"— %n video(s) grabados durante la inspección.",
@@ -4688,7 +4552,7 @@ const T = {
   tap_close:"toque en cualquier parte para cerrar",
   sample_hint:"Ejemplo — tome la foto así. Toque para ampliar.",
   sample_ref:"Referencia — así debe verse el ajuste. Toque para ampliar.",
-  photo_pick:"FOTO O GALERÍA",
+  photo_pick:"FOTO O GALERÍA", photo_doc:"ADJUNTAR FOTO O PDF", doc:"Documento",
   concl_pass:"Todos los puntos aplicables aprobaron.",
   footer_note:"Generado por HOKLAN QC. Las marcas de tiempo de las fotos provienen del teléfono en el momento de la captura.",
   th_test:"Prueba", th_result:"Resultado", th_point:"Punto",
@@ -4849,6 +4713,7 @@ const T = {
   rm_report_zh:"— 同一份报告的中文版。",
   rm_csv:"— 每个检查项一行，西班牙文，可用 Excel 打开。",
   rm_photos:"— %n 张照片，按测试项命名。",
+  rm_docs:"— %n 份随检验附上的文件，按测试项命名。",
   rm_naming:"命名规则：异常项为 测试_检查项_FAIL；测试的整体证据仅用 测试 名称。",
   wm_line:"HOKLAN · 官方质量文件", incomplete:"未完成",
   rm_videos:"— 检验过程中录制的 %n 段视频。",
@@ -4892,7 +4757,7 @@ const T = {
   tap_close:"点击任意处关闭",
   sample_hint:"示例 — 请照此拍摄。点击可放大。",
   sample_ref:"参考 — 设置应如图所示。点击可放大。",
-  photo_pick:"拍照或从相册选择",
+  photo_pick:"拍照或从相册选择", photo_doc:"上传照片或 PDF", doc:"文件",
   concl_pass:"所有适用项目均合格。",
   footer_note:"由 HOKLAN QC 生成。照片时间戳取自拍摄时手机的时间。",
   th_test:"测试", th_result:"结果", th_point:"检查项",
@@ -5680,8 +5545,33 @@ const MAX_PHOTO_PX = 1280, JPEG_QUALITY = 0.6;
    nobody's evidence, and the packet carries it all the way to the customer. */
 const BIG_VIDEO_BYTES = 25 * 1048576;
 
+/* A PDF is filed as a photo on purpose. Everything downstream — the evidence
+   counts, the packet, the report, the storage in IndexedDB — already knows how
+   to carry a photo, and a third kind would have to be taught to all of it. What
+   it carries instead is `doc:true`, which the four places that draw a thumbnail
+   read to draw a file chip rather than an image. Read whole rather than put
+   through the canvas: there is nothing to resize, and a data URL is what
+   survives a reload, where a blob URL does not. */
+const isPdfFile = f =>
+  /pdf$/i.test(f.type || "") || /\.pdf$/i.test(f.name || "");
+/* Not `isDoc`: the report already has a local of that name meaning "this test is
+   a photo section", and the two would shadow each other exactly where both are
+   in scope. */
+const isPdfMedia = m => !!(m && m.doc);
+
 function shrink(file){
   return new Promise(resolve => {
+    if(isPdfFile(file)){
+      const keep = () => resolve({kind:"photo", doc:true, name:file.name,
+                                  size:file.size, file,
+                                  url:URL.createObjectURL(file)});
+      const fr = new FileReader();
+      fr.onerror = keep;
+      fr.onload = () => resolve({kind:"photo", doc:true, name:file.name,
+                                 size:file.size, url:fr.result});
+      fr.readAsDataURL(file);
+      return;
+    }
     if(!file.type.startsWith("image/")){
       resolve({kind:"video", name:file.name, size:file.size, file,
                url:URL.createObjectURL(file)});
@@ -5739,6 +5629,17 @@ async function addMedia(input, u, slot){
     alert(fmt("a_big_video", {s: humanSize(Math.max.apply(null, heavy))}));
 }
 const shotsFor = (r, slot) => r.media.filter(m => m.slot === slot);
+
+/* What goes inside a thumbnail. A document has no picture to show, so it gets
+   its icon and its file name — which is the only thing that tells one report
+   from another once three of them are sitting side by side. */
+const docName = m => String(m.name || "PDF");
+const thumbFace = m => isPdfMedia(m)
+  ? `<u class="doc"><b>PDF</b><i>${esc(docName(m))}</i></u>`
+  : m.kind === "photo" ? `<img src="${m.url}">`
+                       : `<video src="${m.url}" muted></video>`;
+const thumbTag = m => isPdfMedia(m) ? tr("doc")
+  : m.kind === "photo" ? tr("photo") : tr("video");
 
 function dropMedia(uid){
   // The photo belongs to some speaker's record for this test; which one is not
@@ -7286,7 +7187,9 @@ ${/* The origin is already stated as a field in the table above; the paragraph
       if(b.pointShots.length){
         h += `<div class="grid">${b.pointShots.map(s=>{
           shot++;
-          return `<div class="cell"><div class="ph"><img src="${s.m.url}">
+          return `<div class="cell"><div class="ph">${isPdfMedia(s.m)
+              ? `<u class="doc"><b>PDF</b><i>${esc(docName(s.m))}</i></u>`
+              : `<img src="${s.m.url}">`}
             <span class="ts">${shotStamp(s.m.at)}</span></div>
             <div class="cap">#${shot} ${esc(L(s.p.label))}${
               S.units > 1 ? " · " + fmt("speaker_n",{n:s.u+1}) : ""}</div></div>`;
@@ -7740,7 +7643,7 @@ function inLang(code, fn){
 async function buildPacket(){
   const base = packetName();
 
-  let lost = 0, photos = 0, videos = 0;
+  let lost = 0, photos = 0, videos = 0, docs = 0;
   const files = [];
   const seen = {};   // same name twice would silently overwrite in some tools
   /* The clips that could not be packed, by the name they would have carried.
@@ -7780,9 +7683,20 @@ async function buildPacket(){
       // better outcome than losing the videos and the report with it.
       try{
         if(!v.m.url || v.m.url.indexOf("data:") !== 0) throw new Error("no data");
-        files.push({name: `${base}/photos/${stem}.jpg`,
-                    data: dataUrlToBlob(v.m.url)});
-        photos++;
+        /* A PDF travels as a photo everywhere inside the app, but not here: in
+           the packet it has to land as a .pdf in a folder of its own, or the
+           supplier's report arrives named .jpg and opens in nothing.
+           `dataUrlToBlob` already reads the real type out of the data URL, so
+           only the name and the folder need saying. */
+        if(isPdfMedia(v.m)){
+          files.push({name: `${base}/docs/${stem}.pdf`,
+                      data: dataUrlToBlob(v.m.url)});
+          docs++;
+        } else {
+          files.push({name: `${base}/photos/${stem}.jpg`,
+                      data: dataUrlToBlob(v.m.url)});
+          photos++;
+        }
       }catch(err){ lost++; }
     }
   });
@@ -7810,15 +7724,15 @@ async function buildPacket(){
     {name: base + "/" + base + ".csv",
      data: new Blob([inLang("es", reportCsv)], {type:"text/csv;charset=utf-8"})},
     {name: base + "/READ_ME.txt",
-     data: new Blob([packetReadme(photos, videos, lost, lostVideos)],
+     data: new Blob([packetReadme(photos, videos, lost, lostVideos, docs)],
                     {type:"text/plain;charset=utf-8"})}
   ].concat(files);
 
   return {blob: await makeZip(entries), name: base + ".zip",
-          videos, photos, lost, lostVideos};
+          videos, photos, lost, lostVideos, docs};
 }
 
-function packetReadme(photos, videos, lost, lostVideos){
+function packetReadme(photos, videos, lost, lostVideos, docs){
   const out = [];   // not `L`: that is the localisation helper
   out.push("HOKLAN QC — " + S.testId + " — " + S.model);
   out.push(inspectionDate(S.startedAt) + "  ·  " + S.operator);
@@ -7833,6 +7747,7 @@ function packetReadme(photos, videos, lost, lostVideos){
   out.push("                " + tr("rm_csv"));
   if(photos) out.push("photos/         " + fmt("rm_photos",{n:photos}));
   if(videos) out.push("videos/         " + fmt("rm_videos",{n:videos}));
+  if(docs)   out.push("docs/           " + fmt("rm_docs",{n:docs}));
   out.push("");
   out.push(tr("rm_naming"));
   /* Named here too, and not only on the screen: whoever opens this folder in
@@ -8627,14 +8542,19 @@ function zoomMedia(uid){
   const box = document.createElement("div");
   box.className = "ri-zoom";
   box.onclick = () => box.remove();
-  box.innerHTML = m.kind === "photo"
+  box.innerHTML = isPdfMedia(m)
+    // A document cannot be enlarged, so the zoom offers the only thing worth
+    // doing with it: opening it in whatever reads PDFs on this phone.
+    ? `<a class="doc-open" href="${m.url}" target="_blank" rel="noopener"
+         download="${esc(docName(m))}"
+         onclick="event.stopPropagation()">${esc(docName(m))}</a>`
+    : m.kind === "photo"
     ? `<img src="${m.url}" alt="">`
     // Controls and no autoplay: the operator decides when it runs, and a clip
     // that starts by itself in a quiet workshop is startling.
     : `<video src="${m.url}" controls playsinline
          onclick="event.stopPropagation()"></video>`;
-  box.innerHTML += `<span>${esc(m.kind === "photo" ? tr("photo") : tr("video"))
-    } · ${esc(tr("tap_close"))}</span>`;
+  box.innerHTML += `<span>${esc(thumbTag(m))} · ${esc(tr("tap_close"))}</span>`;
   document.body.appendChild(box);
 }
 
@@ -9145,8 +9065,8 @@ function abortBlock(){
 function mediaBlock(r){
   return `<div class="media">${r.media.filter(m=>!m.slot).map(m=>`
     <div class="thumb" onclick="zoomMedia('${m.uid}')">
-      ${m.kind==="photo"?`<img src="${m.url}">`:`<video src="${m.url}" muted></video>`}
-      <b>${m.kind==="photo"?tr("photo"):tr("video")}</b>
+      ${thumbFace(m)}
+      <b>${thumbTag(m)}</b>
       <span onclick="event.stopPropagation();dropMedia('${m.uid}')">×</span>
     </div>`).join("")}</div>`;
 }
@@ -9256,7 +9176,8 @@ function pointRow(p, u, showTag){
   const shotBox = wantShot || wantValue ? `
     <div class="pshot${shotMissing?" miss":""}" id="psb_${id}">
       ${wantShot?`<button onclick="document.getElementById('ps_${id}').click()">${
-        p.gallery ? "🖼" : "📷"} ${tr(p.gallery ? "photo_pick" : "photo")}</button>
+        p.gallery ? "🖼" : "📷"} ${tr(p.doc ? "photo_doc"
+          : p.gallery ? "photo_pick" : "photo")}</button>
       ${/* `capture` is what makes the phone open the camera and nothing else.
             It is right almost everywhere: the operator has the speaker in front
             of him and photographs it there and then. It is wrong on a point
@@ -9265,11 +9186,12 @@ function pointRow(p, u, showTag){
             inspection may be filled in afterwards. Dropping the attribute lets
             the phone offer the gallery as well; it does not take the camera
             away. */""}
-      <input id="ps_${id}" class="hidden" type="file" accept="image/*"
+      <input id="ps_${id}" class="hidden" type="file"
+        accept="image/*${p.doc ? ",application/pdf" : ""}"
         ${p.gallery ? "" : `capture="environment"`} multiple
         onchange="addMedia(this,${u},'${p.id}')">
       <div class="media">${shots.filter(m=>m.kind==="photo").map(m=>`
-        <div class="thumb" onclick="zoomMedia('${m.uid}')"><img src="${m.url}">
+        <div class="thumb" onclick="zoomMedia('${m.uid}')">${thumbFace(m)}
           <span onclick="event.stopPropagation();dropMedia('${m.uid}')">×</span>
         </div>`).join("")}</div>`:""}
       ${sampleBox(p)}
@@ -9307,8 +9229,8 @@ function pointRow(p, u, showTag){
         onchange="addMedia(this,${u},'${p.id}')">
       <div class="media">${shots.map(m=>`
         <div class="thumb" onclick="zoomMedia('${m.uid}')">
-          ${m.kind==="photo"?`<img src="${m.url}">`:`<video src="${m.url}" muted></video>`}
-          <b>${m.kind==="photo"?tr("photo"):tr("video")}</b>
+          ${thumbFace(m)}
+          <b>${thumbTag(m)}</b>
           <span onclick="event.stopPropagation();dropMedia('${m.uid}')">×</span>
         </div>`).join("")}</div>
       <textarea placeholder="${tr("notes_fail_ph")}"

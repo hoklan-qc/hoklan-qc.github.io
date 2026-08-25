@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="9.5">
+<meta name="app-version" content="9.6">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -720,7 +720,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 62,
+      "plan_version": 63,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -4258,7 +4258,43 @@ const CONFIG = {
             "label":{"en":"Transducer","zh":"换能器","es":"Transductor"},
             "help":{"en":"Photograph the capsule with its markings visible. It is the part that decides how the microphone sounds, the cheapest one to substitute quietly, and the one no external photograph can show.",
                     "zh":"拍摄拾音头，标识需清晰可见。它决定了麦克风的音色，是最容易被悄悄替换的廉价件，也是任何外观照片都拍不到的部件。",
-                    "es":"Fotografíe la cápsula con sus marcas a la vista. Es la pieza que decide cómo suena el micrófono, la más barata de sustituir en silencio, y la que ninguna foto exterior puede mostrar."}}]}
+                    "es":"Fotografíe la cápsula con sus marcas a la vista. Es la pieza que decide cómo suena el micrófono, la más barata de sustituir en silencio, y la que ninguna foto exterior puede mostrar."}}]},
+
+        /* Va inmediatamente después de la inspección interna y no antes: el
+           micrófono ya está abierto y la batería ya está a la vista, así que
+           la medición cuesta un minuto en vez de un desmontaje entero.
+
+           Se mide con la batería fuera del circuito. Con la celda conectada a
+           la tarjeta lo que lee el multímetro es el conjunto, no la celda, y
+           una batería agotada con la tarjeta consumiendo puede dar una lectura
+           que parece razonable. */
+        {"id":"PHI_BAT_VOLT","plan":"PHI","optional":false,"evidence":[],
+         "label":{"en":"BATTERY VOLTAGE","zh":"电池电压","es":"VOLTAJE DE LA BATERÍA"},
+         "steps":[
+           {"en":"With the microphone already open, disconnect the battery","zh":"在麦克风已拆开的状态下，断开电池","es":"Con el micrófono ya abierto, desconecte la batería"},
+           {"en":"Measure across its terminals with the multimeter on DC volts","zh":"将万用表置于直流电压档，测量电池两端","es":"Mida entre sus bornes con el multímetro en voltios de continua"},
+           {"en":"Write the reading down and photograph the display","zh":"记录读数并拍摄万用表显示","es":"Anote la lectura y fotografíe la pantalla"},
+           {"en":"Reconnect the battery and close the microphone","zh":"重新接上电池并装回外壳","es":"Vuelva a conectar la batería y cierre el micrófono"}],
+         "points":[
+           {"section":{"en":"The measurement","zh":"测量","es":"La medición"},
+            "help":{"en":"Out of circuit and with the microphone off. What is being measured is the cell, not the cell with a board hanging off it.",
+                    "zh":"须在断路状态下、麦克风关机时测量。所测的是电芯本身，而不是连着电路板的电芯。",
+                    "es":"Fuera del circuito y con el micrófono apagado. Lo que se mide es la celda, no la celda con una tarjeta colgando."}},
+           {"id":"phi_bv_out","code":"WMIC-013",
+            "label":{"en":"Battery disconnected from the board","zh":"电池已与电路板断开","es":"Batería desconectada de la tarjeta"},
+            "help":{"en":"Unplug the connector, or lift one terminal if it is soldered. Handle it by the body and not by the wires: the tabs of these cells tear at the weld and a torn tab is a unit lost in the inspection itself.",
+                    "zh":"拔下接头；若为焊接，则断开其中一极。搬动时握住电芯本体，不要拉扯导线：此类电芯的极耳容易在焊点处撕裂，一旦撕裂，这台机器就毁在检验环节。",
+                    "es":"Desconecte el conector, o levante un borne si va soldado. Sujétela por el cuerpo y no por los cables: las pestañas de estas celdas se rompen por la soldadura, y una pestaña rota es una unidad perdida en la propia inspección."}},
+           {"id":"phi_bv_value","code":"WMIC-012","measure":{"unit":"V","step":"0.01"},
+            "label":{"en":"Battery voltage","zh":"电池电压","es":"Voltaje de la batería"},
+            "help":{"en":"Multimeter on DC volts, red probe to the positive terminal and black to the negative. Read the figure once it settles and write it in the box with its two decimals. Compare it against the specification for this cell before passing or failing the point.",
+                    "zh":"万用表置于直流电压档，红表笔接正极，黑表笔接负极。待读数稳定后读取，并填入方框，保留两位小数。判定合格与否之前，须与该电芯的规格核对。",
+                    "es":"Multímetro en voltios de continua, punta roja al borne positivo y negra al negativo. Lea la cifra cuando se estabilice y escríbala en el recuadro con sus dos decimales. Compárela con la especificación de esta celda antes de aprobar o reprobar el punto."}},
+           {"id":"phi_bv_photo","code":"WMIC-012","photo":true,
+            "label":{"en":"Photo of the measurement","zh":"测量照片","es":"Foto de la medición"},
+            "help":{"en":"Photograph the multimeter with the reading on screen and the probes on the battery, both in the same picture. A photograph of the display alone does not say what was measured, and a figure typed into a box on its own does not say where it came from.",
+                    "zh":"拍摄万用表，读数与搭在电池上的表笔须同时入镜。只拍显示屏无法说明测的是什么，只填数字也无法说明数值从何而来。",
+                    "es":"Fotografíe el multímetro con la lectura en pantalla y las puntas sobre la batería, las dos cosas en la misma foto. Una foto de la pantalla sola no dice qué se midió, y una cifra escrita en un recuadro no dice de dónde salió."}}]}
       ]
     }
   }

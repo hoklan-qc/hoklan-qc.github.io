@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="9.4">
+<meta name="app-version" content="9.5">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -523,6 +523,8 @@ const CONFIG = {
     "HK-ARC106A2":"YIS","HK-ARC108A2":"YIS","HK-BAS115A1":"RHY",
     "HK-BAS118A1":"RHY","HK-BRA208A1":"YIS","HK-BRA208B1":"YIS",
     "HK-BRA210A1":"YIS","HK-BRA210B1":"YIS","HK-BRA212B1":"YIS",
+    /* Desarrollo. Ver DEV_REFS. */
+    "HK-BRA130":"YIS","HK-BRA330":"YIS",
     "HK-DEC115A1":"RHY","HK-DEL101":"RHY","HK-DEL103P":"RHY",
     "HK-DEL105":"RHY","HK-DEL110B1":"RHY","HK-DEL115B1":"RHY",
     "HK-DEL210A1":"RHY","HK-EPS112A1":"RHY","HK-NOV01":"YIS",
@@ -620,6 +622,14 @@ const CONFIG = {
     "AUD-018":{"en":"DSP mode does not change the sound","zh":"DSP 模式不改变声音","es":"El modo DSP no cambia el sonido"},
     "PWR-010":{"en":"No start-up tone or greeting","zh":"无开机音或问候语","es":"Sin sonido de arranque ni saludo"},
     "PWR-011":{"en":"Start-up sound at the wrong level","zh":"开机声音音量不当","es":"Sonido de arranque con el nivel equivocado"},
+    /* BRAGI: lo que su esquema de funciones puede incumplir y ningún código
+       anterior nombra. */
+    "PWR-013":{"en":"Automatic power-off does not follow the rule","zh":"自动关机不符合规则","es":"El apagado automático no cumple la regla"},
+    "PWR-014":{"en":"USB-C output does not deliver or does not cut off","zh":"USB-C 输出无电或未按规则切断","es":"La salida USB-C no entrega o no corta"},
+    "BAT-010":{"en":"Low battery is not signalled as specified","zh":"低电量提示不符合规格","es":"La batería baja no se señaliza como se especifica"},
+    "UI-001":{"en":"The display does not show the specified text","zh":"显示屏未显示规定的内容","es":"La pantalla no muestra el texto especificado"},
+    "UI-002":{"en":"An LED does not follow its specified state","zh":"指示灯状态不符合规定","es":"Un LED no sigue el estado especificado"},
+    "UI-003":{"en":"A gesture is not recognised as specified","zh":"按键手势识别不符合规格","es":"Un gesto no se reconoce como se especifica"},
     "PWR-012":{"en":"Start-up sound is not the same every time","zh":"每次开机声音不一致","es":"El sonido de arranque no es igual todas las veces"},
     "MOD-001":{"en":"Mode button does not change mode","zh":"模式键无法切换模式","es":"La tecla de modo no cambia de modo"},
     "MOD-002":{"en":"Does not switch to USB when the drive is connected","zh":"插入 U 盘后未切换到 USB","es":"No pasa a USB al conectar la memoria"},
@@ -636,6 +646,7 @@ const CONFIG = {
     "DSP-006":{"en":"Display colour is not the specified one","zh":"显示颜色与规定不符","es":"El color de la pantalla no es el especificado"},
     "DSP-007":{"en":"Mode name misspelled on the display","zh":"显示屏上的模式名称拼写错误","es":"Nombre de modo mal escrito en la pantalla"},
     "BT-012":{"en":"Bluetooth name does not match the product branding","zh":"蓝牙名称与产品标识不一致","es":"El nombre Bluetooth no coincide con la marca del producto"},
+    "BT-013":{"en":"Does not enter pairing or is not visible","zh":"无法进入配对或不可被搜索","es":"No entra en emparejamiento o no queda visible"},
     "LED-002":{"en":"Charging LED abnormal","zh":"充电指示灯异常","es":"LED de carga anormal"},
     "LED-003":{"en":"Mode LED abnormal","zh":"模式指示灯异常","es":"LED de modo anormal"},
     "LED-006":{"en":"Light does not switch on or off","zh":"灯光无法开关","es":"La luz no se enciende o no se apaga"},
@@ -709,7 +720,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 61,
+      "plan_version": 62,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -863,7 +874,7 @@ const CONFIG = {
                     "es":"El panel lleva ventilador. Debe girar con el equipo encendido, sin roce, chirrido ni traqueteo, y la rejilla debe estar libre."}}]},
 
         {"id":"USB","optional":false,"only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"USB","zh":"USB","es":"USB"},
          "steps":[
            {"en":"Insert the HOKLAN test USB drive into the speaker","zh":"将 HOKLAN 测试 U 盘插入音箱","es":"Inserte la memoria USB de prueba HOKLAN en el parlante"},
@@ -1075,7 +1086,7 @@ const CONFIG = {
         {/* RHYME's cabinets carry no SD slot, so the test is filtered out rather
               than left for the inspector to mark N/A thirty times. */
          "id":"SD","optional":true,"only_factory":["YIS","RHY","EAG"],
-         "skip_factory":["RHY"],"skip":["HK-KAP103","HK-KAP330"],
+         "skip_factory":["RHY"],"skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"SD CARD","zh":"SD 卡"},
          "steps":[
            {"en":"Insert the HOKLAN test SD card into the speaker","zh":"将 HOKLAN 测试 SD 卡插入音箱"},
@@ -1174,7 +1185,7 @@ const CONFIG = {
                     "zh":"SD 卡保持插入，关机后再开机。应自动回到 SD 模式并开始播放，无需按任何键。"}}]},
 
         {"id":"BLUETOOTH","optional":false,"only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"BLUETOOTH","zh":"蓝牙"},
          "steps":[
            {"en":"Put the speaker in Bluetooth mode and leave it discoverable","zh":"将音箱切换到蓝牙模式并保持可被搜索"},
@@ -1340,7 +1351,7 @@ const CONFIG = {
            es lo que se aprueba, pero el proveedor del módulo cambia entre lotes
            y el lote es lo que se embarca. */
         {"id":"RX_FM_COMPAT","optional":false,"only_factory":["YIS"],
-         "skip":["HK-KAP103","HK-KAP330"],"evidence":[],
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],"evidence":[],
          "label":{"en":"COMPATIBILITY · WIRELESS RECEIVER AND FM",
                   "zh":"兼容性 · 无线接收模块与调频",
                   "es":"COMPATIBILIDAD · RECEPTOR INALÁMBRICO Y FM"},
@@ -1391,7 +1402,7 @@ const CONFIG = {
               received - which is also why INTERNAL asked for a photograph of the
               FM antenna routing. Both come out together. */
          "id":"RADIO_FM","optional":true,"only_factory":["YIS","RHY","EAG"],
-         "skip_factory":["RHY"],"skip":["HK-KAP103","HK-KAP330"],
+         "skip_factory":["RHY"],"skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"FM RADIO","zh":"调频收音"},
          "steps":[
            {"en":"Select radio mode on the speaker","zh":"将音箱切换到收音模式"},
@@ -1450,7 +1461,7 @@ const CONFIG = {
                     "zh":"收音模式下灯光应按设计保持关闭：灯板驱动会干扰调频接收。若灯亮起，属于固件缺陷。"}}]},
 
         {"id":"AUX","optional":false,"only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"AUX LINE","zh":"AUX 音频输入"},
          "steps":[
            {"en":"Select AUX mode on the speaker first","zh":"先在音箱上切换到 AUX 模式"},
@@ -1513,7 +1524,7 @@ const CONFIG = {
            source up for on its own.
            ------------------------------------------------------------------ */
         {"id":"DSP_MODES","optional":false,"only_factory":["RHY"],"evidence":["video"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"DSP MODES","zh":"DSP 模式","es":"MODOS DSP"},
          "steps":[
            {"en":"With audio playing, press the DSP MODE button","zh":"在有音频播放时按下 DSP 模式键","es":"Con audio sonando, pulse la tecla MODOS DSP"},
@@ -1543,7 +1554,7 @@ const CONFIG = {
                     "es":"Deje un modo distinto del primero, apague y encienda. Debe volver al mismo."}}]},
 
         {"id":"SIGNAL_LIMIT","optional":false,"only_factory":["RHY"],"evidence":["video"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"SIGNAL AND LIMIT LEDS","zh":"信号与限幅指示灯","es":"LEDS SEÑAL Y LÍMITE"},
          "steps":[
            {"en":"With programme playing, watch the two LEDs on the panel","zh":"在有节目声时观察面板上的两个指示灯","es":"Con programa sonando, observe los dos LED del panel"},
@@ -1559,7 +1570,7 @@ const CONFIG = {
                     "es":"Suba el volumen hasta que aparezca y bájelo hasta que se apague. Un LÍMITE siempre encendido, o que nunca enciende, no le sirve a quien está en tarima, que es el único que lo mira."}}]},
 
         {"id":"XLR_OUT","optional":false,"only_factory":["RHY"],"evidence":[],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"XLR OUTPUT","zh":"XLR 输出","es":"SALIDA XLR"},
          "steps":[
            {"en":"Connect the XLR output to a second unit","zh":"将 XLR 输出接到第二台设备","es":"Conecte la SALIDA XLR a un segundo equipo"},
@@ -1575,7 +1586,7 @@ const CONFIG = {
                     "es":"Escuche en el segundo equipo con la cabina en silencio: no debe haber zumbido ni siseo."}}]},
 
         {"id":"INPUT_CHANNELS","optional":false,"only_factory":["RHY"],"evidence":["video"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"INPUT CHANNELS","zh":"输入通道","es":"CANALES DE ENTRADA"},
          "steps":[
            {"en":"Microphone on XLR into channel 1, then the same on a 1/4 inch plug","zh":"先用 XLR 将麦克风接入通道 1，再改用 6.35 mm 插头","es":"Micrófono por XLR en el canal 1, y después lo mismo con plug de 1/4\""},
@@ -1641,7 +1652,7 @@ const CONFIG = {
                     "es":"Debe atenuar la música sin tocar el nivel de los micrófonos de los canales 1 y 2."}}]},
 
         {"id":"DISPLAY","optional":true,"only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"DISPLAY","zh":"显示屏"},
          "steps":[
            {"en":"Switch the speaker on and let the display settle","zh":"开机并等待显示屏稳定"},
@@ -1689,7 +1700,7 @@ const CONFIG = {
                     "es":"Recorra los modos DSP y fotografíe la pantalla en cada uno. Lea cada nombre letra por letra y compárelo con la especificación de este modelo."}}]},
 
         {"id":"REMOTE","optional":true,"only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"REMOTE CONTROL","zh":"遥控器"},
          "steps":[
            {"en":"Check the remote has a battery; remove the insulator if new","zh":"确认遥控器有电池，新品请抽出绝缘片"},
@@ -2279,13 +2290,551 @@ const CONFIG = {
                     "zh":"先拍照，再接上电源确认可充电。充电时轻微活动插头：不应断电。整台音箱都依赖这个接口。",
                     "es":"Fotografíelo, luego conecte la fuente y confirme que carga. Mueva el plug dentro del jack mientras carga: no debe cortarse. Es el conector del que depende toda la cabina."}}]},
 
+        /* ===== BRAGI — HK-BRA130 y HK-BRA330 ================================
+           Producto en desarrollo. Las dos referencias comparten esquema, así
+           que comparten plan.
+
+           Escrito contra el esquema de funciones completo: T1 estados, T2
+           acciones por botón y gesto, T3 realimentación por evento y T4 reglas
+           transversales. Donde una prueba cita una regla — R3, R7, R11 — es
+           porque el esquema remite a ella en vez de repetirla.
+
+           Dos decisiones sobre qué se prueba y qué no. La primera: los textos
+           de pantalla se escriben literales en la ayuda, con sus rarezas de
+           siete segmentos incluidas —AUH, PLAN, bAJO, NO-C, y la N torcida de
+           K ON—, porque un inspector que no las tenga por delante las reporta
+           como defecto de firmware y tiene razón aparente. La segunda: las
+           reglas se prueban por su efecto observable y no por su enunciado; R3
+           no es un punto que diga «se cumple la memoria», sino apagar, encender
+           y mirar qué sobrevivió.
+
+           Las pruebas fotográficas no se repiten aquí: PARTES EXTERNAS,
+           ACCESORIOS, MATERIAL IMPRESO y PARTES INTERNAS son las de siempre y
+           estas referencias las heredan por no llevar etiqueta de plan propia.
+           ------------------------------------------------------------------ */
+        {"id":"BRG_POWER","optional":false,"only_factory":["YIS"],"evidence":[],
+         "only":["HK-BRA130","HK-BRA330"],
+         "label":{"en":"POWER ON AND OFF","zh":"开机与关机","es":"ENCENDIDO Y APAGADO"},
+         "steps":[
+           {"en":"Hold B1 for two seconds to switch on","zh":"长按 B1 两秒开机","es":"Mantenga B1 dos segundos para encender"},
+           {"en":"Watch the display and listen through the whole start-up","zh":"完整观察开机过程的显示与声音","es":"Mire la pantalla y escuche todo el arranque"},
+           {"en":"Check the starting values before touching anything","zh":"在操作任何按键之前，先核对开机默认值","es":"Compruebe los valores de arranque antes de tocar nada"},
+           {"en":"Hold B1 again to switch off","zh":"再次长按 B1 关机","es":"Vuelva a mantener B1 para apagar"}],
+         "points":[
+           {"section":{"en":"Switching on","zh":"开机","es":"Al encender"},
+            "help":{"en":"Long press is two full seconds by R13. A shorter press toggles X-Bass instead, which is the usual reason a unit looks like it does not switch on.",
+                    "zh":"按 R13，长按为完整两秒。时间不足则变成切换重低音，这也是机器看似无法开机最常见的原因。",
+                    "es":"Pulsación larga son dos segundos completos, por R13. Más corta alterna X-Bass, que es el motivo habitual de que una unidad parezca no encender."}},
+           {"id":"brg_on","code":"PWR-001","tag":"B1",
+            "label":{"en":"Switches on with a long press of B1","zh":"长按 B1 可开机","es":"Enciende con pulsación larga de B1"},
+            "help":{"en":"From off, hold B1 for two seconds. It must come up on its own.",
+                    "zh":"关机状态下长按 B1 两秒，应能自行启动。",
+                    "es":"Desde apagado, mantenga B1 dos segundos. Debe arrancar sola."}},
+           {"id":"brg_hola","code":"PWR-010","tag":"B1",
+            "label":{"en":"HOLA on the display for 2 s, with the start-up melody","zh":"显示 HOLA 两秒，并播放开机音乐","es":"HOLA en pantalla 2 s, con la melodía de arranque"},
+            "help":{"en":"The display must read HOLA for two seconds and the start-up melody must play. Both, together.",
+                    "zh":"显示屏应显示 HOLA 两秒，同时播放开机音乐。两者缺一不可。",
+                    "es":"La pantalla debe decir HOLA durante dos segundos y sonar la melodía de arranque. Las dos cosas, juntas."}},
+           {"id":"brg_leds_init","code":"UI-002",
+            "label":{"en":"Every LED at its initial state","zh":"各指示灯处于初始状态","es":"Todos los LED en su estado inicial"},
+            "help":{"en":"B1 off because X-Bass starts inactive, B2 slow flashing because it starts in Bluetooth without a device, B3 as the lighting was left, B4 to B6 full, B7 and B8 off because no microphone is connected.",
+                    "zh":"B1 熄灭（重低音默认关闭），B2 慢闪（默认蓝牙且未连接设备），B3 与上次灯光状态一致，B4 至 B6 常亮，B7 与 B8 熄灭（未接麦克风）。",
+                    "es":"B1 apagado porque X-Bass arranca inactivo, B2 en parpadeo lento porque arranca en Bluetooth sin dispositivo, B3 como quedó la iluminación, B4 a B6 plenos, y B7 y B8 apagados porque no hay micrófono."}},
+           {"section":{"en":"Starting values — R4","zh":"开机默认值 — R4","es":"Valores de arranque — R4"},
+            "help":{"en":"Four values fixed by rule. They exist to stop the two commonest field complaints: starting loud, and feedback the moment a microphone is plugged in.",
+                    "zh":"由规则规定的四个默认值。其目的是避免该品类最常见的两种客诉：开机音量过大，以及插入麦克风瞬间的啸叫。",
+                    "es":"Cuatro valores fijados por regla. Existen para evitar las dos quejas de campo más frecuentes: arrancar fuerte, y el acople al conectar el micrófono."}},
+           {"id":"brg_r4_vol","code":"AUD-006","tag":"P1",
+            "label":{"en":"Master volume starts at 4 of 32","zh":"主音量开机值为 4（满量程 32）","es":"Volumen maestro arranca en 4 de 32"},
+            "help":{"en":"Turn P1 one step and read the display: it must have started at 4. Not at whatever it was left at before switching off.",
+                    "zh":"将 P1 转动一格并读取显示：开机值应为 4，而不是关机前的数值。",
+                    "es":"Gire P1 un paso y lea la pantalla: debe haber arrancado en 4. No en el valor en que se dejó antes de apagar."}},
+           {"id":"brg_r4_rest","code":"MOD-004",
+            "label":{"en":"Starts in Bluetooth, X-Bass off, mic priority 0%","zh":"开机进入蓝牙，重低音关闭，麦克风优先 0%","es":"Arranca en Bluetooth, X-Bass inactivo, prioridad de micrófono 0%"},
+            "help":{"en":"Three values at once: the mode must be Bluetooth, B1 must be off, and B7 white. Whatever the speaker was doing when it was switched off.",
+                    "zh":"三项同时核对：模式应为蓝牙，B1 应熄灭，B7 应为白色。无论关机前处于何种状态。",
+                    "es":"Tres valores a la vez: el modo debe ser Bluetooth, B1 apagado y B7 blanco. Sea lo que sea que estuviera haciendo al apagarse."}},
+           {"section":{"en":"Switching off","zh":"关机","es":"Al apagar"},
+            "help":{"en":"The same long press, and the same pair of signals in reverse.",
+                    "zh":"同样的长按操作，以及对应的两个反向提示。",
+                    "es":"La misma pulsación larga, y el mismo par de señales al revés."}},
+           {"id":"brg_off","code":"PWR-001","tag":"B1",
+            "label":{"en":"CHAO for 2 s and the shutdown melody","zh":"显示 CHAO 两秒并播放关机音乐","es":"CHAO 2 s y melodía de apagado"},
+            "help":{"en":"Hold B1. The display must read CHAO for two seconds, the shutdown melody must play and every LED must go out.",
+                    "zh":"长按 B1。显示屏应显示 CHAO 两秒，播放关机音乐，所有指示灯熄灭。",
+                    "es":"Mantenga B1. La pantalla debe decir CHAO dos segundos, sonar la melodía de apagado y apagarse todos los LED."}}]},
+
+        {"id":"BRG_GESTURES","optional":false,"only_factory":["YIS"],"evidence":[],
+         "only":["HK-BRA130","HK-BRA330"],
+         "label":{"en":"GESTURES AND DISABLED BUTTONS","zh":"按键手势与无功能按键","es":"GESTOS Y BOTONES SIN FUNCIÓN"},
+         "steps":[
+           {"en":"Check the three gestures on a button that has all three","zh":"在具备三种手势的按键上逐一验证","es":"Compruebe los tres gestos en un botón que tenga los tres"},
+           {"en":"Then press a button that has no function in this mode","zh":"随后按下在当前模式下无功能的按键","es":"Luego pulse un botón sin función en el modo actual"}],
+         "points":[
+           {"section":{"en":"The three gestures — R13","zh":"三种手势 — R13","es":"Los tres gestos — R13"},
+            "help":{"en":"Short under 800 ms, long two seconds or more, double two short presses less than 400 ms apart. B1 is the button to try them on: it has a different action for each.",
+                    "zh":"短按小于 800 ms，长按两秒以上，双击为两次短按且间隔小于 400 ms。宜在 B1 上验证：三种手势各对应不同功能。",
+                    "es":"Corta por debajo de 800 ms, larga dos segundos o más, doble dos cortas con menos de 400 ms entre ellas. B1 es el botón para probarlos: tiene una acción distinta para cada uno."}},
+           {"id":"brg_g_short","code":"UI-003","tag":"B1",
+            "label":{"en":"Short press — X-Bass on and off","zh":"短按 — 重低音开关","es":"Pulsación corta — X-Bass activa y desactiva"},
+            "help":{"en":"A quick tap must toggle X-Bass and show bAJO or PLAN. It must not switch the speaker off.",
+                    "zh":"轻按一下应切换重低音，并显示 bAJO 或 PLAN，不应关机。",
+                    "es":"Un toque rápido debe alternar X-Bass y mostrar bAJO o PLAN. No debe apagar el parlante."}},
+           {"id":"brg_g_double","code":"UI-003","tag":"B1",
+            "label":{"en":"Double press — battery percentage","zh":"双击 — 显示电量百分比","es":"Pulsación doble — porcentaje de batería"},
+            "help":{"en":"Two quick taps must show the percentage with the % icon for three seconds. If instead it toggles X-Bass twice, the double press is not being recognised.",
+                    "zh":"快速双击应显示电量百分比及 % 图标，持续三秒。若变成连续两次切换重低音，说明未识别为双击。",
+                    "es":"Dos toques rápidos deben mostrar el porcentaje con el icono % durante tres segundos. Si en su lugar alterna X-Bass dos veces, no se está reconociendo la pulsación doble."}},
+           {"section":{"en":"Buttons with no function — R12","zh":"无功能按键 — R12","es":"Botones sin función — R12"},
+            "help":{"en":"In AUX mode B4 and B6 do nothing. What is checked is that they do nothing quietly.",
+                    "zh":"在 AUX 模式下 B4 与 B6 无功能。此处检查的是它们是否\"安静地\"无功能。",
+                    "es":"En modo AUX, B4 y B6 no hacen nada. Lo que se comprueba es que no hagan nada en silencio."}},
+           {"id":"brg_r12","code":"UI-002","tag":"B4 B6",
+            "label":{"en":"No action, no sound, no message, LED off","zh":"无动作、无提示音、无显示，指示灯熄灭","es":"Sin acción, sin sonido, sin mensaje y LED apagado"},
+            "help":{"en":"With an AUX cable in, press B4 and B6. Nothing must happen: no beep, no text on the display, and their LEDs must be off. The unlit LED is the only signal the product gives.",
+                    "zh":"插入 AUX 线后按 B4 与 B6。应无任何反应：无提示音，显示屏无文字，指示灯应熄灭。熄灭的指示灯是产品给出的唯一提示。",
+                    "es":"Con el cable AUX puesto, pulse B4 y B6. No debe pasar nada: ni pitido, ni texto en pantalla, y sus LED deben estar apagados. El LED apagado es la única señal que da el producto."}},
+           {"id":"brg_b5_aux","code":"UI-002","tag":"B5",
+            "label":{"en":"B5 stays lit in AUX","zh":"B5 在 AUX 模式下保持常亮","es":"B5 sigue encendido en AUX"},
+            "help":{"en":"B5 is the exception: it keeps its function in AUX, so its LED must stay full while B4 and B6 are out.",
+                    "zh":"B5 为例外：在 AUX 模式下仍保留功能，因此在 B4、B6 熄灭时其指示灯应保持常亮。",
+                    "es":"B5 es la excepción: conserva su función en AUX, así que su LED debe seguir pleno mientras B4 y B6 están apagados."}}]},
+
+        {"id":"BRG_MODES","optional":false,"only_factory":["YIS"],"evidence":["video"],
+         "only":["HK-BRA130","HK-BRA330"],
+         "label":{"en":"MODES AND SWITCHING","zh":"模式与切换","es":"MODOS Y CONMUTACIÓN"},
+         "steps":[
+           {"en":"With nothing plugged in, walk the modes with a long press of B5","zh":"在未插任何设备时，长按 B5 逐一切换模式","es":"Sin nada conectado, recorra los modos con pulsación larga de B5"},
+           {"en":"Then plug the USB drive in and watch what happens on its own","zh":"随后插入 U 盘，观察其自动行为","es":"Luego conecte la USB y observe qué pasa por sí solo"},
+           {"en":"Repeat with the AUX cable","zh":"用 AUX 线重复上述过程","es":"Repita con el cable AUX"},
+           {"en":"Record one clip covering the whole sequence","zh":"用一段视频记录整个过程","es":"Grabe un video que cubra toda la secuencia"}],
+         "points":[
+           {"section":{"en":"The cycle of modes","zh":"模式循环","es":"El ciclo de modos"},
+            "help":{"en":"One button for every mode, and a spoken name for each. What is checked is not that the key responds but that the cycle closes and that it says where it is.",
+                    "zh":"用一个按键切换所有模式，每个模式都有语音播报。此处检查的不是按键是否有反应，而是循环能否走完一圈，以及是否播报当前模式。",
+                    "es":"Un solo botón para todos los modos, y un nombre hablado para cada uno. Lo que se comprueba no es que la tecla responda, sino que el ciclo cierre y que diga dónde está."}},
+           {"id":"brg_cycle","code":"MOD-001","tag":"B5",
+            "label":{"en":"Long press of B5 walks the modes","zh":"长按 B5 可切换模式","es":"Pulsación larga de B5 recorre los modos"},
+            "help":{"en":"With nothing plugged in there are only two: Bluetooth and FM. The cycle must close back on the first one.",
+                    "zh":"未插任何设备时仅有两个模式：蓝牙与收音。循环应能回到第一个。",
+                    "es":"Sin nada conectado sólo hay dos: Bluetooth y FM. El ciclo debe cerrar y volver al primero."}},
+           {"id":"brg_mode_name","code":"UI-001",
+            "label":{"en":"Display and voice name each mode","zh":"显示与语音均播报模式名称","es":"Pantalla y voz nombran cada modo"},
+            "help":{"en":"On each change the display must show the mode for two seconds — BT 1, USB, FM or AUH — and a Spanish voice must say it. AUH is how AUX is written on seven segments: it is not a fault.",
+                    "zh":"每次切换时，显示屏应显示模式名称两秒——BT 1、USB、FM 或 AUH——并有西班牙语语音播报。AUH 是 AUX 在七段显示上的写法，并非故障。",
+                    "es":"En cada cambio la pantalla debe mostrar el modo dos segundos —BT 1, USB, FM o AUH— y una voz en español debe decirlo. AUH es como se escribe AUX en siete segmentos: no es una falla."}},
+           {"section":{"en":"Conditional modes — R7","zh":"条件性模式 — R7","es":"Modos condicionales — R7"},
+            "help":{"en":"USB and AUX only exist while something is plugged in. Plugging in switches to them; unplugging leaves them, with no message and no sound.",
+                    "zh":"USB 与 AUX 仅在插入设备时存在。插入即切换到该模式，拔出即退出，且无提示、无声音。",
+                    "es":"USB y AUX sólo existen mientras hay algo conectado. Al conectar conmuta a ellos; al retirar, sale sin mensaje y sin sonido."}},
+           {"id":"brg_usb_in","code":"MOD-002","tag":"C2",
+            "label":{"en":"USB inserted switches to USB on its own","zh":"插入 U 盘自动切换到 USB","es":"Al insertar la USB conmuta sola a USB"},
+            "help":{"en":"Plug the drive in without pressing anything. It must switch to USB, show USB for two seconds and start playing.",
+                    "zh":"插入 U 盘，无需按键。应自动切换到 USB，显示 USB 两秒并开始播放。",
+                    "es":"Conecte la memoria sin pulsar nada. Debe pasar a USB, mostrar USB dos segundos y empezar a reproducir."}},
+           {"id":"brg_usb_out","code":"MOD-003","tag":"C2",
+            "label":{"en":"USB removed returns to Bluetooth, silently","zh":"拔出 U 盘后静默返回蓝牙","es":"Al retirar la USB vuelve a Bluetooth, en silencio"},
+            "help":{"en":"Pull the drive out. It must go back to Bluetooth with no message on the display and no sound. An unreadable drive must do the same.",
+                    "zh":"拔出 U 盘，应返回蓝牙模式，显示屏无提示，也无声音。无法读取的 U 盘应有相同表现。",
+                    "es":"Retire la memoria. Debe volver a Bluetooth sin mensaje en pantalla y sin sonido. Una memoria ilegible debe hacer lo mismo."}},
+           {"id":"brg_aux_in","code":"MOD-002","tag":"AUX",
+            "label":{"en":"AUX inserted switches to AUX on its own","zh":"插入 AUX 自动切换到 AUX","es":"Al insertar el AUX conmuta solo a AUX"},
+            "help":{"en":"Plug the cable in. It must switch to AUX and show AUH for two seconds.",
+                    "zh":"插入线缆，应自动切换到 AUX 并显示 AUH 两秒。",
+                    "es":"Conecte el cable. Debe pasar a AUX y mostrar AUH durante dos segundos."}},
+           {"id":"brg_aux_out","code":"MOD-003","tag":"AUX",
+            "label":{"en":"AUX removed returns to the previous mode","zh":"拔出 AUX 后返回上一个模式","es":"Al retirar el AUX vuelve al modo anterior"},
+            "help":{"en":"Pull it out. It must return to the mode it was in before the cable went in — not always to Bluetooth — with no message and no sound.",
+                    "zh":"拔出线缆，应返回插线之前所处的模式，而非一律返回蓝牙，且无提示、无声音。",
+                    "es":"Retírelo. Debe volver al modo en que estaba antes de conectar el cable —no siempre a Bluetooth— sin mensaje y sin sonido."}}]},
+
+        {"id":"BRG_BT","optional":false,"only_factory":["YIS"],"evidence":[],
+         "only":["HK-BRA130","HK-BRA330"],
+         "label":{"en":"BLUETOOTH","zh":"蓝牙","es":"BLUETOOTH"},
+         "steps":[
+           {"en":"Switch on and leave it in Bluetooth without connecting","zh":"开机后停留在蓝牙模式，暂不连接","es":"Encienda y déjelo en Bluetooth sin conectar"},
+           {"en":"Pair the first phone","zh":"连接第一部手机","es":"Empareje el primer teléfono"},
+           {"en":"With the first one still connected, add a second","zh":"在第一部保持连接的情况下，再连接第二部","es":"Con el primero conectado, añada un segundo"},
+           {"en":"Finish with a long press of B2","zh":"最后长按 B2","es":"Termine con una pulsación larga de B2"}],
+         "points":[
+           {"section":{"en":"Pairing","zh":"配对","es":"Emparejando"},
+            "help":{"en":"The state the speaker starts in and returns to whenever it loses a device.",
+                    "zh":"这是开机时所处的状态，也是每次断开连接后自动回到的状态。",
+                    "es":"El estado en que arranca y al que vuelve cada vez que pierde un dispositivo."}},
+           {"id":"brg_bt_pair","code":"BT-013","tag":"B2",
+            "label":{"en":"B2 slow flashing and BT flashing on the display","zh":"B2 慢闪且显示屏 BT 闪烁","es":"B2 en parpadeo lento y BT parpadeando en pantalla"},
+            "help":{"en":"With no device connected it must be visible and waiting: B2 flashing slowly, BT flashing on the display, and the Bluetooth prompt heard on entering the mode.",
+                    "zh":"未连接设备时应处于可被搜索的等待状态：B2 慢闪，显示屏 BT 闪烁，进入该模式时播报蓝牙提示音。",
+                    "es":"Sin dispositivo conectado debe quedar visible y esperando: B2 en parpadeo lento, BT parpadeando en pantalla, y el aviso de Bluetooth al entrar al modo."}},
+           {"id":"brg_bt_one","code":"BT-004","tag":"B2",
+            "label":{"en":"First device — BT 1 and B2 solid blue","zh":"第一台设备 — 显示 BT 1，B2 常亮蓝色","es":"Primer dispositivo — BT 1 y B2 pleno azul"},
+            "help":{"en":"Pair a phone. The display must read BT 1 for two seconds, B2 must go solid blue and the connection tone must sound.",
+                    "zh":"连接手机。显示屏应显示 BT 1 两秒，B2 转为常亮蓝色，并播放连接提示音。",
+                    "es":"Empareje un teléfono. La pantalla debe decir BT 1 dos segundos, B2 pasar a pleno azul y sonar el tono de conexión."}},
+           {"id":"brg_bt_two","code":"BT-004","tag":"B2",
+            "label":{"en":"Second device — BT 2","zh":"第二台设备 — 显示 BT 2","es":"Segundo dispositivo — BT 2"},
+            "help":{"en":"With the first still connected, press B2 briefly and pair a second phone. The display must read BT 2. Both must be able to play, one at a time.",
+                    "zh":"在第一台保持连接时，短按 B2 并连接第二部手机。显示屏应显示 BT 2。两台应能轮流播放。",
+                    "es":"Con el primero conectado, pulse B2 brevemente y empareje un segundo teléfono. La pantalla debe decir BT 2. Los dos deben poder reproducir, uno a la vez."}},
+           {"id":"brg_bt_drop","code":"BT-013","tag":"B2",
+            "label":{"en":"Long press of B2 unpairs and goes back to pairing","zh":"长按 B2 断开并立即回到配对状态","es":"B2 largo desempareja y vuelve a emparejando"},
+            "help":{"en":"Hold B2. The disconnection tone must sound and the speaker must go straight back to pairing — B2 flashing slowly, BT flashing — without staying silent in between.",
+                    "zh":"长按 B2。应播放断开提示音，并立即回到配对状态——B2 慢闪、BT 闪烁——中间不应出现无响应的停顿。",
+                    "es":"Mantenga B2. Debe sonar el tono de desconexión y volver de inmediato a emparejando —B2 parpadeo lento, BT parpadeando— sin quedarse callado en medio."}}]},
+
+        {"id":"BRG_TWS","optional":false,"only_factory":["YIS"],"evidence":[],
+         "only":["HK-BRA130","HK-BRA330"],
+         "label":{"en":"TWS CHAINING","zh":"串联（TWS）","es":"ENCADENADO TWS"},
+         "steps":[
+           {"en":"Two speakers, both in Bluetooth mode","zh":"准备两台音箱，均处于蓝牙模式","es":"Dos parlantes, los dos en modo Bluetooth"},
+           {"en":"Double press B2 on one of them","zh":"在其中一台上双击 B2","es":"Pulse B2 dos veces en uno de ellos"},
+           {"en":"Once chained, play from the phone","zh":"串联成功后，用手机播放","es":"Ya encadenados, reproduzca desde el teléfono"},
+           {"en":"Cancel with another double press of B2","zh":"再次双击 B2 取消串联","es":"Cancele con otra pulsación doble de B2"}],
+         "points":[
+           {"id":"brg_tws_search","code":"BT-010","tag":"B2",
+            "label":{"en":"B2 fast flashing and LR flashing on the display","zh":"B2 快闪且显示屏 LR 闪烁","es":"B2 en parpadeo rápido y LR parpadeando en pantalla"},
+            "help":{"en":"Double press B2 in Bluetooth mode. B2 must flash fast — not slowly, which is pairing — the display must show LR flashing and the TWS voice prompt must be heard.",
+                    "zh":"在蓝牙模式下双击 B2。B2 应快闪，而非慢闪（慢闪为配对），显示屏应显示 LR 闪烁，并播报串联语音提示。",
+                    "es":"Pulse B2 dos veces en modo Bluetooth. B2 debe parpadear rápido —no lento, que es emparejando—, la pantalla mostrar LR parpadeando y oírse el aviso de voz TWS."}},
+           {"id":"brg_tws_link","code":"BT-004",
+            "label":{"en":"Chained — LR steady and both speakers playing","zh":"串联成功 — LR 常亮且两台同时播放","es":"Encadenados — LR fijo y las dos cabinas sonando"},
+            "help":{"en":"When the second speaker accepts, the display must show LR steady, B2 go solid blue and the connection tone sound. Play from the phone: both must sound together, in step.",
+                    "zh":"第二台接受连接后，显示屏应显示 LR 常亮，B2 转为常亮蓝色，并播放连接提示音。用手机播放：两台应同步发声。",
+                    "es":"Cuando la segunda acepta, la pantalla debe mostrar LR fijo, B2 pasar a pleno azul y sonar el tono de conexión. Reproduzca desde el teléfono: las dos deben sonar juntas y acompasadas."}},
+           {"id":"brg_tws_timeout","code":"BT-010",
+            "label":{"en":"Returns to Bluetooth after 3 min without linking","zh":"3 分钟未连接则返回蓝牙","es":"Vuelve a modo BT a los 3 minutos sin conexión"},
+            "help":{"en":"Leave it searching with no second speaker. At three minutes it must return to Bluetooth mode. It must not switch off: switching off at three minutes is the pairing rule, not this one.",
+                    "zh":"在无第二台音箱的情况下让其持续搜索。三分钟后应返回蓝牙模式，而不应关机：三分钟关机属于配对状态的规则，不适用于此。",
+                    "es":"Déjelo buscando sin segunda cabina. A los tres minutos debe volver a modo Bluetooth. No debe apagarse: apagarse a los tres minutos es la regla de emparejando, no ésta."}},
+           {"id":"brg_tws_cancel","code":"BT-010","tag":"B2",
+            "label":{"en":"Another double press cancels the chain","zh":"再次双击可取消串联","es":"Otra pulsación doble cancela el encadenado"},
+            "help":{"en":"Double press B2 again. The display must go back to BT 1 or BT 2 depending on what is connected, and B2 return to its Bluetooth state.",
+                    "zh":"再次双击 B2。显示屏应根据已连接设备返回 BT 1 或 BT 2，B2 恢复蓝牙状态。",
+                    "es":"Pulse B2 dos veces otra vez. La pantalla debe volver a BT 1 o BT 2 según lo que haya conectado, y B2 a su estado de Bluetooth."}}]},
+
+        {"id":"BRG_MIC","optional":false,"only_factory":["YIS"],"evidence":["video"],
+         "only":["HK-BRA130","HK-BRA330"],
+         "label":{"en":"MICROPHONE AND INSTRUMENT","zh":"麦克风与乐器","es":"MICRÓFONO E INSTRUMENTO"},
+         "steps":[
+           {"en":"Plug a microphone into MIC1 and watch B7 and B8","zh":"将麦克风插入 MIC1，观察 B7 与 B8","es":"Conecte un micrófono en MIC1 y mire B7 y B8"},
+           {"en":"Then use MIC2 with the selector on GUITAR","zh":"随后将选择开关置于 GUITAR，使用 MIC2","es":"Luego use MIC2 con el selector en GUITAR"},
+           {"en":"Walk the three priority levels with B7","zh":"用 B7 逐级切换三档优先","es":"Recorra los tres niveles de prioridad con B7"},
+           {"en":"Finish by checking the microphone in AUX mode","zh":"最后在 AUX 模式下检查麦克风","es":"Termine comprobando el micrófono en modo AUX"}],
+         "points":[
+           {"section":{"en":"What each input enables — R5","zh":"各输入口启用的功能 — R5","es":"Qué habilita cada entrada — R5"},
+            "help":{"en":"A microphone enables B7 and B8; an instrument enables only B8. Ducking the music under a guitar makes no sense, giving it reverb does.",
+                    "zh":"麦克风启用 B7 与 B8；乐器仅启用 B8。为吉他压低音乐没有意义，为其加混响则有。",
+                    "es":"Un micrófono habilita B7 y B8; un instrumento habilita sólo B8. Atenuar la música bajo una guitarra no tiene sentido, darle reverb sí."}},
+           {"id":"brg_mic_in","code":"MIC-001","tag":"B7 B8",
+            "label":{"en":"Microphone — MIC on the display, B7 and B8 light up","zh":"麦克风 — 显示 MIC，B7 与 B8 点亮","es":"Micrófono — MIC en pantalla, B7 y B8 se encienden"},
+            "help":{"en":"Plug it into MIC1. The display must read MIC for two seconds and B7 and B8 must go from off to full.",
+                    "zh":"插入 MIC1。显示屏应显示 MIC 两秒，B7 与 B8 应由熄灭转为常亮。",
+                    "es":"Conéctelo en MIC1. La pantalla debe decir MIC dos segundos y B7 y B8 pasar de apagados a plenos."}},
+           {"id":"brg_gt_in","code":"MIC-001","tag":"B8",
+            "label":{"en":"Instrument — GT on the display, only B8 lights up","zh":"乐器 — 显示 GT，仅 B8 点亮","es":"Instrumento — GT en pantalla, sólo B8 se enciende"},
+            "help":{"en":"Use MIC2 with the selector on GUITAR. The display must read GT and B8 light up, while B7 stays off. If B7 lights too, the rule is not being applied.",
+                    "zh":"将选择开关置于 GUITAR 并使用 MIC2。显示屏应显示 GT，B8 点亮，B7 保持熄灭。若 B7 同时点亮，说明该规则未生效。",
+                    "es":"Use MIC2 con el selector en GUITAR. La pantalla debe decir GT y encenderse B8, mientras B7 sigue apagado. Si B7 también enciende, la regla no se está aplicando."}},
+           {"id":"brg_mic_r4","code":"MIC-006","tag":"P1",
+            "label":{"en":"Mic volume returns to 4 every time it is connected","zh":"每次接入麦克风，其音量都回到 4","es":"El volumen de micrófono vuelve a 4 cada vez que se conecta"},
+            "help":{"en":"Set the mic volume high, unplug it and plug it back in. It must come back at 4 of 32. This is what stops the feedback squeal on connecting.",
+                    "zh":"将麦克风音量调高，拔出后再插入。应恢复为 4（满量程 32）。这正是避免插入瞬间啸叫的机制。",
+                    "es":"Suba el volumen de micrófono, desconéctelo y vuelva a conectarlo. Debe volver en 4 de 32. Es lo que evita el chillido de acople al conectar."}},
+           {"section":{"en":"Priority and karaoke","zh":"优先与卡拉OK","es":"Prioridad y karaoke"},
+            "help":{"en":"B7 walks three levels, each with its own colour and its own text. The colour is what the operator sees from a distance; the text is what settles which one it is.",
+                    "zh":"B7 循环三个档位，每档有各自的颜色与文字。颜色便于远距离辨识，文字用于确认具体档位。",
+                    "es":"B7 recorre tres niveles, cada uno con su color y su texto. El color es lo que se ve de lejos; el texto es lo que decide cuál es."}},
+           {"id":"brg_prio","code":"MIC-005","tag":"B7",
+            "label":{"en":"P 0 white, P 75 cyan, P100 blue","zh":"P 0 白色，P 75 青色，P100 蓝色","es":"P 0 blanco, P 75 cian, P100 azul"},
+            "help":{"en":"Press B7 three times with music playing and a microphone connected. The three levels must follow in order, each with its text and its colour, and the music must duck more at each step.",
+                    "zh":"在播放音乐且已接麦克风的状态下按 B7 三次。三个档位应依次出现，各自显示对应文字与颜色，且音乐的压低程度逐级增加。",
+                    "es":"Pulse B7 tres veces con música sonando y micrófono conectado. Los tres niveles deben salir en orden, cada uno con su texto y su color, y la música debe atenuarse más en cada paso."}},
+           {"id":"brg_karaoke","code":"MIC-007","tag":"B7",
+            "label":{"en":"Long press of B7 — K ON and KOFF","zh":"长按 B7 — 显示 K ON 与 KOFF","es":"B7 largo — K ON y KOFF"},
+            "help":{"en":"Hold B7 to switch karaoke on and off. The display must read K ON and KOFF. The N of K ON cannot be formed on seven segments and comes out misshapen: that is the display, not a fault.",
+                    "zh":"长按 B7 开关卡拉OK。显示屏应显示 K ON 与 KOFF。K ON 中的 N 无法用七段显示完整构成，会显得变形：这是显示限制，并非故障。",
+                    "es":"Mantenga B7 para activar y desactivar el karaoke. La pantalla debe decir K ON y KOFF. La N de K ON no se puede formar en siete segmentos y sale deformada: es la pantalla, no una falla."}},
+           {"section":{"en":"Always live — R6","zh":"始终有效 — R6","es":"Siempre activo — R6"},
+            "help":{"en":"The 6.3 mm inputs feed the speaker in every mode, AUX included and with playback paused. B7 is the one exception in AUX.",
+                    "zh":"6.3 mm 输入在所有模式下都送入功放，包括 AUX 模式以及暂停播放时。仅 B7 在 AUX 下为例外。",
+                    "es":"Las entradas de 6.3 mm alimentan el altavoz en todos los modos, AUX incluido y con la reproducción en pausa. B7 es la única excepción en AUX."}},
+           {"id":"brg_mic_always","code":"MIC-004",
+            "label":{"en":"The microphone is heard in every mode, even paused","zh":"各模式下麦克风均有声，暂停时亦然","es":"El micrófono se oye en todos los modos, incluso en pausa"},
+            "help":{"en":"Speak into it in Bluetooth, USB, FM and AUX, and with playback paused. It must be heard in all of them.",
+                    "zh":"在蓝牙、USB、收音、AUX 各模式下以及暂停播放时对麦克风讲话，均应有声。",
+                    "es":"Hable por él en Bluetooth, USB, FM y AUX, y con la reproducción en pausa. Debe oírse en todos."}},
+           {"id":"brg_b7_aux","code":"UI-002","tag":"B7",
+            "label":{"en":"In AUX the microphone sounds but B7 is dead","zh":"AUX 模式下麦克风有声但 B7 无效","es":"En AUX el micrófono suena pero B7 está deshabilitado"},
+            "help":{"en":"With the AUX cable in and a microphone connected, B7 must be off and do nothing. The microphone must still be heard. Both things at once, and that is by design.",
+                    "zh":"插入 AUX 线并接上麦克风时，B7 应熄灭且无任何反应，但麦克风仍应有声。两者同时成立，且属设计如此。",
+                    "es":"Con el cable AUX puesto y micrófono conectado, B7 debe estar apagado y no hacer nada. El micrófono debe seguir oyéndose. Las dos cosas a la vez, y es por diseño."}}]},
+
+        {"id":"BRG_KNOB","optional":false,"only_factory":["YIS"],"evidence":[],
+         "only":["HK-BRA130","HK-BRA330"],
+         "label":{"en":"KNOB P1 AND BUTTON B8","zh":"旋钮 P1 与按键 B8","es":"PERILLA P1 Y BOTÓN B8"},
+         "steps":[
+           {"en":"With a microphone connected, press B8 to walk the three parameters","zh":"在已接麦克风时，按 B8 循环三个参数","es":"Con micrófono conectado, pulse B8 para recorrer los tres parámetros"},
+           {"en":"Turn P1 on each one and read the display","zh":"在每个参数下转动 P1 并读取显示","es":"Gire P1 en cada uno y lea la pantalla"},
+           {"en":"Then let go and wait five seconds","zh":"随后停止操作并等待五秒","es":"Después suelte y espere cinco segundos"}],
+         "points":[
+           {"id":"brg_b8_cycle","code":"AUD-019","tag":"B8",
+            "label":{"en":"B8 walks master volume, mic volume and reverb","zh":"B8 在主音量、麦克风音量与混响间循环","es":"B8 recorre volumen maestro, volumen de micrófono y reverb"},
+            "help":{"en":"Each press moves to the next parameter and the display names it: two digits alone for master volume, M and the value for mic volume, RE and the value for reverb.",
+                    "zh":"每按一次切换到下一个参数，显示屏给出对应标识：主音量为纯两位数字，麦克风音量为 M 加数值，混响为 RE 加数值。",
+                    "es":"Cada pulsación pasa al siguiente parámetro y la pantalla lo nombra: dos dígitos solos para volumen maestro, M y el valor para volumen de micrófono, RE y el valor para reverb."}},
+           {"id":"brg_p1_colour","code":"UI-002","tag":"P1",
+            "label":{"en":"P1 white on master volume, blue on the other two","zh":"P1 主音量为白色，其余两项为蓝色","es":"P1 blanco en volumen maestro, azul en los otros dos"},
+            "help":{"en":"The colour separates master volume from the rest. Mic volume and reverb share blue, so only the display tells those two apart — which is why the text matters.",
+                    "zh":"颜色用于区分主音量与其他参数。麦克风音量与混响同为蓝色，只能靠显示文字区分，因此文字尤为重要。",
+                    "es":"El color separa el volumen maestro del resto. Volumen de micrófono y reverb comparten el azul, así que sólo la pantalla los distingue — por eso el texto importa."}},
+           {"id":"brg_r1","code":"AUD-019","tag":"P1",
+            "label":{"en":"Returns to master volume after 5 s — R1","zh":"5 秒后自动回到主音量 — R1","es":"Vuelve a volumen maestro a los 5 s — R1"},
+            "help":{"en":"Leave the knob on reverb, stop turning it and touch nothing. At five seconds it must return to master volume and P1 go back to white. Not three, not ten: five.",
+                    "zh":"将旋钮停在混响，停止转动且不做任何操作。五秒后应回到主音量，P1 恢复白色。既非三秒，也非十秒，而是五秒。",
+                    "es":"Deje la perilla en reverb, deje de girarla y no toque nada. A los cinco segundos debe volver a volumen maestro y P1 a blanco. Ni tres ni diez: cinco."}},
+           {"id":"brg_p1_limits","code":"UI-001","tag":"P1",
+            "label":{"en":"The value flashes twice at the top and at the bottom","zh":"到达最大值与最小值时数值闪烁两次","es":"El valor parpadea dos veces en el máximo y en el mínimo"},
+            "help":{"en":"Turn P1 all the way to one end and then to the other. At each end the value must flash twice — that is how the product says there is no more travel, since the knob itself has no stop.",
+                    "zh":"将 P1 旋到一端再旋到另一端。到达两端时数值应闪烁两次——旋钮本身无机械限位，这是产品提示已到尽头的方式。",
+                    "es":"Gire P1 hasta un extremo y luego al otro. En cada extremo el valor debe parpadear dos veces — es como el producto avisa que no hay más recorrido, ya que la perilla no tiene tope."}},
+           {"id":"brg_b8_off","code":"UI-002","tag":"B8",
+            "label":{"en":"With no microphone, B8 is off and does nothing","zh":"未接麦克风时 B8 熄灭且无功能","es":"Sin micrófono, B8 está apagado y no hace nada"},
+            "help":{"en":"Unplug the microphone. B8 must go out, P1 must return to master volume on its own, and pressing B8 must do nothing at all.",
+                    "zh":"拔出麦克风。B8 应熄灭，P1 应自动回到主音量，此时按 B8 不应有任何反应。",
+                    "es":"Desconecte el micrófono. B8 debe apagarse, P1 volver sola a volumen maestro, y pulsar B8 no debe hacer absolutamente nada."}}]},
+
+        {"id":"BRG_LIGHT","optional":false,"only_factory":["YIS"],"evidence":["video"],
+         "only":["HK-BRA130","HK-BRA330"],
+         "label":{"en":"LIGHTING","zh":"灯光","es":"ILUMINACIÓN"},
+         "steps":[
+           {"en":"With the lighting on, try the three gestures of B3","zh":"在灯光开启状态下，验证 B3 的三种手势","es":"Con la iluminación encendida, pruebe los tres gestos de B3"},
+           {"en":"Switch it off with a long press","zh":"用长按将其关闭","es":"Apáguela con la pulsación larga"},
+           {"en":"Then check that any gesture brings it back","zh":"随后确认任意手势都能重新点亮","es":"Luego compruebe que cualquier gesto la vuelve a encender"}],
+         "points":[
+           {"section":{"en":"With the lighting on","zh":"灯光开启时","es":"Con la iluminación encendida"},
+            "help":{"en":"Three gestures, three different jobs, and each one names what it did on the display.",
+                    "zh":"三种手势对应三种功能，每次操作都会在显示屏上给出对应提示。",
+                    "es":"Tres gestos, tres trabajos distintos, y cada uno nombra en pantalla lo que hizo."}},
+           {"id":"brg_l_effect","code":"LED-007","tag":"B3",
+            "label":{"en":"Short press — next effect, EF and the number","zh":"短按 — 下一个效果，显示 EF 与编号","es":"Pulsación corta — efecto siguiente, EF y el número"},
+            "help":{"en":"Each tap must change the effect and show EF with its number for two seconds. Go round the whole list: it must close back on the first.",
+                    "zh":"每次短按应切换效果，并显示 EF 及其编号两秒。完整循环一轮，应能回到第一个效果。",
+                    "es":"Cada toque debe cambiar el efecto y mostrar EF con su número dos segundos. Recorra la lista entera: debe cerrar y volver al primero."}},
+           {"id":"brg_l_colour","code":"LED-007","tag":"B3",
+            "label":{"en":"Double press — next colour, CO and the number","zh":"双击 — 下一个颜色，显示 CO 与编号","es":"Pulsación doble — color siguiente, CO y el número"},
+            "help":{"en":"Two quick taps must change the colour, not the effect, and show CO with its number. If the effect changes twice instead, the double press is not being read.",
+                    "zh":"快速双击应切换颜色而非效果，并显示 CO 及其编号。若变成效果连续切换两次，说明未识别为双击。",
+                    "es":"Dos toques rápidos deben cambiar el color, no el efecto, y mostrar CO con su número. Si en su lugar el efecto cambia dos veces, no se está leyendo la pulsación doble."}},
+           {"id":"brg_l_off","code":"LED-006","tag":"B3",
+            "label":{"en":"Long press — lighting off, OFF on the display","zh":"长按 — 关闭灯光，显示 OFF","es":"Pulsación larga — apaga la iluminación, OFF en pantalla"},
+            "help":{"en":"Hold B3. Every decorative LED must go out, the display must read OFF and the B3 LED itself must go out with them.",
+                    "zh":"长按 B3。所有装饰灯应全部熄灭，显示屏显示 OFF，B3 指示灯本身也应随之熄灭。",
+                    "es":"Mantenga B3. Todos los LED decorativos deben apagarse, la pantalla decir OFF y el propio LED de B3 apagarse con ellos."}},
+           {"section":{"en":"With the lighting off","zh":"灯光关闭时","es":"Con la iluminación apagada"},
+            "help":{"en":"From off, the three gestures collapse into one: any of them switches the lighting back on. There is no way to change effect or colour without light to see it on.",
+                    "zh":"在关闭状态下，三种手势合而为一：任意手势都会重新点亮灯光。没有亮灯就无法看到效果或颜色的变化。",
+                    "es":"Desde apagada, los tres gestos se vuelven uno: cualquiera de ellos la enciende. No hay forma de cambiar efecto o color sin luz donde verlo."}},
+           {"id":"brg_l_back","code":"LED-006","tag":"B3",
+            "label":{"en":"Any gesture switches it back on","zh":"任意手势均可重新点亮","es":"Cualquier gesto la vuelve a encender"},
+            "help":{"en":"Try the three: short, long and double. All three must switch the lighting on and the display must show EF with the active effect.",
+                    "zh":"三种手势逐一尝试：短按、长按、双击。三者都应点亮灯光，显示屏显示 EF 及当前效果。",
+                    "es":"Pruebe los tres: corta, larga y doble. Los tres deben encender la iluminación y la pantalla mostrar EF con el efecto activo."}}]},
+
+        {"id":"BRG_FM","optional":false,"only_factory":["YIS"],"evidence":["video"],
+         "only":["HK-BRA130","HK-BRA330"],
+         "label":{"en":"FM RADIO AND LIGHTING","zh":"调频收音与灯光","es":"RADIO FM Y LUCES"},
+         "steps":[
+           {"en":"Leave the lighting on and note which effect it is showing","zh":"保持灯光开启，并记下当前效果","es":"Deje la iluminación encendida y anote qué efecto muestra"},
+           {"en":"Switch to FM and watch the lighting and the display","zh":"切换到收音，观察灯光与显示","es":"Pase a FM y mire la iluminación y la pantalla"},
+           {"en":"Search and step through stations","zh":"进行搜台并切换电台","es":"Busque y recorra las emisoras"},
+           {"en":"Leave FM and check the lighting comes back","zh":"退出收音，确认灯光恢复","es":"Salga de FM y compruebe que la iluminación vuelve"}],
+         "points":[
+           {"section":{"en":"Entering FM — R11","zh":"进入收音模式 — R11","es":"Al entrar en FM — R11"},
+            "help":{"en":"The lighting switches itself off on entering FM. Switched LED drivers spoil reception, and this product has an internal antenna. The display shows FM rather than a warning, so it does not read as a fault.",
+                    "zh":"进入收音模式时灯光自动关闭。LED 开关电源会干扰接收，而本机为内置天线。显示屏显示 FM 而非警告，以免被误认为故障。",
+                    "es":"La iluminación se apaga sola al entrar en FM. Los drivers de LED conmutados degradan la recepción, y este producto lleva antena interna. La pantalla muestra FM en vez de un aviso, para que no se lea como una falla."}},
+           {"id":"brg_fm_lights","code":"FM-009",
+            "label":{"en":"The lighting switches off on its own","zh":"灯光自动关闭","es":"La iluminación se apaga sola"},
+            "help":{"en":"With the lighting on, switch to FM. Every decorative LED and the B3 LED must go out without anyone pressing anything.",
+                    "zh":"在灯光开启状态下切换到收音模式。所有装饰灯及 B3 指示灯应在无人操作的情况下自动熄灭。",
+                    "es":"Con la iluminación encendida, pase a FM. Todos los LED decorativos y el LED de B3 deben apagarse sin que nadie pulse nada."}},
+           {"id":"brg_fm_msg","code":"UI-001",
+            "label":{"en":"FM for 2 s, then the frequency","zh":"先显示 FM 两秒，再显示频率","es":"FM durante 2 s y luego la frecuencia"},
+            "help":{"en":"The display must read FM for two seconds and then settle on the frequency, which stays there. The radio voice prompt must be heard.",
+                    "zh":"显示屏应先显示 FM 两秒，随后固定显示频率并保持。同时应播报收音语音提示。",
+                    "es":"La pantalla debe decir FM dos segundos y luego quedarse en la frecuencia, que permanece. Debe oírse el aviso de voz de radio."}},
+           {"id":"brg_fm_b3","code":"LED-006","tag":"B3",
+            "label":{"en":"B3 still works in FM","zh":"收音模式下 B3 仍可用","es":"B3 sigue habilitado en FM"},
+            "help":{"en":"Press B3 while in FM. The lighting must come back on: the automatic switch-off is a default, not a lock. Reception may get worse with it on, and that is the trade the user is making.",
+                    "zh":"在收音模式下按 B3，灯光应重新点亮：自动关闭只是默认行为，并非锁定。开灯后接收可能变差，这是用户自行取舍的结果。",
+                    "es":"Pulse B3 estando en FM. La iluminación debe volver a encenderse: el apagado automático es un valor por defecto, no un bloqueo. La recepción puede empeorar con ella encendida, y ése es el canje que hace el usuario."}},
+           {"section":{"en":"Tuning and leaving","zh":"调台与退出","es":"Sintonía y salida"},
+            "help":{"en":"The search and the station keys, and then the return of the lighting exactly as it was.",
+                    "zh":"搜台与选台按键，以及退出后灯光是否完全恢复原状。",
+                    "es":"La búsqueda y las teclas de emisora, y luego el regreso de la iluminación tal como estaba."}},
+           {"id":"brg_fm_search","code":"FM-005","tag":"B5",
+            "label":{"en":"Short press of B5 searches stations","zh":"短按 B5 进行搜台","es":"Pulsación corta de B5 busca emisoras"},
+            "help":{"en":"The frequency must update on the display while the scan runs, and stop on stations that can actually be heard.",
+                    "zh":"搜台过程中显示屏频率应持续更新，并停在实际能收听到的电台上。",
+                    "es":"La frecuencia debe irse actualizando en pantalla durante el barrido, y detenerse en emisoras que de verdad se oigan."}},
+           {"id":"brg_fm_step","code":"FM-007","tag":"B4 B6",
+            "label":{"en":"B4 and B6 step through stations","zh":"B4 与 B6 可切换电台","es":"B4 y B6 recorren las emisoras"},
+            "help":{"en":"In FM these two are previous and next station, not previous and next track. The display must show the frequency of each one.",
+                    "zh":"在收音模式下，这两个键为上一台与下一台，而非上一曲与下一曲。显示屏应显示各电台的频率。",
+                    "es":"En FM estos dos son emisora anterior y siguiente, no canción anterior y siguiente. La pantalla debe mostrar la frecuencia de cada una."}},
+           {"id":"brg_fm_exit","code":"FM-009",
+            "label":{"en":"Leaving FM restores the lighting as it was","zh":"退出收音后灯光恢复原状","es":"Al salir de FM se restaura la iluminación como estaba"},
+            "help":{"en":"Change mode. The lighting must come back with the same effect and the same colour it had before entering FM — not with the first one on the list.",
+                    "zh":"切换模式。灯光应以进入收音之前的效果与颜色恢复，而不是回到列表中的第一个。",
+                    "es":"Cambie de modo. La iluminación debe volver con el mismo efecto y el mismo color que tenía antes de entrar en FM, no con el primero de la lista."}}]},
+
+        {/* R3 se prueba por lo que sobrevive, no por su enunciado. Se deja el
+              producto con seis cosas cambiadas, se apaga, se enciende, y se
+              mira cuáles siguen ahí: dos deben quedar y cuatro deben haberse
+              ido. Un firmware que memorice de más pasa cualquier otra prueba
+              del plan sin una marca. */
+         "id":"BRG_MEMORY","optional":false,"only_factory":["YIS"],"evidence":[],
+         "only":["HK-BRA130","HK-BRA330"],
+         "label":{"en":"MEMORY AFTER SWITCHING OFF","zh":"关机后的记忆","es":"MEMORIA TRAS APAGAR"},
+         "steps":[
+           {"en":"In FM, tune a station and change the lighting effect","zh":"在收音模式下调好一个电台并更改灯光效果","es":"En FM, sintonice una emisora y cambie el efecto de luz"},
+           {"en":"Raise the volumes, switch X-Bass on and set priority to 100%","zh":"提高音量，开启重低音，并将优先设为 100%","es":"Suba los volúmenes, active X-Bass y ponga la prioridad en 100%"},
+           {"en":"Switch off with B1 and switch on again","zh":"用 B1 关机后再开机","es":"Apague con B1 y vuelva a encender"},
+           {"en":"Check one by one what survived","zh":"逐项核对哪些设置被保留","es":"Compruebe uno por uno qué sobrevivió"}],
+         "points":[
+           {"section":{"en":"What must survive","zh":"应当保留的设置","es":"Lo que debe conservarse"},
+            "help":{"en":"Two things only, and both are things the user chose on purpose and that carry no risk on switching on.",
+                    "zh":"仅两项，且都是用户有意设定、开机时不会带来风险的内容。",
+                    "es":"Sólo dos cosas, y las dos son cosas que el usuario configuró a propósito y que no representan riesgo al encender."}},
+           {"id":"brg_m_fm","code":"FM-008",
+            "label":{"en":"The last FM station, if it was switched off in Radio","zh":"若关机时处于收音模式，则保留上次电台","es":"La última emisora FM, si se apagó en modo Radio"},
+            "help":{"en":"Switch off while in FM and switch on. Once back in Radio it must return to the same frequency. If it was switched off in another mode, there is nothing to keep.",
+                    "zh":"在收音模式下关机后再开机。再次进入收音时应回到同一频率。若关机时处于其他模式，则无需保留。",
+                    "es":"Apague estando en FM y encienda. Al volver a Radio debe regresar a la misma frecuencia. Si se apagó en otro modo, no hay nada que conservar."}},
+           {"id":"brg_m_light","code":"LED-007",
+            "label":{"en":"The lighting — on or off, effect and colour","zh":"灯光状态 — 开关、效果与颜色","es":"La iluminación — encendida o apagada, efecto y color"},
+            "help":{"en":"All three at once: whether it was on or off, which effect and which colour. Leave it on effect 3 in a colour that is not the first, switch off and on, and it must come back exactly there.",
+                    "zh":"三项须同时保留：开关状态、效果编号与颜色。将其停在效果 3 及非首个颜色，关机再开机后应完全一致。",
+                    "es":"Las tres cosas a la vez: si estaba encendida o apagada, qué efecto y qué color. Déjela en el efecto 3 con un color que no sea el primero, apague y encienda, y debe volver exactamente ahí."}},
+           {"section":{"en":"What must be reset","zh":"应当复位的设置","es":"Lo que debe reiniciarse"},
+            "help":{"en":"Four things that must come back at their starting values, whatever they were when the speaker was switched off. This is the half of the rule that gets missed.",
+                    "zh":"四项无论关机前为何值，都应恢复为开机默认值。这半条规则最容易被忽略。",
+                    "es":"Cuatro cosas que deben volver en sus valores de arranque, estuvieran como estuvieran al apagar. Es la mitad de la regla que se pasa por alto."}},
+           {"id":"brg_m_mode","code":"MOD-004",
+            "label":{"en":"The mode goes back to Bluetooth","zh":"模式恢复为蓝牙","es":"El modo vuelve a Bluetooth"},
+            "help":{"en":"Even if it was switched off in FM or USB, it must start in Bluetooth. The station is kept; the mode is not.",
+                    "zh":"即使关机时处于收音或 USB 模式，开机也应进入蓝牙。保留的是电台，而不是模式。",
+                    "es":"Aunque se haya apagado en FM o USB, debe arrancar en Bluetooth. La emisora se guarda; el modo no."}},
+           {"id":"brg_m_vols","code":"AUD-011",
+            "label":{"en":"Master volume, mic volume and reverb back to their start","zh":"主音量、麦克风音量与混响恢复默认","es":"Volumen maestro, volumen de micrófono y reverb, a su arranque"},
+            "help":{"en":"Leave the three high before switching off. The master must come back at 4 and the other two at their starting values, not where they were left.",
+                    "zh":"关机前将三者均调高。开机后主音量应回到 4，另两项也应恢复默认值，而非关机前的数值。",
+                    "es":"Deje los tres altos antes de apagar. El maestro debe volver en 4 y los otros dos en sus valores de arranque, no donde se dejaron."}},
+           {"id":"brg_m_xbass","code":"AUD-010","tag":"B1",
+            "label":{"en":"X-Bass and mic priority back to off and 0%","zh":"重低音与麦克风优先恢复为关闭与 0%","es":"X-Bass y prioridad de micrófono, a inactivo y 0%"},
+            "help":{"en":"Leave X-Bass on and priority at 100% before switching off. On switching on B1 must be dark and B7 white. A speaker that remembers X-Bass starts louder than the user expects.",
+                    "zh":"关机前开启重低音并将优先设为 100%。开机后 B1 应熄灭，B7 应为白色。若记忆了重低音，开机音量会超出用户预期。",
+                    "es":"Deje X-Bass activo y la prioridad en 100% antes de apagar. Al encender, B1 debe estar apagado y B7 blanco. Un parlante que recuerda el X-Bass arranca más fuerte de lo que el usuario espera."}}]},
+
+        {"id":"BRG_BATTERY","optional":false,"only_factory":["YIS"],"evidence":[],
+         "only":["HK-BRA130","HK-BRA330"],
+         "label":{"en":"BATTERY AND CHARGING","zh":"电池与充电","es":"BATERÍA Y CARGA"},
+         "steps":[
+           {"en":"Connect the AC cable with the speaker on","zh":"在开机状态下接入 AC 电源线","es":"Conecte el cable AC con el parlante encendido"},
+           {"en":"Check the display, the B1 LED and the tone","zh":"检查显示、B1 指示灯与提示音","es":"Compruebe la pantalla, el LED de B1 y el tono"},
+           {"en":"Double press B1 at any time to read the charge","zh":"任意时刻双击 B1 查看电量","es":"Pulse B1 dos veces en cualquier momento para leer la carga"},
+           {"en":"For the low battery points, run it down to 10%","zh":"低电量项目需将电量放至 10%","es":"Para los puntos de batería baja, descárguelo hasta el 10%"}],
+         "points":[
+           {"section":{"en":"Charging","zh":"充电","es":"Carga"},
+            "help":{"en":"Three signals at once on plugging in, and a fourth when it finishes.",
+                    "zh":"接入电源时同时给出三种提示，充满时给出第四种。",
+                    "es":"Tres señales a la vez al conectar, y una cuarta al terminar."}},
+           {"id":"brg_ac","code":"CHG-001",
+            "label":{"en":"On plugging in — percentage flashing, B1 slow, connection tone","zh":"接入电源时 — 电量闪烁、B1 慢闪、连接提示音","es":"Al conectar — porcentaje parpadeando, B1 lento, tono de energía"},
+            "help":{"en":"Plug the AC cable in with the speaker on. The display must show the percentage flashing with the % icon for two seconds, B1 must flash slowly and the power tone must sound.",
+                    "zh":"在开机状态下接入 AC 线。显示屏应显示电量百分比闪烁并带 % 图标，持续两秒，B1 慢闪，并播放接电提示音。",
+                    "es":"Conecte el cable AC con el parlante encendido. La pantalla debe mostrar el porcentaje parpadeando con el icono % durante dos segundos, B1 parpadear lento y sonar el tono de energía conectada."}},
+           {"id":"brg_full","code":"CHG-002",
+            "label":{"en":"When full — 100 steady and B1 stops flashing","zh":"充满时 — 显示 100 常亮，B1 停止闪烁","es":"Al completarse — 100 fijo y B1 deja de parpadear"},
+            "help":{"en":"When charging finishes the display must read 100 steady with the % icon, and B1 must return to its fixed state. No sound at this point.",
+                    "zh":"充电完成后显示屏应显示 100 常亮并带 % 图标，B1 恢复为固定状态。此时无提示音。",
+                    "es":"Al terminar la carga la pantalla debe decir 100 fijo con el icono %, y B1 volver a su estado fijo. Aquí no suena nada."}},
+           {"id":"brg_pct","code":"UI-001","tag":"B1",
+            "label":{"en":"Double press of B1 shows the charge for 3 s","zh":"双击 B1 显示电量三秒","es":"B1 doble muestra la carga durante 3 s"},
+            "help":{"en":"Two quick taps must show the number with the % icon for three seconds and then go back to what was on the display. It must not change anything else.",
+                    "zh":"快速双击应显示数值及 % 图标三秒，随后恢复原显示内容，且不应改变其他任何设置。",
+                    "es":"Dos toques rápidos deben mostrar el número con el icono % durante tres segundos y luego volver a lo que hubiera en pantalla. No debe cambiar nada más."}},
+           {"section":{"en":"Low battery — R2","zh":"低电量 — R2","es":"Batería baja — R2"},
+            "help":{"en":"It enters at 10% and does not leave until 15%. The gap is deliberate: without it the state would flicker on and off around a single number.",
+                    "zh":"电量降至 10% 进入该状态，升至 15% 才退出。此差值是有意设计：否则状态会在同一数值附近反复跳变。",
+                    "es":"Entra al 10% y no sale hasta el 15%. La diferencia es deliberada: sin ella el estado entraría y saldría sin parar alrededor de un solo número."}},
+           {"id":"brg_low","code":"BAT-010",
+            "label":{"en":"At 10% — percentage flashing and a tone every 8 min","zh":"10% 时 — 电量闪烁并每 8 分钟提示一次","es":"Al 10% — porcentaje intermitente y tono cada 8 min"},
+            "help":{"en":"Run the battery down to 10%. The display must show the percentage flashing for five seconds and the low battery tone must repeat every eight minutes.",
+                    "zh":"将电量放至 10%。显示屏应显示电量百分比闪烁五秒，低电量提示音每八分钟重复一次。",
+                    "es":"Descargue hasta el 10%. La pantalla debe mostrar el porcentaje intermitente durante cinco segundos y el tono de batería baja repetirse cada ocho minutos."}},
+           {"id":"brg_bright","code":"UI-001",
+            "label":{"en":"Brightness drops to 30% and stays there","zh":"亮度降至 30% 并保持","es":"El brillo baja al 30% y se mantiene"},
+            "help":{"en":"The display must dim visibly on entering low battery and stay dim until it leaves the state. Outside low battery the brightness is always 100%: a screen dim on a full battery is a fault the other way round.",
+                    "zh":"进入低电量时显示屏应明显变暗，并保持至退出该状态。非低电量时亮度应始终为 100%：电量充足却偏暗，同样属于故障。",
+                    "es":"La pantalla debe atenuarse de forma visible al entrar en batería baja y quedarse así hasta salir del estado. Fuera de batería baja el brillo es siempre 100%: una pantalla atenuada con la batería llena es la falla contraria."}}]},
+
+        {"id":"BRG_USBC","optional":false,"only_factory":["YIS"],"evidence":[],
+         "only":["HK-BRA130","HK-BRA330"],
+         "label":{"en":"USB-C OUTPUT AND AUTOMATIC POWER-OFF",
+                  "zh":"USB-C 输出与自动关机",
+                  "es":"SALIDA USB-C Y APAGADO AUTOMÁTICO"},
+         "steps":[
+           {"en":"Connect a phone to the USB-C socket and confirm it charges","zh":"将手机接入 USB-C 口，确认可充电","es":"Conecte un teléfono al USB-C y confirme que carga"},
+           {"en":"With the battery low, check that the output cuts off","zh":"在低电量状态下确认输出被切断","es":"Con la batería baja, compruebe que la salida corta"},
+           {"en":"Then leave the speaker alone and time the two power-offs","zh":"随后静置音箱，分别计时两种自动关机","es":"Luego deje el parlante quieto y cronometre los dos apagados"}],
+         "points":[
+           {"section":{"en":"The output — R8","zh":"输出 — R8","es":"La salida — R8"},
+            "help":{"en":"It powers other things, and it is the first thing to go when the battery gets low: an accessory function must not eat into the main one.",
+                    "zh":"该口用于为其他设备供电，也是低电量时最先被切断的功能：附属功能不应占用主功能的电量。",
+                    "es":"Alimenta otros equipos, y es lo primero que se corta cuando baja la batería: una función accesoria no puede comerse la principal."}},
+           {"id":"brg_usbc_on","code":"PWR-014",
+            "label":{"en":"Delivers current — UsbC on the display","zh":"可正常供电 — 显示 UsbC","es":"Entrega corriente — UsbC en pantalla"},
+            "help":{"en":"Connect a phone. It must start charging and the display must read UsbC for two seconds.",
+                    "zh":"接入手机，应开始充电，显示屏显示 UsbC 两秒。",
+                    "es":"Conecte un teléfono. Debe empezar a cargar y la pantalla decir UsbC durante dos segundos."}},
+           {"id":"brg_usbc_cut","code":"PWR-014",
+            "label":{"en":"Cuts off at low battery — NO-C on the display","zh":"低电量时切断 — 显示 NO-C","es":"Corta con batería baja — NO-C en pantalla"},
+            "help":{"en":"With a phone charging, let the battery reach 10%. The output must cut off and the display read NO-C for three seconds.",
+                    "zh":"在为手机充电的状态下，让电量降至 10%。输出应切断，显示屏显示 NO-C 三秒。",
+                    "es":"Con un teléfono cargando, deje que la batería llegue al 10%. La salida debe cortarse y la pantalla decir NO-C durante tres segundos."}},
+           {"id":"brg_usbc_stay","code":"PWR-014",
+            "label":{"en":"Does not come back on its own","zh":"不会自行恢复","es":"No se reactiva sola"},
+            "help":{"en":"With the output already cut, unplug the phone and plug it back in. It must not charge. Only charging the speaker brings the output back.",
+                    "zh":"在输出已切断的状态下，拔出手机再重新插入，仍不应充电。只有为音箱充电才能恢复该输出。",
+                    "es":"Con la salida ya cortada, desconecte el teléfono y vuelva a conectarlo. No debe cargar. Sólo cargando el parlante vuelve la salida."}},
+           {"section":{"en":"The two power-offs — R9 and R10","zh":"两种自动关机 — R9 与 R10","es":"Los dos apagados — R9 y R10"},
+            "help":{"en":"Two timers with different times and different outcomes. Both must be measured with nothing connected to the 6.3 mm inputs: a microphone suspends them.",
+                    "zh":"两个计时器，时间与结果均不同。测量时 6.3 mm 输入口不得接任何设备：接入麦克风会使其暂停。",
+                    "es":"Dos temporizadores con tiempos distintos y resultados distintos. Los dos se miden sin nada conectado a las entradas de 6.3 mm: un micrófono los suspende."}},
+           {"id":"brg_r9","code":"PWR-013",
+            "label":{"en":"3 min pairing with no device — it switches off","zh":"配对状态 3 分钟无设备连接 — 自动关机","es":"3 min emparejando sin dispositivo — se apaga"},
+            "help":{"en":"Leave it in Bluetooth with nothing connecting. At three minutes it must switch off, with CHAO and the shutdown melody. Careful with the neighbouring case: three minutes searching for another speaker does not switch off, it returns to Bluetooth.",
+                    "zh":"停留在蓝牙模式且无设备连接。三分钟后应关机，并显示 CHAO 及播放关机音乐。注意区分相邻情形：串联搜索三分钟不会关机，而是返回蓝牙。",
+                    "es":"Déjelo en Bluetooth sin que nada se conecte. A los tres minutos debe apagarse, con CHAO y la melodía de apagado. Cuidado con el caso vecino: tres minutos buscando otra cabina no apaga, vuelve a Bluetooth."}},
+           {"id":"brg_r10","code":"PWR-013",
+            "label":{"en":"15 min with no audio and no button — it switches off","zh":"15 分钟无音频且无按键 — 自动关机","es":"15 min sin audio ni pulsación — se apaga"},
+            "help":{"en":"Connect a phone but play nothing, and touch no button. At fifteen minutes it must switch off. Any button press or any audio restarts the count.",
+                    "zh":"连接手机但不播放，且不按任何键。十五分钟后应关机。任何按键操作或音频信号都会重新计时。",
+                    "es":"Conecte un teléfono pero no reproduzca nada, y no toque ningún botón. A los quince minutos debe apagarse. Cualquier pulsación o cualquier audio reinicia la cuenta."}},
+           {"id":"brg_mic_hold","code":"PWR-013",
+            "label":{"en":"With a microphone connected it does not switch off","zh":"接入麦克风时不会自动关机","es":"Con micrófono conectado no se apaga"},
+            "help":{"en":"Repeat the previous check with a microphone plugged in. It must stay on past fifteen minutes: the exception exists so the speaker does not switch off between karaoke songs. Worth knowing that with a microphone left in, nothing switches it off at all.",
+                    "zh":"在插入麦克风的状态下重复上一项。超过十五分钟仍应保持开机：该例外是为避免卡拉OK两首歌之间关机。需注意：只要麦克风未拔出，任何自动关机都不会生效。",
+                    "es":"Repita la comprobación anterior con un micrófono conectado. Debe seguir encendido pasados los quince minutos: la excepción existe para que no se apague entre canciones de karaoke. Conviene saber que con un micrófono puesto no hay nada que lo apague."}}]},
+
         {"id":"EXTERNAL","optional":false,"type":"photos","no_na":true,
          "only_factory":["YIS","RHY","EAG"],
          /* The KAPPA plan is exactly what its function scheme covers and
             nothing else. Photographs are not in that document, so they are not
             in the plan yet — a development reference is inspected against what
             has been specified, not against what a released product needs. */
-         "skip":["HK-KAP103","HK-KAP330"],
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"EXTERNAL PARTS","zh":"外观部件"},
          "steps":[
            {"en":"Place the speaker in good light, avoiding direct reflections","zh":"将音箱置于光线充足处，避免反光"},
@@ -2349,7 +2898,7 @@ const CONFIG = {
 
         {"id":"ACCESSORIES","optional":false,"type":"photos",
          "only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-KAP103","HK-KAP330"],   // see EXTERNAL above
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],   // see EXTERNAL above
          "label":{"en":"ACCESSORIES","zh":"配件"},
          "steps":[
            {"en":"Take the accessories out of the box onto a clear surface","zh":"将配件从箱中取出，放在干净台面上"},
@@ -2382,7 +2931,7 @@ const CONFIG = {
 
         {"id":"GRAPHICS","optional":false,"type":"photos","no_na":true,
          "only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-KAP103","HK-KAP330"],   // see EXTERNAL above
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],   // see EXTERNAL above
          "label":{"en":"PRINTED MATERIAL","zh":"印刷品"},
          "steps":[
            {"en":"Take a photo of each item on the list","zh":"逐项拍摄下列物品"},
@@ -2466,7 +3015,7 @@ const CONFIG = {
 
         {"id":"EXT_BATTERY","optional":true,"skip_factory":["RHY"],
          "only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-KAP103","HK-KAP330"],
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"EXTERNAL BATTERY","zh":"外置电池"},
          "steps":[
            {"en":"Switch the speaker off and disconnect it from the mains","zh":"关机并断开市电"},
@@ -2535,7 +3084,7 @@ const CONFIG = {
 
         {"id":"INTERNAL","optional":false,"type":"photos","no_na":true,
          "only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-KAP103","HK-KAP330"],   // see EXTERNAL above
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],   // see EXTERNAL above
          "label":{"en":"INTERNAL PARTS","zh":"内部部件"},
          "steps":[
            {"en":"Remove the screws and open the speaker carefully","zh":"拆下螺丝，小心打开箱体"},
@@ -2599,7 +3148,7 @@ const CONFIG = {
            seis fotos de referencia quedan en el historial de git por si algún
            día vuelve a medirse en casa. */
         {"id":"BAT_CAPACITY","optional":true,"only_factory":["YIS"],
-         "skip":["HK-KAP103","HK-KAP330"],"evidence":[],
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],"evidence":[],
          "label":{"en":"SPECIFICATION CHECK · BATTERY CAPACITY",
                   "zh":"规格验证 · 电池容量",
                   "es":"VERIFICACIÓN DE ESPECIFICACIONES · CAPACIDAD DE BATERÍA"},
@@ -2646,7 +3195,7 @@ const CONFIG = {
             measures — a good sub would read near zero and fail. Measuring them
             needs a low tone through the input jack and the filter wide open,
             which is a different test, not a variant of this one. */
-         "skip":["HK-KAP103","HK-KAP330","HK-BAS115A1","HK-BAS118A1"],
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1"],
          "evidence":[],"first":3,
          "label":{"en":"SPECIFICATION CHECK · RMS POWER",
                   "zh":"规格验证 · RMS 功率",
@@ -2769,7 +3318,7 @@ const CONFIG = {
               mode — its signal comes in over XLR from something else. Aging one
               is a reasonable thing to want; it is just not this procedure. */
          "id":"AGING","optional":true,"only_factory":["YIS","RHY"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BAS115A1","HK-BAS118A1"],"evidence":[],
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1"],"evidence":[],
          "first":1,
          "long":{"t":{"en":"This test is still running","zh":"本测试仍在进行中","es":"Esta prueba sigue en curso"},
                  "n":{"en":"Come back when the four hours are up to take the second photograph. Meanwhile you can carry on with the rest of the plan.",
@@ -5200,7 +5749,7 @@ function partialScope(){
    would sit in the dashboard next to real ones.
 
    Taking a reference out of here is what releases it. Nothing else changes. */
-const DEV_REFS = ["HK-KAP103","HK-KAP330"];
+const DEV_REFS = ["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"];
 const isDevRef = m => DEV_REFS.indexOf(m) >= 0;
 
 /* What the factory can choose on the start screen. Development references are

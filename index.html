@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="9.7">
+<meta name="app-version" content="9.8">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -723,7 +723,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 64,
+      "plan_version": 65,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -920,14 +920,29 @@ const CONFIG = {
             "help":{"en":"Including the feet and the tripod socket.",
                     "zh":"需拍到底脚与三脚架插孔。",
                     "es":"Incluyendo las patas y el hueco para trípode."}},
-           {"section":{"en":"Panel and controls","zh":"面板与控制件","es":"Panel y controles"},
-            "help":{"en":"The voltage selector is not photographed here: it has its own test, later in the plan.",
-                    "zh":"电压选择开关不在此处拍摄：计划后面有专门的测试项目。",
-                    "es":"El selector de voltaje no se fotografía aquí: tiene su propia prueba, más adelante en el plan."}},
+           {/* El selector de voltaje se comprueba aquí y no en su prueba
+                aparte: en los subwoofers PARTES EXTERNAS es la primera del
+                plan, así que la posición se lee antes que nada, que es cuando
+                importa. Las cabinas activas de RHYME conservan la prueba
+                propia; sólo los BAS quedan fuera de ella. */
+            "section":{"en":"Panel and controls","zh":"面板与控制件","es":"Panel y controles"},
+            "help":{"en":"Read the voltage selector before the cabinet is plugged in anywhere. Once it goes into the wall at the wrong voltage there is nothing left to inspect.",
+                    "zh":"在接入市电之前先读取电压选择开关的位置。一旦以错误电压通电，就没有什么可检验的了。",
+                    "es":"Lea el selector de voltaje antes de enchufar la cabina en ninguna parte. Una vez conectada al voltaje equivocado ya no queda nada que inspeccionar."}},
            {"id":"sub_ext_panel","photo":true,
             "label":{"en":"Panel","zh":"面板","es":"Panel"}},
            {"id":"sub_ext_knobs","photo":true,
             "label":{"en":"Knobs","zh":"旋钮","es":"Perillas"}},
+           {"id":"sub_ext_volt","code":"PWR-005",
+            "label":{"en":"Voltage selector set for the destination country","zh":"电压选择开关与目的地国家一致","es":"Selector de voltaje en la posición del país de destino"},
+            "help":{"en":"120 V for Colombia, the Dominican Republic, Ecuador and Venezuela. 220 V for Argentina, Chile, Peru and Uruguay. Read the position and compare it with the destination on the order. A cabinet set to 120 V plugged into 220 V burns in the first second, and the selector moves on its own in transit.",
+                    "zh":"哥伦比亚、多米尼加、厄瓜多尔、委内瑞拉为 120 V；阿根廷、智利、秘鲁、乌拉圭为 220 V。读取开关位置并与订单目的地核对。设在 120 V 的机器接入 220 V 会在一秒内烧毁，而该开关在运输中会自行移位。",
+                    "es":"120 V para Colombia, República Dominicana, Ecuador y Venezuela. 220 V para Argentina, Chile, Perú y Uruguay. Lea la posición y compárela con el destino de la orden. Una cabina en 120 V enchufada a 220 V se quema en el primer segundo, y el selector se mueve solo en el transporte."}},
+           {"id":"sub_ext_volt_photo","code":"PWR-005","photo":true,
+            "label":{"en":"Photo of the selector","zh":"选择开关照片","es":"Foto del selector"},
+            "help":{"en":"Close enough that the position can be read in the picture, and with enough panel around it to show where on the cabinet it is. This photograph is what records the position it left the factory in.",
+                    "zh":"距离足够近以便在照片中读出开关位置，同时保留周围部分面板以显示其在机器上的位置。这张照片记录的是出厂时的档位。",
+                    "es":"Lo bastante cerca para que la posición se lea en la foto, y con panel suficiente alrededor para ver en qué parte de la cabina está. Esta foto es lo que registra la posición con la que salió de fábrica."}},
            {"section":{"en":"Grille and screws","zh":"网罩与螺丝","es":"Parrilla y tornillos"},
             "help":{"en":"A missing screw is the cheapest defect there is to fix in the factory and one of the dearest to find at the customer, because by then the panel is already rattling.",
                     "zh":"少一颗螺丝，是工厂里最容易修的缺陷，却是到了客户手里最难处理的问题之一——那时面板已经在共振异响了。",
@@ -940,10 +955,10 @@ const CONFIG = {
                     "zh":"沿网罩逐颗清点，应为十颗，全部到位、拧紧，且不得有滑牙或歪斜。",
                     "es":"Cuéntelos uno a uno alrededor de la parrilla. Deben ser diez, todos puestos, todos apretados y ninguno barrido ni torcido."}},
            {"id":"sub_ext_back_screws","code":"MEC-004",
-            "label":{"en":"The back panel has its 12 screws","zh":"后面板螺丝齐全，共 12 颗","es":"El backpanel tiene sus 12 tornillos"},
-            "help":{"en":"Count them round the back panel. There must be twelve. A panel held on by ten works on the bench and vibrates on stage.",
-                    "zh":"沿后面板逐颗清点，应为十二颗。只上十颗的面板在工位上没问题，一上台就会共振。",
-                    "es":"Cuéntelos alrededor del backpanel. Deben ser doce. Un panel sujeto con diez funciona en el puesto y vibra en tarima."}},
+            "label":{"en":"The panel has its 12 screws","zh":"面板螺丝齐全，共 12 颗","es":"El panel tiene sus 12 tornillos"},
+            "help":{"en":"Count them round the panel. There must be twelve. A panel held on by ten works on the bench and vibrates on stage.",
+                    "zh":"沿面板逐颗清点，应为十二颗。只上十颗的面板在工位上没问题，一上台就会共振。",
+                    "es":"Cuéntelos alrededor del panel. Deben ser doce. Un panel sujeto con diez funciona en el puesto y vibra en tarima."}},
            {"section":{"en":"Markings","zh":"标识","es":"Marcas"},
             "help":{"en":"And then the video, which is what this section closes with: one clip going round the cabinet showing everything photographed above.",
                     "zh":"随后是视频，本节以此结束：一段环绕整机的视频，逐一展示上面拍过的所有内容。",
@@ -1036,11 +1051,11 @@ const CONFIG = {
             "help":{"en":"The bag around the cabinet itself, not the small accessory ones. Lay it flat and photograph it whole.",
                     "zh":"拍摄包裹音箱本体的袋子，不是配件小袋。摊平后整只入镜。",
                     "es":"La bolsa que envuelve la cabina, no las pequeñas de los accesorios. Extiéndala y fotografíela entera."}},
-           {"id":"sub_seal","photo":true,
-            "label":{"en":"Warranty seal","zh":"保修封签","es":"Sello de garantía"},
-            "help":{"en":"In place and whole. One that arrives already broken or badly stuck leaves the unit without a warranty claim later.",
-                    "zh":"须贴在原位且完好。到货时已破损或粘贴不牢的封签，会使该台日后无法办理保修索赔。",
-                    "es":"En su sitio y entero. Uno que llega roto o mal pegado deja la unidad sin reclamo de garantía después."}},
+           {"id":"sub_silkscreen","photo":true,
+            "label":{"en":"Panel silkscreen","zh":"面板丝印","es":"Serigrafía del panel"},
+            "help":{"en":"Photograph the panel square on, close enough to read every printed word. It is silkscreened in Spanish: the labels of the knobs, the inputs and the warnings must be spelled correctly. A misspelling comes out identical on every unit of the run and cannot be corrected afterwards.",
+                    "zh":"正对面板拍照，距离足够近以便看清每一个印字。面板为西班牙文丝印：旋钮、接口和警告的标注拼写必须正确。拼写错误会在整批产品上完全一致，且事后无法修正。",
+                    "es":"Fotografíe el panel de frente, lo bastante cerca para leer cada palabra impresa. Viene serigrafiado en español: los rótulos de las perillas, las entradas y las advertencias deben estar bien escritos. Una errata sale idéntica en todas las unidades de la corrida y después no se puede corregir."}},
            {"section":{"en":"The box","zh":"彩盒","es":"La caja"},
             "help":{"en":"Six faces, one photograph each, so a crushed corner or a missing label can be traced to one side.",
                     "zh":"六个面各拍一张，以便在出现压角或缺标签时能定位到具体是哪一面。",
@@ -3287,6 +3302,9 @@ const CONFIG = {
            decir cuál es el destino no es una comprobación, es una adivinanza. */
         {"id":"VOLT_SELECT","optional":false,"evidence":[],
          "only_factory":["RHY"],
+         /* Los subwoofers no: lo llevan dentro de PARTES EXTERNAS, que en su
+            plan es la primera prueba y por tanto el mejor sitio para leerlo. */
+         "skip":["HK-BAS115A1","HK-BAS118A1"],
          "label":{"en":"VOLTAGE SELECTOR","zh":"电压选择开关","es":"SELECTOR DE VOLTAJE"},
          "steps":[
            {"en":"Find the selector on the panel with the speaker unplugged","zh":"在断电状态下，在面板上找到电压选择开关","es":"Con el equipo desconectado, ubique el selector en el panel"},

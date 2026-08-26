@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="9.6">
+<meta name="app-version" content="9.7">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -657,6 +657,9 @@ const CONFIG = {
     "MEC-001":{"en":"Fan does not turn or is noisy","zh":"风扇不转或有异响","es":"El ventilador no gira o hace ruido"},
     "MEC-002":{"en":"Combo jack faulty on one connector","zh":"两用接口有一种接头失效","es":"El conector combo falla en uno de los dos"},
     "MEC-003":{"en":"MIC / LINE switch does not work","zh":"MIC / LINE 开关无效","es":"El switch MIC / LÍNEA no funciona"},
+    "MEC-004":{"en":"Screws missing, loose or damaged","zh":"螺丝缺失、松动或损坏","es":"Faltan tornillos, o están flojos o dañados"},
+    "ACC-001":{"en":"Accessory missing, wrong or damaged","zh":"配件缺失、规格错误或损坏","es":"Accesorio faltante, equivocado o dañado"},
+    "PKG-001":{"en":"Barcode does not read or does not match the reference","zh":"条码无法读取或与型号不符","es":"El código de barras no lee o no corresponde a la referencia"},
     "CHG-001":{"en":"Does not charge","zh":"无法充电","es":"No carga"},
     "CHG-002":{"en":"Charging indicator incorrect","zh":"充电指示不正确","es":"Indicador de carga incorrecto"},
     "RMT-001":{"en":"Power button does not respond","zh":"电源键无响应","es":"La tecla de encendido no responde"},
@@ -720,7 +723,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 63,
+      "plan_version": 64,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -872,6 +875,224 @@ const CONFIG = {
             "help":{"en":"This panel carries a fan. It must turn with the unit switched on, without rubbing, squealing or rattling, and the grille must be clear.",
                     "zh":"本面板带风扇。开机后应转动，不应有摩擦声、尖叫声或异响，出风口应无遮挡。",
                     "es":"El panel lleva ventilador. Debe girar con el equipo encendido, sin roce, chirrido ni traqueteo, y la rejilla debe estar libre."}}]},
+
+        /* ---------------- BAS: versión propia de las tres secciones ---------
+           PARTES EXTERNAS, ACCESORIOS y MATERIAL IMPRESO son compartidas por
+           las tres fábricas, y lo que HOKLAN pidió aquí es sólo para los
+           subwoofers. Editarlas en su sitio habría cambiado el catálogo entero,
+           así que los BAS salen de ellas por nombre y corren estas tres.
+
+           Y dejan de ser secciones de tipo fotográfico. Contar tornillos no es
+           una foto y un video obligatorio tampoco cabe en ese tipo: como prueba
+           normal cada punto pide lo que necesita — foto, medida o juicio — y el
+           video se exige a nivel de prueba. */
+        {"id":"SUB_EXTERNAL","optional":false,"only_factory":["RHY"],
+         "only":["HK-BAS115A1","HK-BAS118A1"],"evidence":["video"],"first":1,
+         "label":{"en":"EXTERNAL PARTS","zh":"外观部件","es":"PARTES EXTERNAS"},
+         "steps":[
+           {"en":"Put the cabinet in good light, avoiding reflections","zh":"将音箱置于光线充足处，避免反光","es":"Ponga la cabina con buena luz, evitando reflejos"},
+           {"en":"Photograph each area on the list","zh":"逐项拍摄下列部位","es":"Fotografíe cada zona de la lista"},
+           {"en":"Count the screws on the grille and on the back panel","zh":"清点网罩与后面板的螺丝数量","es":"Cuente los tornillos de la parrilla y los del backpanel"},
+           {"en":"Finish with one video going round the whole cabinet","zh":"最后录制一段环绕整机的视频","es":"Termine con un video recorriendo toda la cabina"}],
+         "points":[
+           {"section":{"en":"The cabinet","zh":"箱体","es":"El gabinete"},
+            "help":{"en":"Six faces, one photograph each. Separately, because a scratch on one side is easy to lose in a picture that shows two.",
+                    "zh":"六个面，每面一张照片。分开拍摄，是因为在同时拍到两面的照片里，某一面的刮痕很容易被忽略。",
+                    "es":"Seis caras, una foto cada una. Por separado, porque un rayón en un costado se pierde fácil en una foto que muestra dos."}},
+           {"id":"sub_ext_front","photo":true,
+            "label":{"en":"Front","zh":"正面","es":"Frente"}},
+           {"id":"sub_ext_back","photo":true,
+            "label":{"en":"Back","zh":"背面","es":"Trasera"}},
+           {"id":"sub_ext_right","photo":true,
+            "label":{"en":"Right side","zh":"右侧面","es":"Lateral derecho"},
+            "help":{"en":"Standing at the right of the cabinet looking at it from the front. Include the handle and the joints.",
+                    "zh":"面向正面时站在右侧拍摄，需包含提手与接缝。",
+                    "es":"De pie a la derecha de la cabina mirándola de frente. Incluya la agarradera y los ensambles."}},
+           {"id":"sub_ext_left","photo":true,
+            "label":{"en":"Left side","zh":"左侧面","es":"Lateral izquierdo"},
+            "help":{"en":"The same on the opposite side.",
+                    "zh":"在另一侧拍摄同样的照片。",
+                    "es":"Lo mismo del lado contrario."}},
+           {"id":"sub_ext_top","photo":true,
+            "label":{"en":"Top","zh":"顶部","es":"Superior"}},
+           {"id":"sub_ext_bottom","photo":true,
+            "label":{"en":"Bottom","zh":"底部","es":"Inferior"},
+            "help":{"en":"Including the feet and the tripod socket.",
+                    "zh":"需拍到底脚与三脚架插孔。",
+                    "es":"Incluyendo las patas y el hueco para trípode."}},
+           {"section":{"en":"Panel and controls","zh":"面板与控制件","es":"Panel y controles"},
+            "help":{"en":"The voltage selector is not photographed here: it has its own test, later in the plan.",
+                    "zh":"电压选择开关不在此处拍摄：计划后面有专门的测试项目。",
+                    "es":"El selector de voltaje no se fotografía aquí: tiene su propia prueba, más adelante en el plan."}},
+           {"id":"sub_ext_panel","photo":true,
+            "label":{"en":"Panel","zh":"面板","es":"Panel"}},
+           {"id":"sub_ext_knobs","photo":true,
+            "label":{"en":"Knobs","zh":"旋钮","es":"Perillas"}},
+           {"section":{"en":"Grille and screws","zh":"网罩与螺丝","es":"Parrilla y tornillos"},
+            "help":{"en":"A missing screw is the cheapest defect there is to fix in the factory and one of the dearest to find at the customer, because by then the panel is already rattling.",
+                    "zh":"少一颗螺丝，是工厂里最容易修的缺陷，却是到了客户手里最难处理的问题之一——那时面板已经在共振异响了。",
+                    "es":"Un tornillo que falta es el defecto más barato de corregir en fábrica y uno de los más caros de encontrar en el cliente, porque para entonces el panel ya está vibrando."}},
+           {"id":"sub_ext_grille","photo":true,
+            "label":{"en":"Grille","zh":"网罩","es":"Parrilla"}},
+           {"id":"sub_ext_grille_screws","code":"MEC-004",
+            "label":{"en":"The grille has its 10 screws","zh":"网罩螺丝齐全，共 10 颗","es":"La parrilla tiene sus 10 tornillos"},
+            "help":{"en":"Count them one by one round the grille. There must be ten, all present, all done up and none stripped or crooked.",
+                    "zh":"沿网罩逐颗清点，应为十颗，全部到位、拧紧，且不得有滑牙或歪斜。",
+                    "es":"Cuéntelos uno a uno alrededor de la parrilla. Deben ser diez, todos puestos, todos apretados y ninguno barrido ni torcido."}},
+           {"id":"sub_ext_back_screws","code":"MEC-004",
+            "label":{"en":"The back panel has its 12 screws","zh":"后面板螺丝齐全，共 12 颗","es":"El backpanel tiene sus 12 tornillos"},
+            "help":{"en":"Count them round the back panel. There must be twelve. A panel held on by ten works on the bench and vibrates on stage.",
+                    "zh":"沿后面板逐颗清点，应为十二颗。只上十颗的面板在工位上没问题，一上台就会共振。",
+                    "es":"Cuéntelos alrededor del backpanel. Deben ser doce. Un panel sujeto con diez funciona en el puesto y vibra en tarima."}},
+           {"section":{"en":"Markings","zh":"标识","es":"Marcas"},
+            "help":{"en":"And then the video, which is what this section closes with: one clip going round the cabinet showing everything photographed above.",
+                    "zh":"随后是视频，本节以此结束：一段环绕整机的视频，逐一展示上面拍过的所有内容。",
+                    "es":"Y después el video, con el que cierra esta sección: un solo clip recorriendo la cabina y mostrando todo lo fotografiado arriba."}},
+           {"id":"sub_ext_logo_grille","photo":true,
+            "label":{"en":"Logo on the grille","zh":"网罩上的标志","es":"Logo de la parrilla"},
+            "help":{"en":"Close-up. Straight, complete, well fixed, with no scratched or faded lettering.",
+                    "zh":"特写。应端正、完整、牢固，字体无刮伤或褪色。",
+                    "es":"Primer plano. Derecho, completo, bien fijado y sin letras rayadas ni desvanecidas."}},
+           {"id":"sub_ext_logo_panel","photo":true,
+            "label":{"en":"Logo on the panel","zh":"面板上的标志","es":"Logo del panel"},
+            "help":{"en":"Check it matches the one on the grille in size, colour and finish.",
+                    "zh":"确认其与网罩上的标志在尺寸、颜色和工艺上一致。",
+                    "es":"Compruebe que coincide con el de la parrilla en tamaño, color y acabado."}},
+           {"id":"sub_ext_lot","photo":true,
+            "label":{"en":"Lot number","zh":"批号","es":"Número de lote"},
+            "help":{"en":"Close-up of the lot code on the cabinet itself. Every digit sharp, and matching the lot on the paperwork.",
+                    "zh":"拍摄机身上批号的特写。每一位数字都要清晰，并与检验单上的批号一致。",
+                    "es":"Primer plano del código de lote en la propia cabina. Cada dígito nítido, y coincidiendo con el lote del papeleo."}}]},
+
+        {"id":"SUB_ACC","optional":false,"only_factory":["RHY"],
+         "only":["HK-BAS115A1","HK-BAS118A1"],"evidence":[],
+         "label":{"en":"ACCESSORIES","zh":"配件","es":"ACCESORIOS"},
+         "steps":[
+           {"en":"Take the power cable out of the box","zh":"将电源线从箱中取出","es":"Saque el cable de poder de la caja"},
+           {"en":"Photograph each end on its own","zh":"两端分别拍照","es":"Fotografíe cada extremo por separado"},
+           {"en":"Stretch it out and measure it","zh":"将其拉直并测量长度","es":"Estírelo y mídalo"},
+           {"en":"Photograph the printing on the cable","zh":"拍摄线身上的印字","es":"Fotografíe las especificaciones impresas en el cable"}],
+         "points":[
+           {"section":{"en":"The power cable","zh":"电源线","es":"El cable de poder"},
+            "help":{"en":"The only accessory this cabinet ships with, and the one it will not work without.",
+                    "zh":"本机随附的唯一配件，也是缺了它就无法工作的配件。",
+                    "es":"El único accesorio que trae esta cabina, y el único sin el cual no funciona."}},
+           {"id":"sub_cab_end1","code":"ACC-001","photo":true,
+            "label":{"en":"Plug that goes into the wall","zh":"接市电一端的插头","es":"Extremo que va a la toma de corriente"},
+            "help":{"en":"Close-up of the mains plug, with its pins in view. It must be the plug of the destination country, with no cracks and no bent pins.",
+                    "zh":"拍摄市电插头特写，插脚需入镜。插头须符合目的地国家标准，无开裂、插脚无弯曲。",
+                    "es":"Primer plano del enchufe de pared, con las patas a la vista. Debe ser el del país de destino, sin fisuras y sin patas dobladas."}},
+           {"id":"sub_cab_end2","code":"ACC-001","photo":true,
+            "label":{"en":"Connector that goes into the cabinet","zh":"接音箱一端的接头","es":"Extremo que va a la cabina"},
+            "help":{"en":"Close-up of the IEC connector. Both ends are asked for separately because a damaged pin only shows on the end it is on.",
+                    "zh":"拍摄 IEC 接头特写。两端分开拍摄，是因为损坏的插脚只在所在的那一端才看得到。",
+                    "es":"Primer plano del conector IEC. Se piden los dos extremos por separado porque un contacto dañado sólo se ve en el extremo donde está."}},
+           {"id":"sub_cab_len","code":"ACC-001","photo":true,
+            "measure":{"unit":"m","step":"0.01"},
+            "label":{"en":"Cable length","zh":"线缆长度","es":"Longitud del cable"},
+            "help":{"en":"Stretch it out on the floor without pulling it taut, measure from the face of one plug to the face of the other, and write the figure in the box. Photograph the tape with both ends in the same frame: a photo showing only the number cannot be checked by anybody afterwards.",
+                    "zh":"将线缆在地面上展开但不要绷紧，从一端插头端面量到另一端插头端面，并将数值填入方框。拍摄卷尺时两端须在同一画面内：只拍到数字的照片，事后无人能够复核。",
+                    "es":"Estírelo en el piso sin tensarlo, mida de la cara de un enchufe a la cara del otro, y escriba la cifra en el recuadro. Fotografíe la cinta con los dos extremos en el mismo encuadre: una foto que sólo muestre el número no la puede verificar nadie después."}},
+           {"id":"sub_cab_spec","code":"ACC-001","photo":true,
+            "label":{"en":"Printing on the cable","zh":"线身印字","es":"Especificaciones impresas en el cable"},
+            "help":{"en":"Close-up of the text printed along the jacket, close enough to read the gauge and the ratings. It is what says whether the cable can carry what this cabinet draws, and it is the part nobody checks.",
+                    "zh":"拍摄护套上印字的特写，距离足够近以便读出线规与额定值。它决定了该线缆能否承载本机的电流，而这恰恰是无人核对的部分。",
+                    "es":"Primer plano del texto impreso a lo largo del forro, lo bastante cerca para leer el calibre y los valores nominales. Es lo que dice si el cable aguanta lo que consume esta cabina, y es la parte que nadie revisa."}}]},
+
+        {"id":"SUB_GRAPHICS","optional":false,"only_factory":["RHY"],
+         "only":["HK-BAS115A1","HK-BAS118A1"],"evidence":[],
+         "label":{"en":"PRINTED MATERIAL","zh":"印刷品","es":"MATERIAL IMPRESO"},
+         "steps":[
+           {"en":"Photograph each printed item","zh":"逐项拍摄印刷品","es":"Fotografíe cada impreso"},
+           {"en":"The box has one slot per face: six in all","zh":"彩盒每面一个上传位，共六个","es":"La caja tiene un espacio por cara: seis en total"},
+           {"en":"Photograph the barcode and let the app read it","zh":"拍摄条码，由应用自动识别","es":"Fotografíe el código de barras y deje que la app lo lea"},
+           {"en":"Then measure the three dimensions of the box","zh":"随后测量彩盒的三个尺寸","es":"Después mida las tres dimensiones de la caja"}],
+         "points":[
+           {"section":{"en":"Documents","zh":"文件","es":"Documentos"},
+            "help":{"en":"What travels inside the box with the cabinet.",
+                    "zh":"随音箱一同装入彩盒内的物品。",
+                    "es":"Lo que viaja dentro de la caja junto con la cabina."}},
+           {"id":"sub_manual_front","photo":true,
+            "label":{"en":"Manual — front cover","zh":"说明书 — 封面","es":"Manual — portada"},
+            "help":{"en":"Readable and with no glare over the text.",
+                    "zh":"文字清晰可读，不得有反光遮挡。",
+                    "es":"Legible y sin reflejos sobre el texto."}},
+           {"id":"sub_manual_back","photo":true,
+            "label":{"en":"Manual — back cover","zh":"说明书 — 封底","es":"Manual — contraportada"}},
+           {"id":"sub_tag_front","photo":true,
+            "label":{"en":"Tag — front","zh":"吊牌 — 正面","es":"Etiqueta colgante — frente"}},
+           {"id":"sub_tag_back","photo":true,
+            "label":{"en":"Tag — back","zh":"吊牌 — 背面","es":"Etiqueta colgante — atrás"},
+            "help":{"en":"Both faces separately: the country of origin is usually printed only on the back.",
+                    "zh":"两面分开拍摄：产地通常只印在背面。",
+                    "es":"Las dos caras por separado: el país de origen suele ir impreso sólo atrás."}},
+           {"id":"sub_card","photo":true,
+            "label":{"en":"Loyalty card","zh":"客户回馈卡","es":"Carta de fidelización"},
+            "help":{"en":"Check the QR code or the web address is legible.",
+                    "zh":"确认二维码或网址清晰可读。",
+                    "es":"Compruebe que el código QR o la dirección web queda legible."}},
+           {"id":"sub_bag","photo":true,
+            "label":{"en":"Bag the cabinet is packed in","zh":"包裹音箱的塑料袋","es":"Bolsa en que viene la cabina"},
+            "help":{"en":"The bag around the cabinet itself, not the small accessory ones. Lay it flat and photograph it whole.",
+                    "zh":"拍摄包裹音箱本体的袋子，不是配件小袋。摊平后整只入镜。",
+                    "es":"La bolsa que envuelve la cabina, no las pequeñas de los accesorios. Extiéndala y fotografíela entera."}},
+           {"id":"sub_seal","photo":true,
+            "label":{"en":"Warranty seal","zh":"保修封签","es":"Sello de garantía"},
+            "help":{"en":"In place and whole. One that arrives already broken or badly stuck leaves the unit without a warranty claim later.",
+                    "zh":"须贴在原位且完好。到货时已破损或粘贴不牢的封签，会使该台日后无法办理保修索赔。",
+                    "es":"En su sitio y entero. Uno que llega roto o mal pegado deja la unidad sin reclamo de garantía después."}},
+           {"section":{"en":"The box","zh":"彩盒","es":"La caja"},
+            "help":{"en":"Six faces, one photograph each, so a crushed corner or a missing label can be traced to one side.",
+                    "zh":"六个面各拍一张，以便在出现压角或缺标签时能定位到具体是哪一面。",
+                    "es":"Seis caras, una foto cada una, para que un golpe en una esquina o una etiqueta faltante se pueda ubicar en un costado concreto."}},
+           {"id":"sub_box_front","photo":true,
+            "label":{"en":"Box — front","zh":"彩盒 — 正面","es":"Caja — frente"},
+            "help":{"en":"The main printed face, the one facing the buyer on the shelf.",
+                    "zh":"主展示面，即货架上朝向顾客的一面。",
+                    "es":"La cara impresa principal, la que mira al comprador en el estante."}},
+           {"id":"sub_box_back","photo":true,
+            "label":{"en":"Box — back","zh":"彩盒 — 背面","es":"Caja — atrás"}},
+           {"id":"sub_box_right","photo":true,
+            "label":{"en":"Box — right side","zh":"彩盒 — 右侧面","es":"Caja — lado derecho"}},
+           {"id":"sub_box_left","photo":true,
+            "label":{"en":"Box — left side","zh":"彩盒 — 左侧面","es":"Caja — lado izquierdo"}},
+           {"id":"sub_box_top","photo":true,
+            "label":{"en":"Box — top","zh":"彩盒 — 顶面","es":"Caja — superior"},
+            "help":{"en":"Including the closing flaps and the tape.",
+                    "zh":"需拍到封口摇盖和胶带。",
+                    "es":"Incluyendo las solapas de cierre y la cinta."}},
+           {"id":"sub_box_bottom","photo":true,
+            "label":{"en":"Box — bottom","zh":"彩盒 — 底面","es":"Caja — inferior"},
+            "help":{"en":"Including the seal and any shipping label.",
+                    "zh":"需拍到封口和运输标签。",
+                    "es":"Incluyendo el sello y la etiqueta de transporte."}},
+           {/* `scan` es lo que hace que la app intente leer el código en la
+                fotografía que se acaba de adjuntar y rellene el recuadro sola.
+                Donde el teléfono no sepa leerlo, el recuadro se escribe a mano
+                y la prueba sigue igual de válida: lo que no puede faltar es la
+                foto. */
+            "id":"sub_barcode","code":"PKG-001","photo":true,"scan":true,
+            "measure":{"unit":"EAN","step":"1"},
+            "label":{"en":"Barcode on the box","zh":"彩盒条码","es":"Código de barras de la caja"},
+            "help":{"en":"Photograph the barcode square on, filling the frame, with no glare across the bars. The app reads the number off that photograph and writes it in the box; if it cannot, type it in yourself. Then check it belongs to this reference and no other: two references sharing one code cannot be told apart in the warehouse or at the till.",
+                    "zh":"正对条码拍摄，使其充满画面，条纹上不得有反光。应用会从该照片中识别号码并填入方框；若无法识别，请手动输入。随后核对该号码是否属于本型号：两个型号共用一个条码，在仓库和收银台都无法区分。",
+                    "es":"Fotografíe el código de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto y lo escribe en el recuadro; si no puede, escríbalo usted. Después compruebe que pertenece a esta referencia y no a otra: dos referencias con el mismo código no se distinguen ni en bodega ni en caja."}},
+           {"section":{"en":"Dimensions","zh":"尺寸","es":"Dimensiones"},
+            "help":{"en":"Three measurements of the closed box, with the tape in the picture.",
+                    "zh":"对封好的彩盒测量三个尺寸，卷尺须入镜。",
+                    "es":"Tres medidas de la caja cerrada, con la cinta en la foto."}},
+           {"id":"sub_box_w","photo":true,"measure":{"unit":"cm","step":"0.1"},
+            "sample":"caja_ancho",
+            "label":{"en":"Box — width","zh":"彩盒 — 宽","es":"Caja — ancho"},
+            "help":{"en":"The horizontal side of the front face. Hook the tape on one edge and read it at the opposite edge, with both ends inside the frame. Read the centimetre scale, not the inches.",
+                    "zh":"正面的水平边。将卷尺钩在一端，在另一端读数，两端都要在画面之内。读厘米刻度，不要读英寸。",
+                    "es":"El lado horizontal de la cara frontal. Enganche la cinta en un borde y lea en el borde opuesto, con los dos extremos dentro del encuadre. Lea la escala en centímetros, no las pulgadas."}},
+           {"id":"sub_box_d","photo":true,"measure":{"unit":"cm","step":"0.1"},
+            "sample":"caja_largo",
+            "label":{"en":"Box — depth","zh":"彩盒 — 长","es":"Caja — largo"}},
+           {"id":"sub_box_h","photo":true,"measure":{"unit":"cm","step":"0.1"},
+            "sample":"caja_alto",
+            "label":{"en":"Box — height","zh":"彩盒 — 高","es":"Caja — alto"}}]},
 
         {"id":"USB","optional":false,"only_factory":["YIS","RHY","EAG"],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
@@ -2834,7 +3055,10 @@ const CONFIG = {
             nothing else. Photographs are not in that document, so they are not
             in the plan yet — a development reference is inspected against what
             has been specified, not against what a released product needs. */
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         /* Los subwoofers tienen su propia versión de esta prueba, de las de
+            accesorios y material impreso. Grep SUB_EXTERNAL. */
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330",
+                 "HK-BAS115A1","HK-BAS118A1"],
          "label":{"en":"EXTERNAL PARTS","zh":"外观部件"},
          "steps":[
            {"en":"Place the speaker in good light, avoiding direct reflections","zh":"将音箱置于光线充足处，避免反光"},
@@ -2898,7 +3122,8 @@ const CONFIG = {
 
         {"id":"ACCESSORIES","optional":false,"type":"photos",
          "only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],   // see EXTERNAL above
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330",
+                 "HK-BAS115A1","HK-BAS118A1"],   // see EXTERNAL above
          "label":{"en":"ACCESSORIES","zh":"配件"},
          "steps":[
            {"en":"Take the accessories out of the box onto a clear surface","zh":"将配件从箱中取出，放在干净台面上"},
@@ -2931,7 +3156,8 @@ const CONFIG = {
 
         {"id":"GRAPHICS","optional":false,"type":"photos","no_na":true,
          "only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],   // see EXTERNAL above
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330",
+                 "HK-BAS115A1","HK-BAS118A1"],   // see EXTERNAL above
          "label":{"en":"PRINTED MATERIAL","zh":"印刷品"},
          "steps":[
            {"en":"Take a photo of each item on the list","zh":"逐项拍摄下列物品"},
@@ -3084,7 +3310,9 @@ const CONFIG = {
 
         {"id":"INTERNAL","optional":false,"type":"photos","no_na":true,
          "only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],   // see EXTERNAL above
+         /* Los subwoofers sí corren ésta: sólo tienen versión propia de las
+            tres anteriores. */
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"INTERNAL PARTS","zh":"内部部件"},
          "steps":[
            {"en":"Remove the screws and open the speaker carefully","zh":"拆下螺丝，小心打开箱体"},
@@ -6317,6 +6545,34 @@ function shrink(file){
   });
 }
 
+/* Reads a barcode out of the photograph that has just been attached, rather
+   than from a live camera. The operator has to photograph the code anyway —
+   the picture is the evidence — so decoding that same picture asks nothing
+   extra of him, and needs no camera stream, no second permission and no
+   detection loop running while he holds the phone steady.
+
+   BarcodeDetector ships with Chrome on Android, which is what the factory
+   uses. Where it is missing — iPhone, and Firefox — nothing happens and the
+   box stays for the operator to type into. Silent on every failure on
+   purpose: a number that could not be read is not an error, it is the normal
+   case on half the phones in the world. */
+async function scanFromShot(u, pointId, dataUrl){
+  try{
+    if(typeof BarcodeDetector === "undefined") return;
+    const fmts = await BarcodeDetector.getSupportedFormats().catch(() => []);
+    if(!fmts || !fmts.length) return;
+    const det = new BarcodeDetector({formats: fmts});
+    const img = new Image();
+    await new Promise((ok, no) => { img.onload = ok; img.onerror = no; img.src = dataUrl; });
+    const found = await det.detect(img);
+    if(!found || !found.length) return;
+    const val = String(found[0].rawValue || "").trim();
+    if(!val) return;
+    setValue(u, pointId, val);
+    render(); save();
+  }catch(e){ /* unreadable: the box is filled by hand, which is the fallback */ }
+}
+
 /* `u` is the speaker the picture belongs to. Evidence of a defect is filed
    against the speaker that has it; general evidence of the test goes on
    speaker 1, which is where the report looks for it. */
@@ -6337,6 +6593,18 @@ async function addMedia(input, u, slot){
     r.media.push(m);
   }
   input.value = "";
+  /* Before the render, so the number is already in the box when the box is
+     drawn. Only on a point that asks for it, and only while it is still empty:
+     a value typed by hand is not overwritten by a later photograph. */
+  if(slot){
+    const t = current();
+    const p = t && realPoints(t).filter(x => x.id === slot)[0];
+    if(p && p.scan && !readingOf(r, slot).trim()){
+      const shot = r.media.filter(m => m.slot === slot && m.kind === "photo" &&
+                                       m.url && !m.doc)[0];
+      if(shot) await scanFromShot(u || 0, slot, shot.url);
+    }
+  }
   if(slot) collapseIfDone(slot);
   render(); save();
   if(heavy.length)

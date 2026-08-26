@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="10.0">
+<meta name="app-version" content="10.4">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -723,7 +723,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 67,
+      "plan_version": 71,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -933,11 +933,11 @@ const CONFIG = {
             "label":{"en":"Panel","zh":"面板","es":"Panel"}},
            {"id":"sub_ext_knobs","photo":true,
             "label":{"en":"Knobs","zh":"旋钮","es":"Perillas"}},
-           {"id":"sub_ext_volt","code":"PWR-005",
+           {"id":"sub_ext_volt","code":"PWR-005","measure":{"unit":"V","step":"1"},
             "label":{"en":"Voltage selector set for the destination country","zh":"电压选择开关与目的地国家一致","es":"Selector de voltaje en la posición del país de destino"},
-            "help":{"en":"Read the position of the selector and compare it with the destination on the order. 120 V for Colombia, the Dominican Republic, Ecuador and Venezuela. 220 V for Argentina, Chile, Peru and Uruguay.",
-                    "zh":"读取开关位置并与订单目的地核对。哥伦比亚、多米尼加、厄瓜多尔、委内瑞拉为 120 V；阿根廷、智利、秘鲁、乌拉圭为 220 V。",
-                    "es":"Lea la posición del selector y compárela con el destino de la orden. 120 V para Colombia, República Dominicana, Ecuador y Venezuela. 220 V para Argentina, Chile, Perú y Uruguay."}},
+            "help":{"en":"Read the position of the selector, write it in the box — 115 or 230 — and compare it with the destination on the order. 115 V for Colombia, the Dominican Republic, Ecuador and Venezuela. 230 V for Argentina, Chile, Peru and Uruguay.",
+                    "zh":"读取开关位置，将其填入方框——115 或 230——并与订单目的地核对。哥伦比亚、多米尼加、厄瓜多尔、委内瑞拉为 115 V；阿根廷、智利、秘鲁、乌拉圭为 230 V。",
+                    "es":"Lea la posición del selector, escríbala en el recuadro —115 o 230— y compárela con el destino de la orden. 115 V para Colombia, República Dominicana, Ecuador y Venezuela. 230 V para Argentina, Chile, Perú y Uruguay."}},
            {"id":"sub_ext_volt_photo","code":"PWR-005","photo":true,
             "label":{"en":"Photo of the selector","zh":"选择开关照片","es":"Foto del selector"},
             "help":{"en":"Close enough that the position can be read in the picture, and with enough panel around it to show where on the cabinet it is.",
@@ -1014,8 +1014,11 @@ const CONFIG = {
                     "zh":"拍摄护套上印字的特写，距离足够近以便读出线规与额定值。",
                     "es":"Primer plano del texto impreso a lo largo del forro, lo bastante cerca para leer el calibre y los valores nominales."}}]},
 
-        {"id":"SUB_GRAPHICS","optional":false,"only_factory":["RHY"],
-         "only":["HK-BAS115A1","HK-BAS118A1"],"evidence":[],
+        {/* Nació para los subwoofers y ahora cubre toda RHYME: la prueba
+            compartida deja de aplicarse a esta fábrica. Conserva el id SUB_
+            para no romper las inspecciones que ya estén en curso. */
+         "id":"SUB_GRAPHICS","optional":false,"only_factory":["RHY"],
+         "evidence":[],
          "label":{"en":"PRINTED MATERIAL","zh":"印刷品","es":"MATERIAL IMPRESO"},
          "steps":[
            {"en":"Photograph each printed item","zh":"逐项拍摄印刷品","es":"Fotografíe cada impreso"},
@@ -1116,6 +1119,12 @@ const CONFIG = {
             "help":{"en":"Photograph the barcode square on, filling the frame, with no glare across the bars. The app reads the number off that photograph and writes it in the box; if it cannot, type it in yourself. Then check the number belongs to this reference and no other.",
                     "zh":"正对条码拍摄，使其充满画面，条纹上不得有反光。应用会从该照片中识别号码并填入方框；若无法识别，请手动输入。随后核对该号码是否属于本型号。",
                     "es":"Fotografíe el código de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto y lo escribe en el recuadro; si no puede, escríbalo usted. Después compruebe que el número pertenece a esta referencia y no a otra."}},
+           {"id":"sub_barcode_panel","code":"PKG-001","photo":true,"scan":true,
+            "measure":{"unit":"EAN","step":"1"},
+            "label":{"en":"Barcode on the panel","zh":"面板条码","es":"Código de barras del panel"},
+            "help":{"en":"The same photograph on the barcode silkscreened on the panel, with its own number in its own box. Compare the two numbers: the one on the panel and the one on the box must be the same.",
+                    "zh":"对面板上丝印的条码做同样的拍摄，其号码填入各自的方框。核对两个号码：面板上的与彩盒上的必须一致。",
+                    "es":"La misma foto sobre el código serigrafiado en el panel, con su número en su propio recuadro. Compare los dos números: el del panel y el de la caja deben ser el mismo."}},
            {"section":{"en":"Dimensions","zh":"尺寸","es":"Dimensiones"},
             "help":{"en":"Three measurements of the closed box, with the tape in the picture.",
                     "zh":"对封好的彩盒测量三个尺寸，卷尺须入镜。",
@@ -3119,16 +3128,12 @@ const CONFIG = {
            {"id":"inferior","label":{"en":"Bottom","zh":"底部"}},
            {"id":"pantalla","label":{"en":"Display","zh":"显示屏"}},
            {"id":"panel","label":{"en":"Panel","zh":"面板"}},
-           {/* RHYME only: their cabinets carry a mains selector and the others do
-                not. It gets a photograph of its own rather than being left to the
-                general panel shot, because what matters is the position it was
-                shipped in — a switch left on 120 V arrives in a 240 V country and
-                the first thing the customer does is destroy the power supply. */
+           {/* Sólo RHYME: sus paneles son los que llevan selector. */
             "id":"switch_voltaje","only_factory":["RHY"],
-            "label":{"en":"120 V / 240 V switch","zh":"120V/240V 电压选择开关","es":"Switch de 120 V / 240 V"},
-            "help":{"en":"Close-up of the voltage selector, close enough to read which side it is set to. The position it leaves the factory in is what this photograph records: a cabinet shipped on 120 V to a 240 V country is destroyed the first time it is plugged in, and afterwards nobody can prove how it was set.",
-                    "zh":"拍摄电压选择开关的特写，距离足够近以便看清当前拨到哪一侧。这张照片记录的是出厂时的档位：以 120V 档发往 240V 国家的音箱，第一次通电就会烧毁，事后谁也无法证明出厂时拨在哪一档。",
-                    "es":"Primer plano del selector de voltaje, lo bastante cerca para leer en qué lado quedó. Lo que esta foto registra es la posición con la que sale de fábrica: una cabina despachada en 120 V a un país de 240 V se destruye la primera vez que se conecta, y después nadie puede demostrar cómo venía puesta."}},
+            "label":{"en":"115 V / 230 V switch","zh":"115V/230V 电压选择开关","es":"Switch de 115 V / 230 V"},
+            "help":{"en":"Close-up of the voltage selector, close enough to read which side it is set to.",
+                    "zh":"拍摄电压选择开关的特写，距离足够近以便看清当前拨到哪一侧。",
+                    "es":"Primer plano del selector de voltaje, lo bastante cerca para leer en qué lado quedó."}},
            {"id":"perillas","label":{"en":"Knobs","zh":"旋钮"}},
            {"id":"malla","label":{"en":"Grille","zh":"网罩"}},
            {"id":"logo_malla","label":{"en":"Logo on the grille","zh":"网罩上的标志"},
@@ -3141,17 +3146,8 @@ const CONFIG = {
            {"id":"num_lote","label":{"en":"Lot number","zh":"批号"},
             "help":{"en":"Close-up of the lot or batch number of the speaker: the code printed or labelled on the product itself, usually next to the specification label. Every digit must be sharp and legible in the photo, and it must match the lot recorded on the inspection paperwork. If this reference carries no lot number, photograph the serial number instead and say so in the notes.",
                     "zh":"拍摄音箱批号（生产批次号）的特写：即印制或贴在产品本体上的编号，通常在规格标签旁边。照片中每一位数字都必须清晰可读，且必须与检验单上记录的批号一致。若本型号没有批号，则改拍序列号，并在备注中说明。"}},
-           {/* RHYME panels carry the barcode silkscreened onto the panel itself
-                rather than on a stuck-on label, so a wrong number cannot be
-                peeled off and replaced: it ships on every unit of the run. The
-                three panels reviewed in August 2026 all carried the same EAN,
-                which is why this asks for the scanner and not for the eye. */
-            "id":"barcode","only_factory":["RHY"],
-            "label":{"en":"Barcode reads and matches the reference","zh":"条码可扫描且与型号一致",
-                     "es":"Código de barras legible y corresponde a la referencia"},
-            "help":{"en":"Pass a scanner over the barcode on the panel and photograph it. It must read on the first pass, and the number it returns must belong to this reference and no other. Two references sharing one code cannot be told apart in the warehouse or at the till.",
-                    "zh":"用扫描枪扫描面板上的条码并拍照。应一次读取成功，且读出的编号必须属于本型号，不能属于其他型号。两个型号共用一个条码，在仓库和收银台都无法区分。",
-                    "es":"Pase un lector sobre el código de barras del panel y fotografíelo. Debe leer al primer intento, y el número que devuelva tiene que pertenecer a esta referencia y no a otra. Dos referencias con el mismo código no se pueden diferenciar ni en bodega ni en caja."}},
+           /* El código de barras del panel se pide ahora en MATERIAL IMPRESO,
+              junto al de la caja y con recuadro para el número. */
            {"id":"silkscreen","only_factory":["RHY"],
             "label":{"en":"Panel silkscreen spelled correctly","zh":"面板丝印文字无误",
                      "es":"Serigrafía del panel sin erratas"},
@@ -3193,10 +3189,12 @@ const CONFIG = {
             "help":{"en":"The back, showing the locking knobs and the welds.",
                     "zh":"拍摄背面，需拍到锁紧旋钮和焊接部位。"}}]},
 
-        {"id":"GRAPHICS","optional":false,"type":"photos","no_na":true,
-         "only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330",
-                 "HK-BAS115A1","HK-BAS118A1"],   // see EXTERNAL above
+        {/* RHYME entera pasó a SUB_GRAPHICS, que es la versión con las cuatro
+            páginas del manual, la guía rápida, la sílica, los icopores y el
+            lector de código. Aquí quedan YISION y EAGLE. */
+         "id":"GRAPHICS","optional":false,"type":"photos","no_na":true,
+         "only_factory":["YIS","EAG"],
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"PRINTED MATERIAL","zh":"印刷品"},
          "steps":[
            {"en":"Take a photo of each item on the list","zh":"逐项拍摄下列物品"},
@@ -3339,11 +3337,11 @@ const CONFIG = {
             "help":{"en":"Read with the speaker unplugged. Once it is plugged in at the wrong voltage there is nothing left to inspect.",
                     "zh":"须在断电状态下读取。一旦以错误电压接入市电，就没有什么可检验的了。",
                     "es":"Se lee con el equipo desconectado. Una vez enchufado al voltaje equivocado ya no queda nada que inspeccionar."}},
-           {"id":"volt_select","code":"PWR-005",
+           {"id":"volt_select","code":"PWR-005","measure":{"unit":"V","step":"1"},
             "label":{"en":"Selector set for the destination country","zh":"选择开关与目的地国家一致","es":"Selector en la posición del país de destino"},
-            "help":{"en":"120 V for Colombia, the Dominican Republic, Ecuador and Venezuela. 220 V for Argentina, Chile, Peru and Uruguay. Read the position and compare it with the destination on the order. A speaker set to 120 V plugged into 220 V burns in the first second, and the selector moves on its own in transit.",
-                    "zh":"哥伦比亚、多米尼加、厄瓜多尔、委内瑞拉为 120 V；阿根廷、智利、秘鲁、乌拉圭为 220 V。读取开关位置并与订单目的地核对。设在 120 V 的机器接入 220 V 会在一秒内烧毁，而该开关在运输中会自行移位。",
-                    "es":"120 V para Colombia, República Dominicana, Ecuador y Venezuela. 220 V para Argentina, Chile, Perú y Uruguay. Lea la posición y compárela con el destino de la orden. Un equipo en 120 V enchufado a 220 V se quema en el primer segundo, y el selector se mueve solo en el transporte."}},
+            "help":{"en":"Read the position of the selector, write it in the box — 115 or 230 — and compare it with the destination on the order. 115 V for Colombia, the Dominican Republic, Ecuador and Venezuela. 230 V for Argentina, Chile, Peru and Uruguay.",
+                    "zh":"读取开关位置，将其填入方框——115 或 230——并与订单目的地核对。哥伦比亚、多米尼加、厄瓜多尔、委内瑞拉为 115 V；阿根廷、智利、秘鲁、乌拉圭为 230 V。",
+                    "es":"Lea la posición del selector, escríbala en el recuadro —115 o 230— y compárela con el destino de la orden. 115 V para Colombia, República Dominicana, Ecuador y Venezuela. 230 V para Argentina, Chile, Perú y Uruguay."}},
            {"id":"volt_photo","code":"PWR-005","photo":true,
             "label":{"en":"Photo of the selector","zh":"选择开关照片","es":"Foto del selector"},
             "help":{"en":"Photograph the selector close enough that its position can be read in the picture, and with enough of the panel around it to show where on the speaker it is.",
@@ -3364,16 +3362,99 @@ const CONFIG = {
             "en":"For the FM antenna, show its full routing and fixing point","zh":"收音天线需拍出完整走线和固定位置"},
            {"en":"Mark N/A anything this reference does not include","zh":"本型号不包含的项目请标记为 N/A"}],
          "points":[
-           {"id":"woofer_front","label":{"en":"Woofer — front","zh":"低音单元 — 正面"},
-            "help":{"en":"The cone and surround, seen from the front. Look for tears, glue marks or a misaligned dust cap.",
-                    "zh":"正面拍摄振膜和折环，注意是否有破损、溢胶或防尘帽偏位。"}},
            {"id":"woofer_weight","measure":{"unit":"g","step":"1"},
-            "label":{"en":"Woofer — weight","zh":"低音单元 — 重量"},
-            "help":{"en":"Place the woofer on the scale on its own, with no screws, gasket or cable attached. Photograph the reading and write the value in the box. Weight is what tells the magnet apart: two woofers that look identical from the front can be hundreds of grams apart, and that difference is the sound.",
-                    "zh":"将低音单元单独放在电子秤上，不带螺丝、垫圈和引线。拍摄读数并将数值填入方框。重量能反映磁钢的差异：正面看完全相同的两只喇叭，重量可能相差数百克，而这个差别决定了声音。"}},
-           {"id":"woofer_back","label":{"en":"Woofer — back","zh":"低音单元 — 背面"},
-            "help":{"en":"The magnet, with its label readable: brand, size and impedance. This is what proves the specified woofer was used.",
-                    "zh":"拍摄磁钢及其标签：品牌、尺寸和阻抗必须清晰可读。这是核对是否使用指定喇叭的依据。"}},
+            "label":{"en":"Woofer — weight","zh":"低音单元 — 重量","es":"Woofer — peso"},
+            "help":{"en":"Place the woofer on the scale on its own, with no screws, gasket or cable attached. Photograph the reading and write the value in the box.",
+                    "zh":"将低音单元单独放在电子秤上，不带螺丝、垫圈和引线。拍摄读数并将数值填入方框。",
+                    "es":"Ponga el woofer solo sobre la balanza, sin tornillos, empaque ni cable. Fotografíe la lectura y escriba el valor en el recuadro."}},
+           {"id":"woofer_front","label":{"en":"Woofer — front","zh":"低音单元 — 正面","es":"Woofer — frente"},
+            "help":{"en":"The cone and surround, seen from the front. Look for tears, glue marks or a misaligned dust cap.",
+                    "zh":"正面拍摄振膜和折环，注意是否有破损、溢胶或防尘帽偏位。",
+                    "es":"El cono y la suspensión, vistos de frente. Busque roturas, marcas de pegante o el guardapolvo descentrado."}},
+           {"id":"woofer_back","label":{"en":"Woofer — back","zh":"低音单元 — 背面","es":"Woofer — reverso"},
+            "help":{"en":"The magnet, with its label readable: brand, size and impedance.",
+                    "zh":"拍摄磁钢及其标签：品牌、尺寸和阻抗必须清晰可读。",
+                    "es":"El imán, con su etiqueta legible: marca, tamaño e impedancia."}},
+           {/* Los cuatro puntos siguientes son de construcción del woofer y se
+                piden en todas las referencias de RHYME. */
+            "id":"tinsel_gauge","only_factory":["RHY"],
+            "measure":{"unit":"mm","step":"0.01"},
+            "label":{"en":"Tinsel lead — gauge","zh":"引出线 — 线径","es":"Tinsel — calibre"},
+            "help":{"en":"Measure the gauge of the tinsel lead with a caliper and write it in the box. Photograph the caliper with the lead between the jaws and the reading visible in the same frame.",
+                    "zh":"用游标卡尺测量引出线的线径并填入方框。拍摄卡尺，引出线夹在量爪之间，读数须在同一画面内清晰可见。",
+                    "es":"Mida el calibre del tinsel con un calibrador y escríbalo en el recuadro. Fotografíe el calibrador con el tinsel entre las mordazas y la lectura visible en el mismo encuadre."}},
+           {"id":"tinsel_solder","only_factory":["RHY"],
+            "label":{"en":"Tinsel — solder point","zh":"引出线 — 焊点","es":"Tinsel — punto de soldadura"},
+            "help":{"en":"Close-up of the point where the tinsel lead is soldered to the cone. Close enough to see the joint itself, not just the area around it.",
+                    "zh":"拍摄引出线与振膜焊接处的特写，距离足够近以便看清焊点本身，而不只是周边区域。",
+                    "es":"Primer plano del punto donde el tinsel va soldado al cono. Lo bastante cerca para ver la soldadura misma, no sólo la zona alrededor."}},
+           {"id":"terminals_solder","only_factory":["RHY"],
+            "label":{"en":"Terminals — soldered","zh":"接线端子 — 已焊接","es":"Terminales — soldados"},
+            "help":{"en":"Photograph the two terminals close enough to see that both are soldered, with the solder covering the joint and no loose strands.",
+                    "zh":"拍摄两个接线端子，距离足够近以便确认两者均已焊接，焊锡覆盖焊点且无散股。",
+                    "es":"Fotografíe los dos terminales lo bastante cerca para ver que ambos están soldados, con el estaño cubriendo la unión y sin hilos sueltos."}},
+           {"id":"voice_coil_line","only_factory":["RHY"],
+            "label":{"en":"Voice coil from the production line","zh":"产线上的音圈","es":"Bobina de la línea de producción"},
+            "help":{"en":"Do not take the woofer apart. Ask the line for a loose voice coil of the same model, still unassembled, and photograph it with the winding and its markings visible.",
+                    "zh":"不得拆解低音单元。向产线索取一只同型号、尚未装配的散装音圈，拍摄其绕线与标识，须清晰可见。",
+                    "es":"No desarme el woofer. Pida a la línea una bobina suelta del mismo modelo, aún sin ensamblar, y fotografíela con el devanado y sus marcas a la vista."}},
+           {"id":"foam_left","only_factory":["RHY"],
+            "label":{"en":"Acoustic foam — left side","zh":"吸音棉 — 左侧","es":"Espuma acústica — lado izquierdo"},
+            "help":{"en":"Photograph the inside of the cabinet on the left, showing the acoustic foam over the whole wall. Check it is glued down along its edges and not loose or torn.",
+                    "zh":"拍摄箱体内部左侧，吸音棉须覆盖整面内壁。确认其边缘粘贴牢固，无翘边或破损。",
+                    "es":"Fotografíe el interior de la cabina por el lado izquierdo, mostrando la espuma acústica sobre toda la pared. Compruebe que está pegada por los bordes y no suelta ni rota."}},
+           {"id":"foam_right","only_factory":["RHY"],
+            "label":{"en":"Acoustic foam — right side","zh":"吸音棉 — 右侧","es":"Espuma acústica — lado derecho"},
+            "help":{"en":"The same photograph on the right wall.",
+                    "zh":"对右侧内壁拍摄同样的照片。",
+                    "es":"La misma foto en la pared derecha."}},
+           {"id":"fuses_ref","only_factory":["RHY"],
+            "label":{"en":"Fuses — reference","zh":"保险丝 — 规格","es":"Fusibles — referencia"},
+            "help":{"en":"Photograph the two fuses, both in the same picture, close enough to read the reference printed on each cap: rating and type.",
+                    "zh":"拍摄两只保险丝，须在同一画面内，距离足够近以便读出每只端帽上的规格印字：额定值与类型。",
+                    "es":"Fotografíe los dos fusibles, los dos en la misma foto, lo bastante cerca para leer la referencia impresa en cada casquillo: valor y tipo."}},
+           {"id":"cable_holes_silicone","only_factory":["RHY"],
+            "label":{"en":"Cable holes — sealed with silicone","zh":"过线孔 — 已打硅胶","es":"Agujeros de los cables — sellados con silicona"},
+            "help":{"en":"Photograph the two holes the cables come out of, both in the same picture, close enough to see the silicone. Each must be sealed all the way round, with no gap left open.",
+                    "zh":"拍摄两个出线孔，须在同一画面内，距离足够近以便看清硅胶。每个孔的四周都应封闭，不得留有缝隙。",
+                    "es":"Fotografíe los dos agujeros por donde salen los cables, los dos en la misma foto, lo bastante cerca para ver la silicona. Cada uno debe quedar sellado en todo el contorno, sin ninguna abertura."}},
+           {"id":"volt_pins","only_factory":["RHY"],
+            "label":{"en":"Voltage selector — pins soldered","zh":"电压选择开关 — 引脚已焊接","es":"Selector de voltaje — pines soldados"},
+            "help":{"en":"Photograph the back of the voltage selector from inside the cabinet, close enough to see each pin. All must be soldered, with the solder covering the joint and no pin left bare.",
+                    "zh":"从箱体内部拍摄电压选择开关的背面，距离足够近以便看清每个引脚。所有引脚均须焊接，焊锡覆盖焊点，不得有裸露未焊的引脚。",
+                    "es":"Fotografíe el respaldo del selector de voltaje desde dentro de la cabina, lo bastante cerca para ver cada pin. Todos deben estar soldados, con el estaño cubriendo la unión y ninguno sin soldar."}},
+           /* Los seis siguientes son sólo de los subwoofers. */
+           {"id":"woofer_cable_gauge","only":["HK-BAS115A1","HK-BAS118A1"],
+            "measure":{"unit":"mm","step":"0.01"},
+            "label":{"en":"Woofer cable — gauge","zh":"低音单元引线 — 线径","es":"Cable del woofer — calibre"},
+            "help":{"en":"Measure the gauge of the woofer cable with a caliper, write it in the box and photograph the reading with the cable between the jaws. If the cable carries the gauge printed on it, photograph that printing as well.",
+                    "zh":"用游标卡尺测量低音单元引线的线径，将数值填入方框，并拍摄读数，引线须夹在量爪之间。若引线上印有线规，也一并拍摄该印字。",
+                    "es":"Mida el calibre del cable del woofer con un calibrador, escríbalo en el recuadro y fotografíe la lectura con el cable entre las mordazas. Si el cable trae el calibre impreso, fotografíe también esa impresión."}},
+           {"id":"connectors_glue","only":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Connectors — yellow glue","zh":"接插件 — 黄胶","es":"Conectores — pegante amarillo"},
+            "help":{"en":"Go over every connector inside the cabinet and photograph them. All must carry the yellow glue over the joint between the connector and its housing.",
+                    "zh":"检查箱体内所有接插件并拍照。每个接插件与插座的接合处均应打有黄胶。",
+                    "es":"Recorra todos los conectores dentro de la cabina y fotografíelos. Todos deben llevar el pegante amarillo sobre la unión entre el conector y su alojamiento."}},
+           {"id":"preamp_back","only":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Preamplifier — back","zh":"前置放大板 — 背面","es":"Preamplificador — parte posterior"},
+            "help":{"en":"Photograph the back of the preamplifier board, whole and square on.",
+                    "zh":"正对拍摄前置放大板的背面，整块入镜。",
+                    "es":"Fotografíe la parte posterior de la tarjeta del preamplificador, entera y de frente."}},
+           {"id":"preamp_glue","only":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Preamplifier connector — yellow glue","zh":"前置放大板接插件 — 黄胶","es":"Conector del preamplificador — pegante amarillo"},
+            "help":{"en":"Close-up of the preamplifier connector. It must carry the yellow glue over the joint.",
+                    "zh":"拍摄前置放大板接插件的特写。其接合处应打有黄胶。",
+                    "es":"Primer plano del conector del preamplificador. Debe llevar el pegante amarillo sobre la unión."}},
+           {"id":"preamp_pcb_ver","only":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Preamplifier — PCB version","zh":"前置放大板 — 板版本","es":"Preamplificador — versión de la PCB"},
+            "help":{"en":"Close-up of the version printed on the board, close enough to read every character.",
+                    "zh":"拍摄板上印制的版本号特写，距离足够近以便读出每一个字符。",
+                    "es":"Primer plano de la versión impresa en la tarjeta, lo bastante cerca para leer cada carácter."}},
+           {"id":"eva_foam_panel","only":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"EVA foam around the panel","zh":"面板周围的 EVA 泡棉","es":"Espuma EVA alrededor del panel"},
+            "help":{"en":"Photograph the EVA foam running round the panel. It must go the whole way round, seated in its channel, with no gaps and no pieces missing.",
+                    "zh":"拍摄面板四周的 EVA 泡棉。应完整环绕一圈，嵌入卡槽，无断口、无缺失。",
+                    "es":"Fotografíe la espuma EVA que rodea el panel. Debe dar toda la vuelta, asentada en su canal, sin huecos ni tramos faltantes."}},
            {"id":"tweeter_front","label":{"en":"Tweeter — front","zh":"高音单元 — 正面"},
             "help":{"en":"The diaphragm and horn seen from the front. Look for a dented dome, glue marks, or a horn that is not properly seated.",
                     "zh":"正面拍摄振膜和号角。注意振膜是否凹陷、是否有溢胶、号角是否装配到位。"}},

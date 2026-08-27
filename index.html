@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="10.7">
+<meta name="app-version" content="10.8">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -722,7 +722,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 74,
+      "plan_version": 75,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -3568,7 +3568,8 @@ const CONFIG = {
            {"id":"tweeter_back","label":{"en":"Tweeter — back","zh":"高音单元 — 背面"},
             "help":{"en":"The magnet and the terminals, with the label readable: brand, model and impedance. Front and back are asked for separately because the label that proves which tweeter was fitted is only visible from behind.",
                     "zh":"拍摄磁钢和接线端子，标签需清晰可读：品牌、型号和阻抗。正反面分开拍摄，是因为证明所用高音单元型号的标签只有从背面才看得到。"}},
-           {"id":"fuente","label":{"en":"Power supply","zh":"电源板"}},
+           {"id":"fuente","skip":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Power supply","zh":"电源板"}},
            {"id":"amp_front","label":{"en":"Amplifier — component side","zh":"功放板 — 元件面"},
             "help":{"en":"The side carrying the chips. The board reference and the main IC markings must be readable.",
                     "zh":"拍摄有芯片的一面。板号和主要芯片丝印必须清晰可读。"}},

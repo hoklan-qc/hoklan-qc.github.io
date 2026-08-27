@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="10.4">
+<meta name="app-version" content="10.6">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -617,7 +617,6 @@ const CONFIG = {
     "AUD-013":{"en":"No signal on the XLR output","zh":"XLR 输出无信号","es":"Sin señal en la salida XLR"},
     "AUD-014":{"en":"The 120 Hz output is not filtered","zh":"120 Hz 输出未经滤波","es":"La salida de 120 Hz no está filtrada"},
     "AUD-015":{"en":"Phase switch does not work","zh":"相位开关无效","es":"El switch de fase no funciona"},
-    "AUD-016":{"en":"Low-pass filter does not work","zh":"低通滤波无效","es":"El filtro pasa-bajos no funciona"},
     "AUD-017":{"en":"Channel volume does not work","zh":"通道音量无效","es":"El volumen del canal no funciona"},
     "AUD-018":{"en":"DSP mode does not change the sound","zh":"DSP 模式不改变声音","es":"El modo DSP no cambia el sonido"},
     "PWR-010":{"en":"No start-up tone or greeting","zh":"无开机音或问候语","es":"Sin sonido de arranque ni saludo"},
@@ -723,7 +722,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 71,
+      "plan_version": 73,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -769,50 +768,83 @@ const CONFIG = {
 
         /* ---------------- RHYME subwoofers: HK-BAS115A1, HK-BAS118A1 -------
            A powered sub has no source, no display and no channels. What it does
-           have - and what nobody was checking - is a phase switch, a low-pass
-           filter and a filtered 120 Hz output. A sub wired out of phase passes
-           every test in the old plan without a single mark and then sounds
-           hollow in the assembled system, because it is cancelling the very
-           bass it was bought for.
+           have — and what nobody was checking — is a phase switch and a filtered
+           120 Hz output. A sub wired out of phase passes every test in the old
+           plan without a single mark and then sounds hollow in the assembled
+           system, because it is cancelling the very bass it was bought for.
+
+           El filtro pasa-bajos salió del plan por decisión de HOKLAN: sus dos
+           puntos, 80 Hz y 200 Hz, y el código AUD-016 con ellos.
            ------------------------------------------------------------------ */
-        {"id":"SUB_IO","optional":false,"only_factory":["RHY"],"evidence":[],
+        {/* Antes era una sola prueba, ENTRADAS Y SALIDAS. Se separó porque son
+            dos montajes distintos: la entrada se alimenta desde el mixer y la
+            salida necesita una segunda cabina conectada detrás. */
+         "id":"SUB_IN","optional":false,"only_factory":["RHY"],"evidence":["video"],
          "only":["HK-BAS115A1","HK-BAS118A1"],
-         "label":{"en":"INPUTS AND OUTPUTS","zh":"输入与输出","es":"ENTRADAS Y SALIDAS"},
+         "label":{"en":"INPUTS","zh":"输入","es":"ENTRADAS"},
          "steps":[
-           {"en":"Feed the test source into the input jacks, one side at a time","zh":"用测试音源分别接入左右输入口","es":"Lleve la fuente de prueba a las entradas, un lado a la vez"},
-           {"en":"Connect a full-range cabinet to each output in turn","zh":"依次将全频音箱接到每一路输出","es":"Conecte una cabina de rango completo a cada salida por turnos"},
-           {"en":"Listen to what comes out of the 120 Hz output before judging it","zh":"判定之前先听清 120 Hz 输出的声音","es":"Escuche lo que sale por la salida de 120 Hz antes de juzgarla"}],
+           {"en":"Play La rubia de oro from the mixer","zh":"用调音台播放《La rubia de oro》","es":"Reproduzca La rubia de oro desde el mixer"},
+           {"en":"Feed it into the input jacks, one side at a time","zh":"分别接入左右输入口，一次只接一侧","es":"Llévela a las entradas, un lado a la vez"},
+           {"en":"Raise and lower the volume on each side","zh":"在每一侧上下调节音量","es":"Suba y baje el volumen en cada lado"},
+           {"en":"One video for the whole test, no photos","zh":"整项测试录制一段视频，无需照片","es":"Un solo video para toda la prueba, sin fotos"}],
          "points":[
-           {"section":{"en":"Inputs","zh":"输入","es":"Entradas"},
+           {"section":{"en":"The source","zh":"信号源","es":"La fuente"},
+            "help":{"en":"Always the same track from the mixer, so two inspections can be compared: La rubia de oro. One video covers the whole test — no photographs are asked for here.",
+                    "zh":"始终使用调音台播放同一首曲目《La rubia de oro》，以便两次检验之间可比对。整项测试用一段视频记录，此处不需要照片。",
+                    "es":"Siempre la misma pista desde el mixer, para que dos inspecciones se puedan comparar: La rubia de oro. Un solo video cubre toda la prueba — aquí no se piden fotografías."}},
+           {"section":{"en":"The two inputs","zh":"两个输入口","es":"Las dos entradas"},
             "help":{"en":"They are hybrid jacks: the same socket takes an XLR plug or a 6.3 mm one. Check one side at a time, never both connected at once.",
                     "zh":"这是复合插孔：同一个孔既可插 XLR，也可插 6.3 mm 插头。一次只接一侧检查，不要两侧同时接入。",
                     "es":"Son jacks híbridos: el mismo conector recibe un plug XLR o uno de 6.3 mm. Revise un lado a la vez, nunca con las dos conectadas."}},
            {"id":"in_l","code":"AUX-001",
             "label":{"en":"Input L — hybrid 6.3 mm / XLR","zh":"输入 L — 6.3 mm / XLR 复合口","es":"Entrada izquierda — híbrida 6.3 mm / XLR"},
-            "help":{"en":"Feed the source into the L input only. Audio must come through. Try both plug types in the same socket: first the XLR, then the 6.3 mm.",
-                    "zh":"仅将音源接入 L 输入，应有声音传出。同一个孔要试两种插头：先试 XLR，再试 6.3 mm。",
-                    "es":"Lleve la fuente sólo a la entrada L. Debe entrar audio. Pruebe los dos tipos de plug en el mismo jack: primero el XLR y luego el de 6.3 mm."}},
+            "help":{"en":"Feed the mixer into the L input only. Audio must come through. Try both plug types in the same socket: first the XLR, then the 6.3 mm.",
+                    "zh":"仅将调音台接入 L 输入，应有声音传出。同一个孔要试两种插头：先试 XLR，再试 6.3 mm。",
+                    "es":"Lleve el mixer sólo a la entrada L. Debe entrar audio. Pruebe los dos tipos de plug en el mismo jack: primero el XLR y luego el de 6.3 mm."}},
            {"id":"in_r","code":"AUX-001",
             "label":{"en":"Input R — hybrid 6.3 mm / XLR","zh":"输入 R — 6.3 mm / XLR 复合口","es":"Entrada derecha — híbrida 6.3 mm / XLR"},
             "help":{"en":"Now the R input only, with both plug types again. Same result.",
                     "zh":"改为仅接 R 输入，同样试两种插头，结果应相同。",
                     "es":"Ahora sólo la entrada R, otra vez con los dos tipos de plug. El mismo resultado."}},
-           {"section":{"en":"Outputs","zh":"输出","es":"Salidas"},
-            "help":{"en":"Connect a full-range cabinet to each output and listen to what it is actually being sent.",
-                    "zh":"将全频音箱接到每一路输出，听清实际送出的是什么信号。",
-                    "es":"Conecte una cabina de rango completo a cada salida y escuche qué se le está enviando realmente."}},
-           {"id":"out_full","code":"AUD-013","label":{"en":"XLR output L and R carry the full signal","zh":"XLR 输出 L 与 R 送出全频信号","es":"Salida XLR L y R con la señal completa"},
-            "help":{"en":"Connect to a second unit. The whole signal must come out, bass and treble alike.",
-                    "zh":"接入第二台设备，应送出完整信号，低频与高频俱全。",
-                    "es":"Conecte a un segundo equipo. Debe salir la señal completa, con graves y agudos."}},
-           {"id":"out_120","code":"AUD-014","label":{"en":"120 Hz output is filtered","zh":"120 Hz 输出经过滤波","es":"Salida de 120 Hz filtrada"},
-            "help":{"en":"Connect a full-range cabinet to the 120 Hz output and listen. It must come out with no bass, only from 120 Hz upwards. If bass comes through, mark it as a fail.",
-                    "zh":"将全频音箱接到 120 Hz 输出并细听。应当没有低频，只有 120 Hz 以上的部分。若低频送了出去，判定为异常。",
-                    "es":"Conecte una cabina de rango completo a la salida de 120 Hz y escuche. Debe salir sin graves, sólo de 120 Hz hacia arriba. Si salen los graves, márquelo como no conforme."}},
-           {"id":"out_noise","code":"AUX-003","label":{"en":"Outputs add no noise","zh":"输出不带杂音","es":"Las salidas no meten ruido"},
-            "help":{"en":"With the sub silent, listen at the connected unit: no hum and no hiss.",
-                    "zh":"低音炮静音时，在所接设备上细听：不应有嗡嗡声或嘶声。",
-                    "es":"Con el sub en silencio, escuche en el equipo conectado: sin zumbido ni siseo."}}]},
+           {"id":"in_level","code":"AUX-001",
+            "label":{"en":"The level follows the volume","zh":"声音强度随音量变化","es":"La intensidad sigue al volumen"},
+            "help":{"en":"With the track playing, raise the volume and lower it again. The sound must follow the knob the whole way, rising and falling with it, with no dead spots and no jumps.",
+                    "zh":"在播放状态下将音量调高再调低。声音应全程随旋钮变化，逐渐增大和减小，不应有死区或跳变。",
+                    "es":"Con la pista sonando, suba el volumen y vuelva a bajarlo. El sonido debe seguir a la perilla en todo el recorrido, subiendo y bajando con ella, sin zonas muertas ni saltos."}}]},
+
+        {"id":"SUB_OUT","optional":false,"only_factory":["RHY"],"evidence":[],
+         "only":["HK-BAS115A1","HK-BAS118A1"],
+         "label":{"en":"OUTPUTS","zh":"输出","es":"SALIDAS"},
+         "steps":[
+           {"en":"Play La rubia de oro from the mixer into the sub","zh":"用调音台将《La rubia de oro》送入低音炮","es":"Reproduzca La rubia de oro desde el mixer hacia el sub"},
+           {"en":"Connect each output to the line input of a DEL103","zh":"将每一路输出接到 DEL103 的线路输入","es":"Conecte cada salida a la entrada de línea de un DEL103"},
+           {"en":"Listen at the DEL103, not at the sub","zh":"在 DEL103 上试听，而非在低音炮上","es":"Escuche en el DEL103, no en el sub"},
+           {"en":"Raise and lower the volume on each output","zh":"在每一路输出上上下调节音量","es":"Suba y baje el volumen en cada salida"}],
+         "points":[
+           {"section":{"en":"The set-up","zh":"连接方式","es":"El montaje"},
+            "help":{"en":"The mixer feeds the sub with La rubia de oro, and each output of the sub goes to the line input of a DEL103. What is judged is what comes out of the DEL103.",
+                    "zh":"调音台将《La rubia de oro》送入低音炮，低音炮的每一路输出再接到 DEL103 的线路输入。判定依据是 DEL103 发出的声音。",
+                    "es":"El mixer alimenta el sub con La rubia de oro, y cada salida del sub va a la entrada de línea de un DEL103. Lo que se juzga es lo que sale del DEL103."}},
+           {"id":"out_full","code":"AUD-013",
+            "label":{"en":"XLR output L and R carry the full signal","zh":"XLR 输出 L 与 R 送出全频信号","es":"Salida XLR L y R con la señal completa"},
+            "help":{"en":"Connect each one to the DEL103 in turn. The whole signal must come out, bass and treble alike.",
+                    "zh":"依次接到 DEL103。应送出完整信号，低频与高频俱全。",
+                    "es":"Conecte cada una al DEL103 por turnos. Debe salir la señal completa, con graves y agudos."}},
+           {"id":"out_120","code":"AUD-014",
+            "label":{"en":"120 Hz output — the bass comes through weaker","zh":"120 Hz 输出 — 低频明显减弱","es":"Salida de 120 Hz — los bajos salen con menos intensidad"},
+            "help":{"en":"Connect the 120 Hz output to the DEL103 and listen. The bass must come through weaker than on the full output: compare the two one after the other on the same track and at the same volume. If the bass sounds the same on both, mark it as a fail.",
+                    "zh":"将 120 Hz 输出接到 DEL103 并细听。低频应明显弱于全频输出：用同一曲目、同一音量前后对比两路输出。若两路低频听起来一样，判定为异常。",
+                    "es":"Conecte la salida de 120 Hz al DEL103 y escuche. Los bajos deben salir con menos intensidad que por la salida completa: compare las dos, una después de la otra, con la misma pista y el mismo volumen. Si los bajos suenan igual en ambas, márquelo como no conforme."}},
+           {"id":"out_level","code":"AUD-013",
+            "label":{"en":"The level follows the volume","zh":"声音强度随音量变化","es":"La intensidad sigue al volumen"},
+            "help":{"en":"With the track playing through the DEL103, raise the volume and lower it again. The sound must follow the knob the whole way, with no dead spots and no jumps.",
+                    "zh":"在通过 DEL103 播放的状态下将音量调高再调低。声音应全程随旋钮变化，不应有死区或跳变。",
+                    "es":"Con la pista sonando por el DEL103, suba el volumen y vuelva a bajarlo. El sonido debe seguir a la perilla en todo el recorrido, sin zonas muertas ni saltos."}},
+           {"id":"out_noise","code":"AUX-003",
+            "label":{"en":"Outputs add no noise","zh":"输出不带杂音","es":"Las salidas no meten ruido"},
+            "help":{"en":"Stop the track with everything still connected and listen at the DEL103: no hum and no hiss.",
+                    "zh":"保持连接不变，停止播放，在 DEL103 上细听：不应有嗡嗡声或嘶声。",
+                    "es":"Detenga la pista con todo aún conectado y escuche en el DEL103: sin zumbido ni siseo."}}]},
 
         {"id":"SUB_CONTROLS","optional":false,"only_factory":["RHY"],"evidence":["video"],
          "only":["HK-BAS115A1","HK-BAS118A1"],
@@ -820,7 +852,7 @@ const CONFIG = {
          "steps":[
            {"en":"Run the sub together with a full-range cabinet","zh":"低音炮与全频音箱一同工作","es":"Haga sonar el sub junto con una cabina de rango completo"},
            {"en":"Move each control and listen for the change","zh":"逐个调节控制件并注意声音变化","es":"Mueva cada control y escuche el cambio"},
-           {"en":"One clip covering the phase switch and the filter is enough","zh":"一段涵盖相位开关和滤波旋钮的视频即可","es":"Basta un video que cubra el switch de fase y el filtro"}],
+           {"en":"One clip covering the volume knob and the phase switch is enough","zh":"一段涵盖音量旋钮和相位开关的视频即可","es":"Basta un video que cubra la perilla de volumen y el switch de fase"}],
          "points":[
            {"id":"sub_volume","code":"AUD-006","label":{"en":"VOLUME knob","zh":"音量旋钮","es":"Perilla VOLUMEN"},
             "help":{"en":"From minimum to maximum with programme playing. It must rise smoothly, with no dead spots and no noise as it turns.",
@@ -830,14 +862,6 @@ const CONFIG = {
             "help":{"en":"With the sub and a full-range cabinet playing together, flip the phase. The bass must change audibly: in one position it reinforces, in the other it thins out. If it sounds the same both ways, mark it as a fail.",
                     "zh":"低音炮与全频音箱同时发声时切换相位。低频应有明显变化：一个位置增强，另一个变薄。若两个位置听起来一样，判定为异常。",
                     "es":"Con el sub y una cabina de rango completo sonando juntos, cambie la fase. El bajo debe cambiar de forma audible: en una posición refuerza y en la otra se adelgaza. Si suena igual en ambas, márquelo como no conforme."}},
-           {"id":"sub_lpf_80","code":"AUD-016","label":{"en":"LOW-PASS FILTER at 80 Hz","zh":"低通滤波置于 80 Hz","es":"FILTRO PASA-BAJOS en 80 Hz"},
-            "help":{"en":"Set the knob to 80 and listen: the sub must cover only the lowest part.",
-                    "zh":"将旋钮置于 80 并细听：低音炮应只覆盖最低的一段。",
-                    "es":"Ponga la perilla en 80 y escuche: el sub debe cubrir sólo la parte más baja."}},
-           {"id":"sub_lpf_200","code":"AUD-016","label":{"en":"LOW-PASS FILTER at 200 Hz","zh":"低通滤波置于 200 Hz","es":"FILTRO PASA-BAJOS en 200 Hz"},
-            "help":{"en":"Take it to 200: the sub must clearly cover more range than at 80, and the travel between the two must be continuous, with no jumps.",
-                    "zh":"转到 200：低音炮覆盖的频段应明显宽于 80 时，两点之间的过渡应连续，不应跳变。",
-                    "es":"Llévela a 200: el sub debe cubrir claramente más rango que en 80, y el recorrido entre las dos posiciones debe ser continuo, sin saltos."}},
            {"id":"sub_led_signal","code":"LED-008","label":{"en":"SIGNAL LED","zh":"信号指示灯","es":"LED SEÑAL"},
             "help":{"en":"It must light with signal present and follow the programme.",
                     "zh":"有信号时应点亮，并随节目变化。",
@@ -1727,7 +1751,39 @@ const CONFIG = {
                     "zh":"开关灯光，如有多种灯光模式请逐一切换确认。"}},
            {"id":"lights_off","code":"FM-009","label":{"en":"Lights stay off in radio mode","zh":"收音模式下灯光保持关闭"},
             "help":{"en":"In radio mode the lights must stay off by design: the LED drivers interfere with FM reception. If they come on, it is a firmware fault.",
-                    "zh":"收音模式下灯光应按设计保持关闭：灯板驱动会干扰调频接收。若灯亮起，属于固件缺陷。"}}]},
+                    "zh":"收音模式下灯光应按设计保持关闭：灯板驱动会干扰调频接收。若灯亮起，属于固件缺陷。"}},
+           /* Mismo bloque que en BLUETOOTH, ahora también aquí. Sólo YISION. */
+           {"only_factory":["YIS"],
+            "section":{"en":"Microphones and guitar","zh":"麦克风与吉他"},
+            "help":{"en":"Plug a microphone into MIC1 and speak while you adjust volume, echo and priority. Repeat with MIC2, then connect the guitar. Mark N/A for whatever this reference does not have.",
+                    "zh":"将麦克风插入 MIC1，一边说话一边调节音量、混响和优先键；MIC2 重复同样操作，最后接上吉他。本型号没有的功能标记为“不适用”。"}},
+           {"id":"mic1_priority","code":"MIC-005","only_factory":["YIS"],"label":{"en":"MIC1 priority button","zh":"麦克风 1 优先键"},
+            "help":{"en":"With music playing, press priority and speak into MIC1. The music must drop to about 10% of its level — a drop of roughly 90%, so the voice is heard over a background that is almost silent — and come back to full level when you stop. A drop you have to strain to notice is a fail: on a live speaker the priority is there so the voice can be understood without turning the music down by hand.",
+                    "zh":"在播放音乐时按下优先键并对麦克风 1 说话。音乐应降到原音量的约 10%——即衰减约 90%，人声在几乎无声的背景上清晰可闻——停止说话后恢复原音量。若需要仔细分辨才能察觉衰减，即判定为异常：优先功能的意义在于无需手动调低音乐即可听清人声。"}},
+           {"id":"mic1_volume","code":"MIC-006","only_factory":["YIS"],"label":{"en":"MIC1 volume","zh":"麦克风 1 音量"},
+            "help":{"en":"Speak continuously into MIC1 while turning its volume from minimum to maximum. The level must rise smoothly, without cutting out or crackling.",
+                    "zh":"对麦克风 1 持续说话，同时把音量从最小调到最大。音量应平滑上升，不应中断或有爆音。"}},
+           {"id":"mic1_echo","code":"MIC-007","only_factory":["YIS"],"label":{"en":"MIC1 echo","zh":"麦克风 1 回声"},
+            "help":{"en":"Say short words into MIC1 and turn the echo from minimum to maximum. The repetition must go from none to clearly audible, and the delay must stay within 0 to 280 ms: at maximum the echo must still follow the voice closely, not lag like a separate second voice. Anything longer than that stops sounding like reverberation and starts sounding like a fault.",
+                    "zh":"对麦克风 1 说短词，并将回声从最小调到最大。重复声应从无到明显可闻，延时须在 0～280 毫秒范围内：即使调到最大，回声也应紧跟人声，而不应拖成第二个人声。超过该范围就不再像混响，而像故障。"}},
+           {"id":"mic1_reverb","code":"MIC-008","only_factory":["YIS"],"label":{"en":"MIC1 reverb","zh":"麦克风 1 混响"},
+            "help":{"en":"Speak into MIC1 and raise the reverb. The voice must gain body and depth, not repeat like the echo. Both controls must act independently.",
+                    "zh":"对麦克风 1 说话并加大混响。人声应变得更有空间感和厚度，而不是像回声那样重复。两个旋钮应各自独立起作用。"}},
+           {"id":"mic2_priority","code":"MIC-005","only_factory":["YIS"],"label":{"en":"MIC2 priority button","zh":"麦克风 2 优先键"},
+            "help":{"en":"Unplug MIC1 and plug the microphone into MIC2. Same test, and the same criterion: the music must drop to about 10% of its level while you speak. Mark N/A, here and in the three points below, if this reference has only one microphone input.",
+                    "zh":"拔下 MIC1，将麦克风插入 MIC2。测试方法和判定标准相同：说话时音乐应降到原音量的约 10%。本型号只有一个麦克风接口时，本项及以下三项均标记为“不适用”。"}},
+           {"id":"mic2_volume","code":"MIC-006","only_factory":["YIS"],"label":{"en":"MIC2 volume","zh":"麦克风 2 音量"},
+            "help":{"en":"Speak continuously into MIC2 while turning its volume from minimum to maximum.",
+                    "zh":"对麦克风 2 持续说话，同时把音量从最小调到最大。"}},
+           {"id":"mic2_echo","code":"MIC-007","only_factory":["YIS"],"label":{"en":"MIC2 echo","zh":"麦克风 2 回声"},
+            "help":{"en":"Say short words into MIC2 and turn the echo up. Same range: 0 to 280 ms.",
+                    "zh":"对麦克风 2 说短词并加大回声。范围相同：0～280 毫秒。"}},
+           {"id":"mic2_reverb","code":"MIC-008","only_factory":["YIS"],"label":{"en":"MIC2 reverb","zh":"麦克风 2 混响"},
+            "help":{"en":"Speak into MIC2 and raise the reverb. Echo and reverb must act independently on this input too.",
+                    "zh":"对麦克风 2 说话并加大混响。该接口上回声与混响也应各自独立起作用。"}},
+           {"id":"guitar","code":"AUD-009","only_factory":["YIS"],"label":{"en":"Guitar volume","zh":"吉他音量"},
+            "help":{"en":"Plug the guitar into its input and play while moving its volume control from minimum to maximum. Mark N/A if this reference has no guitar input.",
+                    "zh":"将吉他插入专用接口，一边弹奏一边把吉他音量从最小调到最大。本型号没有吉他接口时标记为“不适用”。"}}]},
 
         {"id":"AUX","optional":false,"only_factory":["YIS","RHY","EAG"],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
@@ -1784,7 +1840,39 @@ const CONFIG = {
                     "zh":"多次按下灯光键。每次都应干脆地开和关，不闪烁，也不应有个别灯珠残亮。"}},
            {"id":"light_pattern","code":"LED-007","skip_factory":["RHY"],"label":{"en":"Light pattern change","zh":"灯光模式切换"},
             "help":{"en":"Step through every light pattern and back to the first. Each one must be visibly different, with no dead LEDs in any pattern.",
-                    "zh":"逐一切换所有灯光模式并回到第一个。每种模式应有明显区别，且任何模式下都不应有不亮的灯珠。"}}]},
+                    "zh":"逐一切换所有灯光模式并回到第一个。每种模式应有明显区别，且任何模式下都不应有不亮的灯珠。"}},
+           /* Mismo bloque que en BLUETOOTH, ahora también aquí. Sólo YISION. */
+           {"only_factory":["YIS"],
+            "section":{"en":"Microphones and guitar","zh":"麦克风与吉他"},
+            "help":{"en":"Plug a microphone into MIC1 and speak while you adjust volume, echo and priority. Repeat with MIC2, then connect the guitar. Mark N/A for whatever this reference does not have.",
+                    "zh":"将麦克风插入 MIC1，一边说话一边调节音量、混响和优先键；MIC2 重复同样操作，最后接上吉他。本型号没有的功能标记为“不适用”。"}},
+           {"id":"mic1_priority","code":"MIC-005","only_factory":["YIS"],"label":{"en":"MIC1 priority button","zh":"麦克风 1 优先键"},
+            "help":{"en":"With music playing, press priority and speak into MIC1. The music must drop to about 10% of its level — a drop of roughly 90%, so the voice is heard over a background that is almost silent — and come back to full level when you stop. A drop you have to strain to notice is a fail: on a live speaker the priority is there so the voice can be understood without turning the music down by hand.",
+                    "zh":"在播放音乐时按下优先键并对麦克风 1 说话。音乐应降到原音量的约 10%——即衰减约 90%，人声在几乎无声的背景上清晰可闻——停止说话后恢复原音量。若需要仔细分辨才能察觉衰减，即判定为异常：优先功能的意义在于无需手动调低音乐即可听清人声。"}},
+           {"id":"mic1_volume","code":"MIC-006","only_factory":["YIS"],"label":{"en":"MIC1 volume","zh":"麦克风 1 音量"},
+            "help":{"en":"Speak continuously into MIC1 while turning its volume from minimum to maximum. The level must rise smoothly, without cutting out or crackling.",
+                    "zh":"对麦克风 1 持续说话，同时把音量从最小调到最大。音量应平滑上升，不应中断或有爆音。"}},
+           {"id":"mic1_echo","code":"MIC-007","only_factory":["YIS"],"label":{"en":"MIC1 echo","zh":"麦克风 1 回声"},
+            "help":{"en":"Say short words into MIC1 and turn the echo from minimum to maximum. The repetition must go from none to clearly audible, and the delay must stay within 0 to 280 ms: at maximum the echo must still follow the voice closely, not lag like a separate second voice. Anything longer than that stops sounding like reverberation and starts sounding like a fault.",
+                    "zh":"对麦克风 1 说短词，并将回声从最小调到最大。重复声应从无到明显可闻，延时须在 0～280 毫秒范围内：即使调到最大，回声也应紧跟人声，而不应拖成第二个人声。超过该范围就不再像混响，而像故障。"}},
+           {"id":"mic1_reverb","code":"MIC-008","only_factory":["YIS"],"label":{"en":"MIC1 reverb","zh":"麦克风 1 混响"},
+            "help":{"en":"Speak into MIC1 and raise the reverb. The voice must gain body and depth, not repeat like the echo. Both controls must act independently.",
+                    "zh":"对麦克风 1 说话并加大混响。人声应变得更有空间感和厚度，而不是像回声那样重复。两个旋钮应各自独立起作用。"}},
+           {"id":"mic2_priority","code":"MIC-005","only_factory":["YIS"],"label":{"en":"MIC2 priority button","zh":"麦克风 2 优先键"},
+            "help":{"en":"Unplug MIC1 and plug the microphone into MIC2. Same test, and the same criterion: the music must drop to about 10% of its level while you speak. Mark N/A, here and in the three points below, if this reference has only one microphone input.",
+                    "zh":"拔下 MIC1，将麦克风插入 MIC2。测试方法和判定标准相同：说话时音乐应降到原音量的约 10%。本型号只有一个麦克风接口时，本项及以下三项均标记为“不适用”。"}},
+           {"id":"mic2_volume","code":"MIC-006","only_factory":["YIS"],"label":{"en":"MIC2 volume","zh":"麦克风 2 音量"},
+            "help":{"en":"Speak continuously into MIC2 while turning its volume from minimum to maximum.",
+                    "zh":"对麦克风 2 持续说话，同时把音量从最小调到最大。"}},
+           {"id":"mic2_echo","code":"MIC-007","only_factory":["YIS"],"label":{"en":"MIC2 echo","zh":"麦克风 2 回声"},
+            "help":{"en":"Say short words into MIC2 and turn the echo up. Same range: 0 to 280 ms.",
+                    "zh":"对麦克风 2 说短词并加大回声。范围相同：0～280 毫秒。"}},
+           {"id":"mic2_reverb","code":"MIC-008","only_factory":["YIS"],"label":{"en":"MIC2 reverb","zh":"麦克风 2 混响"},
+            "help":{"en":"Speak into MIC2 and raise the reverb. Echo and reverb must act independently on this input too.",
+                    "zh":"对麦克风 2 说话并加大混响。该接口上回声与混响也应各自独立起作用。"}},
+           {"id":"guitar","code":"AUD-009","only_factory":["YIS"],"label":{"en":"Guitar volume","zh":"吉他音量"},
+            "help":{"en":"Plug the guitar into its input and play while moving its volume control from minimum to maximum. Mark N/A if this reference has no guitar input.",
+                    "zh":"将吉他插入专用接口，一边弹奏一边把吉他音量从最小调到最大。本型号没有吉他接口时标记为“不适用”。"}}]},
 
         /* ------------------------------------------------------------------
            RHYME back-panel tests. They sit here, after the source tests, so

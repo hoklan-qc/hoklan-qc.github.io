@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="10.6">
+<meta name="app-version" content="10.7">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -722,7 +722,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 73,
+      "plan_version": 74,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -899,6 +899,25 @@ const CONFIG = {
             "help":{"en":"This panel carries a fan. It must turn with the unit switched on, without rubbing, squealing or rattling, and the grille must be clear.",
                     "zh":"本面板带风扇。开机后应转动，不应有摩擦声、尖叫声或异响，出风口应无遮挡。",
                     "es":"El panel lleva ventilador. Debe girar con el equipo encendido, sin roce, chirrido ni traqueteo, y la rejilla debe estar libre."}}]},
+
+        /* La prueba general de potencia RMS no sirve para estos subwoofers: su
+           tono entra por Bluetooth, que no tienen, y mide 1 kHz, que su propio
+           pasa-bajos elimina. Ésta la sustituye con lo mínimo — la cifra y la
+           imagen que la respalda — sin imponer un método de medición. */
+        {"id":"SUB_RMS","optional":false,"only_factory":["RHY"],
+         "only":["HK-BAS115A1","HK-BAS118A1"],"evidence":[],
+         "label":{"en":"RMS POWER","zh":"RMS 功率","es":"POTENCIA RMS"},
+         "steps":[
+           {"en":"Measure the RMS power of the unit","zh":"测量本机的 RMS 功率","es":"Mida la potencia RMS de la unidad"},
+           {"en":"Write the figure in the box","zh":"将数值填入方框","es":"Escriba la cifra en el recuadro"},
+           {"en":"Attach the image of the measurement","zh":"上传测量的图片","es":"Adjunte la imagen de la medición"}],
+         "points":[
+           {"id":"sub_rms_w","code":"AUD-020","photo":true,"gallery":true,
+            "measure":{"unit":"W","step":"0.1"},
+            "label":{"en":"RMS power","zh":"RMS 功率","es":"Potencia RMS"},
+            "help":{"en":"Write the measured RMS power in the box and attach the image that backs it up, with the reading legible in it.",
+                    "zh":"将实测 RMS 功率填入方框，并上传作为依据的图片，其中读数须清晰可读。",
+                    "es":"Escriba la potencia RMS medida en el recuadro y adjunte la imagen que la respalda, con la lectura legible en ella."}}]},
 
         /* ---------------- BAS: versión propia de las tres secciones ---------
            PARTES EXTERNAS, ACCESORIOS y MATERIAL IMPRESO son compartidas por

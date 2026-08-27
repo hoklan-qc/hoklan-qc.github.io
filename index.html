@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="10.9">
+<meta name="app-version" content="11.0">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -722,7 +722,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 76,
+      "plan_version": 77,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -739,7 +739,11 @@ const CONFIG = {
            those skip lists as well as here; grep for HK-BAS115A1 to find them
            all.
            ------------------------------------------------------------------ */
-        {"id":"POWER_AC","optional":false,"only_factory":["RHY"],"evidence":["photo"],
+        {/* Los subwoofers ya no la corren: su interruptor se comprueba dentro de
+            ENTRADAS, que es la prueba donde se enciende el equipo por primera
+            vez en su plan. */
+         "id":"POWER_AC","optional":false,"only_factory":["RHY"],"evidence":["photo"],
+         "skip":["HK-BAS115A1","HK-BAS118A1"],
          "label":{"en":"AC POWER","zh":"交流供电","es":"ALIMENTACIÓN AC"},
          "steps":[
            {"en":"Connect the power cable and switch the cabinet on","zh":"接上电源线并开机","es":"Conecte el cable de alimentación y encienda la cabina"},
@@ -783,11 +787,21 @@ const CONFIG = {
          "only":["HK-BAS115A1","HK-BAS118A1"],
          "label":{"en":"INPUTS","zh":"输入","es":"ENTRADAS"},
          "steps":[
+           {"en":"Switch the cabinet on and check the fan and the pilot","zh":"开机并检查风扇与指示灯","es":"Encienda la cabina y compruebe el ventilador y el testigo"},
            {"en":"Play La rubia de oro from the mixer","zh":"用调音台播放《La rubia de oro》","es":"Reproduzca La rubia de oro desde el mixer"},
            {"en":"Feed it into the input jacks, one side at a time","zh":"分别接入左右输入口，一次只接一侧","es":"Llévela a las entradas, un lado a la vez"},
            {"en":"Raise and lower the volume on each side","zh":"在每一侧上下调节音量","es":"Suba y baje el volumen en cada lado"},
            {"en":"One video for the whole test, no photos","zh":"整项测试录制一段视频，无需照片","es":"Un solo video para toda la prueba, sin fotos"}],
          "points":[
+           {"section":{"en":"Switching on","zh":"开机","es":"Encendido"},
+            "help":{"en":"The first time the cabinet is switched on in this plan.",
+                    "zh":"本计划中首次给音箱通电开机。",
+                    "es":"El primer encendido de la cabina en este plan."}},
+           {"id":"power_switch","code":"PWR-008",
+            "label":{"en":"POWER switch — fan turns and the pilot lights green","zh":"电源开关 — 风扇转动且指示灯亮绿","es":"Interruptor ENCENDIDO — el ventilador gira y el testigo enciende en verde"},
+            "help":{"en":"Press the switch. It must latch firmly, without stopping halfway. The fan must start turning and the pilot lamp must light green.",
+                    "zh":"按下开关。应干脆到位，不应停在中间位置。风扇应开始转动，指示灯应亮起绿色。",
+                    "es":"Presione el interruptor. Debe quedar firme, sin pararse a medio camino. El ventilador debe empezar a girar y el testigo debe encender en color verde."}},
            {"section":{"en":"The source","zh":"信号源","es":"La fuente"},
             "help":{"en":"Always the same track from the mixer, so two inspections can be compared: La rubia de oro. One video covers the whole test — no photographs are asked for here.",
                     "zh":"始终使用调音台播放同一首曲目《La rubia de oro》，以便两次检验之间可比对。整项测试用一段视频记录，此处不需要照片。",
@@ -931,6 +945,9 @@ const CONFIG = {
            video se exige a nivel de prueba. */
         {"id":"SUB_EXTERNAL","optional":false,"only_factory":["RHY"],
          "only":["HK-BAS115A1","HK-BAS118A1"],"evidence":["video"],"first":1,
+         "ask":{"en":"one continuous take going round the speaker, showing the panel, the grille and the rest, no longer than a minute.",
+                "zh":"一镜到底环绕音箱拍摄，需拍到面板、网罩及其余部分，时长不超过一分钟。",
+                "es":"una sola toma continua recorriendo el parlante, donde se observe el panel, la parrilla y las demás funciones, no mayor a un minuto."},
          "label":{"en":"EXTERNAL PARTS","zh":"外观部件","es":"PARTES EXTERNAS"},
          "steps":[
            {"en":"Put the cabinet in good light, avoiding reflections","zh":"将音箱置于光线充足处，避免反光","es":"Ponga la cabina con buena luz, evitando reflejos"},
@@ -976,7 +993,9 @@ const CONFIG = {
             "label":{"en":"Panel","zh":"面板","es":"Panel"}},
            {"id":"sub_ext_knobs","photo":true,
             "label":{"en":"Knobs","zh":"旋钮","es":"Perillas"}},
-           {"id":"sub_ext_volt","code":"PWR-005","measure":{"unit":"V","step":"1"},
+           {"id":"sub_ext_volt","code":"PWR-005",
+            "measure":{"unit":"V","step":"1",
+                       "as":{"en":"Position","zh":"档位","es":"Posición"}},
             "label":{"en":"Voltage selector set for the destination country","zh":"电压选择开关与目的地国家一致","es":"Selector de voltaje en la posición del país de destino"},
             "help":{"en":"Read the position of the selector, write it in the box — 115 or 230 — and compare it with the destination on the order. 115 V for Colombia, the Dominican Republic, Ecuador and Venezuela. 230 V for Argentina, Chile, Peru and Uruguay.",
                     "zh":"读取开关位置，将其填入方框——115 或 230——并与订单目的地核对。哥伦比亚、多米尼加、厄瓜多尔、委内瑞拉为 115 V；阿根廷、智利、秘鲁、乌拉圭为 230 V。",
@@ -3444,7 +3463,9 @@ const CONFIG = {
             "help":{"en":"Read with the speaker unplugged. Once it is plugged in at the wrong voltage there is nothing left to inspect.",
                     "zh":"须在断电状态下读取。一旦以错误电压接入市电，就没有什么可检验的了。",
                     "es":"Se lee con el equipo desconectado. Una vez enchufado al voltaje equivocado ya no queda nada que inspeccionar."}},
-           {"id":"volt_select","code":"PWR-005","measure":{"unit":"V","step":"1"},
+           {"id":"volt_select","code":"PWR-005",
+            "measure":{"unit":"V","step":"1",
+                       "as":{"en":"Position","zh":"档位","es":"Posición"}},
             "label":{"en":"Selector set for the destination country","zh":"选择开关与目的地国家一致","es":"Selector en la posición del país de destino"},
             "help":{"en":"Read the position of the selector, write it in the box — 115 or 230 — and compare it with the destination on the order. 115 V for Colombia, the Dominican Republic, Ecuador and Venezuela. 230 V for Argentina, Chile, Peru and Uruguay.",
                     "zh":"读取开关位置，将其填入方框——115 或 230——并与订单目的地核对。哥伦比亚、多米尼加、厄瓜多尔、委内瑞拉为 115 V；阿根廷、智利、秘鲁、乌拉圭为 230 V。",
@@ -10354,7 +10375,9 @@ function zoomSample(img){
 function measureBox(p, u, id){
   const val = readingOf(row(u), p.id);
   return `<div class="meas${val.trim()?" ok":""}">
-    <label for="mv_${id}">${tr("measured")}</label>
+    ${/* `measure.as` cambia el rótulo del recuadro. Un selector de voltaje no
+          se mide, se lee: la posición en la que quedó no es una medición. */""}
+    <label for="mv_${id}">${p.measure.as ? esc(L(p.measure.as)) : tr("measured")}</label>
     <input id="mv_${id}" type="text" inputmode="decimal"
       value="${esc(val)}" placeholder="0${(p.measure.step||"1")==="1"?"":".0"}"
       oninput="setValue(${u},'${p.id}',this.value);markMeas('${id}',this.value)"
@@ -10573,7 +10596,10 @@ function renderTest(){
             buttons stay: attaching something nobody asked for is always allowed
             and often the most useful thing in the packet. */""}
       ${(want.photo || want.video) ? `<ul class="ask">
-        ${want.video?`<li><b>${tr("video")}</b> ${tr("ask_video")}${needsVideo
+        ${/* `ask` en la prueba reemplaza el texto general del video. El general
+              habla de la pantalla y de las manos, que es lo correcto en una
+              prueba de funciones; un recorrido del gabinete pide otra cosa. */""}
+        ${want.video?`<li><b>${tr("video")}</b> ${t.ask ? esc(L(t.ask)) : tr("ask_video")}${needsVideo
           ? ` <b style="color:var(--amber)">${tr("required")}</b>`
           : naTest ? "" : ` <b style="color:var(--green)">✓</b>`}</li>`:""}
         ${want.photo?`<li><b>${tr("photo")}</b> ${tr("ask_photo")}${needsPhoto

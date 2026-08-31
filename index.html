@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="11.5">
+<meta name="app-version" content="11.6">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -5638,6 +5638,8 @@ const T = {
   a_lost:"\n\nNOTE: some photos could not be recovered on this phone. Your answers were. Retake them from the ☰ menu before generating the report.",
   na_title:"Does not apply to this reference",
   na_test:"Does not apply", na_test_undo:"Does not apply · clear",
+  na_folded_t:"whole section",
+  na_folded:"%n points marked as not applicable. Tap \"Does not apply · clear\" above to open them again.",
   chg_secs:"%n s",
   assign_load:"Reading the assignment…",
   assign_ok:"ASSIGNED BY HOKLAN",
@@ -5848,6 +5850,8 @@ const T = {
   a_lost:"\n\nNOTA: algunas fotos no se pudieron recuperar en este teléfono. Sus respuestas sí. Vuelva a tomarlas desde el menú ☰ antes de generar el informe.",
   na_title:"No aplica a esta referencia",
   na_test:"No aplica", na_test_undo:"No aplica · quitar",
+  na_folded_t:"Sección completa",
+  na_folded:"%n puntos marcados como no aplicables. Toque «No aplica · quitar» arriba para volver a abrirlos.",
   chg_secs:"%n s",
   assign_load:"Leyendo la asignación…",
   assign_ok:"ASIGNACIÓN DE HOKLAN",
@@ -6054,6 +6058,8 @@ const T = {
   a_lost:"\n\n注意：本机上有部分照片无法恢复；回答已保留。生成报告前请从 ☰ 菜单重新拍照。",
   na_title:"本型号不适用",
   na_test:"不适用", na_test_undo:"不适用 · 撤销",
+  na_folded_t:"整节",
+  na_folded:"%n 个检查项已标记为不适用。点击上方“不适用 · 撤销”可重新展开。",
   chg_secs:"%n 秒",
   assign_load:"正在读取指派…",
   assign_ok:"HOKLAN 指派",
@@ -11000,7 +11006,14 @@ function renderPhotoTest(t, r, done, total){
     <p class="hint" style="margin:0 0 10px">${missing?
       fmt("remaining",{n:missing}) :
       `<b style="color:var(--green)">${tr("all_done")}</b>`}</p>
-    ${rows}
+    ${/* Marcada N/A entera, la sección se recoge. Diecinueve tarjetas idénticas
+          diciendo N/A no informan de nada y obligan a bajar por todas para
+          llegar al botón. Se vuelve a desplegar deshaciendo el N/A desde el
+          encabezado, que es el mismo gesto que la marcó. */""}
+    ${allNA(t) ? `<div class="brw">
+        <b>${tr("na")} · ${esc(tr("na_folded_t"))}</b>
+        <span>${fmt("na_folded",{n:items.length})}</span>
+      </div>` : rows}
     <div class="card">
       <label style="margin-top:0">${tr("notes")} ${tr("optional")}</label>
       <textarea id="comment" placeholder="${tr("notes_ph")}"

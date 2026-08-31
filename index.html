@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="12.0">
+<meta name="app-version" content="12.3">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -75,6 +75,20 @@ button{font-family:inherit;font-size:16px;border-radius:10px;border:1px solid va
 button:active{transform:scale(.99)}
 .primary{background:linear-gradient(90deg,#1c6fb0,#2ea3f2);border-color:#4fb8ff;
   color:#04121e;font-size:17px;padding:17px;letter-spacing:1px}
+/* La descarga del paquete, al terminar. Ámbar y con halo: es el único botón de
+   la app que no está en la escala azul, porque es la única acción que, si no se
+   hace, deja la inspección sin entregar. El halo late para que se distinga del
+   botón de al lado incluso de reojo. */
+.packet-dl{flex:1;background:linear-gradient(90deg,#d99a1f,#f5b942);
+  border:1px solid #ffd479;color:#2a2413;font-size:14px;padding:13px 12px;
+  font-weight:700;letter-spacing:.3px;line-height:1.3;
+  box-shadow:0 0 0 0 rgba(245,185,66,.55);animation:aura 2.4s ease-out infinite}
+@keyframes aura{
+  0%{box-shadow:0 0 0 0 rgba(245,185,66,.5)}
+  70%{box-shadow:0 0 0 14px rgba(245,185,66,0)}
+  100%{box-shadow:0 0 0 0 rgba(245,185,66,0)}}
+@media (prefers-reduced-motion:reduce){
+  .packet-dl{animation:none;box-shadow:0 0 14px rgba(245,185,66,.45)}}
 .row{display:flex;margin:0 -5px}
 .row>*{flex:1;margin:0 5px}
 .bar{height:8px;background:#0c1b2d;border-radius:5px;overflow:hidden;margin:10px 0 16px}
@@ -722,7 +736,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 82,
+      "plan_version": 83,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1174,11 +1188,6 @@ const CONFIG = {
             "help":{"en":"Photograph the warranty sticker in place on the cabinet, close enough to read its printing. It must be whole, well stuck down and not torn.",
                     "zh":"拍摄贴在机身上的保修贴纸，距离足够近以便读出其印字。贴纸须完整、粘贴牢固、无破损。",
                     "es":"Fotografíe el sticker de garantía pegado en la cabina, lo bastante cerca para leer su impresión. Debe estar entero, bien pegado y sin rasgaduras."}},
-           {"id":"sub_silkscreen","photo":true,
-            "label":{"en":"Panel silkscreen","zh":"面板丝印","es":"Serigrafía del panel"},
-            "help":{"en":"Photograph the panel square on, close enough to read every printed word. It is silkscreened in Spanish: read the labels of the knobs, the inputs and the warnings letter by letter and check they are spelled correctly.",
-                    "zh":"正对面板拍照，距离足够近以便看清每一个印字。面板为西班牙文丝印：逐字母阅读旋钮、接口和警告的标注，确认拼写正确。",
-                    "es":"Fotografíe el panel de frente, lo bastante cerca para leer cada palabra impresa. Viene serigrafiado en español: lea letra por letra los rótulos de las perillas, las entradas y las advertencias, y compruebe que están bien escritos."}},
            {"section":{"en":"The box","zh":"彩盒","es":"La caja"},
             "help":{"en":"Six faces, one photograph each. Avoid shadows and reflections over the printing.",
                     "zh":"六个面各拍一张照片。避免印刷面出现阴影和反光。",
@@ -5558,7 +5567,7 @@ const T = {
   failures:"Failures:",
   evidence_total:"%n evidence file(s) · %s",
   too_big:"The report is very large. If the phone struggles to generate it, delete duplicate photos from the ☰ menu.",
-  download:"⬇ DOWNLOAD",
+  download:"⬇ DOWNLOAD THE FULL REPORT TO SEND TO THE CUSTOMER",
   save_report_dl:"⬇ DOWNLOAD REPORT",
   saved_report:"Report downloaded: %f — the same document that travels inside the ZIP. Open it and print it if a PDF is needed.",
   pdf_wait:"Preparing the report…",
@@ -5777,7 +5786,10 @@ const T = {
   failures:"Fallas:",
   evidence_total:"%n archivo(s) de evidencia · %s",
   too_big:"El informe es muy grande. Si el teléfono se atasca al generarlo, elimine fotos duplicadas desde el menú ☰.",
-  download:"⬇ DESCARGAR",
+  /* Dice para qué sirve, no qué hace el botón. «Descargar» a secas no
+     distinguía este del de al lado, y el operario bajaba el informe suelto
+     creyendo que con eso había entregado la inspección. */
+  download:"⬇ DESCARGAR INFORME COMPLETO PARA ENVIAR AL CLIENTE",
   save_report_dl:"⬇ DESCARGAR INFORME",
   saved_report:"Informe descargado: %f — el mismo documento que va dentro del ZIP. Ábralo e imprímalo si necesita el PDF.",
   pdf_wait:"Preparando el informe…",
@@ -5987,7 +5999,7 @@ const T = {
   failures:"异常项：",
   evidence_total:"%n 个证据文件 · %s",
   too_big:"报告文件很大。如果手机生成时卡顿，请从 ☰ 菜单删除重复照片。",
-  download:"⬇ 下载",
+  download:"⬇ 下载完整报告，用于发送给客户",
   save_report_dl:"⬇ 下载报告",
   saved_report:"报告已下载：%f — 与压缩包内的文件完全相同。如需 PDF，打开该文件后打印即可。",
   pdf_wait:"正在准备报告……",
@@ -6842,7 +6854,9 @@ const humanSize = b => b > 1048576 ? (b/1048576).toFixed(1)+" MB"
    the photographs travel inside the report itself: fifty of them at the old
    setting made a file too heavy to send by mail. */
 const MAX_PHOTO_PX = 1280, JPEG_QUALITY = 0.6;
-/* A clip past this gets a word of warning, never a refusal. The evidence is
+/* Sin uso desde la v12.1: el aviso por video pesado se retiró. Se deja el
+   umbral por si vuelve a hacer falta medir el tamaño de un clip.
+   A clip past this gets a word of warning, never a refusal. The evidence is
    the point, and an inspector who filmed the only run of an intermittent fault
    must not be told to throw it away - but three minutes of a speaker playing is
    nobody's evidence, and the packet carries it all the way to the customer. */
@@ -6940,17 +6954,11 @@ async function scanFromShot(u, pointId, dataUrl){
 async function addMedia(input, u, slot){
   const r = row(u || 0);
   const files = Array.prototype.slice.call(input.files);
-  const heavy = [];
   for(let i=0;i<files.length;i++){
     const m = await shrink(files[i]);
     m.uid = String(Date.now())+"-"+i+"-"+Math.random().toString(36).slice(2,7);
     m.at = Date.now();        // stamped on the photo, as inspection reports do
     if(slot) m.slot = slot;
-    /* Said once, after the clip is already in. Warning before accepting it
-       would read as a refusal, and the inspector would delete evidence to make
-       the message go away. A photograph never trips this: it has been through
-       the canvas and comes out at a fraction of the size. */
-    if(m.kind === "video" && (m.size || 0) > BIG_VIDEO_BYTES) heavy.push(m.size);
     r.media.push(m);
   }
   input.value = "";
@@ -6968,8 +6976,11 @@ async function addMedia(input, u, slot){
   }
   if(slot) collapseIfDone(slot);
   render(); save();
-  if(heavy.length)
-    alert(fmt("a_big_video", {s: humanSize(Math.max.apply(null, heavy))}));
+  /* El aviso por video pesado se retiró en la v12.1 a petición de HOKLAN:
+     saltaba en cada grabación de cada prueba y el operador lo leía como un
+     error, cuando el video había quedado guardado. El peso del paquete sigue
+     informándose donde corresponde —en la pantalla de descarga, junto al
+     tamaño total— y allí no interrumpe nada. */
 }
 const shotsFor = (r, slot) => r.media.filter(m => m.slot === slot);
 
@@ -9442,11 +9453,15 @@ function clearAssignment(){
    a HOKLAN inspection — and the report says so.
    Not in CONFIG.test_ids: these are not factories to inspect, they are ways in,
    and a code here must never appear in a report as the inspection's test ID. */
-const FACTORY_ADMINS = {
-  "711": {code:"711-K4M8P2R6T", key:"YIS"},
-  "722": {code:"722-B7N3V9X5D", key:"RHY"},
-  "733": {code:"733-J2Q6L8W4Z", key:"EAG"}
-};
+/* Retiradas por HOKLAN en la v12.1. Eran 711 · YISION, 722 · RHYME y 733 ·
+   EAGLE: daban a cada fábrica el administrador restringido a su catálogo, con
+   autoinspección y serie de orden propia. Sólo quedan el administrador de
+   HOKLAN y las cuentas con las que los operarios hacen las inspecciones.
+
+   El mapa se deja vacío en vez de arrancar las ramas que lo consultan: todas
+   caen solas en el camino de HOKLAN, y volver a dar de alta una fábrica es
+   escribir aquí una línea. */
+const FACTORY_ADMINS = {};
 
 /* Only for the group headings of the reference dropdown, and only inside Admin.
    These names never reach a report, a file name or the spreadsheet — there the
@@ -9679,6 +9694,27 @@ function toggleAdminTests(){
    RHYME's" long before its code comes to mind. A factory account sees one group
    — its own — and the label is dropped, because naming the only group there is
    would be telling it something it already knows. */
+/* El código con el que la fábrica conoce cada producto, que no es el nuestro.
+   Se muestra entre paréntesis junto a la referencia, sólo para elegirla: nunca
+   entra en el informe, ni en el nombre del archivo, ni en la hoja de cálculo,
+   donde el producto viaja siempre por su referencia HOKLAN. */
+const FACTORY_SKU = {
+  "HK-DEC115A1":{zh:"新款EV15寸",   sku:"EV15D",   amp:"E300+K221"},
+  "HK-BAS115A1":{zh:"15寸低音炮",   sku:"1560",    amp:"E600+H159"},
+  "HK-BAS118A1":{zh:"18寸低音炮",   sku:"1860",    amp:"E600+H159"},
+  "HK-EPS112A1":{zh:"12寸音柱",     sku:"X404",    amp:"E750+H158"},
+  "HK-DEL110B1":{zh:"单10寸低配版", sku:"LG10D-2", amp:"E200+K221"},
+  "HK-DEL101":  {zh:"单12寸",       sku:"LG12D",   amp:"E520+K221"},
+  "HK-DEL115B1":{zh:"单15寸新程序版",sku:"LG15D",  amp:"E520+K221"},
+  "HK-DEL105":  {zh:"双15寸",       sku:"LG215D",  amp:"E1000+K221"},
+  "HK-DEL210A1":{zh:"双10寸",       sku:"LG210D",  amp:"E520+K221"},
+  "HK-DEL103P": {zh:"单15寸无源",   sku:"LG15",    amp:"PASSIVE"}
+};
+const refLabel = m => {
+  const f = FACTORY_SKU[m];
+  return f ? m + " (" + f.zh + " - " + f.sku + " - " + f.amp + ")" : m;
+};
+
 function refOptions(){
   const byKey = {};
   refList().forEach(m => {
@@ -9696,7 +9732,7 @@ function refOptions(){
     .filter(k => k !== "__DEV__")
     .concat(byKey.__DEV__ ? ["__DEV__"] : []);
   const opt = m => `<option value="${esc(m)}"${
-    m === S.model ? " selected" : ""}>${esc(m)}</option>`;
+    m === S.model ? " selected" : ""}>${esc(refLabel(m))}</option>`;
   const head = `<option value="">${tr("select")}</option>`;
   if(keys.length <= 1) return head + (byKey[keys[0]] || []).map(opt).join("");
   return head + keys.map(k =>
@@ -10032,7 +10068,8 @@ function renderSetup(){
   const bad = S.idDigits.length === 3 && !valid;
   const list = valid ? modelsOf(S.factory) : [];
   const models = `<option value="">${tr("select")}</option>` +
-    list.map(m=>`<option ${m===S.model?"selected":""}>${esc(m)}</option>`).join("");
+    list.map(m=>`<option value="${esc(m)}"${m===S.model?" selected":""}>${
+      esc(refLabel(m))}</option>`).join("");
 
   // Nothing about the references is shown until the code is valid: an invalid
   // code must reveal no part of the catalogue.
@@ -10298,7 +10335,12 @@ function start(){
   // normal inspection and report as if it were complete. An assignment is the
   // one exception — its selection is the whole point, and it survives.
   if(!S.assigned) S.pick = null;
-  S.fromAdmin = false; S.selfCheck = false; S.poLetter = ""; S.poAuto = false;
+  S.fromAdmin = false; S.selfCheck = false; S.poLetter = "";
+  /* El número que escribe el operario es la orden de compra del despacho, así
+     que se rotula OC o PO según el idioma del informe, igual que el que genera
+     la app. Lo que no lleva prefijo es el número que una fábrica copia de la
+     orden de su cliente, que ya viene rotulado de origen. */
+  S.poAuto = true;
   S.index = 0; S.open = {};
   S.data = Array.from({length:S.units}, () => []);
   S.startedAt = Date.now(); S.finishedAt = null; S.screen = "test";
@@ -11302,7 +11344,10 @@ function renderDone(){
       <div class="tag">${esc(S.operator)}</div>
       ${S.units>1?`<div class="tag">${fmt("units_tag",{n:S.units})}</div>`:""}
       <p class="hint">${fmt("evidence_total",{n:files,s:humanSize(evidenceBytes())})}</p>
-      ${evidenceBytes() > 25*1048576 ? `<div class="warn">${tr("too_big")}</div>`:""}
+      ${/* El aviso rojo por paquete grande se retiró en la v12.2, junto con el
+            del video pesado y por lo mismo: aparecía al terminar una inspección
+            correcta y el operador lo leía como un fallo suyo. El peso sigue
+            escrito en la línea de arriba, que es donde informa sin alarmar. */""}
       <button class="jump" onclick="showIndex()">${tr("review")}</button>
     </div>
     ${blocks}
@@ -11326,9 +11371,14 @@ function renderDone(){
         style="background:rgba(20,102,58,.45);border-color:var(--green)"></div>
     </div>`;
 
+  /* El paquete primero y destacado. Es lo que HOKLAN necesita recibir: lleva
+     los tres informes, la hoja de cálculo y toda la evidencia. El informe
+     suelto sirve para mirarlo en el momento, pero descargarlo y creer que con
+     eso se envió la inspección es el error que este orden evita. */
   actions.innerHTML = `
-    <button class="primary" onclick="savePdfNow()">${tr("save_report_dl")}</button>
-    <button style="flex:0 0 44%" onclick="downloadPacket()">${tr("download")}</button>`;
+    <button class="packet-dl" onclick="downloadPacket()">${tr("download")}</button>
+    <button style="flex:0 0 30%;font-size:13px;padding:13px 8px;line-height:1.3"
+      onclick="savePdfNow()">${tr("save_report_dl")}</button>`;
 }
 
 function renderReport(){

@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="11.7">
+<meta name="app-version" content="11.8">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -6218,7 +6218,9 @@ const S = {
   // `finishedAt` is stamped when the inspection is closed, not when the report
   // is printed: the report can be reopened days later and must still say how
   // long the inspection took, not how long ago it was.
-  index:0, open:{}, startedAt:null, finishedAt:null
+  index:0, open:{}, startedAt:null, finishedAt:null,
+  // Consecutivo del día para el nombre del archivo. Ver daySeq().
+  seq:null
 };
 
 /* The checklist is walked once and each question is answered for every speaker
@@ -7720,12 +7722,39 @@ function fileName(){
      test ID used to leave QC__HK-PHI — two underscores where a code should be,
      which reads as a corrupt file name rather than as the missing field it is.
      Anything empty simply drops out and the rest still joins cleanly. */
-  return "QC_" + [clean(S.testId), clean(S.model), part, self, stamp()]
+  /* La orden entra en el nombre y la hora sale. La orden es el dato por el que
+     se busca un informe en la carpeta de descargas; la hora no la miraba nadie.
+     El consecutivo del final es lo que sustituye a la hora como desempate: el
+     código que abre el nombre es el de la cuenta, no el de la inspección, así
+     que sin él dos revisiones de la misma referencia y la misma orden en un
+     mismo día se llamarían igual. */
+  const seq = daySeq();
+  return "QC_" + [clean(S.testId), clean(S.model), clean(poPrinted()), part, self,
+                  dayStamp(), seq > 1 ? String(seq).padStart(2,"0") : ""]
     .filter(Boolean).join("_") + ".html";
 }
-function stamp(){
+function dayStamp(){
   const d = new Date(), p = n => String(n).padStart(2,"0");
-  return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`;
+  return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}`;
+}
+
+/* Cuántas veces se ha nombrado hoy un archivo con esta referencia y esta orden.
+   Se decide una vez por inspección y se guarda con ella: descargar el informe
+   dos veces no puede cambiarle el nombre, y volver a abrir un borrador tampoco.
+   El contador vive aparte, en el teléfono, y sólo conserva el día en curso. */
+const SEQ_KEY = "hoklan_qc_seq";
+function daySeq(){
+  if(S.seq) return S.seq;
+  const day = dayStamp();
+  const base = String(S.model || "") + "|" + poPrinted();
+  let m = {};
+  try{ m = JSON.parse(localStorage.getItem(SEQ_KEY) || "{}") || {}; }catch(e){}
+  Object.keys(m).forEach(k => { if(!m[k] || m[k].d !== day) delete m[k]; });
+  const n = ((m[base] && m[base].n) || 0) + 1;
+  m[base] = {d: day, n};
+  try{ localStorage.setItem(SEQ_KEY, JSON.stringify(m)); }catch(e){}
+  S.seq = n; save();
+  return n;
 }
 
 /* Report layout follows the pre-shipment inspection format the client already
@@ -7962,8 +7991,12 @@ function reportHtml(){
 
   const banner = `<div class="bnr">
     <div class="bnr-l"><b>HOKLAN</b><span>QC</span></div>
+    ${/* La orden de compra en lugar de la fecha. Es el dato por el que se busca
+          un informe; la fecha sigue en la sección I, y allí además como rango
+          cuando la inspección cruza la medianoche. */""}
     <div class="bnr-c"><b>${tr("report_title")}</b>
-      <span>${tr("test_id")}: ${esc(S.testId)} &nbsp;|&nbsp; ${esc(inspectionDate(S.startedAt))}</span></div>
+      <span>${tr("test_id")}: ${esc(S.testId)} &nbsp;|&nbsp; ${
+        esc(poPrinted() || "—")}</span></div>
     <div class="bnr-r"><span>${tr("overall")}</span><b style="color:${colour}">${verdictText(v)}</b></div>
   </div>`;
 

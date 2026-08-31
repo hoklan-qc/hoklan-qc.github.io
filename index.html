@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="11.4">
+<meta name="app-version" content="11.5">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -6357,11 +6357,17 @@ const modelsOf = f => Object.keys(CONFIG.models)
    points of `current()`, and `current()` can be null on a draft whose reference
    was left without a plan; every one of them wants an empty list there, not a
    thrown error in the middle of drawing the screen. */
-/* `no_na` prohíbe marcar N/A en una sección fotográfica: la foto es obligatoria
-   punto por punto. `na_ok` abre la excepción por referencia, para cuando una
-   sección compartida cubre un producto al que de verdad le faltan piezas y el
-   operador no tiene nada que fotografiar. */
-const noNA = t => !!(t && t.no_na) && (t.na_ok || []).indexOf(S.model) < 0;
+/* `no_na` prohíbe marcar N/A punto por punto en una sección fotográfica: cada
+   foto es obligatoria. Sigue valiendo siempre. */
+const noNA = t => !!(t && t.no_na);
+
+/* Quién puede marcar N/A la prueba entera, desde su propio encabezado. Las
+   opcionales siempre; y las que nombren la referencia en `na_ok`, para el caso
+   en que una sección compartida cubre un producto al que le faltan piezas de
+   verdad. Es una decisión sobre toda la sección, no sobre cada punto: por eso
+   vive arriba, junto al nombre, y no repartida en diecinueve botones. */
+const canTestNA = t => !!t && (t.optional ||
+  (t.na_ok || []).indexOf(S.model) >= 0);
 
 const pointsOf = t => ((t && t.points) || []).filter(fits);
 const realPoints = t => pointsOf(t).filter(p => p.id);
@@ -7426,8 +7432,12 @@ function nextTest(){
       goToGap(0, noVal[0].id, "photos");
       return;
     }
+    /* `!allNA(t)`: una prueba marcada N/A entera no tiene fotos que pedir. Sin
+       esto, `no_na` seguía exigiéndolas y la sección quedaba imposible de
+       cerrar por los dos caminos a la vez. */
     const missing = realPoints(t).filter(p =>
-      shotsFor(r,p.id).length === 0 && (noNA(t) || r.points[p.id] !== "NA"));
+      shotsFor(r,p.id).length === 0 &&
+      ((noNA(t) && !allNA(t)) || r.points[p.id] !== "NA"));
     if(missing.length){
       alert(tr("a_missing_photos") + "\n\n" +
         missing.slice(0,6).map(p => "· " + pLab(p)).join("\n") +
@@ -7611,7 +7621,7 @@ function advance(){
    still pressed by hand, which is also what writes the verdict. */
 function toggleTestNA(){
   const t = current();
-  if(!t.optional) return;
+  if(!canTestNA(t)) return;
   const undo = allNA(t);
   if(!confirm(fmt(undo ? "a_na_test_undo" : "a_na_test", {s: L(t.label)}))) return;
   allUnits().forEach(u => {
@@ -10345,7 +10355,7 @@ function header(t, done, total){
          been skipped, and there was no way back — undoing it meant answering
          thirty-three points by hand. Here it sits with the name it applies to,
          it says what it did, and it is a switch. */
-      t.optional ? `<button class="na-test${allNA(t) ? " on" : ""}"
+      canTestNA(t) ? `<button class="na-test${allNA(t) ? " on" : ""}"
         onclick="toggleTestNA()">${
         allNA(t) ? tr("na_test_undo") : tr("na_test")}</button>` : ""}</h2>
     <button class="jump" onclick="showIndex()">${tr("go_other")}</button>
@@ -10885,7 +10895,8 @@ function syncReady(){
        operator that the button lies. */
     const r = row(0);
     ready = realPoints(t).every(p =>
-      (shotsFor(r, p.id).length > 0 || (!noNA(t) && r.points[p.id] === "NA"))
+      (shotsFor(r, p.id).length > 0 ||
+       ((!noNA(t) || allNA(t)) && r.points[p.id] === "NA"))
       && !valueMissing(r, p)
       && ANSWERED.indexOf(r.points[p.id]) >= 0
       && !(r.points[p.id] === "FAIL" && !((r.notes && r.notes[p.id] || "").trim())));
@@ -10901,7 +10912,8 @@ function renderPhotoTest(t, r, done, total){
   const rEn = appTrLine(r, "comment");
   const items = realPoints(t);
   const missing = items.filter(p =>
-    shotsFor(r,p.id).length === 0 && (noNA(t) || r.points[p.id] !== "NA")).length
+    shotsFor(r,p.id).length === 0 &&
+    ((noNA(t) && !allNA(t)) || r.points[p.id] !== "NA")).length
     + items.filter(p => valueMissing(r, p)).length
     // Unanswered points and failures without their description block NEXT here
     // too, exactly as they do on an ordinary test.

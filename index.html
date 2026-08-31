@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="11.9">
+<meta name="app-version" content="12.0">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -10341,7 +10341,10 @@ function draftSummary(){
 }
 
 function seqRows(){
-  const rows = [{key:"HK", label:"Admin HOKLAN · " + ADMIN_ID.digits, prefix:"HK"}];
+  /* `key` es la serie en el almacenamiento y no cambia; `prefix` es sólo lo que
+     se muestra. La serie de HOKLAN ya no se rotula HK: el prefijo del número lo
+     pone el idioma del informe. */
+  const rows = [{key:"HK", label:"Admin HOKLAN · " + ADMIN_ID.digits, prefix:""}];
   Object.keys(FACTORY_ADMINS).forEach(d => {
     const k = FACTORY_ADMINS[d].key;
     rows.push({key:k, prefix:k.charAt(0),
@@ -10378,9 +10381,9 @@ function wipeData(){
             "wipeDraft()", !!d)}
       <h4>${tr("wipe_seqs")}</h4>
       ${seqRows().map(s => row(esc(s.label),
-          s.n ? fmt("wipe_seq_at",{v: s.prefix === "HK" ? "HK" + poDigits(s.n)
-                                        : poDigits(s.n),
-                                   next: s.prefix + poDigits(s.n + 1)})
+          s.n ? fmt("wipe_seq_at",{v: tr("po_prefix") + " " + s.prefix + poDigits(s.n),
+                                   next: tr("po_prefix") + " " + s.prefix +
+                                         poDigits(s.n + 1)})
               : tr("wipe_seq_none"),
           `wipeSeq('${s.key}')`, !!s.n)).join("")}
       <div class="wall">

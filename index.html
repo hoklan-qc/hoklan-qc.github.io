@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="11.0">
+<meta name="app-version" content="11.3">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -722,7 +722,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 77,
+      "plan_version": 80,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -943,8 +943,12 @@ const CONFIG = {
            una foto y un video obligatorio tampoco cabe en ese tipo: como prueba
            normal cada punto pide lo que necesita — foto, medida o juicio — y el
            video se exige a nivel de prueba. */
-        {"id":"SUB_EXTERNAL","optional":false,"only_factory":["RHY"],
-         "only":["HK-BAS115A1","HK-BAS118A1"],"evidence":["video"],"first":1,
+        {/* Nació para los subwoofers y ahora cubre toda RHYME, igual que
+            SUB_GRAPHICS. La prueba compartida deja de aplicarse a esta fábrica,
+            y con ella se van las ruedas, que RHYME no lleva. Conserva el id
+            SUB_ para no romper inspecciones en curso. */
+         "id":"SUB_EXTERNAL","optional":false,"only_factory":["RHY"],
+         "evidence":["video"],"first":1,
          "ask":{"en":"one continuous take going round the speaker, showing the panel, the grille and the rest, no longer than a minute.",
                 "zh":"一镜到底环绕音箱拍摄，需拍到面板、网罩及其余部分，时长不超过一分钟。",
                 "es":"una sola toma continua recorriendo el parlante, donde se observe el panel, la parrilla y las demás funciones, no mayor a un minuto."},
@@ -980,11 +984,36 @@ const CONFIG = {
             "help":{"en":"Including the feet and the tripod socket.",
                     "zh":"需拍到底脚与三脚架插孔。",
                     "es":"Incluyendo las patas y el hueco para trípode."}},
+           {/* Los subwoofers no llevan ni satélite ni pantalla, así que se
+                saltan los cinco puntos siguientes. */
+            "section":{"en":"Tweeter satellite","zh":"高音卫星箱","es":"Satélite de tweeters"},
+            "skip":["HK-BAS115A1","HK-BAS118A1"],
+            "help":{"en":"The upper section that carries the tweeters. Photograph it with everything assembled, framing that part of the cabinet.",
+                    "zh":"装有高音单元的上半部分。整机装配状态下拍摄，画面对准该区域。",
+                    "es":"La parte superior donde van los tweeters. Fotografíela con todo armado, encuadrando esa zona de la cabina."}},
+           {"id":"sub_sat_front","photo":true,"skip":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Satellite — front","zh":"卫星箱 — 正面","es":"Satélite — frente"}},
+           {"id":"sub_sat_back","photo":true,"skip":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Satellite — back","zh":"卫星箱 — 背面","es":"Satélite — parte trasera"}},
+           {"id":"sub_sat_grille","photo":true,"skip":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Satellite — grille","zh":"卫星箱 — 网罩","es":"Satélite — malla"},
+            "help":{"en":"The grille over the tweeters, whole and without dents.",
+                    "zh":"拍摄高音单元前的网罩，须完整无凹陷。",
+                    "es":"La malla que cubre los tweeters, entera y sin abolladuras."}},
+           {"id":"sub_sat_logo","photo":true,"skip":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Satellite — logo","zh":"卫星箱 — 标志","es":"Satélite — logo"},
+            "help":{"en":"Close-up of the logo on the satellite. Straight, complete and well fixed.",
+                    "zh":"拍摄卫星箱上标志的特写。应端正、完整、牢固。",
+                    "es":"Primer plano del logo del satélite. Derecho, completo y bien fijado."}},
+           {"id":"sub_ext_display","photo":true,"skip":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Display","zh":"显示屏","es":"Pantalla"},
+            "help":{"en":"Photograph the display switched on, close enough to read what it shows and to see the glass has no scratches.",
+                    "zh":"在显示屏点亮的状态下拍摄，距离足够近以便读出显示内容，并看清屏面无划痕。",
+                    "es":"Fotografíe la pantalla encendida, lo bastante cerca para leer lo que muestra y ver que el vidrio no tiene rayones."}},
            {/* El selector de voltaje se comprueba aquí y no en su prueba
-                aparte: en los subwoofers PARTES EXTERNAS es la primera del
-                plan, así que la posición se lee antes que nada, que es cuando
-                importa. Las cabinas activas de RHYME conservan la prueba
-                propia; sólo los BAS quedan fuera de ella. */
+                aparte, para leerlo antes de conectar nada. Las cabinas activas
+                de RHYME conservan además la prueba propia; sólo los BAS quedan
+                fuera de ella. */
             "section":{"en":"Panel and controls","zh":"面板与控制件","es":"Panel y controles"},
             "help":{"en":"Read the voltage selector with the cabinet unplugged, before connecting it to anything.",
                     "zh":"在断电状态下读取电压选择开关，接入任何电源之前完成。",
@@ -1202,7 +1231,55 @@ const CONFIG = {
             "label":{"en":"Box — depth","zh":"彩盒 — 长","es":"Caja — largo"}},
            {"id":"sub_box_h","photo":true,"measure":{"unit":"cm","step":"0.1"},
             "sample":"caja_alto",
-            "label":{"en":"Box — height","zh":"彩盒 — 高","es":"Caja — alto"}}]},
+            "label":{"en":"Box — height","zh":"彩盒 — 高","es":"Caja — alto"}},
+           {/* Epsilon se despacha en dos cajas: la del bajo, arriba, y ésta, la
+                del satélite de tweeters. Se documenta igual que la primera —
+                seis caras, código y tres medidas — porque es una caja distinta,
+                con su propia impresión, su propio código y su propio tamaño. */
+            "section":{"en":"Satellite box","zh":"卫星箱彩盒","es":"Caja del satélite"},
+            "only":["HK-EPS112A1"],
+            "help":{"en":"The second box, the one the tweeter satellite ships in. Same photographs as the first: six faces, the barcode and the three measurements.",
+                    "zh":"第二只彩盒，即高音卫星箱的包装。拍摄内容与第一只相同：六个面、条码和三个尺寸。",
+                    "es":"La segunda caja, en la que viaja el satélite de tweeters. Las mismas fotos que la primera: seis caras, el código de barras y las tres medidas."}},
+           {"id":"sat_box_front","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Satellite box — front","zh":"卫星箱彩盒 — 正面","es":"Caja del satélite — frente"},
+            "help":{"en":"The main printed face, the one facing the buyer on the shelf.",
+                    "zh":"主展示面，即货架上朝向顾客的一面。",
+                    "es":"La cara impresa principal, la que mira al comprador en el estante."}},
+           {"id":"sat_box_back","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Satellite box — back","zh":"卫星箱彩盒 — 背面","es":"Caja del satélite — atrás"}},
+           {"id":"sat_box_right","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Satellite box — right side","zh":"卫星箱彩盒 — 右侧面","es":"Caja del satélite — lado derecho"}},
+           {"id":"sat_box_left","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Satellite box — left side","zh":"卫星箱彩盒 — 左侧面","es":"Caja del satélite — lado izquierdo"}},
+           {"id":"sat_box_top","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Satellite box — top","zh":"卫星箱彩盒 — 顶面","es":"Caja del satélite — superior"},
+            "help":{"en":"Including the closing flaps and the tape.",
+                    "zh":"需拍到封口摇盖和胶带。",
+                    "es":"Incluyendo las solapas de cierre y la cinta."}},
+           {"id":"sat_box_bottom","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Satellite box — bottom","zh":"卫星箱彩盒 — 底面","es":"Caja del satélite — inferior"},
+            "help":{"en":"Including the seal and any shipping label.",
+                    "zh":"需拍到封口和运输标签。",
+                    "es":"Incluyendo el sello y la etiqueta de transporte."}},
+           {"id":"sat_barcode","code":"PKG-001","photo":true,"scan":true,
+            "only":["HK-EPS112A1"],"measure":{"unit":"EAN","step":"1"},
+            "label":{"en":"Barcode on the satellite box","zh":"卫星箱彩盒条码","es":"Código de barras de la caja del satélite"},
+            "help":{"en":"Photograph it square on, filling the frame, with no glare across the bars. The app reads the number off that photograph and writes it in the box; if it cannot, type it in yourself. It must be a different code from the one on the bass box.",
+                    "zh":"正对拍摄，使其充满画面，条纹上不得有反光。应用会从该照片中识别号码并填入方框；若无法识别，请手动输入。该号码应与低音箱彩盒上的条码不同。",
+                    "es":"Fotografíelo de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto y lo escribe en el recuadro; si no puede, escríbalo usted. Debe ser un código distinto al de la caja del bajo."}},
+           {"id":"sat_box_w","photo":true,"only":["HK-EPS112A1"],
+            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_ancho",
+            "label":{"en":"Satellite box — width","zh":"卫星箱彩盒 — 宽","es":"Caja del satélite — ancho"},
+            "help":{"en":"The horizontal side of the front face. Hook the tape on one edge and read it at the opposite edge, with both ends inside the frame. Read the centimetre scale, not the inches.",
+                    "zh":"正面的水平边。将卷尺钩在一端，在另一端读数，两端都要在画面之内。读厘米刻度，不要读英寸。",
+                    "es":"El lado horizontal de la cara frontal. Enganche la cinta en un borde y lea en el borde opuesto, con los dos extremos dentro del encuadre. Lea la escala en centímetros, no las pulgadas."}},
+           {"id":"sat_box_d","photo":true,"only":["HK-EPS112A1"],
+            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_largo",
+            "label":{"en":"Satellite box — depth","zh":"卫星箱彩盒 — 长","es":"Caja del satélite — largo"}},
+           {"id":"sat_box_h","photo":true,"only":["HK-EPS112A1"],
+            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_alto",
+            "label":{"en":"Satellite box — height","zh":"卫星箱彩盒 — 高","es":"Caja del satélite — alto"}}]},
 
         {"id":"USB","optional":false,"only_factory":["YIS","RHY","EAG"],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
@@ -3229,10 +3306,10 @@ const CONFIG = {
             nothing else. Photographs are not in that document, so they are not
             in the plan yet — a development reference is inspected against what
             has been specified, not against what a released product needs. */
-         /* Los subwoofers tienen su propia versión de esta prueba, de las de
-            accesorios y material impreso. Grep SUB_EXTERNAL. */
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330",
-                 "HK-BAS115A1","HK-BAS118A1"],
+         /* RHYME entera pasó a SUB_EXTERNAL. Aquí quedan YISION y EAGLE, que son
+            las que llevan ruedas y pantalla en esta prueba. */
+         "only_factory":["YIS","EAG"],
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"EXTERNAL PARTS","zh":"外观部件"},
          "steps":[
            {"en":"Place the speaker in good light, avoiding direct reflections","zh":"将音箱置于光线充足处，避免反光"},
@@ -3437,44 +3514,10 @@ const CONFIG = {
             "help":{"en":"Reconnect the internal battery, set the switch back to internal and close the speaker. Confirm it still works before finishing.",
                     "zh":"重新接上内置电池，将开关拨回内置，并装回箱体。确认恢复后仍能正常工作再结束。"}}]},
 
-        /* ===== Voltage selector =============================================
-           Salió de ALIMENTACIÓN AC, donde era un punto sin fotografía, y quedó
-           como prueba propia justo antes de PARTES INTERNAS. Sólo RHYME: son
-           sus paneles los que llevan selector, y en YISION la prueba aparecía
-           para marcarse N/A cada vez, que es peor que no estar.
-
-           La posición no se juzga contra un voltaje "correcto" sino contra el
-           país al que va la orden, que es el dato que el operador tiene delante
-           y el único que decide si 120 o 220 está bien. Por eso la ayuda lleva
-           los dos grupos escritos: preguntar "¿coincide con el destino?" sin
-           decir cuál es el destino no es una comprobación, es una adivinanza. */
-        {"id":"VOLT_SELECT","optional":false,"evidence":[],
-         "only_factory":["RHY"],
-         /* Los subwoofers no: lo llevan dentro de PARTES EXTERNAS, que en su
-            plan es la primera prueba y por tanto el mejor sitio para leerlo. */
-         "skip":["HK-BAS115A1","HK-BAS118A1"],
-         "label":{"en":"VOLTAGE SELECTOR","zh":"电压选择开关","es":"SELECTOR DE VOLTAJE"},
-         "steps":[
-           {"en":"Find the selector on the panel with the speaker unplugged","zh":"在断电状态下，在面板上找到电压选择开关","es":"Con el equipo desconectado, ubique el selector en el panel"},
-           {"en":"Check its position against the country the order ships to","zh":"将其位置与订单目的地国家核对","es":"Compare su posición con el país de destino de la orden"},
-           {"en":"Photograph it so the position can be read in the picture","zh":"拍照，照片中须能看清开关位置","es":"Fotografíelo de modo que la posición se lea en la foto"}],
-         "points":[
-           {"section":{"en":"Position and destination","zh":"位置与目的地","es":"Posición y destino"},
-            "help":{"en":"Read with the speaker unplugged. Once it is plugged in at the wrong voltage there is nothing left to inspect.",
-                    "zh":"须在断电状态下读取。一旦以错误电压接入市电，就没有什么可检验的了。",
-                    "es":"Se lee con el equipo desconectado. Una vez enchufado al voltaje equivocado ya no queda nada que inspeccionar."}},
-           {"id":"volt_select","code":"PWR-005",
-            "measure":{"unit":"V","step":"1",
-                       "as":{"en":"Position","zh":"档位","es":"Posición"}},
-            "label":{"en":"Selector set for the destination country","zh":"选择开关与目的地国家一致","es":"Selector en la posición del país de destino"},
-            "help":{"en":"Read the position of the selector, write it in the box — 115 or 230 — and compare it with the destination on the order. 115 V for Colombia, the Dominican Republic, Ecuador and Venezuela. 230 V for Argentina, Chile, Peru and Uruguay.",
-                    "zh":"读取开关位置，将其填入方框——115 或 230——并与订单目的地核对。哥伦比亚、多米尼加、厄瓜多尔、委内瑞拉为 115 V；阿根廷、智利、秘鲁、乌拉圭为 230 V。",
-                    "es":"Lea la posición del selector, escríbala en el recuadro —115 o 230— y compárela con el destino de la orden. 115 V para Colombia, República Dominicana, Ecuador y Venezuela. 230 V para Argentina, Chile, Perú y Uruguay."}},
-           {"id":"volt_photo","code":"PWR-005","photo":true,
-            "label":{"en":"Photo of the selector","zh":"选择开关照片","es":"Foto del selector"},
-            "help":{"en":"Photograph the selector close enough that its position can be read in the picture, and with enough of the panel around it to show where on the speaker it is.",
-                    "zh":"拍摄选择开关，须足够近以便在照片中读出其位置，同时保留周围部分面板，以显示其在机器上的位置。",
-                    "es":"Fotografíe el selector lo bastante cerca para que la posición se lea en la foto, y con panel suficiente alrededor para ver en qué parte del equipo está."}}]},
+        /* La prueba suelta SELECTOR DE VOLTAJE se retiró en la v11.2. Al pasar
+           PARTES EXTERNAS a cubrir toda RHYME, el selector quedaba comprobado
+           dos veces en las cabinas activas: allí y aquí. Vive ahora sólo en
+           PARTES EXTERNAS, con su posición en el recuadro y su fotografía. */
 
         {"id":"INTERNAL","optional":false,"type":"photos","no_na":true,
          "only_factory":["YIS","RHY","EAG"],
@@ -3671,6 +3714,41 @@ const CONFIG = {
            a sampled unit, not something done to a speaker that is going to be
            packed. Sampling, like the battery test, and last in the plan with
            it. */
+        /* La potencia RMS de Epsilon y de los Delta la certifica el proveedor de
+           amplificadores, canal por canal. Aquí no se mide con osciloscopio: se
+           adjunta lo que el proveedor entrega y se anota la cifra de cada canal,
+           que es lo que después se compara contra la caja y la ficha. Los BAS
+           quedan fuera: llevan un solo canal y su propia prueba. */
+        {"id":"RMS_SUPPLIER","optional":false,"only_factory":["RHY"],"evidence":[],"first":3,
+         "only":["HK-EPS112A1","HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
+                 "HK-DEL115B1","HK-DEL210A1"],
+         "label":{"en":"SPECIFICATION CHECK · RMS POWER",
+                  "zh":"规格验证 · RMS 功率",
+                  "es":"VERIFICACIÓN DE ESPECIFICACIONES · POTENCIA RMS"},
+         "steps":[
+           {"en":"Ask the amplifier supplier for the power report of each channel","zh":"向功放供应商索取每个通道的功率报告","es":"Pida al proveedor de amplificadores el informe de potencia de cada canal"},
+           {"en":"Attach one image per channel: woofer and tweeter","zh":"每个通道上传一张图片：低音通道与高音通道","es":"Adjunte una imagen por canal: woofer y tweeter"},
+           {"en":"Write the power of each channel in its box","zh":"将各通道的功率填入对应方框","es":"Escriba la potencia de cada canal en su recuadro"}],
+         "points":[
+           {"section":{"en":"Supplier report","zh":"供应商报告","es":"Informe del proveedor"},
+            "help":{"en":"One image per channel, with the power figure legible in it. The example beside each point shows what the report looks like.",
+                    "zh":"每个通道一张图片，其中功率数值须清晰可读。每项旁边的示例展示了该报告的样式。",
+                    "es":"Una imagen por canal, con la cifra de potencia legible en ella. El ejemplo al lado de cada punto muestra cómo se ve el informe."}},
+           {"id":"rms_sup_woofer","code":"AUD-020","photo":true,"gallery":true,
+            "sample":"rms_proveedor",
+            "measure":{"unit":"W","step":"0.1"},
+            "label":{"en":"Woofer channel — power","zh":"低音通道 — 功率","es":"Canal del woofer — potencia"},
+            "help":{"en":"Attach the supplier image of the woofer channel and write the power it shows in the box.",
+                    "zh":"上传供应商提供的低音通道图片，并将其中显示的功率填入方框。",
+                    "es":"Adjunte la imagen del proveedor del canal del woofer y escriba en el recuadro la potencia que muestra."}},
+           {"id":"rms_sup_tweeter","code":"AUD-020","photo":true,"gallery":true,
+            "sample":"rms_proveedor",
+            "measure":{"unit":"W","step":"0.1"},
+            "label":{"en":"Tweeter channel — power","zh":"高音通道 — 功率","es":"Canal del tweeter — potencia"},
+            "help":{"en":"The same for the tweeter channel: its own image and its own figure.",
+                    "zh":"高音通道同样处理：单独的图片与单独的数值。",
+                    "es":"Lo mismo para el canal del tweeter: su propia imagen y su propia cifra."}}]},
+
         {"id":"RMS_POWER","optional":true,"only_factory":["YIS","RHY"],
          /* Written for a full-range cabinet, and only for one: the tone goes in
             over Bluetooth and the tone controls are part of the measurement.
@@ -3679,7 +3757,12 @@ const CONFIG = {
             measures — a good sub would read near zero and fail. Measuring them
             needs a low tone through the input jack and the filter wide open,
             which is a different test, not a variant of this one. */
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1"],
+         /* Epsilon y los Delta corren su propia versión, RMS_SUPPLIER: en ellos
+            la potencia se toma del informe del proveedor de amplificadores, por
+            canal, y no del osciloscopio. */
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1",
+                 "HK-EPS112A1","HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
+                 "HK-DEL115B1","HK-DEL210A1"],
          "evidence":[],"first":3,
          "label":{"en":"SPECIFICATION CHECK · RMS POWER",
                   "zh":"规格验证 · RMS 功率",
@@ -3783,6 +3866,9 @@ const CONFIG = {
            it or it does not, and what it looks for is the fault that only shows
            up once everything inside has come up to temperature.
 
+           Ocho horas desde la v11.1, y un solo punto: la confirmación de que se
+           corrió con la lista de pruebas de HOKLAN. Antes fue así:
+
            Recortada a dos puntos por HOKLAN: la foto del inicio y la del final.
            Salieron la temperatura del área, el sitio de trabajo, el selector de
            voltaje, la conexión AC, la USB, los controles al máximo, el arranque
@@ -3805,35 +3891,23 @@ const CONFIG = {
          "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1"],"evidence":[],
          "first":1,
          "long":{"t":{"en":"This test is still running","zh":"本测试仍在进行中","es":"Esta prueba sigue en curso"},
-                 "n":{"en":"Come back when the four hours are up to take the second photograph. Meanwhile you can carry on with the rest of the plan.",
-                      "zh":"四小时结束后再回来拍摄第二张照片。期间可继续进行计划中的其他测试。",
-                      "es":"Vuelva al cumplirse las cuatro horas para tomar la segunda fotografía. Mientras tanto puede seguir con el resto del plan."}},
-         "label":{"en":"AGING · 4 HOURS","zh":"老化测试 · 4 小时","es":"ENVEJECIMIENTO · 4 HORAS"},
+                 "n":{"en":"Come back when the eight hours are up to answer it. Meanwhile you can carry on with the rest of the plan.",
+                      "zh":"八小时结束后再回来填写本项。期间可继续进行计划中的其他测试。",
+                      "es":"Vuelva al cumplirse las ocho horas para responderla. Mientras tanto puede seguir con el resto del plan."}},
+         "label":{"en":"AGING · 8 HOURS","zh":"老化测试 · 8 小时","es":"ENVEJECIMIENTO · 8 HORAS"},
          "steps":[
-           {"en":"Set the speaker going and photograph it","zh":"启动音箱并拍照","es":"Ponga el parlante a sonar y fotografíelo"},
-           {"en":"Leave it running four hours without stopping it","zh":"连续运行四小时，中途不得停止","es":"Déjelo sonando cuatro horas sin detenerlo"},
-           {"en":"Photograph it again when the four hours are up","zh":"四小时结束后再次拍照","es":"Fotografíelo otra vez al cumplirse las cuatro horas"}],
+           {"en":"Run the aging following the HOKLAN test list","zh":"按 HOKLAN 测试清单执行老化","es":"Realice el envejecimiento siguiendo la lista de pruebas de HOKLAN"},
+           {"en":"Leave it running eight hours without stopping it","zh":"连续运行八小时，中途不得停止","es":"Déjelo sonando ocho horas sin detenerlo"},
+           {"en":"Confirm it when the eight hours are up","zh":"八小时结束后确认本项","es":"Confírmelo al cumplirse las ocho horas"}],
          "points":[
-           {"section":{"en":"The four hours","zh":"四小时","es":"Las cuatro horas"},
-            "help":{"en":"Two photographs, four hours apart. The speaker plays flat out throughout and must not be stopped, paused or touched between them.",
-                    "zh":"两张照片，相隔四小时。其间音箱须以最大状态持续播放，不得停止、暂停或触碰。",
-                    "es":"Dos fotografías, separadas por cuatro horas. En medio el parlante suena al máximo y no debe detenerse, pausarse ni tocarse."}},
-           {/* Taken with the camera and not from the gallery, unlike the two
-                measurement tests. The app stamps a photograph with the moment
-                it was attached, not the moment it was shot, so two pictures
-                picked out of the gallery at the end of the day both carry the
-                end of the day. Here the two times are the evidence: they are
-                what say the speaker ran for four hours. */
-            "id":"age_photo_start","code":"AGE-001","photo":true,
-            "label":{"en":"Photo at the start","zh":"开始时的照片","es":"Foto al iniciar"},
-            "help":{"en":"Photograph the speaker in the test area, connected and playing, with the display showing USB mode. Take it now, with the camera.",
-                    "zh":"在测试场所拍摄音箱：已接电、正在播放，显示屏显示 USB 模式。请当场用相机拍摄。",
-                    "es":"Fotografíe el parlante en el área de prueba, conectado y sonando, con la pantalla mostrando el modo USB. Tómela ahora, con la cámara."}},
-           {"id":"age_photo_end","code":"AGE-001","photo":true,
-            "label":{"en":"Photo at the end","zh":"结束时的照片","es":"Foto al terminar"},
-            "help":{"en":"Photograph the same speaker in the same place, still playing, with the four hours completed. Take it now, with the camera: the two times are what say how long it ran.",
-                    "zh":"在同一位置拍摄同一台音箱，仍在播放，四小时已完成。请当场用相机拍摄：两张照片的时间正是运行时长的证据。",
-                    "es":"Fotografíe el mismo parlante en el mismo sitio, todavía sonando, con las cuatro horas cumplidas. Tómela ahora, con la cámara: las dos horas son lo que dice cuánto tiempo estuvo funcionando."}}]},
+           {/* Un solo punto y sin fotografía, por ahora. Antes eran dos fotos
+                separadas por cuatro horas; HOKLAN lo redujo a la confirmación
+                mientras se define cómo se va a evidenciar. */
+            "id":"age_done","code":"AGE-001",
+            "label":{"en":"Aging completed following the HOKLAN test list","zh":"已按 HOKLAN 测试清单完成老化","es":"Envejecimiento realizado con la lista de pruebas de HOKLAN"},
+            "help":{"en":"Confirm the speaker ran the eight hours following the HOKLAN test list, without being stopped, switched off or touched during them.",
+                    "zh":"确认音箱已按 HOKLAN 测试清单连续运行八小时，其间未停止、未关机、未被触碰。",
+                    "es":"Confirme que el parlante sonó las ocho horas siguiendo la lista de pruebas de HOKLAN, sin detenerse, apagarse ni ser tocado durante ellas."}}]},
 
         /* ===== LESHENG — wireless microphone system =========================
            A different product, so a different plan: two microphones and a

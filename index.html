@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="12.8">
+<meta name="app-version" content="13.0">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -210,6 +210,25 @@ button:active{transform:scale(.99)}
 .meas input{flex:1;min-width:0;margin:0;padding:8px 10px;font-size:17px;
   font-weight:700;text-align:right;letter-spacing:1px}
 .meas b{flex:none;font-size:13px;color:var(--muted);min-width:26px}
+
+/* Código de barras: se muestra, no se escribe */
+.meas.scan{align-items:center}
+.meas.scan u{flex:1;text-align:right;font-size:19px;font-weight:700;
+  letter-spacing:2px;text-decoration:none;color:#dff3e6;font-variant-numeric:tabular-nums}
+.meas.scan u.wait{font-size:12.5px;font-weight:600;letter-spacing:.4px;
+  color:var(--muted);font-style:italic}
+/* Acotado a .ok: si no, gana por especificidad sobre .scan-msg b y pinta de
+   verde el aviso de que el código no se leyó, que es justo lo contrario */
+.meas.ok.scan b{font-size:10px;letter-spacing:.8px;text-transform:uppercase;
+  color:#7fd1a2;min-width:0}
+.meas.bad{border-color:#a8402f;background:rgba(200,70,50,.10)}
+.meas.bad label{color:#ff9b86}
+.scan-msg{flex:1;text-align:right;line-height:1.45}
+.scan-msg b{display:block;font-size:13px;color:#ff9b86;letter-spacing:.4px;
+  text-transform:none;min-width:0}
+.scan-msg i{display:block;font-size:11.5px;color:#e0b6ab;font-style:normal}
+.scan-msg em{display:block;margin-top:3px;font-size:11px;color:var(--muted);
+  font-style:italic}
 
 /* One question, with a row per speaker underneath it */
 .q{border-top:1px solid #16304d;padding-top:4px}
@@ -737,7 +756,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 87,
+      "plan_version": 89,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1017,9 +1036,9 @@ const CONFIG = {
             "id":"sub_barcode","code":"PKG-001","photo":true,"scan":true,
             "measure":{"unit":"EAN","step":"1"},
             "label":{"en":"Barcode on the box","zh":"彩盒条码","es":"Código de barras de la caja"},
-            "help":{"en":"Photograph the barcode square on, filling the frame, with no glare across the bars. The app reads the number off that photograph and writes it in the box; if it cannot, type it in yourself. Then check the number belongs to this reference and no other.",
-                    "zh":"正对条码拍摄，使其充满画面，条纹上不得有反光。应用会从该照片中识别号码并填入方框；若无法识别，请手动输入。随后核对该号码是否属于本型号。",
-                    "es":"Fotografíe el código de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto y lo escribe en el recuadro; si no puede, escríbalo usted. Después compruebe que el número pertenece a esta referencia y no a otra."}},
+            "help":{"en":"Photograph the barcode square on, filling the frame, with no glare across the bars. The app reads the number off that photograph; it cannot be typed in. If it does not read, retake the photograph. Then check the number belongs to this reference and no other.",
+                    "zh":"正对条码拍摄，使其充满画面，条纹上不得有反光。应用会从该照片中自动识别号码，不可手工输入。若未能识别，请重拍。随后核对该号码是否属于本型号。",
+                    "es":"Fotografíe el código de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto; no se puede escribir a mano. Si no lo lee, repita la foto. Después compruebe que el número pertenece a esta referencia y no a otra."}},
            {"section":{"en":"Satellite box","zh":"卫星箱彩盒","es":"Caja del satélite"},
             "only":["HK-EPS112A1"],
             "help":{"en":"Epsilon ships in two boxes. The second one is photographed, weighed and measured the same way, also before opening.",
@@ -1183,9 +1202,9 @@ const CONFIG = {
                     "zh":"将箱体翻转，清点三脚架支座的螺丝，应为四颗，全部拧紧且无滑牙。",
                     "es":"Voltee la cabina y cuente los tornillos del soporte del trípode. Deben ser cuatro, todos apretados y ninguno barrido."}},
            {"section":{"en":"Markings","zh":"标识","es":"Marcas"},
-            "help":{"en":"The logos, the tag and the lot code — everything stuck on or printed on the product. Then the video, which is what this section closes with: one clip going round the cabinet showing everything photographed above.",
-                    "zh":"标志、吊牌与批号——凡是贴在或印在产品上的内容。随后是视频，本节以此结束：一段环绕整机的视频，逐一展示上面拍过的所有内容。",
-                    "es":"Los logos, la etiqueta y el código de lote — todo lo que va pegado o impreso en el producto. Después el video, con el que cierra esta sección: un solo clip recorriendo la cabina y mostrando todo lo fotografiado arriba."}},
+            "help":{"en":"The logos, the tag, the barcode and the lot code — everything stuck on or printed on the product. Then the video, which is what this section closes with: one clip going round the cabinet showing everything photographed above.",
+                    "zh":"标志、吊牌、条码与批号——凡是贴在或印在产品上的内容。随后是视频，本节以此结束：一段环绕整机的视频，逐一展示上面拍过的所有内容。",
+                    "es":"Los logos, la etiqueta, el código de barras y el lote — todo lo que va pegado o impreso en el producto. Después el video, con el que cierra esta sección: un solo clip recorriendo la cabina y mostrando todo lo fotografiado arriba."}},
            {"id":"sub_ext_logo_grille","photo":true,
             "label":{"en":"Logo on the grille","zh":"网罩上的标志","es":"Logo de la parrilla"},
             "help":{"en":"Close-up. Straight, complete, well fixed, with no scratched or faded lettering.",
@@ -1214,6 +1233,15 @@ const CONFIG = {
             "help":{"en":"Photograph the warranty sticker in place on the cabinet, close enough to read its printing. It must be whole, well stuck down and not torn.",
                     "zh":"拍摄贴在机身上的保修贴纸，距离足够近以便读出其印字。贴纸须完整、粘贴牢固、无破损。",
                     "es":"Fotografíe el sticker de garantía pegado en la cabina, lo bastante cerca para leer su impresión. Debe estar entero, bien pegado y sin rasgaduras."}},
+           {/* Viene de MATERIAL IMPRESO. Va serigrafiado en el panel, así que se
+                fotografía en el mismo recorrido que los logos y el lote. El de
+                la caja se toma antes, en la prueba CAJA. */
+            "id":"sub_barcode_panel","code":"PKG-001","photo":true,"scan":true,
+            "measure":{"unit":"EAN","step":"1"},
+            "label":{"en":"Barcode on the panel","zh":"面板条码","es":"Código de barras del panel"},
+            "help":{"en":"Photograph it square on, filling the frame, with no glare across the bars. The app reads the number off that photograph; it cannot be typed in. If it does not read, retake the photograph. Compare it with the one recorded on the box: they must be the same.",
+                    "zh":"正对拍摄，使其充满画面，条纹上不得有反光。应用会从该照片中自动识别号码，不可手工输入。若未能识别，请重拍。与彩盒上记录的号码核对：两者必须一致。",
+                    "es":"Fotografíelo de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto; no se puede escribir a mano. Si no lo lee, repita la foto. Compárelo con el registrado en la caja: deben ser el mismo."}},
            {"id":"sub_ext_lot","photo":true,
             "label":{"en":"Lot number","zh":"批号","es":"Número de lote"},
             "help":{"en":"Close-up of the lot code on the cabinet itself, of the form 25076411. Every digit sharp, and matching the lot on the paperwork.",
@@ -1313,20 +1341,9 @@ const CONFIG = {
             "help":{"en":"The same photograph on the other piece. The two are photographed separately.",
                     "zh":"对另一块做同样的拍摄。两块须分开拍摄。",
                     "es":"La misma foto en la otra pieza. Los dos se fotografían por separado."}},
-           {/* Las caras de la caja, sus medidas, su peso y su código viven en la
-                prueba CAJA, que es la primera del plan y se hace con el empaque
-                todavía cerrado. Aquí queda el código del panel, que está en el
-                producto y sólo se ve una vez desempacado. */
-            "section":{"en":"On the product","zh":"产品本体","es":"En el producto"},
-            "help":{"en":"The code silkscreened on the panel. The one on the box is photographed in the BOX test, before opening.",
-                    "zh":"面板上丝印的条码。彩盒上的条码在「彩盒」测试中拍摄，即开箱之前。",
-                    "es":"El código serigrafiado en el panel. El de la caja se fotografía en la prueba CAJA, antes de abrir."}},
-           {"id":"sub_barcode_panel","code":"PKG-001","photo":true,"scan":true,
-            "measure":{"unit":"EAN","step":"1"},
-            "label":{"en":"Barcode on the panel","zh":"面板条码","es":"Código de barras del panel"},
-            "help":{"en":"The same photograph on the barcode silkscreened on the panel, with its own number in its own box. Compare it with the one recorded on the box: they must be the same.",
-                    "zh":"对面板上丝印的条码做同样的拍摄，其号码填入各自的方框。与彩盒上记录的号码核对：两者必须一致。",
-                    "es":"La misma foto sobre el código serigrafiado en el panel, con su número en su propio recuadro. Compárelo con el registrado en la caja: deben ser el mismo."}}]},
+           /* El código del panel se fotografía en PARTES EXTERNAS, junto al resto
+              de lo que va impreso en el producto. El de la caja, en CAJA. Aquí
+              queda sólo lo que viaja dentro del empaque. */]},
 
         {"id":"USB","optional":false,"only_factory":["YIS","RHY","EAG"],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
@@ -5584,6 +5601,15 @@ const T = {
   conn_ref:"Connectors · tap to enlarge",
   dev_note:"This reference has not been released. The factory cannot see it: it is inspected from here only.",
   measured:"Reading", a_values:"%n reading(s) still to be written down.\n\nThe photo of the instrument is not enough on its own: the number is what can be compared between one unit and the next.",
+  scan_lab:"Code", scan_auto:"read automatically",
+  scan_wait:"Photograph the code — the app reads the number",
+  scan_no:"Code not read",
+  scan_nodet:"This phone has no barcode reader. Use Chrome on Android.",
+  scan_unread:"The photograph could not be decoded. Retake it square on, close, with no glare.",
+  scan_goes_on:"The inspection goes on. The report will record that this code was not read.",
+  rep_scan_no:"NOT READ",
+  rep_scan_t:"Codes not read",
+  rep_scan_i:"The number is read by the app from the photograph and cannot be typed in. Where it could not be read, the photograph is in the annex and the code can be taken from it.",
   ev_na:"Every point of this test is marked N/A: the reference does not have this function, so no photo or video is required. You can still attach one if it helps explain why.",
   ev_free:"Nothing is required here. Attach a photo or a clip if something is worth showing.",
   need_photo:"At least one photo is required, whether the test passes or fails.",
@@ -5803,6 +5829,15 @@ const T = {
   conn_ref:"Conectores · toque para ampliar",
   dev_note:"Esta referencia aún no se ha liberado. La fábrica no la ve: se inspecciona sólo desde aquí.",
   measured:"Medición", a_values:"Faltan %n medición(es) por registrar.\n\nLa foto del instrumento no basta por sí sola: el número es lo que se puede comparar de una unidad a otra.",
+  scan_lab:"Código", scan_auto:"lectura automática",
+  scan_wait:"Fotografíe el código — la app lee el número",
+  scan_no:"Código no leído",
+  scan_nodet:"Este teléfono no tiene lector de códigos. Use Chrome en Android.",
+  scan_unread:"No se pudo descifrar la fotografía. Repítala de frente, cerca y sin reflejos.",
+  scan_goes_on:"La inspección continúa. El informe dejará constancia de que este código no se leyó.",
+  rep_scan_no:"NO LEÍDO",
+  rep_scan_t:"Códigos no leídos",
+  rep_scan_i:"El número lo lee la app de la fotografía y no se puede escribir a mano. Donde no se pudo leer, la fotografía está en el anexo y de ella se puede tomar el código.",
   ev_na:"Todos los puntos de esta prueba están en N/A: la referencia no tiene esta función, así que no se requiere foto ni video. Puede adjuntar uno de todos modos si ayuda a explicar por qué.",
   ev_free:"Aquí no se requiere nada. Adjunte una foto o un video si hay algo que valga la pena mostrar.",
   need_photo:"Se requiere al menos una foto, apruebe o falle la prueba.",
@@ -6018,6 +6053,15 @@ const T = {
   conn_ref:"接口 · 点击放大",
   dev_note:"本型号尚未发布。工厂端不可见：仅可从此处检验。",
   measured:"实测值", a_values:"还有 %n 项实测值未填写。\n\n仅有仪器照片还不够：只有数值才能在不同整机之间进行比较。",
+  scan_lab:"条码", scan_auto:"自动识别",
+  scan_wait:"请拍摄条码——应用自动识别号码",
+  scan_no:"条码未识别",
+  scan_nodet:"本手机无条码识别功能。请使用安卓系统的 Chrome 浏览器。",
+  scan_unread:"照片无法识别。请正对、靠近、避免反光后重拍。",
+  scan_goes_on:"检验继续进行。报告中将注明此条码未能识别。",
+  rep_scan_no:"未识别",
+  rep_scan_t:"未识别的条码",
+  rep_scan_i:"号码由应用从照片中自动识别，不可手工输入。未能识别处，照片存于附件，可据此读取条码。",
   ev_na:"本测试所有检查项均为不适用：本型号没有该功能，因此无需照片或录像。如有助于说明原因，仍可自行上传。",
   ev_free:"本项无强制要求。若有值得记录的内容，可自行上传照片或视频。",
   need_photo:"无论合格与否，本项至少需要一张照片。",
@@ -6965,26 +7009,48 @@ function shrink(file){
    extra of him, and needs no camera stream, no second permission and no
    detection loop running while he holds the phone steady.
 
-   BarcodeDetector ships with Chrome on Android, which is what the factory
-   uses. Where it is missing — iPhone, and Firefox — nothing happens and the
-   box stays for the operator to type into. Silent on every failure on
-   purpose: a number that could not be read is not an error, it is the normal
-   case on half the phones in the world. */
+   El número lo pone el lector y sólo el lector. Escribirlo a mano quedó
+   prohibido a partir de la v13.0 por decisión de HOKLAN: un código tecleado no
+   prueba nada, porque el operario puede copiarlo de otra unidad, de la orden
+   de producción o de la unidad anterior, y el informe no distinguía un dato
+   leído de uno inventado. Leído del código de la propia fotografía, el número
+   y la evidencia son la misma cosa.
+
+   Cuando no se lee, la inspección no se detiene: se marca el punto y el
+   informe lo dice. Se distinguen dos motivos porque no significan lo mismo:
+     "nodet"  — el teléfono no trae lector (iPhone, Firefox). Es un problema
+                del equipo del operario, no del producto, y se resuelve
+                inspeccionando con Chrome en Android.
+     "unread" — hay lector y la foto no se dejó leer: reflejo, desenfoque,
+                encuadre, o la etiqueta está mal impresa. Esto último sí es un
+                hallazgo del producto.
+   Devuelve el motivo, o "" si leyó. */
 async function scanFromShot(u, pointId, dataUrl){
   try{
-    if(typeof BarcodeDetector === "undefined") return;
+    if(typeof BarcodeDetector === "undefined") return "nodet";
     const fmts = await BarcodeDetector.getSupportedFormats().catch(() => []);
-    if(!fmts || !fmts.length) return;
+    if(!fmts || !fmts.length) return "nodet";
     const det = new BarcodeDetector({formats: fmts});
     const img = new Image();
     await new Promise((ok, no) => { img.onload = ok; img.onerror = no; img.src = dataUrl; });
     const found = await det.detect(img);
-    if(!found || !found.length) return;
+    if(!found || !found.length) return "unread";
     const val = String(found[0].rawValue || "").trim();
-    if(!val) return;
+    if(!val) return "unread";
     setValue(u, pointId, val);
-    render(); save();
-  }catch(e){ /* unreadable: the box is filled by hand, which is the fallback */ }
+    return "";
+  }catch(e){ return "unread"; }
+}
+
+/* Anota, o borra, la marca de código no leído. Vive en la fila junto al resto
+   de lo que la inspección produjo, así que viaja al informe y al respaldo sin
+   nada más que hacer. */
+function markScan(u, pointId, why){
+  const r = row(u);
+  r.scanFail = r.scanFail || {};
+  if(why) r.scanFail[pointId] = why;
+  else delete r.scanFail[pointId];
+  save();
 }
 
 /* `u` is the speaker the picture belongs to. Evidence of a defect is filed
@@ -7001,16 +7067,22 @@ async function addMedia(input, u, slot){
     r.media.push(m);
   }
   input.value = "";
-  /* Before the render, so the number is already in the box when the box is
-     drawn. Only on a point that asks for it, and only while it is still empty:
-     a value typed by hand is not overwritten by a later photograph. */
+  /* Before the render, so the número ya está en el recuadro cuando el recuadro
+     se dibuja. Sólo mientras siga vacío: un código ya leído no se vuelve a
+     leer, y así una segunda foto del mismo punto no puede cambiar el dato.
+
+     Se lee de la última foto adjuntada, no de la primera. El operario que
+     repite la foto lo hace porque la anterior no se dejó leer; releer aquella
+     habría fallado otra vez, siempre, y el punto no se habría podido cerrar
+     nunca. */
   if(slot){
     const t = current();
     const p = t && realPoints(t).filter(x => x.id === slot)[0];
     if(p && p.scan && !readingOf(r, slot).trim()){
-      const shot = r.media.filter(m => m.slot === slot && m.kind === "photo" &&
-                                       m.url && !m.doc)[0];
-      if(shot) await scanFromShot(u || 0, slot, shot.url);
+      const shots = r.media.filter(m => m.slot === slot && m.kind === "photo" &&
+                                        m.url && !m.doc);
+      const shot = shots[shots.length - 1];
+      if(shot) markScan(u || 0, slot, await scanFromShot(u || 0, slot, shot.url));
     }
   }
   if(slot) collapseIfDone(slot);
@@ -7315,9 +7387,20 @@ function setValue(u, pointId, text){
   syncReady();
 }
 /* Whether a point that asks for a number still has none. N/A needs none: the
-   reference does not have what was going to be measured. */
+   reference does not have what was going to be measured.
+
+   Un punto de lectura automática nunca bloquea: el número lo pone el lector, no
+   el operario, y si el teléfono no supo leerlo no hay nada que pueda escribir.
+   Lo que ocurre entonces es que la inspección sigue y el informe lo dice. */
 const valueMissing = (r, p) =>
-  !!(p.measure) && r.points[p.id] !== "NA" && !readingOf(r, p.id).trim();
+  !!(p.measure) && !p.scan && r.points[p.id] !== "NA" &&
+  !readingOf(r, p.id).trim();
+
+/* Un código que se fotografió y no se pudo leer. Se marca al adjuntar la foto y
+   viaja hasta el informe. No es un fallo del producto ni del operario: en medio
+   teléfono del mundo no existe el lector, y el dato se recupera después desde
+   la propia fotografía, que sí quedó guardada. */
+const scanFailed = (r, pointId) => !!((r && r.scanFail) || {})[pointId];
 
 function pointValuesMissing(t){
   let n = 0;
@@ -8136,6 +8219,18 @@ td.v{font-weight:400}
    can be read down the column. */
 .reads{margin:8px 0 4px}
 .reads td b{font-size:11pt}
+/* Un código que la app no pudo leer, allí donde iría su número */
+b.nord{color:#c0392b;font-size:9pt;letter-spacing:.5px}
+/* El aviso de códigos no leídos, junto al resumen de la sección II */
+.scanwarn{margin:10px 0 4px;border:1pt solid #c0392b;border-left:3pt solid #c0392b;
+  border-radius:3px;padding:8px 11px;background:#fdf3f1;page-break-inside:avoid}
+.scanwarn>b{display:block;font-size:9.5pt;color:#a3271b;letter-spacing:.4px}
+.scanwarn>p{margin:3px 0 6px;font-size:8pt;color:#7a5a52;line-height:1.45}
+.scanwarn table{width:100%;border-collapse:collapse}
+.scanwarn td{padding:3px 0;font-size:8.5pt;vertical-align:top;
+  border-top:.5pt solid #eccfc8}
+.scanwarn td.w{text-align:right;width:46%;color:#8a6a5c;font-size:8pt;
+  padding-left:10px}
 /* The index of findings: R number, where it was found, and its code. Read in
    one pass before any of them is opened. */
 /* A test that passed: name on the left in the grey column, everything about it
@@ -8392,6 +8487,38 @@ ${runId()}
   h += `</table>
     <p class="note">${tr("test_time_note")}</p>`;
 
+  /* ---- Códigos que no se pudieron leer ----
+     Va aquí arriba, junto al resumen, y no enterrado en el detalle de la prueba
+     que lo pidió. El lector del informe pregunta primero qué falta, y un código
+     ausente es de lo poco que este informe no puede reponer por sí solo: hay
+     que ir a la fotografía. Decirlo tarde equivale a no decirlo.
+
+     No es un hallazgo. Un código ilegible puede ser el producto —etiqueta mal
+     impresa— o el teléfono del inspector, y el informe no puede decidirlo; por
+     eso se informa aparte y no se cuenta como falla. Si la etiqueta está mal,
+     el inspector lo registra como falla del punto, que es donde corresponde. */
+  const unread = [];
+  allUnits().forEach(u => {
+    unitRows(u).forEach((r, i) => {
+      const t = tests()[i];
+      if(!r || !t) return;
+      if(t.type === "photos" && u > 0) return;
+      realPoints(t).forEach(p => {
+        if(!p.scan || readingOf(r, p.id).trim() || !scanFailed(r, p.id)) return;
+        unread.push({test:L(t.label), point:pLab(p), u,
+                     why:tr(scanFailed(r, p.id) === "nodet" ? "scan_nodet"
+                                                            : "scan_unread")});
+      });
+    });
+  });
+  if(unread.length)
+    h += `<div class="scanwarn"><b>${tr("rep_scan_t")}</b>
+      <p>${tr("rep_scan_i")}</p>
+      <table>${unread.map(x => `<tr>
+        <td><b>${esc(x.test)}</b> — ${esc(x.point)}${
+          S.units>1 ? " · " + fmt("speaker_n",{n:x.u+1}) : ""}</td>
+        <td class="w">${esc(x.why)}</td></tr>`).join("")}</table></div>`;
+
   /* ---- III WHAT WAS FOUND ----
      One line per finding, before any of them is opened. Until this existed the
      reader had to walk several pages of photographs to learn how many there
@@ -8500,7 +8627,14 @@ ${runId()}
       allUnits().forEach(u => {
         const rr = unitRows(u)[i];
         const v = rr ? readingOf(rr, p.id).trim() : "";
-        if(!v) return;
+        if(!v){
+          /* Un código que el lector no pudo descifrar se imprime igual, y dice
+             que no se leyó. Omitirlo dejaba el informe sin rastro de que en ese
+             renglón faltaba un número, que es justo lo que hay que saber. */
+          if(p.scan && rr && scanFailed(rr, p.id))
+            reads.push({label:pLab(p), v:"", unit:"", u, no:true});
+          return;
+        }
         reads.push({label:pLab(p), v, unit:unitText(p.measure), u});
       });
     });
@@ -8562,7 +8696,8 @@ ${runId()}
         }<th class="c" style="width:110px">${tr("measured")}</th></tr>${
         b.reads.map(x => `<tr><td>${esc(x.label)}</td>${
           S.units>1?`<td>${fmt("speaker_n",{n:x.u+1})}</td>`:""
-          }<td class="c"><b>${esc(x.v)}</b> ${esc(x.unit)}</td></tr>`).join("")}</table>`;
+          }<td class="c">${x.no ? `<b class="nord">${tr("rep_scan_no")}</b>`
+            : `<b>${esc(x.v)}</b> ${esc(x.unit)}`}</td></tr>`).join("")}</table>`;
 
     if(b.note)
       h += `<p class="note"><b>${tr("notes")}:</b> ${esc(b.note)}${b.noteTr}</p>`;
@@ -8632,7 +8767,8 @@ ${runId()}
             verdictText(b.verdict)}</span>${bits.length ? " · " + bits.join(" · ") : ""}</div>
           ${b.reads.map(x => `<div>${esc(x.label)}${
             S.units>1 ? " · " + fmt("speaker_n",{n:x.u+1}) : ""
-            }: <b>${esc(x.v)}</b> ${esc(x.unit)}</div>`).join("")}
+            }: ${x.no ? `<b class="nord">${tr("rep_scan_no")}</b>`
+                      : `<b>${esc(x.v)}</b> ${esc(x.unit)}`}</div>`).join("")}
           ${b.note
             ? `<div><b>${tr("notes")}:</b> ${esc(b.note)}</div>${
                 b.noteTr ? `<div class="okt-tr">${b.noteTr}</div>` : ""}`
@@ -10660,6 +10796,9 @@ function zoomSample(img){
    not close without. `oninput` never renders: it would rebuild the field and
    shut the phone keyboard between one digit and the next. */
 function measureBox(p, u, id){
+  /* Un código de barras no se escribe: lo pone el lector. El recuadro con
+     teclado se cambia por uno que sólo muestra. */
+  if(p.scan) return scanBox(p, u);
   const val = readingOf(row(u), p.id);
   return `<div class="meas${val.trim()?" ok":""}">
     ${/* `measure.as` cambia el rótulo del recuadro. Un selector de voltaje no
@@ -10672,6 +10811,39 @@ function measureBox(p, u, id){
     <b>${esc(unitText(p.measure))}</b>
   </div>`;
 }
+/* El recuadro de un código de barras. No tiene teclado: el número sale del
+   lector o no sale, y en ningún caso lo escribe el operario. Tres estados, y
+   cada uno dice qué hacer a continuación:
+
+     en espera — todavía no hay foto. El recuadro explica que el número se
+                 obtiene al fotografiar, para que nadie lo busque en el teclado.
+     leído     — el número, en verde, y bloqueado.
+     no leído  — en rojo, con el motivo, y con el aviso de que la prueba
+                 continúa igual y que el informe lo va a registrar. No bloquea:
+                 detener la inspección por un código ilegible dejaría el resto
+                 del producto sin revisar, que es mucho peor que un dato menos.
+                 La foto queda guardada, así que el número se recupera de ella.
+*/
+function scanBox(p, u){
+  const r    = row(u);
+  const val  = readingOf(r, p.id).trim();
+  const why  = scanFailed(r, p.id);
+  const has  = shotsFor(r, p.id).some(m => m.kind === "photo" && !m.doc);
+  const lab  = p.measure && p.measure.as ? esc(L(p.measure.as)) : tr("scan_lab");
+
+  if(val) return `<div class="meas ok scan">
+    <label>${lab}</label><u>${esc(val)}</u><b>${tr("scan_auto")}</b></div>`;
+
+  if(has && why) return `<div class="meas bad scan">
+    <label>${lab}</label>
+    <div class="scan-msg"><b>${tr("scan_no")}</b>
+      <i>${tr(why === "nodet" ? "scan_nodet" : "scan_unread")}</i>
+      <em>${tr("scan_goes_on")}</em></div></div>`;
+
+  return `<div class="meas scan">
+    <label>${lab}</label><u class="wait">${tr("scan_wait")}</u></div>`;
+}
+
 /* Repaints the box in place, since `oninput` cannot render. */
 function markMeas(id, val){
   const box = document.getElementById("mv_" + id);

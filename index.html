@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="11.3">
+<meta name="app-version" content="11.4">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -722,7 +722,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 80,
+      "plan_version": 81,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1071,9 +1071,9 @@ const CONFIG = {
                     "es":"Compruebe que coincide con el de la parrilla en tamaño, color y acabado."}},
            {"id":"sub_ext_lot","photo":true,
             "label":{"en":"Lot number","zh":"批号","es":"Número de lote"},
-            "help":{"en":"Close-up of the lot code on the cabinet itself. Every digit sharp, and matching the lot on the paperwork.",
-                    "zh":"拍摄机身上批号的特写。每一位数字都要清晰，并与检验单上的批号一致。",
-                    "es":"Primer plano del código de lote en la propia cabina. Cada dígito nítido, y coincidiendo con el lote del papeleo."}}]},
+            "help":{"en":"Close-up of the lot code on the cabinet itself, of the form 25076411. Every digit sharp, and matching the lot on the paperwork.",
+                    "zh":"拍摄机身上批号的特写，格式如 25076411。每一位数字都要清晰，并与检验单上的批号一致。",
+                    "es":"Primer plano del código de lote en la propia cabina, del tipo 25076411. Cada dígito nítido, y coincidiendo con el lote del papeleo."}}]},
 
         {"id":"SUB_ACC","optional":false,"only_factory":["RHY"],
          "only":["HK-BAS115A1","HK-BAS118A1"],"evidence":[],
@@ -3520,6 +3520,9 @@ const CONFIG = {
            PARTES EXTERNAS, con su posición en el recuadro y su fotografía. */
 
         {"id":"INTERNAL","optional":false,"type":"photos","no_na":true,
+         /* Excepción por referencia: en el BAS115A1 el operador puede marcar
+            N/A. En el resto la foto sigue siendo obligatoria. */
+         "na_ok":["HK-BAS115A1"],
          "only_factory":["YIS","RHY","EAG"],
          /* Los subwoofers sí corren ésta: sólo tienen versión propia de las
             tres anteriores. */
@@ -6354,6 +6357,12 @@ const modelsOf = f => Object.keys(CONFIG.models)
    points of `current()`, and `current()` can be null on a draft whose reference
    was left without a plan; every one of them wants an empty list there, not a
    thrown error in the middle of drawing the screen. */
+/* `no_na` prohíbe marcar N/A en una sección fotográfica: la foto es obligatoria
+   punto por punto. `na_ok` abre la excepción por referencia, para cuando una
+   sección compartida cubre un producto al que de verdad le faltan piezas y el
+   operador no tiene nada que fotografiar. */
+const noNA = t => !!(t && t.no_na) && (t.na_ok || []).indexOf(S.model) < 0;
+
 const pointsOf = t => ((t && t.points) || []).filter(fits);
 const realPoints = t => pointsOf(t).filter(p => p.id);
 /* A point can name the control it belongs to — B1, P1, C4. On screen that name
@@ -7418,7 +7427,7 @@ function nextTest(){
       return;
     }
     const missing = realPoints(t).filter(p =>
-      shotsFor(r,p.id).length === 0 && (t.no_na || r.points[p.id] !== "NA"));
+      shotsFor(r,p.id).length === 0 && (noNA(t) || r.points[p.id] !== "NA"));
     if(missing.length){
       alert(tr("a_missing_photos") + "\n\n" +
         missing.slice(0,6).map(p => "· " + pLab(p)).join("\n") +
@@ -10876,7 +10885,7 @@ function syncReady(){
        operator that the button lies. */
     const r = row(0);
     ready = realPoints(t).every(p =>
-      (shotsFor(r, p.id).length > 0 || (!t.no_na && r.points[p.id] === "NA"))
+      (shotsFor(r, p.id).length > 0 || (!noNA(t) && r.points[p.id] === "NA"))
       && !valueMissing(r, p)
       && ANSWERED.indexOf(r.points[p.id]) >= 0
       && !(r.points[p.id] === "FAIL" && !((r.notes && r.notes[p.id] || "").trim())));
@@ -10892,7 +10901,7 @@ function renderPhotoTest(t, r, done, total){
   const rEn = appTrLine(r, "comment");
   const items = realPoints(t);
   const missing = items.filter(p =>
-    shotsFor(r,p.id).length === 0 && (t.no_na || r.points[p.id] !== "NA")).length
+    shotsFor(r,p.id).length === 0 && (noNA(t) || r.points[p.id] !== "NA")).length
     + items.filter(p => valueMissing(r, p)).length
     // Unanswered points and failures without their description block NEXT here
     // too, exactly as they do on an ordinary test.
@@ -10900,7 +10909,7 @@ function renderPhotoTest(t, r, done, total){
     + items.filter(p => r.points[p.id] === "FAIL" &&
         !((r.notes && r.notes[p.id] || "").trim())).length;
 
-  const allowNA = !t.no_na;
+  const allowNA = !noNA(t);
 
   /* These points used to record only that a photograph existed. A switch left in
      the wrong position, a dented corner, a logo printed crooked — the picture

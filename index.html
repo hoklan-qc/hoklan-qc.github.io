@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="11.8">
+<meta name="app-version" content="11.9">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -5643,6 +5643,7 @@ const T = {
   a_lost:"\n\nNOTE: some photos could not be recovered on this phone. Your answers were. Retake them from the ☰ menu before generating the report.",
   na_title:"Does not apply to this reference",
   na_test:"Does not apply", na_test_undo:"Does not apply · clear",
+  po_prefix:"PO",
   na_folded_t:"whole section",
   na_folded:"%n points marked as not applicable. Tap \"Does not apply · clear\" above to open them again.",
   chg_secs:"%n s",
@@ -5855,6 +5856,7 @@ const T = {
   a_lost:"\n\nNOTA: algunas fotos no se pudieron recuperar en este teléfono. Sus respuestas sí. Vuelva a tomarlas desde el menú ☰ antes de generar el informe.",
   na_title:"No aplica a esta referencia",
   na_test:"No aplica", na_test_undo:"No aplica · quitar",
+  po_prefix:"OC",
   na_folded_t:"Sección completa",
   na_folded:"%n puntos marcados como no aplicables. Toque «No aplica · quitar» arriba para volver a abrirlos.",
   chg_secs:"%n s",
@@ -6063,6 +6065,7 @@ const T = {
   a_lost:"\n\n注意：本机上有部分照片无法恢复；回答已保留。生成报告前请从 ☰ 菜单重新拍照。",
   na_title:"本型号不适用",
   na_test:"不适用", na_test_undo:"不适用 · 撤销",
+  po_prefix:"PO",
   na_folded_t:"整节",
   na_folded:"%n 个检查项已标记为不适用。点击上方“不适用 · 撤销”可重新展开。",
   chg_secs:"%n 秒",
@@ -6202,7 +6205,7 @@ const S = {
   // A targeted inspection launched from Admin: `pick` is the list of test ids
   // to run, and `fromAdmin` is what puts the ABORT button on the screen. Both
   // null/false in the normal factory flow, which always runs the whole plan.
-  pick:null, fromAdmin:false, poLetter:"",
+  pick:null, fromAdmin:false, poLetter:"", poAuto:false,
   // Whether the test list is unfolded in Admin. Folded by default: the common
   // case is running all of them and never opening it.
   adminTests:false,
@@ -7728,8 +7731,13 @@ function fileName(){
      código que abre el nombre es el de la cuenta, no el de la inspección, así
      que sin él dos revisiones de la misma referencia y la misma orden en un
      mismo día se llamarían igual. */
+  /* La orden va rotulada también aquí, con el prefijo del idioma en que se
+     generó el archivo: OC en español, PO en inglés y chino. Se pega sin espacio
+     —OC000123— porque un espacio en un nombre de archivo se convierte en %20 en
+     cuanto el archivo se envía por correo o por WeChat. */
   const seq = daySeq();
-  return "QC_" + [clean(S.testId), clean(S.model), clean(poPrinted()), part, self,
+  return "QC_" + [clean(S.testId), clean(S.model),
+                  clean(poPrinted().replace(/\s+/g,"")), part, self,
                   dayStamp(), seq > 1 ? String(seq).padStart(2,"0") : ""]
     .filter(Boolean).join("_") + ".html";
 }
@@ -9305,15 +9313,24 @@ function peekPo(){
   try{ n = parseInt(localStorage.getItem(poSeqName()), 10) || 0; }catch(e){}
   return n + 1;
 }
+/* Sólo los dígitos. El prefijo se pone al imprimir, no al guardar: HOKLAN lo
+   quiere en el idioma del informe —OC en español, PO en inglés y chino—, y un
+   número guardado como OC000123 en un teléfono y PO000123 en otro sería el
+   mismo dato escrito de dos formas, imposible de buscar en la hoja de cálculo.
+   Guardado va limpio; rotulado se ve en cada idioma. */
 function takePo(){
   const n = peekPo();
   try{ localStorage.setItem(poSeqName(), String(n)); }catch(e){}
-  return isFactoryUser() ? poDigits(n) : "HK" + poDigits(n);
+  return poDigits(n);
 }
 /* The order number as the report prints it. A factory inspection carries the
    initial of its factory there — and only there, so `S.po` stays the value the
-   spreadsheet and the dashboard can be searched by. */
-const poPrinted = () => (S.poLetter || "") + (S.po || "");
+   spreadsheet and the dashboard can be searched by.
+
+   `poAuto` distingue el número que generó la app del que la fábrica copió de la
+   orden del cliente: a un PO-88213 ajeno no se le antepone nada. */
+const poPrinted = () => (S.poAuto ? tr("po_prefix") + " " : "") +
+                        (S.poLetter || "") + (S.po || "");
 
 const ADMIN_ID = {digits:"365", code:"365-H8Q2K7L4"};
 
@@ -9516,8 +9533,8 @@ function renderAdmin(){
             than on the start screen, where it belonged to nobody, and read with
             peekPo so that looking at it does not consume a number. */""}
       <div class="tag">${esc(fmt("next_po",{
-        p: isFactoryUser() ? ADMIN_FACTORY.charAt(0) + poDigits(peekPo())
-                           : "HK" + poDigits(peekPo()),
+        p: tr("po_prefix") + " " +
+           (isFactoryUser() ? ADMIN_FACTORY.charAt(0) : "") + poDigits(peekPo()),
         /* The name of the account, translated. It used to be built here in
            Spanish whatever language the app was in, so a Chinese operator read
            "ADMIN HOKLAN" and "FÁBRICA Y" on his own screen. What goes into
@@ -9564,7 +9581,8 @@ function renderAdmin(){
       <input id="adminPo" value="${esc(S.po)}" maxlength="12" autocomplete="off"
         placeholder="${tr("po_ph")}" oninput="setAdminPo(this.value)">
       <p class="hint" style="margin-top:6px">${fmt("po_factory",{
-        p: ADMIN_FACTORY.charAt(0) + poDigits(peekPo())})}</p>` : ""}`}
+        p: tr("po_prefix") + " " + ADMIN_FACTORY.charAt(0) +
+           poDigits(peekPo())})}</p>` : ""}`}
     </div>
 
     ${S.model && canAssign() ? `
@@ -9774,6 +9792,7 @@ function adminStart(){
     return;
   }
   S.po = typed || takePo();
+  S.poAuto = !typed;   // ver poPrinted(): sólo el número propio lleva prefijo
   /* The letter belongs to the series, not to the account: it is what tells Y004
      apart from R004 when three factories number their own inspections from 001.
      A number the factory copied from the customer's order is already unique and
@@ -9800,7 +9819,7 @@ function abortTest(){
   clearDraft();
   S.data = [[]]; S.index = 0; S.open = {};
   S.startedAt = null; S.finishedAt = null; S.mediaDropped = false;
-  S.fromAdmin = false; S.selfCheck = false; S.poLetter = "";
+  S.fromAdmin = false; S.selfCheck = false; S.poLetter = ""; S.poAuto = false;
   /* An assignment survives being aborted, and it has to: HOKLAN said this
      inspection is required, and abandoning one unit does not withdraw that. The
      reference, the tests and the unit count are put back exactly as they came, so
@@ -10279,7 +10298,7 @@ function start(){
   // normal inspection and report as if it were complete. An assignment is the
   // one exception — its selection is the whole point, and it survives.
   if(!S.assigned) S.pick = null;
-  S.fromAdmin = false; S.selfCheck = false; S.poLetter = "";
+  S.fromAdmin = false; S.selfCheck = false; S.poLetter = ""; S.poAuto = false;
   S.index = 0; S.open = {};
   S.data = Array.from({length:S.units}, () => []);
   S.startedAt = Date.now(); S.finishedAt = null; S.screen = "test";
@@ -10293,7 +10312,7 @@ function start(){
    would be filed under a number that belongs to another account. */
 function goHomeReset(){
   S.idDigits = ""; S.testId = ""; S.factory = ""; S.model = "";
-  S.po = ""; S.operator = ""; S.poLetter = "";
+  S.po = ""; S.operator = ""; S.poLetter = ""; S.poAuto = false;
   // The assignment goes with it: the next operator on this phone must type the
   // code again and get whatever is published then, not what was published when
   // somebody else opened the app this morning.
@@ -10386,7 +10405,7 @@ function wipeDraft(){
   clearDraft();
   S.data = [[]]; S.units = 1; S.index = 0; S.open = {};
   S.po = ""; S.operator = ""; S.startedAt = null; S.finishedAt = null; S.mediaDropped = false;
-  S.pick = null; S.fromAdmin = false; S.selfCheck = false; S.poLetter = "";
+  S.pick = null; S.fromAdmin = false; S.selfCheck = false; S.poLetter = ""; S.poAuto = false;
   // Back to Admin, which is where the button now lives: dropping to the start
   // screen would mean typing the code again to carry on doing what you were.
   S.screen = ADMIN_OK ? "admin" : "setup";
@@ -10416,7 +10435,7 @@ function wipeAll(){
   }catch(e){}
   S.data = [[]]; S.units = 1; S.index = 0; S.open = {};
   S.po = ""; S.operator = ""; S.startedAt = null; S.finishedAt = null; S.mediaDropped = false;
-  S.pick = null; S.fromAdmin = false; S.selfCheck = false; S.poLetter = "";
+  S.pick = null; S.fromAdmin = false; S.selfCheck = false; S.poLetter = ""; S.poAuto = false;
   S.screen = ADMIN_OK ? "admin" : "setup";
   goHomeReset();
   closeWipe();
@@ -11340,7 +11359,7 @@ function goHome(){
   S.screen = "setup"; S.index = 0; S.units = 1;
   S.data = [[]]; S.open = {};
   S.startedAt = null; S.finishedAt = null; S.mediaDropped = false;
-  S.pick = null; S.fromAdmin = false; S.selfCheck = false; S.poLetter = "";
+  S.pick = null; S.fromAdmin = false; S.selfCheck = false; S.poLetter = ""; S.poAuto = false;
   goHomeReset();
   window.scrollTo(0,0);
   render();

@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="12.7">
+<meta name="app-version" content="12.8">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -737,7 +737,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 86,
+      "plan_version": 87,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -966,6 +966,7 @@ const CONFIG = {
                     "zh":"本节所有内容均须在开箱之前完成。",
                     "es":"Todo lo de esta sección se mide antes de abrir nada."}},
            {"id":"box_gross","code":"PKG-002","photo":true,
+            "sample":"caja_peso",
             "measure":{"unit":"kg","step":"0.1"},
             "label":{"en":"Gross weight","zh":"毛重","es":"Peso bruto"},
             "help":{"en":"Put the closed box, with the product inside, on the scale. Photograph the scale with the reading legible and the whole box on the platform, and write the figure in the box — for example 35 kg.",
@@ -983,12 +984,67 @@ const CONFIG = {
            {"id":"sub_box_h","photo":true,"measure":{"unit":"cm","step":"0.1"},
             "sample":"caja_alto",
             "label":{"en":"Box — height","zh":"彩盒 — 高","es":"Caja — alto"}},
+           {"section":{"en":"The six faces","zh":"六个面","es":"Las seis caras"},
+            "help":{"en":"One photograph per face, with the box still closed. Avoid shadows and reflections over the printing.",
+                    "zh":"每面一张照片，彩盒须保持封闭状态。避免印刷面出现阴影和反光。",
+                    "es":"Una foto por cara, con la caja todavía cerrada. Evite sombras y reflejos sobre la impresión."}},
+           {"id":"sub_box_front","photo":true,
+            "label":{"en":"Box — front","zh":"彩盒 — 正面","es":"Caja — frente"},
+            "help":{"en":"The main printed face, the one facing the buyer on the shelf.",
+                    "zh":"主展示面，即货架上朝向顾客的一面。",
+                    "es":"La cara impresa principal, la que mira al comprador en el estante."}},
+           {"id":"sub_box_back","photo":true,
+            "label":{"en":"Box — back","zh":"彩盒 — 背面","es":"Caja — atrás"}},
+           {"id":"sub_box_right","photo":true,
+            "label":{"en":"Box — right side","zh":"彩盒 — 右侧面","es":"Caja — lado derecho"}},
+           {"id":"sub_box_left","photo":true,
+            "label":{"en":"Box — left side","zh":"彩盒 — 左侧面","es":"Caja — lado izquierdo"}},
+           {"id":"sub_box_top","photo":true,
+            "label":{"en":"Box — top","zh":"彩盒 — 顶面","es":"Caja — superior"},
+            "help":{"en":"Including the closing flaps and the tape.",
+                    "zh":"需拍到封口摇盖和胶带。",
+                    "es":"Incluyendo las solapas de cierre y la cinta."}},
+           {"id":"sub_box_bottom","photo":true,
+            "label":{"en":"Box — bottom","zh":"彩盒 — 底面","es":"Caja — inferior"},
+            "help":{"en":"Including the seal and any shipping label.",
+                    "zh":"需拍到封口和运输标签。",
+                    "es":"Incluyendo el sello y la etiqueta de transporte."}},
+           {/* `scan` es lo que hace que la app intente leer el código en la
+                fotografía que se acaba de adjuntar y rellene el recuadro sola.
+                Donde el teléfono no sepa leerlo, el recuadro se escribe a mano
+                y la prueba sigue igual de válida: lo que no puede faltar es la
+                foto. */
+            "id":"sub_barcode","code":"PKG-001","photo":true,"scan":true,
+            "measure":{"unit":"EAN","step":"1"},
+            "label":{"en":"Barcode on the box","zh":"彩盒条码","es":"Código de barras de la caja"},
+            "help":{"en":"Photograph the barcode square on, filling the frame, with no glare across the bars. The app reads the number off that photograph and writes it in the box; if it cannot, type it in yourself. Then check the number belongs to this reference and no other.",
+                    "zh":"正对条码拍摄，使其充满画面，条纹上不得有反光。应用会从该照片中识别号码并填入方框；若无法识别，请手动输入。随后核对该号码是否属于本型号。",
+                    "es":"Fotografíe el código de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto y lo escribe en el recuadro; si no puede, escríbalo usted. Después compruebe que el número pertenece a esta referencia y no a otra."}},
            {"section":{"en":"Satellite box","zh":"卫星箱彩盒","es":"Caja del satélite"},
             "only":["HK-EPS112A1"],
-            "help":{"en":"Epsilon ships in two boxes. The second one is weighed and measured the same way, also before opening.",
-                    "zh":"Epsilon 分两箱发运。第二箱同样在开箱之前称重并测量。",
-                    "es":"Epsilon se despacha en dos cajas. La segunda se pesa y se mide igual, también antes de abrir."}},
+            "help":{"en":"Epsilon ships in two boxes. The second one is photographed, weighed and measured the same way, also before opening.",
+                    "zh":"Epsilon 分两箱发运。第二箱同样在开箱之前拍摄、称重并测量。",
+                    "es":"Epsilon se despacha en dos cajas. La segunda se fotografía, se pesa y se mide igual, también antes de abrir."}},
+           {"id":"sat_box_front","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Satellite box — front","zh":"卫星箱彩盒 — 正面","es":"Caja del satélite — frente"}},
+           {"id":"sat_box_back","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Satellite box — back","zh":"卫星箱彩盒 — 背面","es":"Caja del satélite — atrás"}},
+           {"id":"sat_box_right","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Satellite box — right side","zh":"卫星箱彩盒 — 右侧面","es":"Caja del satélite — lado derecho"}},
+           {"id":"sat_box_left","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Satellite box — left side","zh":"卫星箱彩盒 — 左侧面","es":"Caja del satélite — lado izquierdo"}},
+           {"id":"sat_box_top","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Satellite box — top","zh":"卫星箱彩盒 — 顶面","es":"Caja del satélite — superior"}},
+           {"id":"sat_box_bottom","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Satellite box — bottom","zh":"卫星箱彩盒 — 底面","es":"Caja del satélite — inferior"}},
+           {"id":"sat_barcode","code":"PKG-001","photo":true,"scan":true,
+            "only":["HK-EPS112A1"],"measure":{"unit":"EAN","step":"1"},
+            "label":{"en":"Barcode on the satellite box","zh":"卫星箱彩盒条码","es":"Código de barras de la caja del satélite"},
+            "help":{"en":"The same photograph on the second box, with its own number in its own field. It must be a different code from the one on the bass box.",
+                    "zh":"对第二箱做同样的拍摄，其号码填入各自的方框。该号码应与低音箱彩盒上的条码不同。",
+                    "es":"La misma foto en la segunda caja, con su número en su propio recuadro. Debe ser un código distinto al de la caja del bajo."}},
            {"id":"sat_gross","code":"PKG-002","photo":true,"only":["HK-EPS112A1"],
+            "sample":"caja_peso",
             "measure":{"unit":"kg","step":"0.1"},
             "label":{"en":"Satellite box — gross weight","zh":"卫星箱彩盒 — 毛重","es":"Caja del satélite — peso bruto"},
             "help":{"en":"The same on the second box: photograph the scale with the reading legible and write the figure in the box.",
@@ -1257,87 +1313,20 @@ const CONFIG = {
             "help":{"en":"The same photograph on the other piece. The two are photographed separately.",
                     "zh":"对另一块做同样的拍摄。两块须分开拍摄。",
                     "es":"La misma foto en la otra pieza. Los dos se fotografían por separado."}},
-           {"section":{"en":"The box","zh":"彩盒","es":"La caja"},
-            "help":{"en":"Six faces, one photograph each. Avoid shadows and reflections over the printing.",
-                    "zh":"六个面各拍一张照片。避免印刷面出现阴影和反光。",
-                    "es":"Seis caras, una foto cada una. Evite sombras y reflejos sobre la impresión."}},
-           {"id":"sub_box_front","photo":true,
-            "label":{"en":"Box — front","zh":"彩盒 — 正面","es":"Caja — frente"},
-            "help":{"en":"The main printed face, the one facing the buyer on the shelf.",
-                    "zh":"主展示面，即货架上朝向顾客的一面。",
-                    "es":"La cara impresa principal, la que mira al comprador en el estante."}},
-           {"id":"sub_box_back","photo":true,
-            "label":{"en":"Box — back","zh":"彩盒 — 背面","es":"Caja — atrás"}},
-           {"id":"sub_box_right","photo":true,
-            "label":{"en":"Box — right side","zh":"彩盒 — 右侧面","es":"Caja — lado derecho"}},
-           {"id":"sub_box_left","photo":true,
-            "label":{"en":"Box — left side","zh":"彩盒 — 左侧面","es":"Caja — lado izquierdo"}},
-           {"id":"sub_box_top","photo":true,
-            "label":{"en":"Box — top","zh":"彩盒 — 顶面","es":"Caja — superior"},
-            "help":{"en":"Including the closing flaps and the tape.",
-                    "zh":"需拍到封口摇盖和胶带。",
-                    "es":"Incluyendo las solapas de cierre y la cinta."}},
-           {"id":"sub_box_bottom","photo":true,
-            "label":{"en":"Box — bottom","zh":"彩盒 — 底面","es":"Caja — inferior"},
-            "help":{"en":"Including the seal and any shipping label.",
-                    "zh":"需拍到封口和运输标签。",
-                    "es":"Incluyendo el sello y la etiqueta de transporte."}},
-           {/* `scan` es lo que hace que la app intente leer el código en la
-                fotografía que se acaba de adjuntar y rellene el recuadro sola.
-                Donde el teléfono no sepa leerlo, el recuadro se escribe a mano
-                y la prueba sigue igual de válida: lo que no puede faltar es la
-                foto. */
-            "id":"sub_barcode","code":"PKG-001","photo":true,"scan":true,
-            "measure":{"unit":"EAN","step":"1"},
-            "label":{"en":"Barcode on the box","zh":"彩盒条码","es":"Código de barras de la caja"},
-            "help":{"en":"Photograph the barcode square on, filling the frame, with no glare across the bars. The app reads the number off that photograph and writes it in the box; if it cannot, type it in yourself. Then check the number belongs to this reference and no other.",
-                    "zh":"正对条码拍摄，使其充满画面，条纹上不得有反光。应用会从该照片中识别号码并填入方框；若无法识别，请手动输入。随后核对该号码是否属于本型号。",
-                    "es":"Fotografíe el código de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto y lo escribe en el recuadro; si no puede, escríbalo usted. Después compruebe que el número pertenece a esta referencia y no a otra."}},
+           {/* Las caras de la caja, sus medidas, su peso y su código viven en la
+                prueba CAJA, que es la primera del plan y se hace con el empaque
+                todavía cerrado. Aquí queda el código del panel, que está en el
+                producto y sólo se ve una vez desempacado. */
+            "section":{"en":"On the product","zh":"产品本体","es":"En el producto"},
+            "help":{"en":"The code silkscreened on the panel. The one on the box is photographed in the BOX test, before opening.",
+                    "zh":"面板上丝印的条码。彩盒上的条码在「彩盒」测试中拍摄，即开箱之前。",
+                    "es":"El código serigrafiado en el panel. El de la caja se fotografía en la prueba CAJA, antes de abrir."}},
            {"id":"sub_barcode_panel","code":"PKG-001","photo":true,"scan":true,
             "measure":{"unit":"EAN","step":"1"},
             "label":{"en":"Barcode on the panel","zh":"面板条码","es":"Código de barras del panel"},
-            "help":{"en":"The same photograph on the barcode silkscreened on the panel, with its own number in its own box. Compare the two numbers: the one on the panel and the one on the box must be the same.",
-                    "zh":"对面板上丝印的条码做同样的拍摄，其号码填入各自的方框。核对两个号码：面板上的与彩盒上的必须一致。",
-                    "es":"La misma foto sobre el código serigrafiado en el panel, con su número en su propio recuadro. Compare los dos números: el del panel y el de la caja deben ser el mismo."}},
-           {/* Las medidas y los pesos viven en la prueba CAJA, que es la primera
-                del plan: se toman con el empaque todavía cerrado. Aquí quedan
-                las fotografías, que se hacen con la caja ya abierta. */
-            /* Epsilon se despacha en dos cajas: la del bajo, arriba, y ésta, la
-                del satélite de tweeters. Se documenta igual que la primera —
-                seis caras y su propio código— porque es una caja distinta, con
-                su propia impresión. */
-            "section":{"en":"Satellite box","zh":"卫星箱彩盒","es":"Caja del satélite"},
-            "only":["HK-EPS112A1"],
-            "help":{"en":"The second box, the one the tweeter satellite ships in. Same photographs as the first: six faces and the barcode.",
-                    "zh":"第二只彩盒，即高音卫星箱的包装。拍摄内容与第一只相同：六个面和条码。",
-                    "es":"La segunda caja, en la que viaja el satélite de tweeters. Las mismas fotos que la primera: seis caras y el código de barras."}},
-           {"id":"sat_box_front","photo":true,"only":["HK-EPS112A1"],
-            "label":{"en":"Satellite box — front","zh":"卫星箱彩盒 — 正面","es":"Caja del satélite — frente"},
-            "help":{"en":"The main printed face, the one facing the buyer on the shelf.",
-                    "zh":"主展示面，即货架上朝向顾客的一面。",
-                    "es":"La cara impresa principal, la que mira al comprador en el estante."}},
-           {"id":"sat_box_back","photo":true,"only":["HK-EPS112A1"],
-            "label":{"en":"Satellite box — back","zh":"卫星箱彩盒 — 背面","es":"Caja del satélite — atrás"}},
-           {"id":"sat_box_right","photo":true,"only":["HK-EPS112A1"],
-            "label":{"en":"Satellite box — right side","zh":"卫星箱彩盒 — 右侧面","es":"Caja del satélite — lado derecho"}},
-           {"id":"sat_box_left","photo":true,"only":["HK-EPS112A1"],
-            "label":{"en":"Satellite box — left side","zh":"卫星箱彩盒 — 左侧面","es":"Caja del satélite — lado izquierdo"}},
-           {"id":"sat_box_top","photo":true,"only":["HK-EPS112A1"],
-            "label":{"en":"Satellite box — top","zh":"卫星箱彩盒 — 顶面","es":"Caja del satélite — superior"},
-            "help":{"en":"Including the closing flaps and the tape.",
-                    "zh":"需拍到封口摇盖和胶带。",
-                    "es":"Incluyendo las solapas de cierre y la cinta."}},
-           {"id":"sat_box_bottom","photo":true,"only":["HK-EPS112A1"],
-            "label":{"en":"Satellite box — bottom","zh":"卫星箱彩盒 — 底面","es":"Caja del satélite — inferior"},
-            "help":{"en":"Including the seal and any shipping label.",
-                    "zh":"需拍到封口和运输标签。",
-                    "es":"Incluyendo el sello y la etiqueta de transporte."}},
-           {"id":"sat_barcode","code":"PKG-001","photo":true,"scan":true,
-            "only":["HK-EPS112A1"],"measure":{"unit":"EAN","step":"1"},
-            "label":{"en":"Barcode on the satellite box","zh":"卫星箱彩盒条码","es":"Código de barras de la caja del satélite"},
-            "help":{"en":"Photograph it square on, filling the frame, with no glare across the bars. The app reads the number off that photograph and writes it in the box; if it cannot, type it in yourself. It must be a different code from the one on the bass box.",
-                    "zh":"正对拍摄，使其充满画面，条纹上不得有反光。应用会从该照片中识别号码并填入方框；若无法识别，请手动输入。该号码应与低音箱彩盒上的条码不同。",
-                    "es":"Fotografíelo de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto y lo escribe en el recuadro; si no puede, escríbalo usted. Debe ser un código distinto al de la caja del bajo."}}]},
+            "help":{"en":"The same photograph on the barcode silkscreened on the panel, with its own number in its own box. Compare it with the one recorded on the box: they must be the same.",
+                    "zh":"对面板上丝印的条码做同样的拍摄，其号码填入各自的方框。与彩盒上记录的号码核对：两者必须一致。",
+                    "es":"La misma foto sobre el código serigrafiado en el panel, con su número en su propio recuadro. Compárelo con el registrado en la caja: deben ser el mismo."}}]},
 
         {"id":"USB","optional":false,"only_factory":["YIS","RHY","EAG"],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],

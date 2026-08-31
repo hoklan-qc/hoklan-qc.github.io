@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="11.6">
+<meta name="app-version" content="11.7">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -722,7 +722,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 81,
+      "plan_version": 82,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1169,6 +1169,11 @@ const CONFIG = {
             "help":{"en":"The same photograph on the other piece. The two are photographed separately.",
                     "zh":"对另一块做同样的拍摄。两块须分开拍摄。",
                     "es":"La misma foto en la otra pieza. Los dos se fotografían por separado."}},
+           {"id":"sub_warranty_sticker","photo":true,"only":["HK-BAS115A1"],
+            "label":{"en":"Warranty sticker","zh":"保修贴纸","es":"Sticker de garantía"},
+            "help":{"en":"Photograph the warranty sticker in place on the cabinet, close enough to read its printing. It must be whole, well stuck down and not torn.",
+                    "zh":"拍摄贴在机身上的保修贴纸，距离足够近以便读出其印字。贴纸须完整、粘贴牢固、无破损。",
+                    "es":"Fotografíe el sticker de garantía pegado en la cabina, lo bastante cerca para leer su impresión. Debe estar entero, bien pegado y sin rasgaduras."}},
            {"id":"sub_silkscreen","photo":true,
             "label":{"en":"Panel silkscreen","zh":"面板丝印","es":"Serigrafía del panel"},
             "help":{"en":"Photograph the panel square on, close enough to read every printed word. It is silkscreened in Spanish: read the labels of the knobs, the inputs and the warnings letter by letter and check they are spelled correctly.",
@@ -5570,7 +5575,7 @@ const T = {
   rm_videos:"— %n video(s) recorded during the inspection.",
   lost_head:"%n video(s) could not be packed into the folder:",
   lost_wechat:"They were not lost: they are still in this phone's gallery, where they were recorded. Send them by WeChat next to the packet, saying which inspection they belong to. A video only survives inside the app while the page stays open — reloading it, or opening another one, is what leaves it out.",
-  rm_pdf:"To get the PDF: open REPORT_ES.html, REPORT_EN.html or REPORT_ZH.html in any browser, then Print → Save as PDF.",
+  rm_pdf:"To get the PDF: open REPORT_ES.html, REPORT_EN.html or REPORT_ZH.html in any browser, then Print → Save as PDF.\r\nIn the print dialog, switch off \"Headers and footers\": left on, the PDF carries the web address and the computer's date printed on every page.",
   packet_note:"All of it travels as one ZIP file. Sending three separate attachments is how one of them gets lost.",
   packing:"Preparing the file… this takes a moment when there are videos.",
   packet_done:"<b>%f</b> · %s · %n photo(s), %v video(s)",
@@ -5789,7 +5794,7 @@ const T = {
   rm_videos:"— %n video(s) grabados durante la inspección.",
   lost_head:"%n video(s) no se pudieron empacar en la carpeta:",
   lost_wechat:"No se perdieron: siguen en la galería de este teléfono, donde se grabaron. Envíelos por WeChat junto con el paquete, diciendo a qué inspección pertenecen. Un video solo sobrevive dentro de la app mientras la página siga abierta — recargarla, o abrir otra, es lo que lo deja por fuera.",
-  rm_pdf:"Para obtener el PDF: abra REPORT_ES.html, REPORT_EN.html o REPORT_ZH.html en cualquier navegador y elija Imprimir → Guardar como PDF.",
+  rm_pdf:"Para obtener el PDF: abra REPORT_ES.html, REPORT_EN.html o REPORT_ZH.html en cualquier navegador y elija Imprimir → Guardar como PDF.\r\nEn el diálogo de impresión, desactive «Encabezados y pies de página»: si se dejan activados, el PDF sale con la dirección web y la fecha del computador impresas en cada hoja.",
   packet_note:"Todo viaja en un solo archivo ZIP. Enviar tres adjuntos por separado es la forma segura de perder uno.",
   packing:"Preparando el archivo… toma un momento cuando hay videos.",
   packet_done:"<b>%f</b> · %s · %n foto(s), %v video(s)",
@@ -5997,7 +6002,7 @@ const T = {
   rm_videos:"— 检验过程中录制的 %n 段视频。",
   lost_head:"有 %n 段视频未能打包进文件夹：",
   lost_wechat:"这些视频并未丢失：它们仍保存在本机相册中，就是录制时的位置。请通过微信随压缩包一并发送，并注明属于哪次检验。视频只在页面保持打开期间存在于应用内——重新加载页面或打开其他页面，就会导致其无法打包。",
-  rm_pdf:"获取 PDF：用任意浏览器打开 REPORT_ES.html、REPORT_EN.html 或 REPORT_ZH.html，然后选择 打印 → 另存为 PDF。",
+  rm_pdf:"获取 PDF：用任意浏览器打开 REPORT_ES.html、REPORT_EN.html 或 REPORT_ZH.html，然后选择 打印 → 另存为 PDF。\r\n在打印对话框中请关闭“页眉和页脚”：若保持开启，PDF 每一页都会印上网址和电脑的日期。",
   packet_note:"以上内容打包为一个 ZIP 文件一起发送。分成三个附件发送，往往会漏掉其中一个。",
   packing:"正在生成文件……包含视频时需要稍等片刻。",
   packet_done:"<b>%f</b> · %s · %n 张照片，%v 段视频",
@@ -7748,13 +7753,33 @@ const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 96">
 const LOGO_URL = "data:image/svg+xml;charset=utf-8," +
   encodeURIComponent(LOGO_SVG.replace(/\s+/g," "));
 
+/* El logo, en la primera página. Antes iba `position:fixed`, y al imprimir
+   Chrome dibuja los elementos fijos sólo en la primera hoja: la marca de agua
+   aparecía una vez y desaparecía, que es peor que no tenerla. */
 function watermark(){
-  const line = tr("wm_line");
   return `<div class="wm" aria-hidden="true">
     <img class="wm-mark" src="${LOGO_URL}" alt="">
-    <div class="wm-rows">${
-      new Array(28).fill(0).map(()=>`<span>${esc(line)}</span>`).join("")}</div>
   </div>`;
+}
+
+/* Identificación breve, delante de cada sección. La primera no la lleva: tiene
+   el membrete completo encima. */
+function runId(){
+  return `<div class="runid"><span><b>HOKLAN QC</b> · ${esc(S.testId)} · ${
+    esc(S.model)}</span><span>${esc(poPrinted() || "")}</span></div>`;
+}
+
+/* La leyenda diagonal, ahora como fondo repetido del documento. Un fondo sí se
+   repite en todas las páginas al imprimir, y `print-color-adjust:exact` —que ya
+   estaba— es lo que hace que el navegador lo pinte en vez de descartarlo. */
+function wmBg(){
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="560" height="320">' +
+    '<text x="20" y="170" transform="rotate(-32 280 160)" ' +
+    'font-family="Segoe UI,Arial,sans-serif" font-size="15" font-weight="700" ' +
+    'letter-spacing="3" fill="#0f3f6b" fill-opacity="0.055">' +
+    esc(tr("wm_line")) + '</text></svg>';
+  return 'background-image:url("data:image/svg+xml;utf8,' +
+         encodeURIComponent(svg).replace(/'/g, "%27") + '");background-repeat:repeat';
 }
 
 function shotStamp(ms){
@@ -7945,8 +7970,24 @@ function reportHtml(){
   let h = `<!DOCTYPE html><html lang="${LANG==="zh"?"zh-CN":"en"}"><head><meta charset="utf-8">
 <title>QC ${esc(S.testId)} ${esc(S.model)}</title><style>
 *{box-sizing:border-box}
+/* El fondo blanco es explícito a propósito. Sin él el lienzo queda transparente
+   y un navegador en modo oscuro pinta texto azul marino sobre negro: en papel
+   se veía bien y en pantalla no se leía. */
 body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;
-  color:#16212e;max-width:900px;margin:0 auto;padding:14px;font-size:11pt}
+  color:#16212e;background:#fff;max-width:900px;margin:0 auto;padding:14px;
+  font-size:11pt;${wmBg()}}
+/* Márgenes del PDF fijados aquí. La cabecera automática del navegador —la URL y
+   el número de página— no se puede quitar desde el archivo: es una casilla del
+   diálogo de impresión, y el READ_ME del paquete se lo dice al operador. */
+@page{margin:14mm}
+/* Identificación al principio de cada sección. No es un membrete repetido por
+   página —los navegadores no lo soportan sin reestructurar el documento—, pero
+   como cada sección evita partirse, cae cerca de cada corte de hoja y ninguna
+   queda sin decir a qué inspección pertenece. */
+.runid{display:flex;justify-content:space-between;gap:10px;font-size:7.5pt;
+  color:#5b6b7c;border-bottom:1px solid #b9c6d4;padding-bottom:3px;
+  margin:0 0 7px;letter-spacing:.2px}
+.runid b{color:#16212e}
 .bnr{display:flex;align-items:stretch;border:1px solid #b9c6d4;margin-bottom:14px}
 .bnr-l{padding:8px 14px;border-right:1px solid #b9c6d4;display:flex;
   align-items:center;gap:6px}
@@ -8100,7 +8141,7 @@ td.v{font-weight:400}
    what browsers repeat on every printed page; a background image would only
    appear on the first one. It sits under the content, never over it: a
    watermark that competes with a defect photo is worse than none. */
-.wm{position:fixed;left:0;top:0;width:100%;height:100%;z-index:0;
+.wm{position:absolute;left:0;top:0;width:100%;height:640px;z-index:0;
   pointer-events:none;overflow:hidden;
   display:flex;align-items:center;justify-content:center}
 .wm-mark{width:46%;max-width:360px;opacity:.07}
@@ -8116,8 +8157,12 @@ body > *:not(.wm), #report > *:not(.wm){position:relative;z-index:1}
 @media print{
   body{padding:0;max-width:none;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .bnr{position:running(top)}
+  ${/* `position:running(top)` era de un estándar de maquetación paginada que
+        ningún navegador implementa: se ignoraba en silencio y la cabecera salía
+        sólo en la página 1. La identificación va ahora en `.runid`, repetida al
+        principio de cada sección. */""}
   .sec,.find,.cell{page-break-inside:avoid}
+  .runid{page-break-after:avoid}
   .brk{page-break-before:always}
 }
 </style></head><body>
@@ -8129,7 +8174,12 @@ ${banner}
 <table>
   <tr><td class="k">${tr("test_id")}</td><td class="v nw">${esc(S.testId)}</td>
       <td class="k">${tr("inspection")}</td><td class="v">${
-        esc(dayOnly(S.startedAt))}</td></tr>
+        /* Rango cuando cruza la medianoche. Con el envejecimiento de ocho horas
+           una inspección que empieza de noche termina al día siguiente, y una
+           sola fecha con hora de fin 01:25 debajo se lee como un error. */
+        esc(dayOnly(S.startedAt) +
+            (finishedAt() && dayOnly(finishedAt()) !== dayOnly(S.startedAt)
+              ? " → " + dayOnly(finishedAt()) : ""))}</td></tr>
   <tr><td class="k">${tr("reference")}</td><td class="v nw">${esc(S.model)}</td>
       <td class="k">${tr("po")}</td><td class="v">${esc(poPrinted()||"—")}</td></tr>
   ${/* The clock in its own fields. The date above no longer carries the hour:
@@ -8172,6 +8222,7 @@ ${scope?`<p class="att">${tr("scope_part_note")}</p>`:""}
 ${/* The origin is already stated as a field in the table above; the paragraph
       that repeated it in prose said the same thing twice. */""}
 
+${runId()}
 <div class="sec"><i>II</i><b>${tr("inspection_summary")}</b></div>
 <table>
   <tr><th>${tr("th_test")}</th><th class="c" style="width:60px">${tr("ok")}</th>
@@ -8256,7 +8307,7 @@ ${/* The origin is already stated as a field in the table above; the paragraph
      were and what they were about; the detail belongs after that question is
      answered, not instead of it. */
   if(findings.length){
-    h += `<div class="sec"><i>III</i><b>${tr("nc_found")}</b></div>
+    h += `${runId()}<div class="sec"><i>III</i><b>${tr("nc_found")}</b></div>
       <p class="note">${tr("remarks_note")}</p>
       <table class="ncidx">${findings.map((f,k) => `<tr>
         <td class="r">R${k+1}</td>
@@ -8270,7 +8321,7 @@ ${/* The origin is already stated as a field in the table above; the paragraph
 
   /* ---- IV THE FINDINGS IN FULL ---- */
   if(findings.length){
-    h += `<div class="sec"><i>IV</i><b>${tr("remarks")}</b></div>`;
+    h += `${runId()}<div class="sec"><i>IV</i><b>${tr("remarks")}</b></div>`;
     findings.forEach((f,k)=>{
       h += `<div class="find">
         <div class="find-h"><i>R${k+1}</i>
@@ -8461,7 +8512,8 @@ ${/* The origin is already stated as a field in the table above; the paragraph
   const naV = blocksV.filter(b => b.verdict === "N/A");
 
   if(okV.length){
-    h += `<div class="sec brk"><i>V</i><b>${tr("tests_ok")}</b></div>`;
+    h += `<div class="brk"></div>${runId()}
+      <div class="sec"><i>V</i><b>${tr("tests_ok")}</b></div>`;
 
     okV.forEach(b => {
       /* Everything the test carries, across every speaker. A test with no
@@ -8576,7 +8628,7 @@ ${/* The origin is already stated as a field in the table above; the paragraph
      — why does the plan have fourteen tests and the summary only twelve — and
      it answers it without letting any of them borrow the word "passed". */
   if(naV.length){
-    h += `<div class="sec"><i>VI</i><b>${tr("tests_na")}</b></div>
+    h += `${runId()}<div class="sec"><i>VI</i><b>${tr("tests_na")}</b></div>
       <p class="na-note">${tr("tests_na_note")}</p>
       <table class="nal">${naV.map(b => `<tr>
         <td class="nm">${esc(L(b.t.label))}</td>
@@ -8584,7 +8636,7 @@ ${/* The origin is already stated as a field in the table above; the paragraph
   }
 
   /* ---- CONCLUSION ---- */
-  h += `<div class="sec"><i>${naV.length ? "VII" : "VI"}</i><b>${
+  h += `${runId()}<div class="sec"><i>${naV.length ? "VII" : "VI"}</i><b>${
     tr("conclusion")}</b></div>
     ${S.units>1?`<table style="margin-bottom:10px">
       <tr><th>${tr("speaker")}</th><th class="c" style="width:90px">${tr("th_result")}</th>

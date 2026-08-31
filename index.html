@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="12.4">
+<meta name="app-version" content="12.7">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -673,6 +673,7 @@ const CONFIG = {
     "MEC-004":{"en":"Screws missing, loose or damaged","zh":"螺丝缺失、松动或损坏","es":"Faltan tornillos, o están flojos o dañados"},
     "ACC-001":{"en":"Accessory missing, wrong or damaged","zh":"配件缺失、规格错误或损坏","es":"Accesorio faltante, equivocado o dañado"},
     "PKG-001":{"en":"Barcode does not read or does not match the reference","zh":"条码无法读取或与型号不符","es":"El código de barras no lee o no corresponde a la referencia"},
+    "PKG-002":{"en":"Gross weight or box dimensions out of specification","zh":"毛重或彩盒尺寸超出规格","es":"Peso bruto o dimensiones de la caja fuera de especificación"},
     "CHG-001":{"en":"Does not charge","zh":"无法充电","es":"No carga"},
     "CHG-002":{"en":"Charging indicator incorrect","zh":"充电指示不正确","es":"Indicador de carga incorrecto"},
     "RMT-001":{"en":"Power button does not respond","zh":"电源键无响应","es":"La tecla de encendido no responde"},
@@ -736,7 +737,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 83,
+      "plan_version": 86,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -947,6 +948,62 @@ const CONFIG = {
                     "zh":"将实测 RMS 功率填入方框，并上传作为依据的图片，其中读数须清晰可读。",
                     "es":"Escriba la potencia RMS medida en el recuadro y adjunte la imagen que la respalda, con la lectura legible en ella."}}]},
 
+        /* Primera del plan, y tiene que serlo: es lo único que se mide con la
+           caja todavía cerrada. Se toma la muestra, se pesa, se mide, y sólo
+           entonces se destapa para seguir. Después ya no hay forma de conocer el
+           peso bruto sin volver a empacar. */
+        {"id":"SUB_BOX","optional":false,"only_factory":["RHY"],
+         "evidence":[],"first":1,
+         "label":{"en":"BOX","zh":"彩盒","es":"CAJA"},
+         "steps":[
+           {"en":"Take a sample at random, still packed","zh":"随机抽取一台，保持包装完好","es":"Tome una muestra al azar, todavía empacada"},
+           {"en":"Weigh it closed, with the product inside","zh":"连同产品整箱称重","es":"Pésela cerrada, con el producto dentro"},
+           {"en":"Measure the three sides","zh":"测量三个方向的尺寸","es":"Mida los tres lados"},
+           {"en":"Only then open it and carry on","zh":"完成后再开箱，继续后续测试","es":"Sólo entonces ábrala y siga con el resto"}],
+         "points":[
+           {"section":{"en":"Closed box","zh":"整箱状态","es":"La caja cerrada"},
+            "help":{"en":"Everything here is measured before opening anything.",
+                    "zh":"本节所有内容均须在开箱之前完成。",
+                    "es":"Todo lo de esta sección se mide antes de abrir nada."}},
+           {"id":"box_gross","code":"PKG-002","photo":true,
+            "measure":{"unit":"kg","step":"0.1"},
+            "label":{"en":"Gross weight","zh":"毛重","es":"Peso bruto"},
+            "help":{"en":"Put the closed box, with the product inside, on the scale. Photograph the scale with the reading legible and the whole box on the platform, and write the figure in the box — for example 35 kg.",
+                    "zh":"将封好的彩盒连同产品整体放在秤上。拍摄秤，读数须清晰可读且整箱都在秤台上，并将数值填入方框——例如 35 kg。",
+                    "es":"Ponga la caja cerrada, con el producto dentro, sobre la báscula. Fotografíe la báscula con la lectura legible y la caja entera sobre la plataforma, y escriba la cifra en el recuadro — por ejemplo 35 kg."}},
+           {"id":"sub_box_w","photo":true,"measure":{"unit":"cm","step":"0.1"},
+            "sample":"caja_ancho",
+            "label":{"en":"Box — width","zh":"彩盒 — 宽","es":"Caja — ancho"},
+            "help":{"en":"The horizontal side of the front face. Hook the tape on one edge and read it at the opposite edge, with both ends inside the frame. Read the centimetre scale, not the inches.",
+                    "zh":"正面的水平边。将卷尺钩在一端，在另一端读数，两端都要在画面之内。读厘米刻度，不要读英寸。",
+                    "es":"El lado horizontal de la cara frontal. Enganche la cinta en un borde y lea en el borde opuesto, con los dos extremos dentro del encuadre. Lea la escala en centímetros, no las pulgadas."}},
+           {"id":"sub_box_d","photo":true,"measure":{"unit":"cm","step":"0.1"},
+            "sample":"caja_largo",
+            "label":{"en":"Box — depth","zh":"彩盒 — 长","es":"Caja — largo"}},
+           {"id":"sub_box_h","photo":true,"measure":{"unit":"cm","step":"0.1"},
+            "sample":"caja_alto",
+            "label":{"en":"Box — height","zh":"彩盒 — 高","es":"Caja — alto"}},
+           {"section":{"en":"Satellite box","zh":"卫星箱彩盒","es":"Caja del satélite"},
+            "only":["HK-EPS112A1"],
+            "help":{"en":"Epsilon ships in two boxes. The second one is weighed and measured the same way, also before opening.",
+                    "zh":"Epsilon 分两箱发运。第二箱同样在开箱之前称重并测量。",
+                    "es":"Epsilon se despacha en dos cajas. La segunda se pesa y se mide igual, también antes de abrir."}},
+           {"id":"sat_gross","code":"PKG-002","photo":true,"only":["HK-EPS112A1"],
+            "measure":{"unit":"kg","step":"0.1"},
+            "label":{"en":"Satellite box — gross weight","zh":"卫星箱彩盒 — 毛重","es":"Caja del satélite — peso bruto"},
+            "help":{"en":"The same on the second box: photograph the scale with the reading legible and write the figure in the box.",
+                    "zh":"第二箱同样处理：拍摄秤，读数须清晰可读，并将数值填入方框。",
+                    "es":"Lo mismo con la segunda caja: fotografíe la báscula con la lectura legible y escriba la cifra en el recuadro."}},
+           {"id":"sat_box_w","photo":true,"only":["HK-EPS112A1"],
+            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_ancho",
+            "label":{"en":"Satellite box — width","zh":"卫星箱彩盒 — 宽","es":"Caja del satélite — ancho"}},
+           {"id":"sat_box_d","photo":true,"only":["HK-EPS112A1"],
+            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_largo",
+            "label":{"en":"Satellite box — depth","zh":"卫星箱彩盒 — 长","es":"Caja del satélite — largo"}},
+           {"id":"sat_box_h","photo":true,"only":["HK-EPS112A1"],
+            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_alto",
+            "label":{"en":"Satellite box — height","zh":"卫星箱彩盒 — 高","es":"Caja del satélite — alto"}}]},
+
         /* ---------------- BAS: versión propia de las tres secciones ---------
            PARTES EXTERNAS, ACCESORIOS y MATERIAL IMPRESO son compartidas por
            las tres fábricas, y lo que HOKLAN pidió aquí es sólo para los
@@ -962,7 +1019,7 @@ const CONFIG = {
             y con ella se van las ruedas, que RHYME no lleva. Conserva el id
             SUB_ para no romper inspecciones en curso. */
          "id":"SUB_EXTERNAL","optional":false,"only_factory":["RHY"],
-         "evidence":["video"],"first":1,
+         "evidence":["video"],"first":2,
          "ask":{"en":"one continuous take going round the speaker, showing the panel, the grille and the rest, no longer than a minute.",
                 "zh":"一镜到底环绕音箱拍摄，需拍到面板、网罩及其余部分，时长不超过一分钟。",
                 "es":"una sola toma continua recorriendo el parlante, donde se observe el panel, la parrilla y las demás funciones, no mayor a un minuto."},
@@ -1070,9 +1127,9 @@ const CONFIG = {
                     "zh":"将箱体翻转，清点三脚架支座的螺丝，应为四颗，全部拧紧且无滑牙。",
                     "es":"Voltee la cabina y cuente los tornillos del soporte del trípode. Deben ser cuatro, todos apretados y ninguno barrido."}},
            {"section":{"en":"Markings","zh":"标识","es":"Marcas"},
-            "help":{"en":"And then the video, which is what this section closes with: one clip going round the cabinet showing everything photographed above.",
-                    "zh":"随后是视频，本节以此结束：一段环绕整机的视频，逐一展示上面拍过的所有内容。",
-                    "es":"Y después el video, con el que cierra esta sección: un solo clip recorriendo la cabina y mostrando todo lo fotografiado arriba."}},
+            "help":{"en":"The logos, the tag and the lot code — everything stuck on or printed on the product. Then the video, which is what this section closes with: one clip going round the cabinet showing everything photographed above.",
+                    "zh":"标志、吊牌与批号——凡是贴在或印在产品上的内容。随后是视频，本节以此结束：一段环绕整机的视频，逐一展示上面拍过的所有内容。",
+                    "es":"Los logos, la etiqueta y el código de lote — todo lo que va pegado o impreso en el producto. Después el video, con el que cierra esta sección: un solo clip recorriendo la cabina y mostrando todo lo fotografiado arriba."}},
            {"id":"sub_ext_logo_grille","photo":true,
             "label":{"en":"Logo on the grille","zh":"网罩上的标志","es":"Logo de la parrilla"},
             "help":{"en":"Close-up. Straight, complete, well fixed, with no scratched or faded lettering.",
@@ -1083,6 +1140,24 @@ const CONFIG = {
             "help":{"en":"Check it matches the one on the grille in size, colour and finish.",
                     "zh":"确认其与网罩上的标志在尺寸、颜色和工艺上一致。",
                     "es":"Compruebe que coincide con el de la parrilla en tamaño, color y acabado."}},
+           {/* Vienen de MATERIAL IMPRESO. Van pegados al producto, así que se
+                fotografían en el mismo recorrido en vez de obligar a volver a
+                coger la cabina dos pruebas después. */
+            "id":"sub_ext_tag_front","photo":true,
+            "label":{"en":"Tag — front","zh":"吊牌 — 正面","es":"Etiqueta colgante — frente"},
+            "help":{"en":"The printed face of the tag, complete and legible.",
+                    "zh":"拍摄吊牌有印刷的一面，内容完整、清晰可读。",
+                    "es":"La cara impresa de la etiqueta, completa y legible."}},
+           {"id":"sub_ext_tag_back","photo":true,
+            "label":{"en":"Tag — back","zh":"吊牌 — 背面","es":"Etiqueta colgante — atrás"},
+            "help":{"en":"The other face, with the barcode and the country of origin legible.",
+                    "zh":"拍摄另一面，条码与产地需清晰可读。",
+                    "es":"La otra cara, con el código de barras y el país de origen legibles."}},
+           {"id":"sub_ext_warranty","photo":true,"only":["HK-BAS115A1"],
+            "label":{"en":"Warranty sticker","zh":"保修贴纸","es":"Sticker de garantía"},
+            "help":{"en":"Photograph the warranty sticker in place on the cabinet, close enough to read its printing. It must be whole, well stuck down and not torn.",
+                    "zh":"拍摄贴在机身上的保修贴纸，距离足够近以便读出其印字。贴纸须完整、粘贴牢固、无破损。",
+                    "es":"Fotografíe el sticker de garantía pegado en la cabina, lo bastante cerca para leer su impresión. Debe estar entero, bien pegado y sin rasgaduras."}},
            {"id":"sub_ext_lot","photo":true,
             "label":{"en":"Lot number","zh":"批号","es":"Número de lote"},
             "help":{"en":"Close-up of the lot code on the cabinet itself, of the form 25076411. Every digit sharp, and matching the lot on the paperwork.",
@@ -1123,7 +1198,10 @@ const CONFIG = {
             compartida deja de aplicarse a esta fábrica. Conserva el id SUB_
             para no romper las inspecciones que ya estén en curso. */
          "id":"SUB_GRAPHICS","optional":false,"only_factory":["RHY"],
-         "evidence":[],
+         /* Segunda del plan, detrás de PARTES EXTERNAS. Las dos se hacen con la
+            caja abierta y el producto todavía sin conectar; dejarla al final
+            obligaba a volver al empaque cuando ya estaba apartado. */
+         "evidence":[],"first":3,
          "label":{"en":"PRINTED MATERIAL","zh":"印刷品","es":"MATERIAL IMPRESO"},
          "steps":[
            {"en":"Photograph each printed item","zh":"逐项拍摄印刷品","es":"Fotografíe cada impreso"},
@@ -1151,13 +1229,9 @@ const CONFIG = {
             "help":{"en":"One photograph: it is printed on one side only. Flat and square on, with the text readable.",
                     "zh":"仅需一张照片：本页为单面印刷。摊平并正对拍摄，文字须清晰可读。",
                     "es":"Una sola foto: viene impresa por una sola cara. Plana y de frente, con el texto legible."}},
-           {"id":"sub_tag_front","photo":true,
-            "label":{"en":"Tag — front","zh":"吊牌 — 正面","es":"Etiqueta colgante — frente"}},
-           {"id":"sub_tag_back","photo":true,
-            "label":{"en":"Tag — back","zh":"吊牌 — 背面","es":"Etiqueta colgante — atrás"},
-            "help":{"en":"The other face, with the barcode and the country of origin legible.",
-                    "zh":"拍摄另一面，条码与产地需清晰可读。",
-                    "es":"La otra cara, con el código de barras y el país de origen legibles."}},
+           /* La etiqueta colgante y el sticker de garantía se fotografían en
+              PARTES EXTERNAS: van pegados al producto, y el operador los tiene
+              delante mientras recorre el gabinete. */
            {"id":"sub_card","photo":true,
             "label":{"en":"Loyalty card","zh":"客户回馈卡","es":"Carta de fidelización"},
             "help":{"en":"Check the QR code or the web address is legible.",
@@ -1183,11 +1257,6 @@ const CONFIG = {
             "help":{"en":"The same photograph on the other piece. The two are photographed separately.",
                     "zh":"对另一块做同样的拍摄。两块须分开拍摄。",
                     "es":"La misma foto en la otra pieza. Los dos se fotografían por separado."}},
-           {"id":"sub_warranty_sticker","photo":true,"only":["HK-BAS115A1"],
-            "label":{"en":"Warranty sticker","zh":"保修贴纸","es":"Sticker de garantía"},
-            "help":{"en":"Photograph the warranty sticker in place on the cabinet, close enough to read its printing. It must be whole, well stuck down and not torn.",
-                    "zh":"拍摄贴在机身上的保修贴纸，距离足够近以便读出其印字。贴纸须完整、粘贴牢固、无破损。",
-                    "es":"Fotografíe el sticker de garantía pegado en la cabina, lo bastante cerca para leer su impresión. Debe estar entero, bien pegado y sin rasgaduras."}},
            {"section":{"en":"The box","zh":"彩盒","es":"La caja"},
             "help":{"en":"Six faces, one photograph each. Avoid shadows and reflections over the printing.",
                     "zh":"六个面各拍一张照片。避免印刷面出现阴影和反光。",
@@ -1230,31 +1299,18 @@ const CONFIG = {
             "help":{"en":"The same photograph on the barcode silkscreened on the panel, with its own number in its own box. Compare the two numbers: the one on the panel and the one on the box must be the same.",
                     "zh":"对面板上丝印的条码做同样的拍摄，其号码填入各自的方框。核对两个号码：面板上的与彩盒上的必须一致。",
                     "es":"La misma foto sobre el código serigrafiado en el panel, con su número en su propio recuadro. Compare los dos números: el del panel y el de la caja deben ser el mismo."}},
-           {"section":{"en":"Dimensions","zh":"尺寸","es":"Dimensiones"},
-            "help":{"en":"Three measurements of the closed box, with the tape in the picture.",
-                    "zh":"对封好的彩盒测量三个尺寸，卷尺须入镜。",
-                    "es":"Tres medidas de la caja cerrada, con la cinta en la foto."}},
-           {"id":"sub_box_w","photo":true,"measure":{"unit":"cm","step":"0.1"},
-            "sample":"caja_ancho",
-            "label":{"en":"Box — width","zh":"彩盒 — 宽","es":"Caja — ancho"},
-            "help":{"en":"The horizontal side of the front face. Hook the tape on one edge and read it at the opposite edge, with both ends inside the frame. Read the centimetre scale, not the inches.",
-                    "zh":"正面的水平边。将卷尺钩在一端，在另一端读数，两端都要在画面之内。读厘米刻度，不要读英寸。",
-                    "es":"El lado horizontal de la cara frontal. Enganche la cinta en un borde y lea en el borde opuesto, con los dos extremos dentro del encuadre. Lea la escala en centímetros, no las pulgadas."}},
-           {"id":"sub_box_d","photo":true,"measure":{"unit":"cm","step":"0.1"},
-            "sample":"caja_largo",
-            "label":{"en":"Box — depth","zh":"彩盒 — 长","es":"Caja — largo"}},
-           {"id":"sub_box_h","photo":true,"measure":{"unit":"cm","step":"0.1"},
-            "sample":"caja_alto",
-            "label":{"en":"Box — height","zh":"彩盒 — 高","es":"Caja — alto"}},
-           {/* Epsilon se despacha en dos cajas: la del bajo, arriba, y ésta, la
+           {/* Las medidas y los pesos viven en la prueba CAJA, que es la primera
+                del plan: se toman con el empaque todavía cerrado. Aquí quedan
+                las fotografías, que se hacen con la caja ya abierta. */
+            /* Epsilon se despacha en dos cajas: la del bajo, arriba, y ésta, la
                 del satélite de tweeters. Se documenta igual que la primera —
-                seis caras, código y tres medidas — porque es una caja distinta,
-                con su propia impresión, su propio código y su propio tamaño. */
+                seis caras y su propio código— porque es una caja distinta, con
+                su propia impresión. */
             "section":{"en":"Satellite box","zh":"卫星箱彩盒","es":"Caja del satélite"},
             "only":["HK-EPS112A1"],
-            "help":{"en":"The second box, the one the tweeter satellite ships in. Same photographs as the first: six faces, the barcode and the three measurements.",
-                    "zh":"第二只彩盒，即高音卫星箱的包装。拍摄内容与第一只相同：六个面、条码和三个尺寸。",
-                    "es":"La segunda caja, en la que viaja el satélite de tweeters. Las mismas fotos que la primera: seis caras, el código de barras y las tres medidas."}},
+            "help":{"en":"The second box, the one the tweeter satellite ships in. Same photographs as the first: six faces and the barcode.",
+                    "zh":"第二只彩盒，即高音卫星箱的包装。拍摄内容与第一只相同：六个面和条码。",
+                    "es":"La segunda caja, en la que viaja el satélite de tweeters. Las mismas fotos que la primera: seis caras y el código de barras."}},
            {"id":"sat_box_front","photo":true,"only":["HK-EPS112A1"],
             "label":{"en":"Satellite box — front","zh":"卫星箱彩盒 — 正面","es":"Caja del satélite — frente"},
             "help":{"en":"The main printed face, the one facing the buyer on the shelf.",
@@ -1281,19 +1337,7 @@ const CONFIG = {
             "label":{"en":"Barcode on the satellite box","zh":"卫星箱彩盒条码","es":"Código de barras de la caja del satélite"},
             "help":{"en":"Photograph it square on, filling the frame, with no glare across the bars. The app reads the number off that photograph and writes it in the box; if it cannot, type it in yourself. It must be a different code from the one on the bass box.",
                     "zh":"正对拍摄，使其充满画面，条纹上不得有反光。应用会从该照片中识别号码并填入方框；若无法识别，请手动输入。该号码应与低音箱彩盒上的条码不同。",
-                    "es":"Fotografíelo de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto y lo escribe en el recuadro; si no puede, escríbalo usted. Debe ser un código distinto al de la caja del bajo."}},
-           {"id":"sat_box_w","photo":true,"only":["HK-EPS112A1"],
-            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_ancho",
-            "label":{"en":"Satellite box — width","zh":"卫星箱彩盒 — 宽","es":"Caja del satélite — ancho"},
-            "help":{"en":"The horizontal side of the front face. Hook the tape on one edge and read it at the opposite edge, with both ends inside the frame. Read the centimetre scale, not the inches.",
-                    "zh":"正面的水平边。将卷尺钩在一端，在另一端读数，两端都要在画面之内。读厘米刻度，不要读英寸。",
-                    "es":"El lado horizontal de la cara frontal. Enganche la cinta en un borde y lea en el borde opuesto, con los dos extremos dentro del encuadre. Lea la escala en centímetros, no las pulgadas."}},
-           {"id":"sat_box_d","photo":true,"only":["HK-EPS112A1"],
-            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_largo",
-            "label":{"en":"Satellite box — depth","zh":"卫星箱彩盒 — 长","es":"Caja del satélite — largo"}},
-           {"id":"sat_box_h","photo":true,"only":["HK-EPS112A1"],
-            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_alto",
-            "label":{"en":"Satellite box — height","zh":"卫星箱彩盒 — 高","es":"Caja del satélite — alto"}}]},
+                    "es":"Fotografíelo de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto y lo escribe en el recuadro; si no puede, escríbalo usted. Debe ser un código distinto al de la caja del bajo."}}]},
 
         {"id":"USB","optional":false,"only_factory":["YIS","RHY","EAG"],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
@@ -3780,7 +3824,7 @@ const CONFIG = {
          "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1",
                  "HK-EPS112A1","HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
-         "evidence":[],"first":3,
+         "evidence":[],"first":5,
          "label":{"en":"SPECIFICATION CHECK · RMS POWER",
                   "zh":"规格验证 · RMS 功率",
                   "es":"VERIFICACIÓN DE ESPECIFICACIONES · POTENCIA RMS"},
@@ -3906,7 +3950,11 @@ const CONFIG = {
               is a reasonable thing to want; it is just not this procedure. */
          "id":"AGING","optional":true,"only_factory":["YIS","RHY"],
          "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1"],"evidence":[],
-         "first":1,
+         /* Cuarta, no primera: en RHYME la caja se pesa y se mide cerrada antes
+            de nada, y el envejecimiento necesita el producto desempacado. Sigue
+            arrancando lo antes posible para que las ocho horas corran mientras
+            se hace el resto. */
+         "first":4,
          "long":{"t":{"en":"This test is still running","zh":"本测试仍在进行中","es":"Esta prueba sigue en curso"},
                  "n":{"en":"Come back when the eight hours are up to answer it. Meanwhile you can carry on with the rest of the plan.",
                       "zh":"八小时结束后再回来填写本项。期间可继续进行计划中的其他测试。",

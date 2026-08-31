@@ -756,7 +756,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 89,
+      "plan_version": 90,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1028,11 +1028,11 @@ const CONFIG = {
             "help":{"en":"Including the seal and any shipping label.",
                     "zh":"需拍到封口和运输标签。",
                     "es":"Incluyendo el sello y la etiqueta de transporte."}},
-           {/* `scan` es lo que hace que la app intente leer el código en la
-                fotografía que se acaba de adjuntar y rellene el recuadro sola.
-                Donde el teléfono no sepa leerlo, el recuadro se escribe a mano
-                y la prueba sigue igual de válida: lo que no puede faltar es la
-                foto. */
+           {/* `scan` es lo que hace que la app lea el código en la fotografía
+                que se acaba de adjuntar y rellene el recuadro sola. Desde la
+                v13.0 el recuadro no admite teclado: si el teléfono no lo lee,
+                el informe lo advierte y la prueba sigue. Lo que no puede
+                faltar es la foto, porque de ella se recupera el número. */
             "id":"sub_barcode","code":"PKG-001","photo":true,"scan":true,
             "measure":{"unit":"EAN","step":"1"},
             "label":{"en":"Barcode on the box","zh":"彩盒条码","es":"Código de barras de la caja"},
@@ -1044,6 +1044,33 @@ const CONFIG = {
             "help":{"en":"Epsilon ships in two boxes. The second one is photographed, weighed and measured the same way, also before opening.",
                     "zh":"Epsilon 分两箱发运。第二箱同样在开箱之前拍摄、称重并测量。",
                     "es":"Epsilon se despacha en dos cajas. La segunda se fotografía, se pesa y se mide igual, también antes de abrir."}},
+           {/* Mismo orden que la caja del bajo, y por la misma razón: la
+                báscula y la cinta métrica primero, con la caja intacta, y las
+                fotos después. Estaba al revés — las seis caras, el código, y
+                sólo entonces el peso —, de modo que el operario dejaba la caja
+                en el piso para fotografiarla y la volvía a subir a la báscula
+                al final. Dos recorridos donde basta uno. */
+            "id":"sat_gross","code":"PKG-002","photo":true,"only":["HK-EPS112A1"],
+            "sample":"caja_peso",
+            "measure":{"unit":"kg","step":"0.1"},
+            "label":{"en":"Satellite box — gross weight","zh":"卫星箱彩盒 — 毛重","es":"Caja del satélite — peso bruto"},
+            "help":{"en":"The same on the second box: photograph the scale with the reading legible and write the figure in the box.",
+                    "zh":"第二箱同样处理：拍摄秤，读数须清晰可读，并将数值填入方框。",
+                    "es":"Lo mismo con la segunda caja: fotografíe la báscula con la lectura legible y escriba la cifra en el recuadro."}},
+           {"id":"sat_box_w","photo":true,"only":["HK-EPS112A1"],
+            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_ancho",
+            "label":{"en":"Satellite box — width","zh":"卫星箱彩盒 — 宽","es":"Caja del satélite — ancho"}},
+           {"id":"sat_box_d","photo":true,"only":["HK-EPS112A1"],
+            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_largo",
+            "label":{"en":"Satellite box — depth","zh":"卫星箱彩盒 — 长","es":"Caja del satélite — largo"}},
+           {"id":"sat_box_h","photo":true,"only":["HK-EPS112A1"],
+            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_alto",
+            "label":{"en":"Satellite box — height","zh":"卫星箱彩盒 — 高","es":"Caja del satélite — alto"}},
+           {"section":{"en":"The six faces of the satellite box","zh":"卫星箱彩盒的六个面","es":"Las seis caras de la caja del satélite"},
+            "only":["HK-EPS112A1"],
+            "help":{"en":"One photograph per face, with the box still closed. Avoid shadows and reflections over the printing.",
+                    "zh":"每面一张照片，彩盒须保持封闭状态。避免印刷面出现阴影和反光。",
+                    "es":"Una foto por cara, con la caja todavía cerrada. Evite sombras y reflejos sobre la impresión."}},
            {"id":"sat_box_front","photo":true,"only":["HK-EPS112A1"],
             "label":{"en":"Satellite box — front","zh":"卫星箱彩盒 — 正面","es":"Caja del satélite — frente"}},
            {"id":"sat_box_back","photo":true,"only":["HK-EPS112A1"],
@@ -1059,25 +1086,9 @@ const CONFIG = {
            {"id":"sat_barcode","code":"PKG-001","photo":true,"scan":true,
             "only":["HK-EPS112A1"],"measure":{"unit":"EAN","step":"1"},
             "label":{"en":"Barcode on the satellite box","zh":"卫星箱彩盒条码","es":"Código de barras de la caja del satélite"},
-            "help":{"en":"The same photograph on the second box, with its own number in its own field. It must be a different code from the one on the bass box.",
-                    "zh":"对第二箱做同样的拍摄，其号码填入各自的方框。该号码应与低音箱彩盒上的条码不同。",
-                    "es":"La misma foto en la segunda caja, con su número en su propio recuadro. Debe ser un código distinto al de la caja del bajo."}},
-           {"id":"sat_gross","code":"PKG-002","photo":true,"only":["HK-EPS112A1"],
-            "sample":"caja_peso",
-            "measure":{"unit":"kg","step":"0.1"},
-            "label":{"en":"Satellite box — gross weight","zh":"卫星箱彩盒 — 毛重","es":"Caja del satélite — peso bruto"},
-            "help":{"en":"The same on the second box: photograph the scale with the reading legible and write the figure in the box.",
-                    "zh":"第二箱同样处理：拍摄秤，读数须清晰可读，并将数值填入方框。",
-                    "es":"Lo mismo con la segunda caja: fotografíe la báscula con la lectura legible y escriba la cifra en el recuadro."}},
-           {"id":"sat_box_w","photo":true,"only":["HK-EPS112A1"],
-            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_ancho",
-            "label":{"en":"Satellite box — width","zh":"卫星箱彩盒 — 宽","es":"Caja del satélite — ancho"}},
-           {"id":"sat_box_d","photo":true,"only":["HK-EPS112A1"],
-            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_largo",
-            "label":{"en":"Satellite box — depth","zh":"卫星箱彩盒 — 长","es":"Caja del satélite — largo"}},
-           {"id":"sat_box_h","photo":true,"only":["HK-EPS112A1"],
-            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_alto",
-            "label":{"en":"Satellite box — height","zh":"卫星箱彩盒 — 高","es":"Caja del satélite — alto"}}]},
+            "help":{"en":"The same photograph on the second box. The app reads the number; it cannot be typed in. It must be a different code from the one on the bass box.",
+                    "zh":"对第二箱做同样的拍摄。号码由应用自动识别，不可手工输入。该号码应与低音箱彩盒上的条码不同。",
+                    "es":"La misma foto en la segunda caja. La app lee el número; no se puede escribir a mano. Debe ser un código distinto al de la caja del bajo."}}]},
 
         /* ---------------- BAS: versión propia de las tres secciones ---------
            PARTES EXTERNAS, ACCESORIOS y MATERIAL IMPRESO son compartidas por

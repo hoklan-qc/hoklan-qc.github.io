@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="13.0">
+<meta name="app-version" content="13.1">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -7037,7 +7037,7 @@ async function scanFromShot(u, pointId, dataUrl){
     if(!found || !found.length) return "unread";
     const val = String(found[0].rawValue || "").trim();
     if(!val) return "unread";
-    setValue(u, pointId, val);
+    setCode(u, pointId, val);
     return "";
   }catch(e){ return "unread"; }
 }
@@ -7386,6 +7386,18 @@ function setValue(u, pointId, text){
   save();
   syncReady();
 }
+/* Un código de barras no pasa por `setValue`. Aquélla es una función para
+   mediciones y descarta todo lo que no sea dígito o punto, que en un EAN no se
+   nota pero en una etiqueta Code 128 —"BAS115-25076411"— borra el guión y las
+   letras y deja un número que no existe. Aquí se guarda lo que el lector
+   entregó, tal cual. */
+function setCode(u, pointId, text){
+  const r = row(u);
+  r.values = r.values || {};
+  r.values[pointId] = String(text || "").trim();
+  save();
+  syncReady();
+}
 /* Whether a point that asks for a number still has none. N/A needs none: the
    reference does not have what was going to be measured.
 
@@ -7399,8 +7411,12 @@ const valueMissing = (r, p) =>
 /* Un código que se fotografió y no se pudo leer. Se marca al adjuntar la foto y
    viaja hasta el informe. No es un fallo del producto ni del operario: en medio
    teléfono del mundo no existe el lector, y el dato se recupera después desde
-   la propia fotografía, que sí quedó guardada. */
-const scanFailed = (r, pointId) => !!((r && r.scanFail) || {})[pointId];
+   la propia fotografía, que sí quedó guardada.
+
+   Devuelve el motivo — "nodet" o "unread" — y no un booleano: quien pregunta
+   quiere saber cuál de los dos, porque uno señala al teléfono y el otro puede
+   señalar a la etiqueta. Cadena vacía cuando el código sí se leyó. */
+const scanFailed = (r, pointId) => ((r && r.scanFail) || {})[pointId] || "";
 
 function pointValuesMissing(t){
   let n = 0;

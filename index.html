@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="12.3">
+<meta name="app-version" content="12.4">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -5568,7 +5568,7 @@ const T = {
   evidence_total:"%n evidence file(s) · %s",
   too_big:"The report is very large. If the phone struggles to generate it, delete duplicate photos from the ☰ menu.",
   download:"⬇ DOWNLOAD THE FULL REPORT TO SEND TO THE CUSTOMER",
-  save_report_dl:"⬇ DOWNLOAD REPORT",
+  save_report_dl:"⬇ DOWNLOAD BASIC REPORT",
   saved_report:"Report downloaded: %f — the same document that travels inside the ZIP. Open it and print it if a PDF is needed.",
   pdf_wait:"Preparing the report…",
   save_pdf:"SAVE AS PDF", back:"BACK",
@@ -5790,7 +5790,9 @@ const T = {
      distinguía este del de al lado, y el operario bajaba el informe suelto
      creyendo que con eso había entregado la inspección. */
   download:"⬇ DESCARGAR INFORME COMPLETO PARA ENVIAR AL CLIENTE",
-  save_report_dl:"⬇ DESCARGAR INFORME",
+  /* «Básico» frente a «completo»: los dos botones se leen uno al lado del otro
+     y lo que los distingue es cuánto llevan, no qué hacen. */
+  save_report_dl:"⬇ DESCARGAR REPORTE BÁSICO",
   saved_report:"Informe descargado: %f — el mismo documento que va dentro del ZIP. Ábralo e imprímalo si necesita el PDF.",
   pdf_wait:"Preparando el informe…",
   save_pdf:"GUARDAR COMO PDF", back:"ATRÁS",
@@ -6000,7 +6002,7 @@ const T = {
   evidence_total:"%n 个证据文件 · %s",
   too_big:"报告文件很大。如果手机生成时卡顿，请从 ☰ 菜单删除重复照片。",
   download:"⬇ 下载完整报告，用于发送给客户",
-  save_report_dl:"⬇ 下载报告",
+  save_report_dl:"⬇ 下载基础报告",
   saved_report:"报告已下载：%f — 与压缩包内的文件完全相同。如需 PDF，打开该文件后打印即可。",
   pdf_wait:"正在准备报告……",
   save_pdf:"另存为 PDF", back:"返回",

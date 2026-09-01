@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="13.1">
+<meta name="app-version" content="13.2">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -756,7 +756,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 94,
+      "plan_version": 95,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1901,12 +1901,12 @@ const CONFIG = {
            {"section":{"en":"Tuning","zh":"调台"},
             "help":{"en":"Select radio mode and run the auto search to store stations. Step through them with next and back. Then switch the speaker off and on to check it keeps the last station.",
                     "zh":"切换到收音模式并执行自动搜台保存电台，用上/下一台按键切换。之后重新开机，确认是否记忆上次电台。"}},
-           {"id":"search","code":"FM-005",
+           {"id":"search","code":"FM-005","photo":true,
             "measure":{"unit":{"en":"stations","zh":"个电台","es":"emisoras"},"step":"1"},
             "label":{"en":"Searches and stores stations","zh":"搜索并保存电台"},
-            "help":{"en":"Run the auto search and let it finish. It must find several stations and store them; one or none is a fail. Write in the box how many it stored.",
-                    "zh":"执行自动搜台并等待完成。应搜到多个电台并保存；只搜到一个或搜不到即判定为异常。请在方框中填写实际保存的电台数量。",
-                    "es":"Ejecute la búsqueda automática y déjela terminar. Debe encontrar varias emisoras y guardarlas; una o ninguna es un fallo. Escriba en el recuadro cuántas guardó."}},
+            "help":{"en":"Run the auto search and let it finish. It must find several stations and store them; one or none is a fail. Write in the box how many it stored and photograph the list of stored stations on the display.",
+                    "zh":"执行自动搜台并等待完成。应搜到多个电台并保存；只搜到一个或搜不到即判定为异常。请在方框中填写实际保存的电台数量，并拍摄显示屏上已保存的电台列表。",
+                    "es":"Ejecute la búsqueda automática y déjela terminar. Debe encontrar varias emisoras y guardarlas; una o ninguna es un fallo. Escriba en el recuadro cuántas guardó y fotografíe en la pantalla las emisoras almacenadas."}},
            {"id":"station_next","code":"FM-007","label":{"en":"Next station button","zh":"下一台按键"},
             "help":{"en":"Press it several times. The frequency must move to the next stored station each time, not scan endlessly.",
                     "zh":"连续按几次。每次应跳到下一个已存电台，而不是一直扫描。"}},
@@ -2644,13 +2644,13 @@ const CONFIG = {
             "help":{"en":"This is the one place in the whole scheme where a key does something its printing does not say: B5 is marked play and pause, and in radio it runs the channel search. It is checked separately for that reason.",
                     "zh":"这是整份功能表中唯一一处按键功能与其印字不符的地方：B5 印的是播放/暂停，在收音模式下却是自动搜台。因此单独设项检查。",
                     "es":"Este es el único sitio de todo el esquema donde una tecla hace algo que su impresión no dice: B5 está marcado como reproducir y pausar, y en radio dispara la búsqueda de emisoras. Por eso se comprueba aparte."}},
-           {"id":"kap_scan","code":"FM-005",
+           {"id":"kap_scan","code":"FM-005","photo":true,
             "measure":{"unit":{"en":"stations","zh":"个电台","es":"emisoras"},"step":"1"},
             "tag":"B5",
             "label":{"en":"Short press searches and stores stations","zh":"短按可搜索并保存电台","es":"Pulsación corta busca y guarda emisoras"},
-            "help":{"en":"Press once and let the search finish. It must find and store several. Write in the box how many it stored: a cabinet that stores fourteen and another that stores three, in the same room, are telling you about the aerial of the second one.",
-                    "zh":"按一次并等待搜索完成。应搜到并保存多个电台。请在方框中填写实际保存的数量：同一房间内，一台存下十四个而另一台只存下三个，说明的是第二台的天线问题。",
-                    "es":"Pulse una vez y deje terminar la búsqueda. Debe encontrar y guardar varias. Escriba en el recuadro cuántas guardó: una cabina que guarda catorce y otra que guarda tres, en la misma sala, están hablando de la antena de la segunda."}},
+            "help":{"en":"Press once and let the search finish. It must find and store several; one or none is a fail. Write in the box how many it stored and photograph the list of stored stations on the display.",
+                    "zh":"按一次并等待搜索完成。应搜到并保存多个电台；只搜到一个或搜不到即判定为异常。请在方框中填写实际保存的数量，并拍摄显示屏上已保存的电台列表。",
+                    "es":"Pulse una vez y deje terminar la búsqueda. Debe encontrar y guardar varias; una o ninguna es un fallo. Escriba en el recuadro cuántas guardó y fotografíe en la pantalla las emisoras almacenadas."}},
            {"id":"kap_ch_next","code":"FM-007","tag":"B6",
             "label":{"en":"Short press — next station","zh":"短按 — 下一台","es":"Pulsación corta — emisora siguiente"},
             "help":{"en":"Press several times. It must move to the next stored station each time, not scan endlessly.",
@@ -3549,21 +3549,29 @@ const CONFIG = {
            {"id":"caja_inferior","label":{"en":"Box — bottom","zh":"彩盒 — 底面"},
             "help":{"en":"The bottom, including the seal and any shipping label.",
                     "zh":"拍摄底面，需拍到封口和运输标签。"}},
-           {"id":"caja_ancho","measure":{"unit":"cm","step":"0.1"},
+           {/* `photo` faltaba en las tres. La ayuda ya mandaba encuadrar los dos
+                extremos de la cinta, así que pedía una foto que la app no
+                recogía: el número entraba solo, sin nada detrás. En RHYME las
+                mismas tres medidas sí la exigen desde que se rehizo la prueba
+                CAJA, y era la misma medición con dos reglas distintas. */
+            "id":"caja_ancho","photo":true,"measure":{"unit":"cm","step":"0.1"},
             "sample":"caja_ancho",
             "label":{"en":"Box — width","zh":"彩盒 — 宽"},
-            "help":{"en":"The horizontal side of the front face. Hook the tape on one edge and read it at the opposite edge, with both ends inside the frame: a photo that shows only the number cannot be checked by anybody afterwards. Read the centimetre scale, not the inches — the tape carries both, and 86 cm sits right next to 34 in.",
-                    "zh":"正面的水平边。将卷尺钩在一端，在另一端读数，两端都要在画面之内：只拍到数字的照片，事后无人能够复核。读厘米刻度，不要读英寸——卷尺上两种刻度并排，86 厘米就紧挨着 34 英寸。"}},
-           {"id":"caja_largo","measure":{"unit":"cm","step":"0.1"},
+            "help":{"en":"The horizontal side of the front face. Hook the tape on one edge and read it at the opposite edge, with both ends inside the frame. Read the centimetre scale, not the inches.",
+                    "zh":"正面的水平边。将卷尺钩在一端，在另一端读数，两端都要在画面之内。读厘米刻度，不要读英寸。",
+                    "es":"El lado horizontal de la cara frontal. Enganche la cinta en un borde y lea en el borde opuesto, con los dos extremos dentro del encuadre. Lea la escala en centímetros, no las pulgadas."}},
+           {"id":"caja_largo","photo":true,"measure":{"unit":"cm","step":"0.1"},
             "sample":"caja_largo",
             "label":{"en":"Box — depth","zh":"彩盒 — 深"},
-            "help":{"en":"The depth: the tape crosses the top face, from the front edge to the back edge. Same rule — both ends of the tape in the photo, and centimetres.",
-                    "zh":"深度：卷尺横跨顶面，从前沿量到后沿。规则相同——卷尺两端都要入镜，读厘米。"}},
-           {"id":"caja_alto","measure":{"unit":"cm","step":"0.1"},
+            "help":{"en":"The depth: the tape crosses the top face, from the front edge to the back edge. Both ends of the tape in the photo, and centimetres.",
+                    "zh":"深度：卷尺横跨顶面，从前沿量到后沿。卷尺两端都要入镜，读厘米。",
+                    "es":"El largo: la cinta cruza la cara superior, del borde delantero al trasero. Los dos extremos de la cinta en la foto, y en centímetros."}},
+           {"id":"caja_alto","photo":true,"measure":{"unit":"cm","step":"0.1"},
             "sample":"caja_alto",
             "label":{"en":"Box — height","zh":"彩盒 — 高"},
-            "help":{"en":"The vertical side, from the base to the top. Stand the box up and run the tape down one corner. This is the one where the bottom end usually falls out of the frame: step back until the base and the reading are both in the picture.",
-                    "zh":"垂直边，从底部量到顶部。将彩盒立起，卷尺沿一条棱垂直放置。这一项最容易把底端拍出画面：请后退，直到底部和读数同时在画面之内。"}}]},
+            "help":{"en":"The vertical side, from the base to the top. Stand the box up and run the tape down one corner. Step back until the base and the reading are both in the picture.",
+                    "zh":"垂直边，从底部量到顶部。将彩盒立起，卷尺沿一条棱垂直放置。请后退，直到底部和读数同时在画面之内。",
+                    "es":"El lado vertical, de la base al tope. Pare la caja y baje la cinta por una esquina. Retroceda hasta que la base y la lectura entren las dos en la foto."}}]},
 
         {"id":"EXT_BATTERY","optional":true,"skip_factory":["RHY"],
          "only_factory":["YIS","RHY","EAG"],
@@ -9669,15 +9677,18 @@ function clearAssignment(){
    a HOKLAN inspection — and the report says so.
    Not in CONFIG.test_ids: these are not factories to inspect, they are ways in,
    and a code here must never appear in a report as the inspection's test ID. */
-/* Retiradas por HOKLAN en la v12.1. Eran 711 · YISION, 722 · RHYME y 733 ·
-   EAGLE: daban a cada fábrica el administrador restringido a su catálogo, con
-   autoinspección y serie de orden propia. Sólo quedan el administrador de
-   HOKLAN y las cuentas con las que los operarios hacen las inspecciones.
+/* Los administradores de fábrica se retiraron en la v12.1. Eran 711 · YISION,
+   722 · RHYME y 733 · EAGLE: daban a cada fábrica un administrador restringido
+   a su catálogo, con autoinspección y serie de orden propia. Quedan sólo el
+   administrador de HOKLAN y las cuentas con las que los operarios inspeccionan.
 
-   El mapa se deja vacío en vez de arrancar las ramas que lo consultan: todas
-   caen solas en el camino de HOKLAN, y volver a dar de alta una fábrica es
-   escribir aquí una línea. */
-const FACTORY_ADMINS = {};
+   En la v12.1 el mapa se dejó vacío y las ramas que lo consultaban se quedaron
+   en pie, cayendo todas por el camino de HOKLAN. En la v13.2 se retiraron esas
+   ramas: eran código que ya no podía ejecutarse, y en una lectura del archivo
+   hacían creer que la cuenta de fábrica seguía existiendo.
+
+   Para volver a dar de alta una fábrica hay que reponer el mapa y el punto de
+   entrada de `openCode`, no sólo escribir una línea. */
 
 /* Only for the group headings of the reference dropdown, and only inside Admin.
    These names never reach a report, a file name or the spreadsheet — there the
@@ -9691,7 +9702,17 @@ let ADMIN_OK = false;      // per session on purpose: never remembered on disk
 /* "" while the full admin code is in use; the factory key for a factory
    account. Deliberately not cleared when Admin is left: once the phone has been
    handed to a factory in this session, it keeps the narrower permissions until
-   the page is reloaded. */
+   the page is reloaded.
+
+   ATENCIÓN — desde la v12.1 esta variable ya no puede dejar de ser "". El único
+   sitio que la ponía era la rama de las cuentas de administrador de fábrica, y
+   esas cuentas se retiraron. En consecuencia `isFactoryUser()` devuelve siempre
+   falso y `S.selfCheck` nunca se activa, de modo que la autoinspección de
+   fábrica —el rótulo FACTORY en el nombre del archivo, el origen «fábrica» del
+   informe, la letra de fábrica en el número de orden— está fuera de servicio.
+   Se conserva entera, sin ejecutarse, a la espera de que HOKLAN decida si la
+   reactiva o se retira también. No es código olvidado: está aquí a propósito y
+   documentado. */
 let ADMIN_FACTORY = "";
 const isFactoryUser = () => !!ADMIN_FACTORY;
 
@@ -9712,14 +9733,9 @@ function tabBar(){
    the first time. Everything Admin touched is cleared, so what appears is the
    start screen exactly as it opens — no reference chosen, no test selection
    left behind, no field pre-filled. */
-/* The code currently in use, for the header. A factory account shows its own,
-   never the admin one. */
-function adminCode(){
-  if(!ADMIN_FACTORY) return ADMIN_ID.code;
-  const hit = Object.keys(FACTORY_ADMINS)
-    .find(d => FACTORY_ADMINS[d].key === ADMIN_FACTORY);
-  return hit ? FACTORY_ADMINS[hit].code : "";
-}
+/* El código en uso, para el encabezado. Antes elegía entre el de HOKLAN y el de
+   la fábrica; retiradas las cuentas de fábrica sólo queda uno. */
+function adminCode(){ return ADMIN_ID.code; }
 
 function exitAdmin(){
   ADMIN_OK = false;
@@ -10472,16 +10488,10 @@ function setTestId(value){
     return;
   }
 
-  // A factory account: the same Admin screens, restricted to one factory.
-  const fa = FACTORY_ADMINS[digits];
-  if(fa){
-    ADMIN_OK = true; ADMIN_FACTORY = fa.key;
-    S.idDigits = ""; S.testId = ""; S.factory = ""; S.model = "";
-    S.screen = "admin";
-    window.scrollTo(0,0);
-    render();
-    return;
-  }
+  /* Aquí entraban las cuentas de administrador de fábrica, 711, 722 y 733.
+     Retiradas en la v12.1; la rama se quitó en la v13.2. Un operario que teclee
+     uno de esos tres números cae ahora donde cae cualquier código que no
+     existe, que es lo correcto: la cuenta ya no existe. */
 
   // Typing a code by hand over an assignment replaces it. This is the only way
   // back to the normal flow from this screen, and it costs deliberate effort:
@@ -10602,12 +10612,10 @@ function seqRows(){
   /* `key` es la serie en el almacenamiento y no cambia; `prefix` es sólo lo que
      se muestra. La serie de HOKLAN ya no se rotula HK: el prefijo del número lo
      pone el idioma del informe. */
+  /* Una sola serie desde que se retiraron las cuentas de fábrica. Se deja como
+     lista, y no como un valor suelto, porque la pantalla de borrado la recorre
+     y porque reponer una fábrica es volver a añadir una fila aquí. */
   const rows = [{key:"HK", label:"Admin HOKLAN · " + ADMIN_ID.digits, prefix:""}];
-  Object.keys(FACTORY_ADMINS).forEach(d => {
-    const k = FACTORY_ADMINS[d].key;
-    rows.push({key:k, prefix:k.charAt(0),
-               label:fmt("wipe_factory",{l:k.charAt(0), d:d})});
-  });
   return rows.map(r => {
     let n = 0;
     try{ n = parseInt(localStorage.getItem(PO_SEQ_KEY + r.key), 10) || 0; }catch(e){}

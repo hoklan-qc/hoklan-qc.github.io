@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="13.2">
+<meta name="app-version" content="13.3">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -756,7 +756,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 97,
+      "plan_version": 98,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -3480,7 +3480,9 @@ const CONFIG = {
         {/* RHYME entera pasó a SUB_GRAPHICS, que es la versión con las cuatro
             páginas del manual, la guía rápida, la sílica, los icopores y el
             lector de código. Aquí quedan YISION y EAGLE. */
-         "id":"GRAPHICS","optional":false,"type":"photos","no_na":true,
+         /* N/A punto por punto habilitado para YISION en el plan 98, a petición
+            de HOKLAN. EAGLE conserva la prohibición: no la pidió. */
+         "id":"GRAPHICS","optional":false,"type":"photos","no_na":["EAG"],
          "only_factory":["YIS","EAG"],
          "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"PRINTED MATERIAL","zh":"印刷品"},
@@ -6558,8 +6560,24 @@ const modelsOf = f => Object.keys(CONFIG.models)
    was left without a plan; every one of them wants an empty list there, not a
    thrown error in the middle of drawing the screen. */
 /* `no_na` prohíbe marcar N/A punto por punto en una sección fotográfica: cada
-   foto es obligatoria. Sigue valiendo siempre. */
-const noNA = t => !!(t && t.no_na);
+   foto es obligatoria.
+
+   Admite dos formas desde la v13.3.
+
+     true            — nadie puede marcar N/A punto por punto.
+     ["EAG", ...]    — sólo esas fábricas lo tienen prohibido; en las demás el
+                       botón de N/A aparece con normalidad.
+
+   La lista hizo falta cuando HOKLAN pidió el N/A en MATERIAL IMPRESO para
+   YISION. Esa prueba la comparten YISION y EAGLE, y `no_na` era un sí o un no
+   para toda la prueba: quitarlo habría cambiado también a EAGLE, que no lo
+   pidió. Se resuelve por fábrica y no por referencia porque la decisión es de
+   la fábrica, no del producto. */
+const noNA = t => {
+  const v = t && t.no_na;
+  if(!v) return false;
+  return Array.isArray(v) ? v.indexOf(S.factory) >= 0 : true;
+};
 
 /* Quién puede marcar N/A la prueba entera, desde su propio encabezado. Las
    opcionales siempre; y las que nombren la referencia en `na_ok`, para el caso

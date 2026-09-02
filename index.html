@@ -756,7 +756,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 96,
+      "plan_version": 97,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -836,10 +836,10 @@ const CONFIG = {
             "help":{"en":"Press the switch. It must latch firmly, without stopping halfway. The fan must start turning and the pilot lamp must light green.",
                     "zh":"按下开关。应干脆到位，不应停在中间位置。风扇应开始转动，指示灯应亮起绿色。",
                     "es":"Presione el interruptor. Debe quedar firme, sin pararse a medio camino. El ventilador debe empezar a girar y el testigo debe encender en color verde."}},
-           {"section":{"en":"The source","zh":"信号源","es":"La fuente"},
-            "help":{"en":"Always the same track from the mixer: La rubia de oro. One video covers the whole test — no photographs are asked for here.",
-                    "zh":"始终使用调音台播放同一首曲目《La rubia de oro》。整项测试用一段视频记录，此处不需要照片。",
-                    "es":"Siempre la misma pista desde el mixer: La rubia de oro. Un solo video cubre toda la prueba — aquí no se piden fotografías."}},
+           {"section":{"en":"The source and the bench","zh":"信号源与工位","es":"La fuente y el montaje"},
+            "help":{"en":"Play the HOKLAN Aging playlist from the mixer. Connect the outputs of the cabinet to a DEL103, which is what makes the phase change audible. One video covers the whole test — no photographs are asked for here.",
+                    "zh":"用调音台播放 HOKLAN Aging 歌单。将本机的输出接到一台 DEL103——相位切换要靠它才听得出来。整项测试用一段视频记录，此处不需要照片。",
+                    "es":"Reproduzca desde el mixer la lista de música HOKLAN de Aging. Conecte las salidas de la cabina a un DEL103, que es lo que permite oír el cambio de fase. Un solo video cubre toda la prueba — aquí no se piden fotografías."}},
            {"section":{"en":"The two inputs","zh":"两个输入口","es":"Las dos entradas"},
             "help":{"en":"They are hybrid jacks: the same socket takes an XLR plug or a 6.3 mm one. Check one side at a time, never both connected at once.",
                     "zh":"这是复合插孔：同一个孔既可插 XLR，也可插 6.3 mm 插头。一次只接一侧检查，不要两侧同时接入。",
@@ -859,114 +859,106 @@ const CONFIG = {
             "label":{"en":"Input R — hybrid 6.3 mm / XLR","zh":"输入 R — 6.3 mm / XLR 复合口","es":"Entrada derecha — híbrida 6.3 mm / XLR"},
             "help":{"en":"Now the R input only, with both plug types again, and the same volume sweep from maximum to minimum. Same result as the L input.",
                     "zh":"改为仅接 R 输入，同样试两种插头，并同样从最大到最小完成一次音量扫描。结果应与 L 输入相同。",
-                    "es":"Ahora sólo la entrada R, otra vez con los dos tipos de plug, y el mismo barrido de volumen del máximo al mínimo. El mismo resultado que en la entrada L."}}]},
-
-        {"id":"SUB_OUT","optional":false,"only_factory":["RHY"],"evidence":[],
-         "only":["HK-BAS115A1","HK-BAS118A1"],
-         "label":{"en":"OUTPUTS","zh":"输出","es":"SALIDAS"},
-         "steps":[
-           {"en":"Play La rubia de oro from the mixer into the sub","zh":"用调音台将《La rubia de oro》送入低音炮","es":"Reproduzca La rubia de oro desde el mixer hacia el sub"},
-           {"en":"Connect each output to the line input of a DEL103","zh":"将每一路输出接到 DEL103 的线路输入","es":"Conecte cada salida a la entrada de línea de un DEL103"},
-           {"en":"Listen at the DEL103, not at the sub","zh":"在 DEL103 上试听，而非在低音炮上","es":"Escuche en el DEL103, no en el sub"},
-           {"en":"Raise and lower the volume on each output","zh":"在每一路输出上上下调节音量","es":"Suba y baje el volumen en cada salida"}],
-         "points":[
-           {"section":{"en":"The set-up","zh":"连接方式","es":"El montaje"},
-            "help":{"en":"The mixer feeds the sub with La rubia de oro, and each output of the sub goes to the line input of a DEL103. What is judged is what comes out of the DEL103.",
-                    "zh":"调音台将《La rubia de oro》送入低音炮，低音炮的每一路输出再接到 DEL103 的线路输入。判定依据是 DEL103 发出的声音。",
-                    "es":"El mixer alimenta el sub con La rubia de oro, y cada salida del sub va a la entrada de línea de un DEL103. Lo que se juzga es lo que sale del DEL103."}},
-           {"id":"out_full","code":"AUD-013",
-            "label":{"en":"XLR output L and R carry the full signal","zh":"XLR 输出 L 与 R 送出全频信号","es":"Salida XLR L y R con la señal completa"},
-            "help":{"en":"Connect each one to the DEL103 in turn. The whole signal must come out, bass and treble alike.",
-                    "zh":"依次接到 DEL103。应送出完整信号，低频与高频俱全。",
-                    "es":"Conecte cada una al DEL103 por turnos. Debe salir la señal completa, con graves y agudos."}},
-           {"id":"out_120","code":"AUD-014",
-            "label":{"en":"120 Hz output — the bass comes through weaker","zh":"120 Hz 输出 — 低频明显减弱","es":"Salida de 120 Hz — los bajos salen con menos intensidad"},
-            "help":{"en":"Connect the 120 Hz output to the DEL103 and listen. The bass must come through weaker than on the full output: compare the two one after the other on the same track and at the same volume. If the bass sounds the same on both, mark it as a fail.",
-                    "zh":"将 120 Hz 输出接到 DEL103 并细听。低频应明显弱于全频输出：用同一曲目、同一音量前后对比两路输出。若两路低频听起来一样，判定为异常。",
-                    "es":"Conecte la salida de 120 Hz al DEL103 y escuche. Los bajos deben salir con menos intensidad que por la salida completa: compare las dos, una después de la otra, con la misma pista y el mismo volumen. Si los bajos suenan igual en ambas, márquelo como no conforme."}},
-           {"id":"out_level","code":"AUD-013",
-            "label":{"en":"The level follows the volume","zh":"声音强度随音量变化","es":"La intensidad sigue al volumen"},
-            "help":{"en":"With the track playing through the DEL103, raise the volume and lower it again. The sound must follow the knob the whole way, with no dead spots and no jumps.",
-                    "zh":"在通过 DEL103 播放的状态下将音量调高再调低。声音应全程随旋钮变化，不应有死区或跳变。",
-                    "es":"Con la pista sonando por el DEL103, suba el volumen y vuelva a bajarlo. El sonido debe seguir a la perilla en todo el recorrido, sin zonas muertas ni saltos."}},
-           {"id":"out_noise","code":"AUX-003",
-            "label":{"en":"Outputs add no noise","zh":"输出不带杂音","es":"Las salidas no meten ruido"},
-            "help":{"en":"Stop the track with everything still connected and listen at the DEL103: no hum and no hiss.",
-                    "zh":"保持连接不变，停止播放，在 DEL103 上细听：不应有嗡嗡声或嘶声。",
-                    "es":"Detenga la pista con todo aún conectado y escuche en el DEL103: sin zumbido ni siseo."}}]},
-
-        {"id":"SUB_CONTROLS","optional":false,"only_factory":["RHY"],"evidence":["video"],
-         "only":["HK-BAS115A1","HK-BAS118A1"],
-         "label":{"en":"CONTROLS","zh":"控制","es":"CONTROLES"},
-         "steps":[
-           {"en":"Run the sub together with a full-range cabinet","zh":"低音炮与全频音箱一同工作","es":"Haga sonar el sub junto con una cabina de rango completo"},
-           {"en":"Move each control and listen for the change","zh":"逐个调节控制件并注意声音变化","es":"Mueva cada control y escuche el cambio"},
-           {"en":"One clip covering the volume knob and the phase switch is enough","zh":"一段涵盖音量旋钮和相位开关的视频即可","es":"Basta un video que cubra la perilla de volumen y el switch de fase"}],
-         "points":[
-           {"id":"sub_volume","code":"AUD-006","label":{"en":"VOLUME knob","zh":"音量旋钮","es":"Perilla VOLUMEN"},
-            "help":{"en":"From minimum to maximum with programme playing. It must rise smoothly, with no dead spots and no noise as it turns.",
-                    "zh":"在有节目声的情况下从最小转到最大。应平滑上升，无死区，旋转时无杂音。",
-                    "es":"De mínimo a máximo con programa sonando. Debe subir suave, sin zonas muertas ni ruido al girar."}},
+                    "es":"Ahora sólo la entrada R, otra vez con los dos tipos de plug, y el mismo barrido de volumen del máximo al mínimo. El mismo resultado que en la entrada L."}},
+           {/* Fase y LED LÍMITE vienen de CONTROLES, prueba que se retiró. Los dos
+                se juzgan con señal entrando y con el DEL103 conectado, que es el
+                montaje que ya está armado aquí. En CONTROLES obligaban a rehacerlo
+                una prueba después. */
+            "section":{"en":"Phase and limit","zh":"相位与限幅","es":"Fase y límite"},
+            "help":{"en":"Both are judged with the track playing and the DEL103 connected, on the bench already set up above.",
+                    "zh":"两项均在播放状态、DEL103 已连接的情况下判定，沿用上面已经搭好的工位。",
+                    "es":"Los dos se juzgan con la pista sonando y el DEL103 conectado, sobre el montaje que ya quedó armado arriba."}},
            {"id":"sub_phase","code":"AUD-015","label":{"en":"PHASE switch NORMAL / 180","zh":"相位开关 NORMAL / 180","es":"Switch de FASE NORMAL / 180"},
-            "help":{"en":"With the sub and a full-range cabinet playing together, flip the phase. The bass must change audibly: in one position it reinforces, in the other it thins out. If it sounds the same both ways, mark it as a fail.",
-                    "zh":"低音炮与全频音箱同时发声时切换相位。低频应有明显变化：一个位置增强，另一个变薄。若两个位置听起来一样，判定为异常。",
-                    "es":"Con el sub y una cabina de rango completo sonando juntos, cambie la fase. El bajo debe cambiar de forma audible: en una posición refuerza y en la otra se adelgaza. Si suena igual en ambas, márquelo como no conforme."}},
-           {"id":"sub_led_signal","code":"LED-008","label":{"en":"SIGNAL LED","zh":"信号指示灯","es":"LED SEÑAL"},
-            "help":{"en":"It must light with signal present and follow the programme.",
-                    "zh":"有信号时应点亮，并随节目变化。",
-                    "es":"Debe encender con señal presente y seguir el programa."}},
+            "help":{"en":"With the sub and the DEL103 playing together, flip the phase. The bass must change audibly: in one position it reinforces, in the other it thins out. If it sounds the same both ways, mark it as a fail.",
+                    "zh":"低音炮与 DEL103 同时发声时切换相位。低频应有明显变化：一个位置增强，另一个变薄。若两个位置听起来一样，判定为异常。",
+                    "es":"Con el sub y el DEL103 sonando juntos, cambie la fase. El bajo debe cambiar de forma audible: en una posición refuerza y en la otra se adelgaza. Si suena igual en ambas, márquelo como no conforme."}},
            {"id":"sub_led_limit","code":"LED-009","label":{"en":"LIMIT LED","zh":"限幅指示灯","es":"LED LÍMITE"},
             "help":{"en":"Raise the level until it appears and lower it until it goes out. One that stays on, or that never comes on, is a fail.",
                     "zh":"提高电平直至其点亮，再降低直至熄灭。长亮或永不点亮的，判定为异常。",
                     "es":"Suba el nivel hasta que aparezca y bájelo hasta que se apague. Uno que se queda encendido, o que nunca enciende, es no conforme."}}]},
 
-        {"id":"SUB_AUDIO","optional":false,"only_factory":["RHY"],"evidence":["video"],
+        {/* Reorganizada por canal y no por tipo de salida. Antes eran cuatro
+              puntos que cruzaban los dos canales —rango completo, 120 Hz, nivel
+              y ruido, cada uno respondido una sola vez—, así que una cabina con
+              el canal derecho muerto aprobaba los cuatro con el izquierdo. Ahora
+              cada canal se recorre entero, con sus dos salidas y su barrido de
+              volumen, y son dos puntos. */
+         "id":"SUB_OUT","optional":false,"only_factory":["RHY"],"evidence":["video"],
          "only":["HK-BAS115A1","HK-BAS118A1"],
-         "label":{"en":"AUDIO","zh":"音频","es":"AUDIO"},
+         "label":{"en":"OUTPUTS","zh":"输出","es":"SALIDAS"},
          "steps":[
-           {"en":"Play a track with real low end at maximum volume","zh":"以最大音量播放低频充分的曲目","es":"Reproduzca una pista con graves reales a volumen máximo"},
-           {"en":"Listen first, then feel the cabinet with your hand","zh":"先听，再用手触摸箱体","es":"Escuche primero y luego palpe el gabinete con la mano"},
-           {"en":"Finish with the fan","zh":"最后检查风扇","es":"Termine con el ventilador"}],
+           {"en":"Play the HOKLAN Aging playlist from the mixer into the sub","zh":"用调音台将 HOKLAN Aging 歌单送入低音炮","es":"Reproduzca la lista HOKLAN de Aging desde el mixer hacia el sub"},
+           {"en":"One channel at a time, into the line input of a DEL103","zh":"一次接一个声道，接到 DEL103 的线路输入","es":"Un canal a la vez, a la entrada de línea de un DEL103"},
+           {"en":"Listen at the DEL103, not at the sub","zh":"在 DEL103 上试听，而非在低音炮上","es":"Escuche en el DEL103, no en el sub"},
+           {"en":"One video for the whole test","zh":"整项测试录制一段视频","es":"Un solo video para toda la prueba"}],
          "points":[
-           {"id":"sub_woofer","code":"AUD-001","label":{"en":"Woofer sounds","zh":"低音单元出声","es":"El woofer suena"},
-            "help":{"en":"Hold your hand in front of the woofer and feel it move. The low end must be present and clean, not weak or muffled.",
-                    "zh":"手放在低音单元前感受振动。低频应饱满干净，不应无力或发闷。",
-                    "es":"Ponga la mano frente al woofer y sienta el movimiento. El bajo debe estar presente y limpio, no débil ni apagado."}},
-           {"id":"sub_distortion","code":"AUD-003","label":{"en":"No distortion at high volume","zh":"大音量无失真","es":"Sin distorsión a volumen alto"},
-            "help":{"en":"At the maximum already set, the sound must stay clean, without breaking up or going harsh.",
-                    "zh":"在已调到最大的音量下，声音应保持干净，不破音、不刺耳。",
-                    "es":"Al máximo ya puesto, el sonido debe mantenerse limpio, sin quebrarse ni volverse áspero."}},
-           {"id":"sub_vibration","code":"AUD-004","label":{"en":"No abnormal cabinet vibration","zh":"箱体无异常振动","es":"Sin vibración anormal del gabinete"},
-            "help":{"en":"Run your hand over the cabinet, the grille and the back panel. Nothing must rattle or feel loose.",
-                    "zh":"用手抚过箱体、网罩和后面板。不应有松动或异响。",
-                    "es":"Pase la mano por el gabinete, la malla y la tapa trasera. Nada debe traquetear ni sentirse flojo."}},
-           {"id":"sub_noise","code":"AUD-005","label":{"en":"No abnormal noise","zh":"无异响","es":"Sin ruidos anormales"},
-            "help":{"en":"Pause with the sub still on: it must fall silent, with no hiss, hum or clicking.",
-                    "zh":"保持开机并暂停播放：应完全安静，无嘶声、嗡声或咔哒声。",
-                    "es":"Pause con el sub encendido: debe quedar en silencio, sin siseo, zumbido ni chasquidos."}},
-           {"id":"sub_fan","code":"MEC-001","label":{"en":"Fan","zh":"风扇","es":"Ventilador"},
-            "help":{"en":"This panel carries a fan. It must turn with the unit switched on, without rubbing, squealing or rattling, and the grille must be clear.",
-                    "zh":"本面板带风扇。开机后应转动，不应有摩擦声、尖叫声或异响，出风口应无遮挡。",
-                    "es":"El panel lleva ventilador. Debe girar con el equipo encendido, sin roce, chirrido ni traqueteo, y la rejilla debe estar libre."}}]},
+           {"section":{"en":"The set-up","zh":"连接方式","es":"El montaje"},
+            "help":{"en":"The mixer feeds the sub with the HOKLAN Aging playlist, and the output being checked goes to the line input of a DEL103. What is judged is what comes out of the DEL103. The full-range connectors are the ones on the left side.",
+                    "zh":"调音台将 HOKLAN Aging 歌单送入低音炮，被检查的那一路输出接到 DEL103 的线路输入。判定依据是 DEL103 发出的声音。全频接口位于左侧。",
+                    "es":"El mixer alimenta el sub con la lista HOKLAN de Aging, y la salida que se esté revisando va a la entrada de línea de un DEL103. Lo que se juzga es lo que sale del DEL103. Los conectores de rango completo son los del lado izquierdo."}},
+           {"id":"out_r","code":"AUD-013",
+            "label":{"en":"Output R — full range and 120 Hz","zh":"输出 R — 全频与 120 Hz","es":"Salida R — rango completo y 120 Hz"},
+            "help":{"en":"Three things on this channel alone, with the left one disconnected. One: connect the full-range R output to the DEL103 — the whole signal must come out, bass and treble alike. Two: with the track playing, raise the volume to maximum and bring it back down to minimum — the sound must follow the knob the whole way, with no dead spots and no jumps. Three: move over to the 120 Hz R output — the bass must come through weaker than on the full-range one, compared on the same track and at the same volume. Bass that sounds the same on both is a fail.",
+                    "zh":"仅在本声道上完成三项，左声道保持断开。一：将 R 全频输出接到 DEL103——应送出完整信号，低频与高频俱全。二：在播放状态下将音量调到最大再调回最小——声音应全程随旋钮变化，不应有死区或跳变。三：改接 R 的 120 Hz 输出——低频应明显弱于全频输出，需用同一曲目、同一音量对比。两路低频听起来一样即判定为异常。",
+                    "es":"Tres cosas sobre este canal solo, con el izquierdo desconectado. Una: conecte la salida R de rango completo al DEL103 — debe salir la señal completa, con graves y agudos. Dos: con la pista sonando, suba el volumen al máximo y bájelo al mínimo — el sonido debe seguir a la perilla en todo el recorrido, sin zonas muertas ni saltos. Tres: pase a la salida R de 120 Hz — los bajos deben salir con menos intensidad que por la de rango completo, comparando con la misma pista y el mismo volumen. Que los bajos suenen igual en ambas es un fallo."}},
+           {"id":"out_l","code":"AUD-013",
+            "label":{"en":"Output L — full range and 120 Hz","zh":"输出 L — 全频与 120 Hz","es":"Salida L — rango completo y 120 Hz"},
+            "help":{"en":"The same three things on the left channel, with the right one disconnected: full range, volume sweep from maximum to minimum, and the 120 Hz output with the bass weaker. Same result as the R channel.",
+                    "zh":"在左声道上完成同样的三项，右声道保持断开：全频、从最大到最小的音量扫描，以及 120 Hz 输出低频减弱。结果应与 R 声道相同。",
+                    "es":"Las mismas tres cosas en el canal izquierdo, con el derecho desconectado: rango completo, barrido de volumen del máximo al mínimo, y la salida de 120 Hz con los bajos más débiles. El mismo resultado que en el canal R."}}]},
+
+        /* CONTROLES y AUDIO se retiraron en el plan 97, a petición de HOKLAN.
+
+           De CONTROLES sobrevivieron dos puntos, que se movieron a ENTRADAS: el
+           switch de fase y el LED de límite. Los dos necesitan señal entrando y
+           un DEL103 conectado —el montaje que ENTRADAS ya tiene armado—, y aquí
+           obligaban a rearmarlo una prueba después. La perilla de volumen y el
+           LED de señal se juzgan ahora dentro de los barridos de volumen de
+           ENTRADAS y SALIDAS, que recorren la escala entera en los dos canales.
+
+           AUDIO preguntaba si el woofer suena, si distorsiona, si el gabinete
+           vibra y si el ventilador gira. Lo primero lo responde cualquiera de
+           las dos pruebas anteriores, que no se pueden aprobar sin oír la
+           cabina; el ventilador ya se comprueba en el encendido de ENTRADAS. */
 
         /* La prueba general de potencia RMS no sirve para estos subwoofers: su
            tono entra por Bluetooth, que no tienen, y mide 1 kHz, que su propio
            pasa-bajos elimina. Ésta la sustituye con lo mínimo — la cifra y la
            imagen que la respalda — sin imponer un método de medición. */
-        {"id":"SUB_RMS","optional":false,"only_factory":["RHY"],
+        /* Primera del plan desde el plan 97, y no porque sea lo primero que se
+           hace: es lo primero que hay que *pedir*. La cifra la tiene el
+           proveedor del amplificador, y entre que el operario escribe y el
+           proveedor contesta pueden pasar horas. Puesta al final, la inspección
+           entera quedaba esperando por un correo. Puesta aquí, el operario pide
+           la foto o el PDF, sigue con el resto del plan y vuelve a esta prueba
+           cuando el proveedor conteste. `long` es lo que le dice a la app que
+           una prueba sin responder no bloquea el avance. */
+        {/* `first` 0.5 y no 1: CAJA ya ocupa el 1, y es una prueba compartida con
+              los Delta y el Epsilon, donde no debe moverse. Medio punto la pone
+              delante sin tocar el orden de las demás fábricas. Cero no sirve:
+              `planTests` ordena por `(a.first || 99)` y el cero es falso, así que
+              un `first:0` mandaría la prueba al final. */
+         "id":"SUB_RMS","optional":false,"only_factory":["RHY"],"first":0.5,
          "only":["HK-BAS115A1","HK-BAS118A1"],"evidence":[],
+         "long":{"t":{"en":"Ask the supplier now, then carry on",
+                      "zh":"先向供应商索取，然后继续",
+                      "es":"Pida el dato ahora y siga adelante"},
+                 "n":{"en":"Ask the amplifier supplier for the photograph or the PDF of the RMS power and carry on with the rest of the plan. When it arrives, come back to this test and finish it. Nothing else is waiting on it.",
+                      "zh":"先向功放供应商索取 RMS 功率的照片或 PDF，然后继续进行计划中的其他测试。收到后再回到本项完成填写。其余测试不受影响。",
+                      "es":"Solicite al proveedor del amplificador la foto o el PDF de la potencia RMS y continúe con el resto de las pruebas. Cuando llegue, regrese a esta prueba y termínela. Nada más queda esperando por ella."}},
          "label":{"en":"RMS POWER","zh":"RMS 功率","es":"POTENCIA RMS"},
          "steps":[
-           {"en":"Measure the RMS power of the unit","zh":"测量本机的 RMS 功率","es":"Mida la potencia RMS de la unidad"},
-           {"en":"Write the figure in the box","zh":"将数值填入方框","es":"Escriba la cifra en el recuadro"},
-           {"en":"Attach the image of the measurement","zh":"上传测量的图片","es":"Adjunte la imagen de la medición"}],
+           {"en":"Ask the supplier for the RMS power of the amplifier","zh":"向供应商索取功放的 RMS 功率","es":"Pida al proveedor la potencia RMS del amplificador"},
+           {"en":"Carry on with the rest of the plan while you wait","zh":"等待期间继续进行其他测试","es":"Siga con el resto del plan mientras espera"},
+           {"en":"Come back and attach the photo or the PDF","zh":"收到后回到本项，上传照片或 PDF","es":"Vuelva y adjunte la foto o el PDF"},
+           {"en":"Write the figure in the box","zh":"将数值填入方框","es":"Escriba la cifra en el recuadro"}],
          "points":[
            {"id":"sub_rms_w","code":"AUD-020","photo":true,"gallery":true,
             "measure":{"unit":"W","step":"0.1"},
             "label":{"en":"RMS power","zh":"RMS 功率","es":"Potencia RMS"},
-            "help":{"en":"Write the measured RMS power in the box and attach the image that backs it up, with the reading legible in it.",
-                    "zh":"将实测 RMS 功率填入方框，并上传作为依据的图片，其中读数须清晰可读。",
-                    "es":"Escriba la potencia RMS medida en el recuadro y adjunte la imagen que la respalda, con la lectura legible en ella."}}]},
+            "help":{"en":"Ask the amplifier supplier for the RMS power of this model and attach what they send, a photograph or a PDF, with the figure legible in it. Write the figure in the box. If it has not arrived yet, leave the test open and carry on with the rest of the plan.",
+                    "zh":"向功放供应商索取本型号的 RMS 功率，并上传其发来的照片或 PDF，数值须清晰可读。将数值填入方框。若尚未收到，可先保留本项未完成，继续进行其他测试。",
+                    "es":"Pida al proveedor del amplificador la potencia RMS de este modelo y adjunte lo que le envíe, foto o PDF, con la cifra legible. Escriba la cifra en el recuadro. Si todavía no ha llegado, deje la prueba abierta y siga con el resto del plan."}}]},
 
         /* Primera del plan, y tiene que serlo: es lo único que se mide con la
            caja todavía cerrada. Se toma la muestra, se pesa, se mide, y sólo
@@ -1240,7 +1232,10 @@ const CONFIG = {
             "help":{"en":"The other face, with the barcode and the country of origin legible.",
                     "zh":"拍摄另一面，条码与产地需清晰可读。",
                     "es":"La otra cara, con el código de barras y el país de origen legibles."}},
-           {"id":"sub_ext_warranty","photo":true,"only":["HK-BAS115A1"],
+           {/* Se pidió sólo para el BAS115A1 y quedó así por descuido: el 118 lleva
+                el mismo sticker en el mismo sitio. Igualado en el plan 97. */
+            "id":"sub_ext_warranty","photo":true,
+            "only":["HK-BAS115A1","HK-BAS118A1"],
             "label":{"en":"Warranty sticker","zh":"保修贴纸","es":"Sticker de garantía"},
             "help":{"en":"Photograph the warranty sticker in place on the cabinet, close enough to read its printing. It must be whole, well stuck down and not torn.",
                     "zh":"拍摄贴在机身上的保修贴纸，距离足够近以便读出其印字。贴纸须完整、粘贴牢固、无破损。",
@@ -1285,6 +1280,7 @@ const CONFIG = {
                     "zh":"将线缆在地面上展开但不要绷紧，从一端插头端面量到另一端插头端面，并将数值填入方框。拍摄卷尺时，线缆两端须在同一画面内。",
                     "es":"Estírelo en el piso sin tensarlo, mida de la cara de un enchufe a la cara del otro, y escriba la cifra en el recuadro. Fotografíe la cinta con los dos extremos del cable en el mismo encuadre."}},
            {"id":"sub_cab_spec","code":"ACC-001","photo":true,
+            "sample":"bas_cable_spec",
             "label":{"en":"Printing on the cable","zh":"线身印字","es":"Especificaciones impresas en el cable"},
             "help":{"en":"Close-up of the text printed along the jacket, close enough to read the gauge and the ratings.",
                     "zh":"拍摄护套上印字的特写，距离足够近以便读出线规与额定值。",
@@ -3620,10 +3616,18 @@ const CONFIG = {
            dos veces en las cabinas activas: allí y aquí. Vive ahora sólo en
            PARTES EXTERNAS, con su posición en el recuadro y su fotografía. */
 
-        {"id":"INTERNAL","optional":false,"type":"photos","no_na":true,
-         /* Excepción por referencia: en el BAS115A1 el operador puede marcar
-            N/A. En el resto la foto sigue siendo obligatoria. */
-         "na_ok":["HK-BAS115A1"],
+        {/* Sin `no_na` y sin `na_ok` desde el plan 97, por decisión de HOKLAN.
+
+              `no_na` prohibía marcar N/A punto por punto, y `na_ok` abría la
+              excepción contraria: en el BAS115A1 se podía marcar N/A la sección
+              entera de una vez. Entre las dos, lo único que el operario podía
+              hacer era descartar los diecinueve puntos juntos o ninguno, y una
+              cabina a la que le falta el preamplificador no tiene por qué
+              perder también las fotos del woofer.
+
+              Al quitar las dos, cada punto se marca N/A por su cuenta, que es
+              como se comporta el resto del plan. */
+         "id":"INTERNAL","optional":false,"type":"photos",
          "only_factory":["YIS","RHY","EAG"],
          /* Los subwoofers sí corren ésta: sólo tienen versión propia de las
             tres anteriores. */
@@ -3637,11 +3641,35 @@ const CONFIG = {
             "en":"For the FM antenna, show its full routing and fixing point","zh":"收音天线需拍出完整走线和固定位置"},
            {"en":"Mark N/A anything this reference does not include","zh":"本型号不包含的项目请标记为 N/A"}],
          "points":[
+           {/* El tinsel abre la sección desde el plan 97. Los dos puntos son lo
+                único que exige el woofer todavía montado y con luz encima: una
+                vez desmontado para pesarlo, el calibrador ya no entra igual y la
+                soldadura queda contra la mesa. */
+            "id":"tinsel_gauge","only_factory":["RHY"],
+            "sample":"bas_tinsel_calibre",
+            "measure":{"unit":"mm","step":"0.01"},
+            "label":{"en":"Tinsel lead — gauge","zh":"引出线 — 线径","es":"Tinsel — calibre"},
+            "help":{"en":"Measure the gauge of the tinsel lead with a caliper and write it in the box. Photograph the caliper with the lead between the jaws and the reading visible in the same frame.",
+                    "zh":"用游标卡尺测量引出线的线径并填入方框。拍摄卡尺，引出线夹在量爪之间，读数须在同一画面内清晰可见。",
+                    "es":"Mida el calibre del tinsel con un calibrador y escríbalo en el recuadro. Fotografíe el calibrador con el tinsel entre las mordazas y la lectura visible en el mismo encuadre."}},
+           {"id":"tinsel_solder","only_factory":["RHY"],
+            "sample":"bas_tinsel_soldadura",
+            "label":{"en":"Tinsel — solder point","zh":"引出线 — 焊点","es":"Tinsel — punto de soldadura"},
+            "help":{"en":"Close-up of the point where the tinsel lead is soldered to the cone. Close enough to see the joint itself, not just the area around it.",
+                    "zh":"拍摄引出线与振膜焊接处的特写，距离足够近以便看清焊点本身，而不只是周边区域。",
+                    "es":"Primer plano del punto donde el tinsel va soldado al cono. Lo bastante cerca para ver la soldadura misma, no sólo la zona alrededor."}},
            {"id":"woofer_weight","measure":{"unit":"g","step":"1"},
+            "sample":"bas_woofer_peso",
             "label":{"en":"Woofer — weight","zh":"低音单元 — 重量","es":"Woofer — peso"},
             "help":{"en":"Place the woofer on the scale on its own, with no screws, gasket or cable attached. Photograph the reading and write the value in the box.",
                     "zh":"将低音单元单独放在电子秤上，不带螺丝、垫圈和引线。拍摄读数并将数值填入方框。",
                     "es":"Ponga el woofer solo sobre la balanza, sin tornillos, empaque ni cable. Fotografíe la lectura y escriba el valor en el recuadro."}},
+           {"id":"woofer_impedance","only":["HK-BAS115A1","HK-BAS118A1"],
+            "sample":"bas_impedancia","measure":{"unit":"Ω","step":"0.1"},
+            "label":{"en":"Woofer — impedance","zh":"低音单元 — 阻抗","es":"Woofer — impedancia"},
+            "help":{"en":"Measure the impedance across the two terminals of the woofer, with nothing else connected to them, and write the value in the box. Photograph the meter with the reading on screen and the probes on the terminals, both in the same picture.",
+                    "zh":"在低音单元的两个接线端子间测量阻抗，端子上不得连接其他任何线路，并将数值填入方框。拍摄仪表，读数与搭在端子上的表笔须在同一画面内。",
+                    "es":"Mida la impedancia entre los dos terminales del woofer, sin nada más conectado a ellos, y escriba el valor en el recuadro. Fotografíe el instrumento con la lectura en pantalla y las puntas sobre los terminales, las dos cosas en la misma foto."}},
            {"id":"woofer_front","label":{"en":"Woofer — front","zh":"低音单元 — 正面","es":"Woofer — frente"},
             "help":{"en":"The cone and surround, seen from the front. Look for tears, glue marks or a misaligned dust cap.",
                     "zh":"正面拍摄振膜和折环，注意是否有破损、溢胶或防尘帽偏位。",
@@ -3650,82 +3678,87 @@ const CONFIG = {
             "help":{"en":"The magnet, with its label readable: brand, size and impedance.",
                     "zh":"拍摄磁钢及其标签：品牌、尺寸和阻抗必须清晰可读。",
                     "es":"El imán, con su etiqueta legible: marca, tamaño e impedancia."}},
-           {/* Los cuatro puntos siguientes son de construcción del woofer y se
-                piden en todas las referencias de RHYME. */
-            "id":"tinsel_gauge","only_factory":["RHY"],
-            "measure":{"unit":"mm","step":"0.01"},
-            "label":{"en":"Tinsel lead — gauge","zh":"引出线 — 线径","es":"Tinsel — calibre"},
-            "help":{"en":"Measure the gauge of the tinsel lead with a caliper and write it in the box. Photograph the caliper with the lead between the jaws and the reading visible in the same frame.",
-                    "zh":"用游标卡尺测量引出线的线径并填入方框。拍摄卡尺，引出线夹在量爪之间，读数须在同一画面内清晰可见。",
-                    "es":"Mida el calibre del tinsel con un calibrador y escríbalo en el recuadro. Fotografíe el calibrador con el tinsel entre las mordazas y la lectura visible en el mismo encuadre."}},
-           {"id":"tinsel_solder","only_factory":["RHY"],
-            "label":{"en":"Tinsel — solder point","zh":"引出线 — 焊点","es":"Tinsel — punto de soldadura"},
-            "help":{"en":"Close-up of the point where the tinsel lead is soldered to the cone. Close enough to see the joint itself, not just the area around it.",
-                    "zh":"拍摄引出线与振膜焊接处的特写，距离足够近以便看清焊点本身，而不只是周边区域。",
-                    "es":"Primer plano del punto donde el tinsel va soldado al cono. Lo bastante cerca para ver la soldadura misma, no sólo la zona alrededor."}},
            {"id":"terminals_solder","only_factory":["RHY"],
+            "sample":"bas_terminales",
             "label":{"en":"Terminals — soldered","zh":"接线端子 — 已焊接","es":"Terminales — soldados"},
             "help":{"en":"Photograph the two terminals close enough to see that both are soldered, with the solder covering the joint and no loose strands.",
                     "zh":"拍摄两个接线端子，距离足够近以便确认两者均已焊接，焊锡覆盖焊点且无散股。",
                     "es":"Fotografíe los dos terminales lo bastante cerca para ver que ambos están soldados, con el estaño cubriendo la unión y sin hilos sueltos."}},
            {"id":"voice_coil_line","only_factory":["RHY"],
+            "sample":"bas_bobina",
             "label":{"en":"Voice coil from the production line","zh":"产线上的音圈","es":"Bobina de la línea de producción"},
             "help":{"en":"Do not take the woofer apart. Ask the line for a loose voice coil of the same model, still unassembled, and photograph it with the winding and its markings visible.",
                     "zh":"不得拆解低音单元。向产线索取一只同型号、尚未装配的散装音圈，拍摄其绕线与标识，须清晰可见。",
                     "es":"No desarme el woofer. Pida a la línea una bobina suelta del mismo modelo, aún sin ensamblar, y fotografíela con el devanado y sus marcas a la vista."}},
-           {"id":"foam_left","only_factory":["RHY"],
-            "label":{"en":"Acoustic foam — left side","zh":"吸音棉 — 左侧","es":"Espuma acústica — lado izquierdo"},
-            "help":{"en":"Photograph the inside of the cabinet on the left, showing the acoustic foam over the whole wall. Check it is glued down along its edges and not loose or torn.",
-                    "zh":"拍摄箱体内部左侧，吸音棉须覆盖整面内壁。确认其边缘粘贴牢固，无翘边或破损。",
-                    "es":"Fotografíe el interior de la cabina por el lado izquierdo, mostrando la espuma acústica sobre toda la pared. Compruebe que está pegada por los bordes y no suelta ni rota."}},
-           {"id":"foam_right","only_factory":["RHY"],
-            "label":{"en":"Acoustic foam — right side","zh":"吸音棉 — 右侧","es":"Espuma acústica — lado derecho"},
-            "help":{"en":"The same photograph on the right wall.",
-                    "zh":"对右侧内壁拍摄同样的照片。",
-                    "es":"La misma foto en la pared derecha."}},
-           {"id":"fuses_ref","only_factory":["RHY"],
-            "label":{"en":"Fuses — reference","zh":"保险丝 — 规格","es":"Fusibles — referencia"},
-            "help":{"en":"Photograph the two fuses, both in the same picture, close enough to read the reference printed on each cap: rating and type.",
-                    "zh":"拍摄两只保险丝，须在同一画面内，距离足够近以便读出每只端帽上的规格印字：额定值与类型。",
-                    "es":"Fotografíe los dos fusibles, los dos en la misma foto, lo bastante cerca para leer la referencia impresa en cada casquillo: valor y tipo."}},
-           {"id":"cable_holes_silicone","only_factory":["RHY"],
-            "label":{"en":"Cable holes — sealed with silicone","zh":"过线孔 — 已打硅胶","es":"Agujeros de los cables — sellados con silicona"},
-            "help":{"en":"Photograph the two holes the cables come out of, both in the same picture, close enough to see the silicone. Each must be sealed all the way round, with no gap left open.",
-                    "zh":"拍摄两个出线孔，须在同一画面内，距离足够近以便看清硅胶。每个孔的四周都应封闭，不得留有缝隙。",
-                    "es":"Fotografíe los dos agujeros por donde salen los cables, los dos en la misma foto, lo bastante cerca para ver la silicona. Cada uno debe quedar sellado en todo el contorno, sin ninguna abertura."}},
+           {/* Las dos espumas —lado izquierdo y lado derecho— se unificaron en el
+                plan 97: una sola foto del interior del cajón, que las muestra las
+                dos y ahorra un desmontaje. */
+            "id":"cabinet_inside","only_factory":["RHY"],
+            "sample":"bas_interior",
+            "label":{"en":"Inside of the cabinet","zh":"箱体内部","es":"Interior del cajón"},
+            "help":{"en":"One photograph of the inside of the cabinet showing both walls, with the acoustic foam over each of them. Check it is glued down along its edges and not loose or torn on either side.",
+                    "zh":"拍摄一张箱体内部照片，两侧内壁均须入镜，各自覆盖吸音棉。确认两侧的吸音棉边缘均粘贴牢固，无翘边或破损。",
+                    "es":"Una sola foto del interior del cajón que muestre las dos paredes, con la espuma acústica sobre cada una. Compruebe que está pegada por los bordes y que no está suelta ni rota en ninguno de los dos lados."}},
+           {/* Corriente y voltaje van en dos puntos y no en uno. El recuadro de
+                medición admite un solo número: `setValue` descarta todo lo que no
+                sea dígito o punto, así que un «8 A 250 V» escrito de corrido se
+                habría guardado como 8250. Dos recuadros, cada uno con su unidad,
+                y el dato sale comparable de una unidad a otra. */
+            "id":"fuses_ref","only_factory":["RHY"],
+            "sample":"bas_fusibles",
+            "measure":{"unit":"A","step":"0.1"},
+            "label":{"en":"Fuses — there are two, and the current","zh":"保险丝 — 共两只，及其电流","es":"Fusibles — son dos, y la corriente"},
+            "help":{"en":"Check there are two fuses and photograph both in the same picture, close enough to read what is printed on each cap. Write the current in the box — for example 8. Both fuses must carry the same rating.",
+                    "zh":"确认共有两只保险丝，并将两只拍在同一画面内，距离足够近以便读出每只端帽上的印字。在方框中填写电流——例如 8。两只保险丝的规格须一致。",
+                    "es":"Verifique que hay dos fusibles y fotografíe los dos en la misma foto, lo bastante cerca para leer lo impreso en cada casquillo. Escriba la corriente en el recuadro — por ejemplo 8. Los dos fusibles deben ser del mismo valor."}},
+           {"id":"fuses_volt","only_factory":["RHY"],
+            "measure":{"unit":"V","step":"1"},
+            "label":{"en":"Fuses — voltage","zh":"保险丝 — 电压","es":"Fusibles — voltaje"},
+            "help":{"en":"The voltage printed on the same caps — for example 250. It is in the photograph above; no second picture is needed.",
+                    "zh":"填写同一端帽上印制的电压——例如 250。上一项的照片已包含该信息，无需另行拍照。",
+                    "es":"El voltaje impreso en esos mismos casquillos — por ejemplo 250. Ya está en la foto de arriba; no hace falta una segunda."}},
            {"id":"volt_pins","only_factory":["RHY"],
+            "sample":"bas_selector_pines",
             "label":{"en":"Voltage selector — pins soldered","zh":"电压选择开关 — 引脚已焊接","es":"Selector de voltaje — pines soldados"},
             "help":{"en":"Photograph the back of the voltage selector from inside the cabinet, close enough to see each pin. All must be soldered, with the solder covering the joint and no pin left bare.",
                     "zh":"从箱体内部拍摄电压选择开关的背面，距离足够近以便看清每个引脚。所有引脚均须焊接，焊锡覆盖焊点，不得有裸露未焊的引脚。",
                     "es":"Fotografíe el respaldo del selector de voltaje desde dentro de la cabina, lo bastante cerca para ver cada pin. Todos deben estar soldados, con el estaño cubriendo la unión y ninguno sin soldar."}},
            /* Los seis siguientes son sólo de los subwoofers. */
-           {"id":"woofer_cable_gauge","only":["HK-BAS115A1","HK-BAS118A1"],
-            "measure":{"unit":"mm","step":"0.01"},
+           {/* En AWG y no en milímetros desde el plan 97. El calibre del cable se
+                especifica y se compra en AWG, y traducirlo a milímetros obligaba
+                al operario a convertir en la cabeza para contrastar contra la
+                especificación. Ojo con la escala: en AWG el número baja cuando el
+                cable engorda. El BAS115A1 lleva 16 AWG. */
+            "id":"woofer_cable_gauge","only":["HK-BAS115A1","HK-BAS118A1"],
+            "sample":"bas_cable_woofer",
+            "measure":{"unit":"AWG","step":"1"},
             "label":{"en":"Woofer cable — gauge","zh":"低音单元引线 — 线径","es":"Cable del woofer — calibre"},
-            "help":{"en":"Measure the gauge of the woofer cable with a caliper, write it in the box and photograph the reading with the cable between the jaws. If the cable carries the gauge printed on it, photograph that printing as well.",
-                    "zh":"用游标卡尺测量低音单元引线的线径，将数值填入方框，并拍摄读数，引线须夹在量爪之间。若引线上印有线规，也一并拍摄该印字。",
-                    "es":"Mida el calibre del cable del woofer con un calibrador, escríbalo en el recuadro y fotografíe la lectura con el cable entre las mordazas. Si el cable trae el calibre impreso, fotografíe también esa impresión."}},
+            "help":{"en":"Read the gauge printed on the woofer cable and write it in the box, in AWG. The BAS115A1 must be 16 AWG. Photograph the printing on the cable; where the cable carries none, measure it with a caliper and photograph the reading with the cable between the jaws.",
+                    "zh":"读取低音单元引线上印制的线规，以 AWG 填入方框。BAS115A1 应为 16 AWG。拍摄线上的印字；若线上无印字，则用游标卡尺测量，并拍摄读数，引线须夹在量爪之间。",
+                    "es":"Lea el calibre impreso en el cable del woofer y escríbalo en el recuadro, en AWG. El BAS115A1 debe ser 16 AWG. Fotografíe la impresión del cable; si el cable no la trae, mídalo con un calibrador y fotografíe la lectura con el cable entre las mordazas."}},
            {"id":"connectors_glue","only":["HK-BAS115A1","HK-BAS118A1"],
+            "sample":"bas_pegante",
             "label":{"en":"Connectors — yellow glue","zh":"接插件 — 黄胶","es":"Conectores — pegante amarillo"},
-            "help":{"en":"Go over every connector inside the cabinet and photograph them. All must carry the yellow glue over the joint between the connector and its housing.",
-                    "zh":"检查箱体内所有接插件并拍照。每个接插件与插座的接合处均应打有黄胶。",
-                    "es":"Recorra todos los conectores dentro de la cabina y fotografíelos. Todos deben llevar el pegante amarillo sobre la unión entre el conector y su alojamiento."}},
+            "help":{"en":"Go over every connector inside the cabinet, the one on the preamplifier included, and photograph them. All must carry the yellow glue over the joint between the connector and its housing.",
+                    "zh":"检查箱体内所有接插件（含前置放大板上的接插件）并拍照。每个接插件与插座的接合处均应打有黄胶。",
+                    "es":"Recorra todos los conectores dentro de la cabina, incluido el del preamplificador, y fotografíelos. Todos deben llevar el pegante amarillo sobre la unión entre el conector y su alojamiento."}},
            {"id":"preamp_back","only":["HK-BAS115A1","HK-BAS118A1"],
+            "sample":"bas_preamp_back",
             "label":{"en":"Preamplifier — back","zh":"前置放大板 — 背面","es":"Preamplificador — parte posterior"},
             "help":{"en":"Photograph the back of the preamplifier board, whole and square on.",
                     "zh":"正对拍摄前置放大板的背面，整块入镜。",
                     "es":"Fotografíe la parte posterior de la tarjeta del preamplificador, entera y de frente."}},
-           {"id":"preamp_glue","only":["HK-BAS115A1","HK-BAS118A1"],
-            "label":{"en":"Preamplifier connector — yellow glue","zh":"前置放大板接插件 — 黄胶","es":"Conector del preamplificador — pegante amarillo"},
-            "help":{"en":"Close-up of the preamplifier connector. It must carry the yellow glue over the joint.",
-                    "zh":"拍摄前置放大板接插件的特写。其接合处应打有黄胶。",
-                    "es":"Primer plano del conector del preamplificador. Debe llevar el pegante amarillo sobre la unión."}},
-           {"id":"preamp_pcb_ver","only":["HK-BAS115A1","HK-BAS118A1"],
+           {/* El punto suelto del pegante del conector del preamplificador se
+                retiró en el plan 97: ese conector es uno de los que ya recorre
+                CONECTORES · PEGANTE AMARILLO, y se fotografiaba dos veces. */
+            "id":"preamp_pcb_ver","only":["HK-BAS115A1","HK-BAS118A1"],
+            "sample":"bas_preamp_pcb",
             "label":{"en":"Preamplifier — PCB version","zh":"前置放大板 — 板版本","es":"Preamplificador — versión de la PCB"},
             "help":{"en":"Close-up of the version printed on the board, close enough to read every character.",
                     "zh":"拍摄板上印制的版本号特写，距离足够近以便读出每一个字符。",
                     "es":"Primer plano de la versión impresa en la tarjeta, lo bastante cerca para leer cada carácter."}},
            {"id":"eva_foam_panel","only":["HK-BAS115A1","HK-BAS118A1"],
+            "sample":"bas_eva",
             "label":{"en":"EVA foam around the panel","zh":"面板周围的 EVA 泡棉","es":"Espuma EVA alrededor del panel"},
             "help":{"en":"Photograph the EVA foam running round the panel. It must go the whole way round, seated in its channel, with no gaps and no pieces missing.",
                     "zh":"拍摄面板四周的 EVA 泡棉。应完整环绕一圈，嵌入卡槽，无断口、无缺失。",
@@ -3742,9 +3775,26 @@ const CONFIG = {
                     "es":"El imán y los terminales, en su propia foto, con la etiqueta legible: marca, modelo e impedancia."}},
            {"id":"fuente","skip":["HK-BAS115A1","HK-BAS118A1"],
             "label":{"en":"Power supply","zh":"电源板"}},
-           {"id":"amp_front","label":{"en":"Amplifier — component side","zh":"功放板 — 元件面"},
+           {/* En los subwoofers el amplificador va montado de canto contra el
+                panel, así que la «cara de componentes» no se puede fotografiar
+                sin desmontarlo. Los dos costados sí, y entre los dos se ve lo
+                mismo. El resto de las fábricas sigue con el punto de siempre. */
+            "id":"amp_front","skip":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Amplifier — component side","zh":"功放板 — 元件面"},
             "help":{"en":"The side carrying the chips. The board reference and the main IC markings must be readable.",
                     "zh":"拍摄有芯片的一面。板号和主要芯片丝印必须清晰可读。"}},
+           {"id":"amp_side_1","only":["HK-BAS115A1","HK-BAS118A1"],
+            "sample":"bas_amp_lat1",
+            "label":{"en":"Amplifier — one side","zh":"功放板 — 一侧","es":"Amplificador — un costado"},
+            "help":{"en":"Photograph the amplifier from one side, with the whole board in the frame and the components on that face visible.",
+                    "zh":"从一侧拍摄功放板，整块板须入镜，该面的元件须清晰可见。",
+                    "es":"Fotografíe el amplificador por un costado, con la tarjeta entera en el encuadre y los componentes de esa cara a la vista."}},
+           {"id":"amp_side_2","only":["HK-BAS115A1","HK-BAS118A1"],
+            "sample":"bas_amp_lat2",
+            "label":{"en":"Amplifier — the other side","zh":"功放板 — 另一侧","es":"Amplificador — el otro costado"},
+            "help":{"en":"The same photograph from the opposite side. The board reference and the main IC markings must be readable between the two pictures.",
+                    "zh":"从对侧拍摄同样的照片。板号和主要芯片丝印在两张照片中须能读出。",
+                    "es":"La misma foto por el costado opuesto. Entre las dos fotos deben quedar legibles el número de la tarjeta y las marcas del circuito principal."}},
            {"id":"amp_back","skip":["HK-BAS115A1","HK-BAS118A1"],
             "label":{"en":"Amplifier — solder side","zh":"功放板 — 焊接面"},
             "help":{"en":"The solder side. Look for cold joints, flux residue, bridges or reworked areas.",

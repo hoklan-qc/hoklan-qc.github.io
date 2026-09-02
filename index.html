@@ -756,7 +756,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 98,
+      "plan_version": 99,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -3834,9 +3834,12 @@ const CONFIG = {
            día vuelve a medirse en casa. */
         {"id":"BAT_CAPACITY","optional":true,"only_factory":["YIS"],
          "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],"evidence":[],
-         "label":{"en":"SPECIFICATION CHECK · BATTERY CAPACITY",
-                  "zh":"规格验证 · 电池容量",
-                  "es":"VERIFICACIÓN DE ESPECIFICACIONES · CAPACIDAD DE BATERÍA"},
+         /* Sin el prefijo «VERIFICACIÓN DE ESPECIFICACIONES ·» desde el plan 99:
+            en la pantalla del teléfono ocupaba dos renglones antes de llegar a
+            lo que la prueba es. */
+         "label":{"en":"BATTERY CAPACITY",
+                  "zh":"电池容量",
+                  "es":"CAPACIDAD DE BATERÍA"},
          "steps":[
            {"en":"Ask the supplier for the report of their capacity test","zh":"向供应商索取其容量测试报告","es":"Pida al proveedor el informe de su prueba de capacidad"},
            {"en":"Write down the capacity the report declares","zh":"填写报告中声明的容量","es":"Escriba la capacidad que declara el informe"},
@@ -3880,9 +3883,12 @@ const CONFIG = {
         {"id":"RMS_SUPPLIER","optional":false,"only_factory":["RHY"],"evidence":[],"first":3,
          "only":["HK-EPS112A1","HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
-         "label":{"en":"SPECIFICATION CHECK · RMS POWER",
-                  "zh":"规格验证 · RMS 功率",
-                  "es":"VERIFICACIÓN DE ESPECIFICACIONES · POTENCIA RMS"},
+         /* Sin el prefijo, igual que la capacidad de batería. Quedan tres pruebas
+            con el mismo título —ésta, la de YISION y la de los BAS—, pero ningún
+            plan lleva más de una: son 7 modelos, 37 y 2, sin cruce. */
+         "label":{"en":"RMS POWER",
+                  "zh":"RMS 功率",
+                  "es":"POTENCIA RMS"},
          "steps":[
            {"en":"Ask the amplifier supplier for the power report of each channel","zh":"向功放供应商索取每个通道的功率报告","es":"Pida al proveedor de amplificadores el informe de potencia de cada canal"},
            {"en":"Attach one image per channel: woofer and tweeter","zh":"每个通道上传一张图片：低音通道与高音通道","es":"Adjunte una imagen por canal: woofer y tweeter"},
@@ -3922,9 +3928,12 @@ const CONFIG = {
                  "HK-EPS112A1","HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
          "evidence":[],"first":5,
-         "label":{"en":"SPECIFICATION CHECK · RMS POWER",
-                  "zh":"规格验证 · RMS 功率",
-                  "es":"VERIFICACIÓN DE ESPECIFICACIONES · POTENCIA RMS"},
+         /* Sin el prefijo, igual que la capacidad de batería. Quedan tres pruebas
+            con el mismo título —ésta, la de YISION y la de los BAS—, pero ningún
+            plan lleva más de una: son 7 modelos, 37 y 2, sin cruce. */
+         "label":{"en":"RMS POWER",
+                  "zh":"RMS 功率",
+                  "es":"POTENCIA RMS"},
          "steps":[
            {"en":"Take the woofer out and put a load resistor of the same impedance in its place","zh":"拆下低音单元，换上同阻抗的负载电阻","es":"Saque el woofer y ponga en su lugar una carga de la misma impedancia"},
            {"en":"Put the oscilloscope on CH1 across the load","zh":"将示波器 CH1 接到负载两端","es":"Conecte el osciloscopio en CH1 sobre la carga"},

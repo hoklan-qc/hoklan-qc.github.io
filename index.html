@@ -756,7 +756,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 95,
+      "plan_version": 96,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -844,21 +844,22 @@ const CONFIG = {
             "help":{"en":"They are hybrid jacks: the same socket takes an XLR plug or a 6.3 mm one. Check one side at a time, never both connected at once.",
                     "zh":"这是复合插孔：同一个孔既可插 XLR，也可插 6.3 mm 插头。一次只接一侧检查，不要两侧同时接入。",
                     "es":"Son jacks híbridos: el mismo conector recibe un plug XLR o uno de 6.3 mm. Revise un lado a la vez, nunca con las dos conectadas."}},
-           {"id":"in_l","code":"AUX-001",
+           {/* El barrido de volumen era un punto suelto —«la intensidad sigue al
+                volumen»— que se respondía una sola vez, después de haber probado
+                las dos entradas. Así no decía de cuál de las dos hablaba: una
+                cabina con la entrada derecha muerta en media escala aprobaba el
+                punto con la izquierda. Ahora cada entrada lleva su propio
+                barrido, dentro de la misma toma, y la sección queda en dos. */
+            "id":"in_l","code":"AUX-001",
             "label":{"en":"Input L — hybrid 6.3 mm / XLR","zh":"输入 L — 6.3 mm / XLR 复合口","es":"Entrada izquierda — híbrida 6.3 mm / XLR"},
-            "help":{"en":"Feed the mixer into the L input only. Audio must come through. Try both plug types in the same socket: first the XLR, then the 6.3 mm.",
-                    "zh":"仅将调音台接入 L 输入，应有声音传出。同一个孔要试两种插头：先试 XLR，再试 6.3 mm。",
-                    "es":"Lleve el mixer sólo a la entrada L. Debe entrar audio. Pruebe los dos tipos de plug en el mismo jack: primero el XLR y luego el de 6.3 mm."}},
+            "help":{"en":"Feed the mixer into the L input only. Audio must come through. Try both plug types in the same socket: first the XLR, then the 6.3 mm. With the track playing, raise the volume to maximum and bring it back down to minimum: the sound must follow the knob the whole way, with no dead spots and no jumps.",
+                    "zh":"仅将调音台接入 L 输入，应有声音传出。同一个孔要试两种插头：先试 XLR，再试 6.3 mm。在播放状态下将音量调到最大再调回最小：声音应全程随旋钮变化，不应有死区或跳变。",
+                    "es":"Lleve el mixer sólo a la entrada L. Debe entrar audio. Pruebe los dos tipos de plug en el mismo jack: primero el XLR y luego el de 6.3 mm. Con la pista sonando, suba el volumen al máximo y bájelo al mínimo: el sonido debe seguir a la perilla en todo el recorrido, sin zonas muertas ni saltos."}},
            {"id":"in_r","code":"AUX-001",
             "label":{"en":"Input R — hybrid 6.3 mm / XLR","zh":"输入 R — 6.3 mm / XLR 复合口","es":"Entrada derecha — híbrida 6.3 mm / XLR"},
-            "help":{"en":"Now the R input only, with both plug types again. Same result.",
-                    "zh":"改为仅接 R 输入，同样试两种插头，结果应相同。",
-                    "es":"Ahora sólo la entrada R, otra vez con los dos tipos de plug. El mismo resultado."}},
-           {"id":"in_level","code":"AUX-001",
-            "label":{"en":"The level follows the volume","zh":"声音强度随音量变化","es":"La intensidad sigue al volumen"},
-            "help":{"en":"With the track playing, raise the volume and lower it again. The sound must follow the knob the whole way, rising and falling with it, with no dead spots and no jumps.",
-                    "zh":"在播放状态下将音量调高再调低。声音应全程随旋钮变化，逐渐增大和减小，不应有死区或跳变。",
-                    "es":"Con la pista sonando, suba el volumen y vuelva a bajarlo. El sonido debe seguir a la perilla en todo el recorrido, subiendo y bajando con ella, sin zonas muertas ni saltos."}}]},
+            "help":{"en":"Now the R input only, with both plug types again, and the same volume sweep from maximum to minimum. Same result as the L input.",
+                    "zh":"改为仅接 R 输入，同样试两种插头，并同样从最大到最小完成一次音量扫描。结果应与 L 输入相同。",
+                    "es":"Ahora sólo la entrada R, otra vez con los dos tipos de plug, y el mismo barrido de volumen del máximo al mínimo. El mismo resultado que en la entrada L."}}]},
 
         {"id":"SUB_OUT","optional":false,"only_factory":["RHY"],"evidence":[],
          "only":["HK-BAS115A1","HK-BAS118A1"],
@@ -1308,30 +1309,35 @@ const CONFIG = {
             "help":{"en":"What travels inside the box with the cabinet.",
                     "zh":"随音箱一同装入彩盒内的物品。",
                     "es":"Lo que viaja dentro de la caja junto con la cabina."}},
-           {"id":"sub_manual_p1","photo":true,
+           {/* `sample` en las seis: cada punto muestra la cara que le toca, para
+                que el operario compare la hoja que tiene en la mano con la
+                aprobada antes de fotografiarla. Si el archivo todavía no está en
+                `img/`, `sampleFallback` retira el recuadro y el punto sigue
+                pidiendo su foto igual. */
+            "id":"sub_manual_p1","photo":true,"sample":"bas_manual_p1",
             "label":{"en":"Manual — page 1","zh":"说明书 — 第 1 页","es":"Manual — página 1"},
-            "help":{"en":"One photograph per page, the page flat and square on, with the text readable and no glare over it.",
-                    "zh":"每页一张照片，纸面摊平、正对拍摄，文字清晰可读且无反光遮挡。",
-                    "es":"Una foto por página, con la hoja plana y de frente, el texto legible y sin reflejos encima."}},
-           {"id":"sub_manual_p2","photo":true,
+            "help":{"en":"One photograph per page, the page flat and square on, with the text readable and no glare over it. Compare it against the example before photographing it.",
+                    "zh":"每页一张照片，纸面摊平、正对拍摄，文字清晰可读且无反光遮挡。拍摄前请与示例核对。",
+                    "es":"Una foto por página, con la hoja plana y de frente, el texto legible y sin reflejos encima. Compárela con el ejemplo antes de fotografiarla."}},
+           {"id":"sub_manual_p2","photo":true,"sample":"bas_manual_p2",
             "label":{"en":"Manual — page 2","zh":"说明书 — 第 2 页","es":"Manual — página 2"}},
-           {"id":"sub_manual_p3","photo":true,
+           {"id":"sub_manual_p3","photo":true,"sample":"bas_manual_p3",
             "label":{"en":"Manual — page 3","zh":"说明书 — 第 3 页","es":"Manual — página 3"}},
-           {"id":"sub_manual_p4","photo":true,
+           {"id":"sub_manual_p4","photo":true,"sample":"bas_manual_p4",
             "label":{"en":"Manual — page 4","zh":"说明书 — 第 4 页","es":"Manual — página 4"}},
-           {"id":"sub_guide","photo":true,
+           {"id":"sub_guide","photo":true,"sample":"bas_guia",
             "label":{"en":"Quick guide","zh":"快速指南","es":"Guía rápida"},
-            "help":{"en":"One photograph: it is printed on one side only. Flat and square on, with the text readable.",
-                    "zh":"仅需一张照片：本页为单面印刷。摊平并正对拍摄，文字须清晰可读。",
-                    "es":"Una sola foto: viene impresa por una sola cara. Plana y de frente, con el texto legible."}},
+            "help":{"en":"One photograph: it is printed on one side only. Flat and square on, with the text readable. Compare it against the example before photographing it.",
+                    "zh":"仅需一张照片：本页为单面印刷。摊平并正对拍摄，文字须清晰可读。拍摄前请与示例核对。",
+                    "es":"Una sola foto: viene impresa por una sola cara. Plana y de frente, con el texto legible. Compárela con el ejemplo antes de fotografiarla."}},
            /* La etiqueta colgante y el sticker de garantía se fotografían en
               PARTES EXTERNAS: van pegados al producto, y el operador los tiene
               delante mientras recorre el gabinete. */
-           {"id":"sub_card","photo":true,
+           {"id":"sub_card","photo":true,"sample":"bas_carta",
             "label":{"en":"Loyalty card","zh":"客户回馈卡","es":"Carta de fidelización"},
-            "help":{"en":"Check the QR code or the web address is legible.",
-                    "zh":"确认二维码或网址清晰可读。",
-                    "es":"Compruebe que el código QR o la dirección web queda legible."}},
+            "help":{"en":"Check the QR code or the web address is legible, and that the card matches the example.",
+                    "zh":"确认二维码或网址清晰可读，且卡片与示例一致。",
+                    "es":"Compruebe que el código QR o la dirección web queda legible, y que la carta coincide con el ejemplo."}},
            {"id":"sub_bag","photo":true,
             "label":{"en":"Bag the cabinet is packed in","zh":"包裹音箱的塑料袋","es":"Bolsa en que viene la cabina"},
             "help":{"en":"The bag around the cabinet itself, not the small accessory ones. Lay it flat and photograph it whole.",

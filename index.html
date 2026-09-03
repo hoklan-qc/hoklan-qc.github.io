@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="13.3">
+<meta name="app-version" content="13.5">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -89,6 +89,11 @@ button:active{transform:scale(.99)}
   100%{box-shadow:0 0 0 0 rgba(245,185,66,0)}}
 @media (prefers-reduced-motion:reduce){
   .packet-dl{animation:none;box-shadow:0 0 14px rgba(245,185,66,.45)}}
+/* Ya descargado. Verde, quieto y con el visto: el botón deja de pedir atención
+   porque ya no hace falta, y de un vistazo se sabe si queda algo por bajar. Se
+   puede volver a pulsar — el ZIP se rearma igual — pero nada empuja a hacerlo. */
+.packet-dl.done{background:linear-gradient(90deg,#1d6b46,#2f9e68);
+  border-color:#57c98f;color:#eafaf1;animation:none;box-shadow:none}
 .row{display:flex;margin:0 -5px}
 .row>*{flex:1;margin:0 5px}
 .bar{height:8px;background:#0c1b2d;border-radius:5px;overflow:hidden;margin:10px 0 16px}
@@ -5841,6 +5846,8 @@ const T = {
   open_report:"VIEW REPORT / SAVE PDF",
   home:"HOME",
   a_home:"Go back to the start screen?\n\nThe current inspection will be discarded. Download the report first if you have not.",
+  download_done:"✓ REPORT DOWNLOADED — DOWNLOAD AGAIN",
+  a_home_nodl:"You have NOT downloaded the report.\n\nThe inspection is finished, but nothing has left this phone yet. Going back to the start screen discards it and it cannot be recovered.\n\nGo back anyway?",
   how_to:"How to check this",
   open_fails:"%n failed point(s) still need a photo and a note.",
   fail_evidence:"EVIDENCE REQUIRED FOR THIS DEFECT",
@@ -6068,6 +6075,8 @@ const T = {
   open_report:"VER INFORME / GUARDAR PDF",
   home:"INICIO",
   a_home:"¿Volver a la pantalla inicial?\n\nLa inspección actual se descartará. Descargue el informe primero si aún no lo ha hecho.",
+  download_done:"✓ INFORME DESCARGADO — DESCARGAR DE NUEVO",
+  a_home_nodl:"NO ha descargado el informe.\n\nLa inspección está terminada, pero todavía no ha salido nada de este teléfono. Volver a la pantalla inicial la descarta y no se puede recuperar.\n\n¿Volver de todas formas?",
   how_to:"Cómo verificar esto",
   open_fails:"%n punto(s) fallidos aún necesitan foto y observación.",
   fail_evidence:"EVIDENCIA OBLIGATORIA PARA ESTE DEFECTO",
@@ -6286,6 +6295,8 @@ const T = {
   open_report:"查看报告 / 保存 PDF",
   home:"首页",
   a_home:"返回首页？\n\n当前检验记录将被清除。如果还没有下载报告，请先下载。",
+  download_done:"✓ 报告已下载 — 再次下载",
+  a_home_nodl:"您尚未下载报告。\n\n本次检验已完成，但尚未有任何内容离开这台手机。返回首页将清除记录，且无法恢复。\n\n仍要返回吗？",
   how_to:"如何检查",
   open_fails:"仍有 %n 个异常项缺少照片和说明。",
   fail_evidence:"此异常项必须提供证据",
@@ -6802,6 +6813,17 @@ let SHOTS_FAILED = false;
    Both are shown on the checklist, where the operator can still act on them. */
 let DRAFT_FAILED = false;
 
+/* Si el paquete que se descargó sigue valiendo. Se enciende al terminar la
+   descarga y se apaga en `save()`, es decir en cuanto el operario cambia
+   cualquier cosa: una respuesta corregida deja obsoleto el ZIP que ya está en
+   la carpeta de descargas, y el operario no tiene forma de notarlo — los dos
+   archivos se llaman casi igual.
+
+   Vive en memoria y no en el borrador a propósito: `downloadPacket` borra el
+   borrador al terminar, y además una inspección reabierta al día siguiente hay
+   que volver a descargarla de todos modos. */
+let PACKET_SAVED = false;
+
 function openMediaDb(){
   if(mediaDbTried) return Promise.resolve(mediaDb);
   mediaDbTried = true;
@@ -6940,6 +6962,10 @@ function withoutMedia(state){
   });
 }
 function save(){
+  /* Cualquier cambio invalida el paquete ya descargado. Va aquí y no en cada
+     mutador porque `save` es el único sitio por el que pasan todos: responder un
+     punto, escribir una medida, adjuntar una foto, marcar N/A. */
+  PACKET_SAVED = false;
   /* Descriptions first and pictures second, in that order on purpose. The
      answers are what an inspection is; if the phone is going to fail at
      anything, it should fail at the part that can be taken again. */
@@ -9060,6 +9086,11 @@ function showReport(){
    nothing called it. It had grown two fallbacks of its own for the browsers that
    refuse to write into an iframe, and all of it was dead weight behind a button
    that goes straight to this function. */
+/* Sin llamadores desde la v13.4: era la que colgaba del botón «descargar reporte
+   básico», retirado de la pantalla de cierre. Se conserva entera, con su clave
+   de idioma `save_report_dl`, porque reponer el botón es una línea en
+   `renderDone`. Quien quiera hoy el informe suelto lo baja desde «Ver informe /
+   Guardar PDF», que usa `printReport`. */
 async function savePdfNow(){
   showSaved(tr("pdf_wait"));
   try{ await Promise.all([ensureTranslations(), ensureRefImg()]); }catch(e){}
@@ -9579,6 +9610,10 @@ function downloadPacket(){
     saveBlob(p.blob, p.name);
     showSaved(packetSummary(p) + tr("saved_hint"));
     clearDraft();
+    /* Después de `clearDraft`, que no toca esta bandera, y con un render para
+       que el botón cambie a verde en el acto. */
+    PACKET_SAVED = true;
+    render();
   });
 }
 
@@ -11714,14 +11749,18 @@ function renderDone(){
         style="background:rgba(20,102,58,.45);border-color:var(--green)"></div>
     </div>`;
 
-  /* El paquete primero y destacado. Es lo que HOKLAN necesita recibir: lleva
-     los tres informes, la hoja de cálculo y toda la evidencia. El informe
-     suelto sirve para mirarlo en el momento, pero descargarlo y creer que con
-     eso se envió la inspección es el error que este orden evita. */
+  /* Un solo botón desde la v13.4. Al lado del paquete vivía «descargar reporte
+     básico», que bajaba el informe suelto, sin fotos ni hoja de cálculo. Dos
+     botones de descarga uno junto al otro invitaban a elegir, y el que no había
+     que elegir era más corto de leer; una inspección entregada como informe
+     suelto llega sin la evidencia que la sostiene.
+
+     El informe suelto no se pierde: sigue a un toque de distancia, en «Ver
+     informe / Guardar PDF», que es donde corresponde — se abre para mirarlo, y
+     desde ahí se guarda si alguien lo necesita. */
   actions.innerHTML = `
-    <button class="packet-dl" onclick="downloadPacket()">${tr("download")}</button>
-    <button style="flex:0 0 30%;font-size:13px;padding:13px 8px;line-height:1.3"
-      onclick="savePdfNow()">${tr("save_report_dl")}</button>`;
+    <button class="packet-dl${PACKET_SAVED ? " done" : ""}" onclick="downloadPacket()">${
+      tr(PACKET_SAVED ? "download_done" : "download")}</button>`;
 }
 
 function renderReport(){
@@ -11749,7 +11788,15 @@ function goHome(){
   // An inspection in progress is real work; never discard it on one tap.
   const working = S.screen !== "setup" &&
     S.data.some(u => (u || []).some(r => r));
-  if(working && !confirm(tr("a_home"))) return;
+  /* Terminada y sin descargar es el caso que más duele: la inspección está
+     hecha entera y se pierde en el último toque. El aviso genérico decía
+     «descargue el informe primero si aún no lo ha hecho» — un condicional que
+     el operario no puede resolver, porque nada en pantalla le dice si lo hizo.
+     Éste no supone nada: sabe que no se ha descargado y lo afirma. */
+  if(working && S.screen === "done" && !PACKET_SAVED){
+    if(!confirm(tr("a_home_nodl"))) return;
+  }
+  else if(working && !confirm(tr("a_home"))) return;
 
   clearDraft();
   S.screen = "setup"; S.index = 0; S.units = 1;

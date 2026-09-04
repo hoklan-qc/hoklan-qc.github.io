@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="13.9">
+<meta name="app-version" content="13.10">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -8135,10 +8135,15 @@ function fileName(){
   /* Nada de separadores fijos pegados a mano: lo que esté vacío desaparece y el
      resto se une igual. Una orden sin escribir dejaba dos guiones seguidos, que
      se leen como un nombre corrupto y no como el dato que falta. */
-  return [clean(S.model),
-          clean(poPrinted().replace(/\s+/g,"")),
-          stampFin(),
-          part].filter(Boolean).join("-") + ".html";
+  /* El prefijo va siempre, no como en el encabezado del informe. Allí
+     `poPrinted` sólo lo pone cuando el número lo generó la app, y los operarios
+     escriben la orden a mano: el nombre del archivo salía «…-004477-…», seis
+     dígitos sueltos entre guiones que no se distinguen de una fecha. */
+  const orden = S.po
+    ? clean(tr("po_prefix") + (S.poLetter || "") + S.po).replace(/\s+/g,"")
+    : "";
+  return [clean(S.model), orden, stampFin(), part]
+    .filter(Boolean).join("-") + ".html";
 }
 
 /* El momento en que se cerró la inspección, no el de la descarga. Descargar el

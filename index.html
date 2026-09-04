@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 106,
+      "plan_version": 107,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1990,10 +1990,16 @@ const CONFIG = {
            {"id":"android","code":"BT-007","label":{"en":"Connection with Android","zh":"连接安卓手机"},
             "help":{"en":"Disconnect the iPhone first, then pair an Android. Both must work: it is common for a speaker to connect with one and fail with the other.",
                     "zh":"先断开 iPhone，再配对安卓手机。两者都必须正常：只连其中一种的情况很常见。"}},
-           {"id":"name_match","code":"BT-012","label":{"en":"Bluetooth name matches the product","zh":"蓝牙名称与产品一致"},
-            "help":{"en":"Read the name exactly as the phone lists it and confirm it against the name printed in the user manual. They must say the same thing, character by character. The manual is the one source to check against: the logo on the grille and the logo on the panel can disagree with each other, and when they do there is no way to tell which one is right. A speaker sold as one model that announces itself as another is a defect the customer sees before switching it on. Photograph the phone's list if it does not match.",
-                    "zh":"按手机列表中显示的名称逐字读取，并与用户手册上印制的名称核对确认，两者必须逐字一致。以手册为唯一比对依据：网罩标志与面板标志之间也可能不一致，一旦不一致就无从判断哪个才是对的。以某型号出售却以另一个名称广播的音箱，客户开机之前就会发现。若不一致，请拍摄手机列表。",
-                    "es":"Lea el nombre tal como lo lista el teléfono y confírmelo contra el nombre que aparece en el manual de usuario. Deben decir lo mismo, carácter por carácter. El manual es la única fuente contra la cual comparar: el logo de la rejilla y el del panel pueden contradecirse entre sí, y cuando eso pasa no hay forma de saber cuál de los dos tiene razón. Un parlante que se vende como un modelo y se anuncia como otro es un defecto que el cliente ve antes de encenderlo. Fotografíe la lista del teléfono si no coincide."}},
+           {/* La foto pasó a ser obligatoria en el plan 107. Antes se pedía sólo
+                cuando el nombre no coincidía, así que de una inspección correcta
+                no quedaba rastro de cuál era el nombre — y ése es justo el dato
+                que hay que poder revisar meses después, cuando el cliente reclama
+                que el parlante se anuncia con otro nombre. */
+            "id":"name_match","code":"BT-012","photo":true,
+            "label":{"en":"Bluetooth name matches the product","zh":"蓝牙名称与产品一致","es":"El nombre Bluetooth coincide con el producto"},
+            "help":{"en":"Read the name exactly as the phone lists it and confirm it against the name printed in the user manual. They must say the same thing, character by character. Photograph the phone's list with the name legible, whether it matches or not. The manual is the one source to check against: the logo on the grille and the logo on the panel can disagree with each other, and when they do there is no way to tell which one is right.",
+                    "zh":"按手机列表中显示的名称逐字读取，并与用户手册上印制的名称核对确认，两者必须逐字一致。无论是否一致，均须拍摄手机列表，名称须清晰可读。以手册为唯一比对依据：网罩标志与面板标志之间也可能不一致，一旦不一致就无从判断哪个才是对的。",
+                    "es":"Lea el nombre tal como lo lista el teléfono y confírmelo contra el nombre impreso en el manual de usuario. Deben decir lo mismo, carácter por carácter. Fotografíe la lista del teléfono con el nombre legible, coincida o no. El manual es la única fuente contra la cual comparar: el logo de la rejilla y el del panel pueden contradecirse entre sí, y cuando eso pasa no hay forma de saber cuál de los dos tiene razón."}},
            {"id":"autoconnect","code":"BT-008","label":{"en":"Reconnects automatically on power on","zh":"开机自动回连"},
             "help":{"en":"With the phone paired and nearby, switch the speaker off and on. It must reconnect by itself, without pairing again.",
                     "zh":"手机保持已配对且在附近，关机后再开机。音箱应自动回连，无需重新配对。"}},

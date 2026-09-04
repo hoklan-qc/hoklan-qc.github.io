@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="13.8">
+<meta name="app-version" content="13.9">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -8110,34 +8110,47 @@ function finalVerdict(){
 }
 
 /* ---------- report -------------------------------------------------------- */
+/* Referencia, orden y momento de cierre. Tres datos y en ese orden, porque es
+   el orden en que se busca un informe: primero qué producto, luego qué orden,
+   y sólo entonces cuál de las revisiones.
+
+   Qué salió y por qué. El código de la cuenta abría el nombre y no aportaba —
+   la fábrica ya se deduce de la referencia. El consecutivo diario, que existía
+   para desempatar dos revisiones del mismo día, lo reemplaza la hora, que
+   desempata mejor: el consecutivo se llevaba en cada teléfono por separado, así
+   que dos inspectores de la misma fábrica producían el mismo `_02`. Dos relojes
+   no coinciden al minuto.
+
+   La marca PARTIAL se queda. Una inspección que sólo cubrió dos pruebas tiene
+   que decirlo en el nombre, o dentro de seis meses nadie abre el archivo para
+   averiguar por qué está incompleto.
+
+   La orden lleva el prefijo del idioma en que se generó el archivo: OC en
+   español, PO en inglés y chino. Se pega sin espacio —OC004477— porque un
+   espacio en un nombre de archivo se convierte en %20 en cuanto se envía por
+   correo o por WeChat. */
 function fileName(){
   const clean = s => String(s||"").replace(/[^A-Za-z0-9._-]+/g,"-");
-  // A partial inspection says so in its own file name. Six months later nobody
-  // opens the report to find out why it only covers two tests.
   const part = partialScope() ? "PARTIAL" : "";
-  // Same reasoning as _PARTIAL: what the file is has to survive being forwarded
-  // on its own, and a self-inspection is a different kind of document.
-  const self = S.selfCheck ? "FACTORY" : "";
-  /* Built from the parts that exist, not by pasting fixed separators. A missing
-     test ID used to leave QC__HK-PHI — two underscores where a code should be,
-     which reads as a corrupt file name rather than as the missing field it is.
-     Anything empty simply drops out and the rest still joins cleanly. */
-  /* La orden entra en el nombre y la hora sale. La orden es el dato por el que
-     se busca un informe en la carpeta de descargas; la hora no la miraba nadie.
-     El consecutivo del final es lo que sustituye a la hora como desempate: el
-     código que abre el nombre es el de la cuenta, no el de la inspección, así
-     que sin él dos revisiones de la misma referencia y la misma orden en un
-     mismo día se llamarían igual. */
-  /* La orden va rotulada también aquí, con el prefijo del idioma en que se
-     generó el archivo: OC en español, PO en inglés y chino. Se pega sin espacio
-     —OC000123— porque un espacio en un nombre de archivo se convierte en %20 en
-     cuanto el archivo se envía por correo o por WeChat. */
-  const seq = daySeq();
-  return "QC_" + [clean(S.testId), clean(S.model),
-                  clean(poPrinted().replace(/\s+/g,"")), part, self,
-                  dayStamp(), seq > 1 ? String(seq).padStart(2,"0") : ""]
-    .filter(Boolean).join("_") + ".html";
+  /* Nada de separadores fijos pegados a mano: lo que esté vacío desaparece y el
+     resto se une igual. Una orden sin escribir dejaba dos guiones seguidos, que
+     se leen como un nombre corrupto y no como el dato que falta. */
+  return [clean(S.model),
+          clean(poPrinted().replace(/\s+/g,"")),
+          stampFin(),
+          part].filter(Boolean).join("-") + ".html";
 }
+
+/* El momento en que se cerró la inspección, no el de la descarga. Descargar el
+   paquete dos veces, o volver a descargarlo tras corregir una prueba, no puede
+   cambiarle el nombre al archivo: sería otro archivo para la misma inspección.
+   `finishedAt` se sella una sola vez, al terminar. */
+function stampFin(){
+  const d = new Date(S.finishedAt || Date.now()), p = n => String(n).padStart(2,"0");
+  return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}` +
+         `-${p(d.getHours())}${p(d.getMinutes())}`;
+}
+
 function dayStamp(){
   const d = new Date(), p = n => String(n).padStart(2,"0");
   return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}`;
@@ -8146,7 +8159,14 @@ function dayStamp(){
 /* Cuántas veces se ha nombrado hoy un archivo con esta referencia y esta orden.
    Se decide una vez por inspección y se guarda con ella: descargar el informe
    dos veces no puede cambiarle el nombre, y volver a abrir un borrador tampoco.
-   El contador vive aparte, en el teléfono, y sólo conserva el día en curso. */
+   El contador vive aparte, en el teléfono, y sólo conserva el día en curso.
+
+   Sin llamadores desde la v13.9: el nombre del archivo lleva ahora la hora de
+   cierre, que desempata mejor. Este contador se llevaba en cada teléfono por
+   separado, así que dos inspectores de la misma fábrica revisando la misma
+   referencia y la misma orden el mismo día generaban los dos un `_02` — dos
+   archivos distintos con el mismo nombre. Se conserva por si algún día se
+   quiere volver a un consecutivo, esta vez compartido. */
 const SEQ_KEY = "hoklan_qc_seq";
 function daySeq(){
   if(S.seq) return S.seq;
@@ -9710,6 +9730,64 @@ function packetSummary(p){
     `${tr("lost_wechat")}</div>`;
 }
 
+/* ---------- respaldo en Drive ---------------------------------------------
+   El paquete se descarga al teléfono y además se sube a una carpeta de HOKLAN
+   en Google Drive. La descarga manda: es la copia que no depende de la red, y
+   es la única que exige la app antes de dejar volver al inicio. El respaldo
+   ocurre después, aparte, y su fracaso no atrapa a nadie — una fábrica sin
+   señal no puede quedarse con el operario de pie frente a una barra de
+   progreso.
+
+   Cómo funciona, en dos pasos. El teléfono le pide al buzón —una función de
+   HOKLAN en Cloudflare— un permiso de subida, presentando el código de la
+   cuenta con la que se inspecciona. El buzón, que es quien guarda las
+   credenciales de Google, devuelve una URL de un solo uso. El ZIP viaja del
+   teléfono directo a Google por esa URL: no pasa por el buzón, así que ni el
+   tamaño del paquete ni el tráfico son problema de nadie.
+
+   Vacío desactiva el respaldo por completo, sin tocar nada más. */
+const BUZON = "https://buzon-hoklan.esneyder-q.workers.dev/";
+
+/* Callado en los dos sentidos, por decisión de HOKLAN: ni avisa que sube, ni
+   avisa que falló, ni ofrece reintentar. Para el operario esto no existe.
+
+   La razón es que no es su problema. Él ya hizo lo que tenía que hacer —la
+   inspección está descargada en su teléfono— y el respaldo es una comodidad de
+   la oficina. Un aviso rojo por una red de fábrica que se cayó sólo consigue
+   que alguien crea que perdió el trabajo, o que se quede intentando arreglar
+   algo que no puede arreglar.
+
+   Lo que esto cuesta, y hay que saberlo: si falla, nadie se entera en el
+   momento. Quien lo nota es HOKLAN, al ver que ese informe no llegó a la
+   carpeta. Por eso aquí se reintenta tres veces antes de rendirse, con esperas
+   crecientes: el corte de red de una fábrica suele durar segundos, y quien no
+   va a pedir ayuda más vale que insista solo. */
+async function subirRespaldo(p){
+  if(!BUZON) return;
+
+  for(let intento = 0; intento < 3; intento++){
+    if(intento) await new Promise(r => setTimeout(r, intento * 4000));
+    if(navigator.onLine === false) continue;
+    try{
+      const r = await fetch(BUZON, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ code: S.testId, filename: p.name, size: p.blob.size })
+      });
+      const s = await r.json();
+      if(!s || !s.url) throw new Error((s && s.error) || "buzon");
+
+      const up = await fetch(s.url, { method: "PUT", body: p.blob });
+      if(!up.ok) throw new Error("drive " + up.status);
+      return;                                   // subido
+    }catch(e){
+      /* A la consola y a ningún sitio más. Sirve para diagnosticar con el
+         teléfono en la mano; el operario no lo ve. */
+      try{ console.warn("respaldo Drive:", e); }catch(_){}
+    }
+  }
+}
+
 function downloadPacket(){
   if(!CAN_DOWNLOAD){ alert(tr("a_no_download")); return; }
   withPacket(async p => {
@@ -9720,6 +9798,9 @@ function downloadPacket(){
        que el botón cambie a verde en el acto. */
     PACKET_SAVED = true;
     render();
+    /* Sin `await`: la descarga ya ocurrió y el operario no tiene por qué
+       esperar a que termine el respaldo para seguir con lo suyo. */
+    subirRespaldo(p);
   });
 }
 

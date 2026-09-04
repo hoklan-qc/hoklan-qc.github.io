@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 102,
+      "plan_version": 103,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -3682,12 +3682,26 @@ const CONFIG = {
             "help":{"en":"Close-up of the point where the tinsel lead is soldered to the cone. Close enough to see the joint itself, not just the area around it.",
                     "zh":"拍摄引出线与振膜焊接处的特写，距离足够近以便看清焊点本身，而不只是周边区域。",
                     "es":"Primer plano del punto donde el tinsel va soldado al cono. Lo bastante cerca para ver la soldadura misma, no sólo la zona alrededor."}},
-           {"id":"woofer_weight","measure":{"unit":"g","step":"1"},
+           {/* Dos puntos para la misma medición, porque la unidad no puede
+                depender de la fábrica dentro de un solo punto. RHYME pesa en
+                kilogramos: sus woofers de 15 y 18 pulgadas pasan de los cinco
+                kilos, y anotarlos en gramos daba cifras de cinco dígitos que
+                nadie lee bien. Las demás fábricas montan altavoces pequeños y
+                siguen en gramos. Sólo uno de los dos le aparece al operario. */
+            "id":"woofer_weight","skip_factory":["RHY"],
+            "measure":{"unit":"g","step":"1"},
             "sample":"bas_woofer_peso",
             "label":{"en":"Woofer — weight","zh":"低音单元 — 重量","es":"Woofer — peso"},
             "help":{"en":"Place the woofer on the scale on its own, with no screws, gasket or cable attached. Photograph the reading and write the value in the box.",
                     "zh":"将低音单元单独放在电子秤上，不带螺丝、垫圈和引线。拍摄读数并将数值填入方框。",
                     "es":"Ponga el woofer solo sobre la balanza, sin tornillos, empaque ni cable. Fotografíe la lectura y escriba el valor en el recuadro."}},
+           {"id":"woofer_weight_kg","only_factory":["RHY"],
+            "measure":{"unit":"kg","step":"0.01"},
+            "sample":"bas_woofer_peso",
+            "label":{"en":"Woofer — weight","zh":"低音单元 — 重量","es":"Woofer — peso"},
+            "help":{"en":"Place the woofer on the scale on its own, with no screws, gasket or cable attached. Photograph the reading and write the value in the box, in kilograms.",
+                    "zh":"将低音单元单独放在电子秤上，不带螺丝、垫圈和引线。拍摄读数，并以千克为单位将数值填入方框。",
+                    "es":"Ponga el woofer solo sobre la balanza, sin tornillos, empaque ni cable. Fotografíe la lectura y escriba el valor en el recuadro, en kilogramos."}},
            {"id":"woofer_impedance","only":["HK-BAS115A1","HK-BAS118A1"],
             "sample":"bas_impedancia","measure":{"unit":"Ω","step":"0.1"},
             "label":{"en":"Woofer — impedance","zh":"低音单元 — 阻抗","es":"Woofer — impedancia"},

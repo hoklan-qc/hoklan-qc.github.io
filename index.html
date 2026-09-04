@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 109,
+      "plan_version": 110,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1681,7 +1681,8 @@ const CONFIG = {
            {"en":"Let the HOKLAN USB play, listening for dropouts","zh":"让测试音频播放，注意是否有中断","es":"Deje reproducir la USB HOKLAN, atento a cortes"},
            {"en":"With the USB drive playing, check each control on the list","zh":"在播放状态下，逐项检查下列功能","es":"Con la memoria reproduciendo, verifique cada control de la lista"},
            {"en":"Switch it off and on twice: on battery and on mains","zh":"关机再开机两次：一次用电池，一次接市电","es":"Apague y encienda dos veces: con batería y conectado a la red"},
-           {"en":"Finish with Testing_Vol_Max at maximum volume","zh":"最后以最大音量播放 Testing_Vol_Max","es":"Termine con Testing_Vol_Max a volumen máximo"}],
+           {"skip_factory":["RHY"],
+            "en":"Finish with Testing_Vol_Max at maximum volume","zh":"最后以最大音量播放 Testing_Vol_Max","es":"Termine con Testing_Vol_Max a volumen máximo"}],
          "points":[
            {"section":{"en":"Playback","zh":"播放","es":"Reproducción"},
             "help":{"en":"Insert the HOKLAN test USB and select USB mode. Wait until it reads the USB drive and plays. At the end, switch the speaker off and on to see whether it starts in USB by itself.",
@@ -1731,7 +1732,11 @@ const CONFIG = {
             "help":{"en":"Press once: the sound must stop and the display must show pause. Press again: it must resume from the same point, not from the start.",
                     "zh":"按一次，声音应停止且屏幕显示暂停；再按一次应从原位置继续，而不是从头播放。",
                     "es":"Pulse una vez: el sonido debe detenerse y la pantalla mostrar pausa. Pulse otra vez: debe continuar desde el mismo punto, no desde el inicio."}},
-           {"id":"repeat","code":"USB-012","label":{"en":"Repeat one / all button","zh":"单曲/全部循环按键","es":"Tecla de repetición una / todas"},
+           {/* Ninguna referencia de RHYME lleva esta tecla: sus paneles no la
+                traen, y se estaba pidiendo comprobar un botón que no existe.
+                Fuera de RHYME en el plan 110. YISION y EAGLE sí la llevan. */
+            "id":"repeat","code":"USB-012","skip_factory":["RHY"],
+            "label":{"en":"Repeat one / all button","zh":"单曲/全部循环按键","es":"Tecla de repetición una / todas"},
             "help":{"en":"Set repeat-one and let the track end: the same track must play again. Then set repeat-all: at the end it must move to the next track.",
                     "zh":"设为单曲循环，让曲目播完：应重复播放同一首。再设为全部循环：播完应自动进入下一首。",
                     "es":"Ponga repetir-una y deje terminar la pista: debe volver a sonar la misma. Luego ponga repetir-todas: al terminar debe pasar a la siguiente."}},
@@ -1760,6 +1765,15 @@ const CONFIG = {
             "help":{"en":"Take the volume from minimum to maximum slowly. It must rise continuously the whole way, with no jumps, dead spots or scratchy sound, and where there is a number on the display it must follow. Leave it at maximum: the next group is listened to like this.",
                     "zh":"缓慢将音量从最小调到最大。全程应连续上升，不应跳变、无死区、无刮擦杂音；若屏幕显示数值，应同步变化。保持最大音量：下一组就是在这个状态下听的。",
                     "es":"Lleve el volumen del mínimo al máximo lentamente. Debe crecer de forma continua en todo el recorrido, sin saltos, zonas muertas ni sonido rasposo, y donde haya número en pantalla debe seguirlo. Déjelo en el máximo: el grupo siguiente se escucha así."}},
+           {/* El LED LÍMITE se juzgaba en una prueba aparte, LEDS SEÑAL Y LÍMITE,
+                que obligaba a volver a montar la señal y a mover otra vez el
+                volumen. Aquí el barrido acaba de hacerse y el montaje está
+                puesto. Sólo RHYME trae este LED en el panel. */
+            "id":"led_limit","code":"LED-009","only_factory":["RHY"],
+            "label":{"en":"LIMIT LED","zh":"限幅指示灯","es":"LED LÍMITE"},
+            "help":{"en":"Raise the level until it appears and lower it until it goes out. One that stays on, or that never comes on, is a fail. Leave the volume at maximum again for the next group.",
+                    "zh":"提高电平直至其点亮，再降低直至熄灭。长亮或永不点亮的，判定为异常。判定后把音量调回最大，供下一组使用。",
+                    "es":"Suba el nivel hasta que aparezca y bájelo hasta que se apague. Uno que se queda encendido, o que nunca enciende, es no conforme. Deje el volumen otra vez en el máximo para el grupo siguiente."}},
            {"section":{"en":"Sound quality","zh":"音质","es":"Calidad de sonido"},
             "help":{"en":"With the volume still at maximum from the group above. Listen, then put your hand on the speaker to feel for abnormal vibration or rattles.",
                     "zh":"承接上一组，音量保持最大。先听，再用手触摸箱体，感受是否有异常振动或杂音。",
@@ -1871,11 +1885,15 @@ const CONFIG = {
             "help":{"en":"Now with the AC cable connected and the USB drive still inserted, switch it off and on again. It must do the same: back into USB mode, playing, with nothing pressed.",
                     "zh":"再接上 AC 电源线，U 盘保持插入，关机后再开机。结果应相同：自动回到 USB 模式并开始播放，无需按任何键。",
                     "es":"Ahora con el cable AC conectado y la memoria aún insertada, apague y encienda otra vez. Debe hacer lo mismo: volver al modo USB y reproducir, sin pulsar nada."}},
-           {"section":{"en":"Maximum volume","zh":"最大音量","es":"Volumen máximo"},
+           {/* Fuera de RHYME desde el plan 110: sus referencias ya sostienen el
+                volumen máximo en Calidad de sonido, con el barrido y la escucha
+                de distorsión hechos allí. YISION y EAGLE la conservan. */
+            "skip_factory":["RHY"],
+            "section":{"en":"Maximum volume","zh":"最大音量","es":"Volumen máximo"},
             "help":{"en":"Left for last on purpose: it is the loudest thing in the test and it is where a speaker that has passed everything else still breaks up.",
                     "zh":"特意放在最后：这是本测试中声音最大的一项，也是通过了其他所有项目的音箱仍可能破音的地方。",
                     "es":"Se deja de último a propósito: es lo más fuerte de la prueba y es donde un parlante que pasó todo lo demás todavía se quiebra."}},
-           {"id":"usb_vol_max","code":"AUD-003",
+           {"id":"usb_vol_max","code":"AUD-003","skip_factory":["RHY"],
             "label":{"en":"Maximum volume functional — Testing_Vol_Max","zh":"最大音量正常 — Testing_Vol_Max","es":"Volumen máximo funcional — Testing_Vol_Max"},
             "help":{"en":"Play the Testing_Vol_Max track from the USB drive and take the volume to maximum. It must hold there: no distortion, no crackling, no cutting out and no shutting down. Leave it playing for a minute before judging it — the fault usually appears after a few seconds, not at once.",
                     "zh":"播放 U 盘中的 Testing_Vol_Max 曲目，并将音量调到最大。应能稳定播放：不失真、无爆音、不断续、不关机。判定前先让其播放一分钟——此类问题通常在数秒后才出现，而非立即。",
@@ -1929,7 +1947,9 @@ const CONFIG = {
            {"id":"play_pause","code":"SD-010","label":{"en":"PLAY / PAUSE button","zh":"播放/暂停按键"},
             "help":{"en":"Press once: the sound must stop and the display must show pause. Press again: it must resume from the same point.",
                     "zh":"按一次，声音应停止且屏幕显示暂停；再按一次应从原位置继续播放。"}},
-           {"id":"repeat","code":"SD-012","label":{"en":"Repeat one / all button","zh":"单曲/全部循环按键"},
+           {/* La misma tecla que en USB, y por lo mismo fuera de RHYME. */
+            "id":"repeat","code":"SD-012","skip_factory":["RHY"],
+            "label":{"en":"Repeat one / all button","zh":"单曲/全部循环按键"},
             "help":{"en":"Set repeat-one and let the track end: the same track must play again. Then set repeat-all: at the end it must move to the next track.",
                     "zh":"设为单曲循环，让曲目播完：应重复播放同一首。再设为全部循环：播完应自动进入下一首。"}},
            {"id":"modes","code":"DSP-005","label":{"en":"Mode button","zh":"模式按键"},
@@ -2426,21 +2446,20 @@ const CONFIG = {
                     "zh":"停在第一个以外的模式，关机再开机，应回到同一模式。",
                     "es":"Deje un modo distinto del primero, apague y encienda. Debe volver al mismo."}}]},
 
-        {"id":"SIGNAL_LIMIT","optional":false,"only_factory":["RHY"],"evidence":["video"],
+        {/* Era LEDS SEÑAL Y LÍMITE. El LED LÍMITE pasó a Controles de audio,
+              dentro de USB, donde el barrido de volumen que ese punto necesita
+              ya está hecho. Aquí queda sólo el LED SEÑAL, y el nombre y los
+              pasos se ajustaron a eso. */
+         "id":"SIGNAL_LIMIT","optional":false,"only_factory":["RHY"],"evidence":["video"],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
-         "label":{"en":"SIGNAL AND LIMIT LEDS","zh":"信号与限幅指示灯","es":"LEDS SEÑAL Y LÍMITE"},
+         "label":{"en":"SIGNAL LED","zh":"信号指示灯","es":"LED SEÑAL"},
          "steps":[
-           {"en":"With programme playing, watch the two LEDs on the panel","zh":"在有节目声时观察面板上的两个指示灯","es":"Con programa sonando, observe los dos LED del panel"},
-           {"en":"Raise the level until LIMIT appears, then lower it","zh":"提高电平直到限幅灯点亮，再降低","es":"Suba el nivel hasta que aparezca LÍMITE y luego bájelo"}],
+           {"en":"With programme playing, watch the SIGNAL LED on the panel","zh":"在有节目声时观察面板上的信号指示灯","es":"Con programa sonando, observe el LED SEÑAL del panel"}],
          "points":[
            {"id":"led_signal","code":"LED-008","label":{"en":"SIGNAL LED lights with signal present","zh":"有信号时信号灯点亮","es":"LED SEÑAL enciende con señal presente"},
             "help":{"en":"With audio playing it must light and follow the programme. Dark while signal is present is a fail.",
                     "zh":"有音频播放时应点亮并随节目变化。有信号却不亮，判定为异常。",
-                    "es":"Con audio sonando debe encender y seguir el programa. Apagado con señal presente es falla."}},
-           {"id":"led_limit","code":"LED-009","label":{"en":"LIMIT LED lights only on clipping","zh":"仅在削波时限幅灯点亮","es":"LED LÍMITE enciende sólo al saturar"},
-            "help":{"en":"Raise the volume until it appears and lower it until it goes out. A LIMIT that is always on, or that never comes on, is no use to the person on stage, who is the only one who looks at it.",
-                    "zh":"提高音量直至其点亮，再降低直至熄灭。长亮或永不点亮的限幅灯，对台上唯一会看它的人毫无用处。",
-                    "es":"Suba el volumen hasta que aparezca y bájelo hasta que se apague. Un LÍMITE siempre encendido, o que nunca enciende, no le sirve a quien está en tarima, que es el único que lo mira."}}]},
+                    "es":"Con audio sonando debe encender y seguir el programa. Apagado con señal presente es falla."}}]},
 
         {"id":"XLR_OUT","optional":false,"only_factory":["RHY"],"evidence":[],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],

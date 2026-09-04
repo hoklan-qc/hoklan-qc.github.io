@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="14.0">
+<meta name="app-version" content="14.1">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -10095,7 +10095,10 @@ function renderAdmin(){
             than on the start screen, where it belonged to nobody, and read with
             peekPo so that looking at it does not consume a number. */""}
       <div class="tag">${esc(fmt("next_po",{
-        p: tr("po_prefix") + " " + poDigits(peekPo()),
+        /* Sólo los dígitos: `next_po` ya trae la palabra —«OC %p» en español,
+           «Order no. %p» en inglés—, y pasarle además el prefijo dejaba un
+           «OC OC 008» que llevaba versiones ahí sin que nadie lo mirara. */
+        p: poDigits(peekPo()),
         /* The name of the account, translated. It used to be built here in
            Spanish whatever language the app was in, so a Chinese operator read
            "ADMIN HOKLAN" on his own screen. What goes into `S.operator`, and

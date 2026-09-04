@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 104,
+      "plan_version": 106,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -964,7 +964,7 @@ const CONFIG = {
                 salida cómoda cuando el correo no llegaba. Sin ella, la
                 inspección no se puede cerrar sin la foto o el PDF. */
             "id":"sub_rms_w","code":"AUD-020","photo":true,"gallery":true,"must":true,
-            "sample":"rms_ejemplo",
+            "sample":"rms_ejemplo","must":true,
             "measure":{"unit":"W","step":"0.1"},
             "label":{"en":"RMS power","zh":"RMS 功率","es":"Potencia RMS"},
             "help":{"en":"Ask the amplifier supplier for the RMS power of this model and attach what they send, a photograph or a PDF, with the figure legible in it. Write the figure in the box. If it has not arrived yet, leave the test open and carry on with the rest of the plan.",
@@ -990,10 +990,25 @@ const CONFIG = {
            {"en":"Measure the three sides","zh":"测量三个方向的尺寸","es":"Mida los tres lados"},
            {"en":"Only then open it and carry on","zh":"完成后再开箱，继续后续测试","es":"Sólo entonces ábrala y siga con el resto"}],
          "points":[
-           {"section":{"en":"Closed box","zh":"整箱状态","es":"La caja cerrada"},
+           {/* Dos encabezados y no cuatro desde el plan 105. El Epsilon viaja en
+                dos cajas y cada una llevaba las suyas —«la caja cerrada» y «las
+                seis caras»—, así que el operario recorría cuatro secciones para
+                dos cajas y tenía que acordarse de cuál iba con cuál. Ahora cada
+                caja es una sección con nombre propio y sus once puntos dentro.
+
+                En las referencias de una sola caja el título dice sólo «La caja
+                cerrada»: nombrarla «del woofer» donde no hay otra con qué
+                confundirla sobraba. */
+            "section":{"en":"The box","zh":"彩盒","es":"La caja cerrada"},
+            "skip":["HK-EPS112A1"],
             "help":{"en":"Everything here is measured before opening anything.",
                     "zh":"本节所有内容均须在开箱之前完成。",
                     "es":"Todo lo de esta sección se mide antes de abrir nada."}},
+           {"section":{"en":"Woofer box","zh":"低音箱彩盒","es":"Caja del woofer"},
+            "only":["HK-EPS112A1"],
+            "help":{"en":"The first of the two boxes. Everything here is measured before opening anything.",
+                    "zh":"两个彩盒中的第一个。本节所有内容均须在开箱之前完成。",
+                    "es":"La primera de las dos cajas. Todo lo de esta sección se mide antes de abrir nada."}},
            {"id":"box_gross","code":"PKG-002","photo":true,
             "sample":"caja_peso",
             "measure":{"unit":"kg","step":"0.1"},
@@ -1001,19 +1016,39 @@ const CONFIG = {
             "help":{"en":"Put the closed box, with the product inside, on the scale. Photograph the scale with the reading legible and the whole box on the platform, and write the figure in the box — for example 35 kg.",
                     "zh":"将封好的彩盒连同产品整体放在秤上。拍摄秤，读数须清晰可读且整箱都在秤台上，并将数值填入方框——例如 35 kg。",
                     "es":"Ponga la caja cerrada, con el producto dentro, sobre la báscula. Fotografíe la báscula con la lectura legible y la caja entera sobre la plataforma, y escriba la cifra en el recuadro — por ejemplo 35 kg."}},
-           {"id":"sub_box_w","photo":true,"measure":{"unit":"cm","step":"0.1"},
+           {/* El peso neto se sumó en el plan 105. El bruto lleva la caja, los
+                icopores, los impresos y los accesorios encima; el neto es la
+                cabina sola, y es el que se compara contra la ficha del producto
+                y el que discute un transportista. Uno no se deduce del otro sin
+                pesar también el empaque vacío. */
+            "id":"box_net","code":"PKG-002","photo":true,
+            "sample":"caja_peso",
+            "measure":{"unit":"kg","step":"0.1"},
+            "label":{"en":"Net weight — cabinet alone","zh":"净重 — 仅音箱本体","es":"Peso neto — la cabina sola"},
+            "help":{"en":"Once the box is open, put the cabinet on the scale on its own: no box, no foam, no cable, no printed matter. Photograph the scale with the reading legible and write the figure in the box.",
+                    "zh":"开箱后，将音箱本体单独放在秤上：不含彩盒、泡沫、线材与印刷品。拍摄秤，读数须清晰可读，并将数值填入方框。",
+                    "es":"Con la caja ya abierta, ponga la cabina sola sobre la báscula: sin caja, sin icopores, sin cable y sin impresos. Fotografíe la báscula con la lectura legible y escriba la cifra en el recuadro."}},
+           {/* En milímetros desde el plan 105. La ficha del empaque y lo que el
+                cliente pide vienen en milímetros, y traducir de centímetros a
+                mano era una coma de más o de menos entre 860 y 86. */
+            "id":"sub_box_w","photo":true,"measure":{"unit":"mm","step":"1"},
             "sample":"caja_ancho",
             "label":{"en":"Box — width","zh":"彩盒 — 宽","es":"Caja — ancho"},
             "help":{"en":"The horizontal side of the front face. Hook the tape on one edge and read it at the opposite edge, with both ends inside the frame. Read the centimetre scale, not the inches.",
                     "zh":"正面的水平边。将卷尺钩在一端，在另一端读数，两端都要在画面之内。读厘米刻度，不要读英寸。",
                     "es":"El lado horizontal de la cara frontal. Enganche la cinta en un borde y lea en el borde opuesto, con los dos extremos dentro del encuadre. Lea la escala en centímetros, no las pulgadas."}},
-           {"id":"sub_box_d","photo":true,"measure":{"unit":"cm","step":"0.1"},
+           {"id":"sub_box_d","photo":true,"measure":{"unit":"mm","step":"1"},
             "sample":"caja_largo",
             "label":{"en":"Box — depth","zh":"彩盒 — 长","es":"Caja — largo"}},
-           {"id":"sub_box_h","photo":true,"measure":{"unit":"cm","step":"0.1"},
+           {"id":"sub_box_h","photo":true,"measure":{"unit":"mm","step":"1"},
             "sample":"caja_alto",
             "label":{"en":"Box — height","zh":"彩盒 — 高","es":"Caja — alto"}},
-           {"section":{"en":"The six faces","zh":"六个面","es":"Las seis caras"},
+           {/* El encabezado de las seis caras desaparece en el Epsilon: allí la
+                caja ya tiene el suyo y partirla en dos volvía a mezclar las dos
+                cajas. En las demás referencias se conserva, porque separa lo que
+                se mide de lo que se fotografía. */
+            "section":{"en":"The six faces","zh":"六个面","es":"Las seis caras"},
+            "skip":["HK-EPS112A1"],
             "help":{"en":"One photograph per face, with the box still closed. Avoid shadows and reflections over the printing.",
                     "zh":"每面一张照片，彩盒须保持封闭状态。避免印刷面出现阴影和反光。",
                     "es":"Una foto por cara, con la caja todavía cerrada. Evite sombras y reflejos sobre la impresión."}},
@@ -1049,11 +1084,14 @@ const CONFIG = {
             "help":{"en":"Photograph the barcode square on, filling the frame, with no glare across the bars. The app reads the number off that photograph; it cannot be typed in. If it does not read, retake the photograph. Then check the number belongs to this reference and no other.",
                     "zh":"正对条码拍摄，使其充满画面，条纹上不得有反光。应用会从该照片中自动识别号码，不可手工输入。若未能识别，请重拍。随后核对该号码是否属于本型号。",
                     "es":"Fotografíe el código de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto; no se puede escribir a mano. Si no lo lee, repita la foto. Después compruebe que el número pertenece a esta referencia y no a otra."}},
-           {"section":{"en":"Satellite box","zh":"卫星箱彩盒","es":"Caja del satélite"},
+           {/* «Satélite» era el nombre viejo de la columna. Se renombró en el
+                plan 105 en todo el archivo: en fábrica la llaman columna, y el
+                poste va en esta misma caja. */
+            "section":{"en":"Column and pole box","zh":"立柱与支杆彩盒","es":"Caja de columna y poste"},
             "only":["HK-EPS112A1"],
-            "help":{"en":"Epsilon ships in two boxes. The second one is photographed, weighed and measured the same way, also before opening.",
-                    "zh":"Epsilon 分两箱发运。第二箱同样在开箱之前拍摄、称重并测量。",
-                    "es":"Epsilon se despacha en dos cajas. La segunda se fotografía, se pesa y se mide igual, también antes de abrir."}},
+            "help":{"en":"The second of the two boxes, the one carrying the column and the pole. Photographed, weighed and measured the same way, also before opening.",
+                    "zh":"两个彩盒中的第二个，内装立柱与支杆。同样在开箱之前拍摄、称重并测量。",
+                    "es":"La segunda de las dos cajas, la que trae la columna y el poste. Se fotografía, se pesa y se mide igual, también antes de abrir."}},
            {/* Mismo orden que la caja del bajo, y por la misma razón: la
                 báscula y la cinta métrica primero, con la caja intacta, y las
                 fotos después. Estaba al revés — las seis caras, el código, y
@@ -1063,42 +1101,40 @@ const CONFIG = {
             "id":"sat_gross","code":"PKG-002","photo":true,"only":["HK-EPS112A1"],
             "sample":"caja_peso",
             "measure":{"unit":"kg","step":"0.1"},
-            "label":{"en":"Satellite box — gross weight","zh":"卫星箱彩盒 — 毛重","es":"Caja del satélite — peso bruto"},
+            "label":{"en":"Column and pole box — gross weight","zh":"立柱与支杆彩盒 — 毛重","es":"Caja de columna y poste — peso bruto"},
             "help":{"en":"The same on the second box: photograph the scale with the reading legible and write the figure in the box.",
                     "zh":"第二箱同样处理：拍摄秤，读数须清晰可读，并将数值填入方框。",
                     "es":"Lo mismo con la segunda caja: fotografíe la báscula con la lectura legible y escriba la cifra en el recuadro."}},
            {"id":"sat_box_w","photo":true,"only":["HK-EPS112A1"],
-            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_ancho",
-            "label":{"en":"Satellite box — width","zh":"卫星箱彩盒 — 宽","es":"Caja del satélite — ancho"}},
+            "measure":{"unit":"mm","step":"1"},"sample":"caja_ancho",
+            "label":{"en":"Column and pole box — width","zh":"立柱与支杆彩盒 — 宽","es":"Caja de columna y poste — ancho"}},
            {"id":"sat_box_d","photo":true,"only":["HK-EPS112A1"],
-            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_largo",
-            "label":{"en":"Satellite box — depth","zh":"卫星箱彩盒 — 长","es":"Caja del satélite — largo"}},
+            "measure":{"unit":"mm","step":"1"},"sample":"caja_largo",
+            "label":{"en":"Column and pole box — depth","zh":"立柱与支杆彩盒 — 长","es":"Caja de columna y poste — largo"}},
            {"id":"sat_box_h","photo":true,"only":["HK-EPS112A1"],
-            "measure":{"unit":"cm","step":"0.1"},"sample":"caja_alto",
-            "label":{"en":"Satellite box — height","zh":"卫星箱彩盒 — 高","es":"Caja del satélite — alto"}},
-           {"section":{"en":"The six faces of the satellite box","zh":"卫星箱彩盒的六个面","es":"Las seis caras de la caja del satélite"},
-            "only":["HK-EPS112A1"],
-            "help":{"en":"One photograph per face, with the box still closed. Avoid shadows and reflections over the printing.",
-                    "zh":"每面一张照片，彩盒须保持封闭状态。避免印刷面出现阴影和反光。",
-                    "es":"Una foto por cara, con la caja todavía cerrada. Evite sombras y reflejos sobre la impresión."}},
+            "measure":{"unit":"mm","step":"1"},"sample":"caja_alto",
+            "label":{"en":"Column and pole box — height","zh":"立柱与支杆彩盒 — 高","es":"Caja de columna y poste — alto"}},
            {"id":"sat_box_front","photo":true,"only":["HK-EPS112A1"],
-            "label":{"en":"Satellite box — front","zh":"卫星箱彩盒 — 正面","es":"Caja del satélite — frente"}},
+            "label":{"en":"Column and pole box — front","zh":"立柱与支杆彩盒 — 正面","es":"Caja de columna y poste — frente"},
+            "help":{"en":"From here on, one photograph per face with the box still closed. Avoid shadows and reflections over the printing.",
+                    "zh":"自本项起，每面一张照片，彩盒须保持封闭状态。避免印刷面出现阴影和反光。",
+                    "es":"De aquí en adelante, una foto por cara con la caja todavía cerrada. Evite sombras y reflejos sobre la impresión."}},
            {"id":"sat_box_back","photo":true,"only":["HK-EPS112A1"],
-            "label":{"en":"Satellite box — back","zh":"卫星箱彩盒 — 背面","es":"Caja del satélite — atrás"}},
+            "label":{"en":"Column and pole box — back","zh":"立柱与支杆彩盒 — 背面","es":"Caja de columna y poste — atrás"}},
            {"id":"sat_box_right","photo":true,"only":["HK-EPS112A1"],
-            "label":{"en":"Satellite box — right side","zh":"卫星箱彩盒 — 右侧面","es":"Caja del satélite — lado derecho"}},
+            "label":{"en":"Column and pole box — right side","zh":"立柱与支杆彩盒 — 右侧面","es":"Caja de columna y poste — lado derecho"}},
            {"id":"sat_box_left","photo":true,"only":["HK-EPS112A1"],
-            "label":{"en":"Satellite box — left side","zh":"卫星箱彩盒 — 左侧面","es":"Caja del satélite — lado izquierdo"}},
+            "label":{"en":"Column and pole box — left side","zh":"立柱与支杆彩盒 — 左侧面","es":"Caja de columna y poste — lado izquierdo"}},
            {"id":"sat_box_top","photo":true,"only":["HK-EPS112A1"],
-            "label":{"en":"Satellite box — top","zh":"卫星箱彩盒 — 顶面","es":"Caja del satélite — superior"}},
+            "label":{"en":"Column and pole box — top","zh":"立柱与支杆彩盒 — 顶面","es":"Caja de columna y poste — superior"}},
            {"id":"sat_box_bottom","photo":true,"only":["HK-EPS112A1"],
-            "label":{"en":"Satellite box — bottom","zh":"卫星箱彩盒 — 底面","es":"Caja del satélite — inferior"}},
+            "label":{"en":"Column and pole box — bottom","zh":"立柱与支杆彩盒 — 底面","es":"Caja de columna y poste — inferior"}},
            {"id":"sat_barcode","code":"PKG-001","photo":true,"scan":true,
             "only":["HK-EPS112A1"],"measure":{"unit":"EAN","step":"1"},
-            "label":{"en":"Barcode on the satellite box","zh":"卫星箱彩盒条码","es":"Código de barras de la caja del satélite"},
-            "help":{"en":"The same photograph on the second box. The app reads the number; it cannot be typed in. It must be a different code from the one on the bass box.",
+            "label":{"en":"Barcode on the column and pole box","zh":"立柱与支杆彩盒条码","es":"Código de barras de la caja de columna y poste"},
+            "help":{"en":"The same photograph on the second box. The app reads the number; it cannot be typed in. It must be a different code from the one on the woofer box.",
                     "zh":"对第二箱做同样的拍摄。号码由应用自动识别，不可手工输入。该号码应与低音箱彩盒上的条码不同。",
-                    "es":"La misma foto en la segunda caja. La app lee el número; no se puede escribir a mano. Debe ser un código distinto al de la caja del bajo."}}]},
+                    "es":"La misma foto en la segunda caja. La app lee el número; no se puede escribir a mano. Debe ser un código distinto al de la caja del woofer."}}]},
 
         /* ---------------- BAS: versión propia de las tres secciones ---------
            PARTES EXTERNAS, ACCESORIOS y MATERIAL IMPRESO son compartidas por
@@ -1115,6 +1151,7 @@ const CONFIG = {
             y con ella se van las ruedas, que RHYME no lleva. Conserva el id
             SUB_ para no romper inspecciones en curso. */
          "id":"SUB_EXTERNAL","optional":false,"only_factory":["RHY"],
+         "skip":["HK-EPS112A1"],
          "evidence":["video"],"first":3,
          "ask":{"en":"one continuous take going round the speaker, showing the panel, the grille and the rest, no longer than a minute.",
                 "zh":"一镜到底环绕音箱拍摄，需拍到面板、网罩及其余部分，时长不超过一分钟。",
@@ -1151,40 +1188,25 @@ const CONFIG = {
             "help":{"en":"Including the feet and the tripod socket.",
                     "zh":"需拍到底脚与三脚架插孔。",
                     "es":"Incluyendo las patas y el hueco para trípode."}},
-           {/* Los subwoofers no llevan ni satélite ni pantalla, así que se
-                saltan los cinco puntos siguientes. */
-            "section":{"en":"Tweeter satellite","zh":"高音卫星箱","es":"Satélite de tweeters"},
-            "skip":["HK-BAS115A1","HK-BAS118A1"],
-            "help":{"en":"The upper section that carries the tweeters. Photograph it with everything assembled, framing that part of the cabinet.",
-                    "zh":"装有高音单元的上半部分。整机装配状态下拍摄，画面对准该区域。",
-                    "es":"La parte superior donde van los tweeters. Fotografíela con todo armado, encuadrando esa zona de la cabina."}},
-           {"id":"sub_sat_front","photo":true,"skip":["HK-BAS115A1","HK-BAS118A1"],
-            "label":{"en":"Satellite — front","zh":"卫星箱 — 正面","es":"Satélite — frente"}},
-           {"id":"sub_sat_back","photo":true,"skip":["HK-BAS115A1","HK-BAS118A1"],
-            "label":{"en":"Satellite — back","zh":"卫星箱 — 背面","es":"Satélite — parte trasera"}},
-           {"id":"sub_sat_grille","photo":true,"skip":["HK-BAS115A1","HK-BAS118A1"],
-            "label":{"en":"Satellite — grille","zh":"卫星箱 — 网罩","es":"Satélite — malla"},
-            "help":{"en":"The grille over the tweeters, whole and without dents.",
-                    "zh":"拍摄高音单元前的网罩，须完整无凹陷。",
-                    "es":"La malla que cubre los tweeters, entera y sin abolladuras."}},
-           {"id":"sub_sat_logo","photo":true,"skip":["HK-BAS115A1","HK-BAS118A1"],
-            "label":{"en":"Satellite — logo","zh":"卫星箱 — 标志","es":"Satélite — logo"},
-            "help":{"en":"Close-up of the logo on the satellite. Straight, complete and well fixed.",
-                    "zh":"拍摄卫星箱上标志的特写。应端正、完整、牢固。",
-                    "es":"Primer plano del logo del satélite. Derecho, completo y bien fijado."}},
+           {/* La sección del satélite salió de aquí en el plan 105. Se pedía a
+                todo RHYME menos a los BAS, y resulta que la columna sólo la
+                lleva el Epsilon: al DEC115 y a los siete Delta se les estaba
+                pidiendo la fotografía de una pieza que no traen. El Epsilon
+                corre ahora su propia prueba de partes externas, EPS_EXTERNAL,
+                donde la columna y el poste tienen cada uno sus seis caras.
+
+                La pantalla se queda, porque ésa sí la llevan las cabinas
+                activas; sólo cambia de sección, de la del satélite —que ya no
+                existe— a la del panel, que es donde está montada. */
+            "section":{"en":"Panel and controls","zh":"面板与控制件","es":"Panel y controles"},
+            "help":{"en":"Read the voltage selector with the cabinet unplugged, before connecting it to anything.",
+                    "zh":"在断电状态下读取电压选择开关，接入任何电源之前完成。",
+                    "es":"Lea el selector de voltaje con la cabina desconectada, antes de enchufarla a nada."}},
            {"id":"sub_ext_display","photo":true,"skip":["HK-BAS115A1","HK-BAS118A1"],
             "label":{"en":"Display","zh":"显示屏","es":"Pantalla"},
             "help":{"en":"Photograph the display switched on, close enough to read what it shows and to see the glass has no scratches.",
                     "zh":"在显示屏点亮的状态下拍摄，距离足够近以便读出显示内容，并看清屏面无划痕。",
                     "es":"Fotografíe la pantalla encendida, lo bastante cerca para leer lo que muestra y ver que el vidrio no tiene rayones."}},
-           {/* El selector de voltaje se comprueba aquí y no en su prueba
-                aparte, para leerlo antes de conectar nada. Las cabinas activas
-                de RHYME conservan además la prueba propia; sólo los BAS quedan
-                fuera de ella. */
-            "section":{"en":"Panel and controls","zh":"面板与控制件","es":"Panel y controles"},
-            "help":{"en":"Read the voltage selector with the cabinet unplugged, before connecting it to anything.",
-                    "zh":"在断电状态下读取电压选择开关，接入任何电源之前完成。",
-                    "es":"Lea el selector de voltaje con la cabina desconectada, antes de enchufarla a nada."}},
            {"id":"sub_ext_panel","photo":true,
             "label":{"en":"Panel","zh":"面板","es":"Panel"}},
            {"id":"sub_ext_knobs","photo":true,
@@ -1272,8 +1294,223 @@ const CONFIG = {
                     "zh":"拍摄机身上批号的特写，格式如 25076411。每一位数字都要清晰，并与检验单上的批号一致。",
                     "es":"Primer plano del código de lote en la propia cabina, del tipo 25076411. Cada dígito nítido, y coincidiendo con el lote del papeleo."}}]},
 
-        {"id":"SUB_ACC","optional":false,"only_factory":["RHY"],
-         "only":["HK-BAS115A1","HK-BAS118A1"],"evidence":[],
+        /* ===== PARTES EXTERNAS · Epsilon ====================================
+           Prueba propia y no un puñado de excepciones sobre la compartida.
+
+           El Epsilon es tres piezas —gabinete, columna y poste— donde las otras
+           nueve referencias de RHYME son una, y eso cambia casi todo: dieciocho
+           fotos de caras en vez de seis, dos paneles en vez de uno, catorce
+           tornillos en la parrilla en vez de diez, dos logos de parrilla. Meter
+           eso en SUB_EXTERNAL habría dejado veinte puntos con `only` sobre una
+           prueba que comparten diez modelos, y cada cambio futuro obligaría a
+           leer las dos realidades a la vez.
+
+           Separadas, la compartida se queda limpia para las otras nueve y ésta
+           se puede editar sin mirar a nadie más. El precio es que un cambio que
+           valga para todos hay que hacerlo dos veces; se paga con gusto. */
+        {"id":"EPS_EXTERNAL","optional":false,"only_factory":["RHY"],
+         "only":["HK-EPS112A1"],
+         "evidence":["video"],"first":3,
+         "ask":{"en":"one continuous take going round the cabinet, the column and the pole, showing the panels, the grilles and the rest, no longer than a minute.",
+                "zh":"一镜到底环绕箱体、立柱与支杆拍摄，需拍到两块面板、网罩及其余部分，时长不超过一分钟。",
+                "es":"una sola toma continua recorriendo el gabinete, la columna y el poste, donde se observen los paneles, las parrillas y las demás funciones, no mayor a un minuto."},
+         "label":{"en":"EXTERNAL PARTS","zh":"外观部件","es":"PARTES EXTERNAS"},
+         "steps":[
+           {"en":"Put the three pieces in good light, avoiding reflections","zh":"将三个部件置于光线充足处，避免反光","es":"Ponga las tres piezas con buena luz, evitando reflejos"},
+           {"en":"Six faces of the cabinet, six of the column, six of the pole","zh":"箱体六面、立柱六面、支杆六面","es":"Seis caras del gabinete, seis de la columna y seis del poste"},
+           {"en":"Count the screws of the grille and of the two panels","zh":"清点网罩与两块面板的螺丝","es":"Cuente los tornillos de la parrilla y de los dos paneles"},
+           {"en":"Finish with one video going round everything","zh":"最后录制一段环绕全部部件的视频","es":"Termine con un video recorriendo todo"}],
+         "points":[
+           {"section":{"en":"The cabinet","zh":"箱体","es":"El gabinete"},
+            "help":{"en":"Six faces, one photograph each, in good light and without reflections. Look for scratches, dents, stains and paint defects.",
+                    "zh":"六个面各拍一张照片，光线充足且避免反光。检查刮痕、凹陷、污渍与喷涂缺陷。",
+                    "es":"Seis caras, una foto cada una, con buena luz y sin reflejos. Busque rayones, golpes, manchas y defectos de pintura."}},
+           {"id":"sub_ext_front","photo":true,
+            "label":{"en":"Cabinet — front","zh":"箱体 — 正面","es":"Gabinete — frente"}},
+           {"id":"sub_ext_back","photo":true,
+            "label":{"en":"Cabinet — back","zh":"箱体 — 背面","es":"Gabinete — trasera"}},
+           {"id":"sub_ext_right","photo":true,
+            "label":{"en":"Cabinet — right side","zh":"箱体 — 右侧面","es":"Gabinete — lateral derecho"},
+            "help":{"en":"Standing at the right of the cabinet looking at it from the front. Include the handle and the joints.",
+                    "zh":"面向正面时站在右侧拍摄，需包含提手与接缝。",
+                    "es":"De pie a la derecha del gabinete mirándolo de frente. Incluya la agarradera y los ensambles."}},
+           {"id":"sub_ext_left","photo":true,
+            "label":{"en":"Cabinet — left side","zh":"箱体 — 左侧面","es":"Gabinete — lateral izquierdo"}},
+           {"id":"sub_ext_top","photo":true,
+            "label":{"en":"Cabinet — top","zh":"箱体 — 顶部","es":"Gabinete — superior"}},
+           {"id":"sub_ext_bottom","photo":true,
+            "label":{"en":"Cabinet — bottom","zh":"箱体 — 底部","es":"Gabinete — inferior"},
+            "help":{"en":"Including the feet and the pole socket.",
+                    "zh":"需拍到底脚与支杆插孔。",
+                    "es":"Incluyendo las patas y el hueco del poste."}},
+
+           {"section":{"en":"The column","zh":"立柱","es":"La columna"},
+            "help":{"en":"The piece that carries the tweeters, on its own and with the grille fitted. Six faces, one photograph each.",
+                    "zh":"装有高音单元的部件，单独拍摄且网罩已装好。六个面各拍一张照片。",
+                    "es":"La pieza que lleva los tweeters, sola y con la malla puesta. Seis caras, una foto cada una."}},
+           {"id":"eps_col_front","photo":true,
+            "label":{"en":"Column — front","zh":"立柱 — 正面","es":"Columna — frente"}},
+           {"id":"eps_col_back","photo":true,
+            "label":{"en":"Column — back","zh":"立柱 — 背面","es":"Columna — trasera"}},
+           {"id":"eps_col_right","photo":true,
+            "label":{"en":"Column — right side","zh":"立柱 — 右侧面","es":"Columna — lateral derecho"}},
+           {"id":"eps_col_left","photo":true,
+            "label":{"en":"Column — left side","zh":"立柱 — 左侧面","es":"Columna — lateral izquierdo"}},
+           {"id":"eps_col_top","photo":true,
+            "label":{"en":"Column — top","zh":"立柱 — 顶部","es":"Columna — superior"}},
+           {"id":"eps_col_bottom","photo":true,
+            "label":{"en":"Column — bottom","zh":"立柱 — 底部","es":"Columna — inferior"},
+            "help":{"en":"The end that goes into the pole. Look at the fit and the paint round the opening.",
+                    "zh":"拍摄插入支杆的一端。检查配合处与开口周围的漆面。",
+                    "es":"El extremo que entra en el poste. Mire el ajuste y la pintura alrededor de la boca."}},
+
+           {"section":{"en":"The pole","zh":"支杆","es":"El poste"},
+            "help":{"en":"The tube that joins the cabinet to the column. Six faces, one photograph each, looking at the thread, the pin and the paint.",
+                    "zh":"连接箱体与立柱的支杆。六个面各拍一张照片，注意螺纹、插销与漆面。",
+                    "es":"El tubo que une el gabinete con la columna. Seis caras, una foto cada una, mirando la rosca, el pasador y la pintura."}},
+           {"id":"eps_pole_front","photo":true,
+            "label":{"en":"Pole — front","zh":"支杆 — 正面","es":"Poste — frente"}},
+           {"id":"eps_pole_back","photo":true,
+            "label":{"en":"Pole — back","zh":"支杆 — 背面","es":"Poste — trasera"}},
+           {"id":"eps_pole_right","photo":true,
+            "label":{"en":"Pole — right side","zh":"支杆 — 右侧面","es":"Poste — lateral derecho"}},
+           {"id":"eps_pole_left","photo":true,
+            "label":{"en":"Pole — left side","zh":"支杆 — 左侧面","es":"Poste — lateral izquierdo"}},
+           {"id":"eps_pole_top","photo":true,
+            "label":{"en":"Pole — top","zh":"支杆 — 顶部","es":"Poste — superior"},
+            "help":{"en":"The end that goes into the column, with its thread or its pin.",
+                    "zh":"拍摄插入立柱的一端，需拍到螺纹或插销。",
+                    "es":"El extremo que entra en la columna, con su rosca o su pasador."}},
+           {"id":"eps_pole_bottom","photo":true,
+            "label":{"en":"Pole — bottom","zh":"支杆 — 底部","es":"Poste — inferior"},
+            "help":{"en":"The end that goes into the cabinet.",
+                    "zh":"拍摄插入箱体的一端。",
+                    "es":"El extremo que entra en el gabinete."}},
+
+           {"section":{"en":"Panels and controls","zh":"面板与控制件","es":"Paneles y controles"},
+            "help":{"en":"The Epsilon carries two panels: the one with the knobs and the one with the fan. Each gets its own photograph. Read the voltage selector with the cabinet unplugged, before connecting it to anything.",
+                    "zh":"Epsilon 有两块面板：旋钮面板和风扇面板，各拍一张照片。在断电状态下读取电压选择开关，接入任何电源之前完成。",
+                    "es":"El Epsilon lleva dos paneles: el de las perillas y el del ventilador. Cada uno con su propia foto. Lea el selector de voltaje con la cabina desconectada, antes de enchufarla a nada."}},
+           {"id":"eps_panel_knobs","photo":true,
+            "label":{"en":"Knob panel","zh":"旋钮面板","es":"Panel de perillas"},
+            "help":{"en":"The whole panel in one frame, square on, with its printing legible.",
+                    "zh":"正对拍摄整块面板，印字须清晰可读。",
+                    "es":"El panel entero en un encuadre, de frente y con su impresión legible."}},
+           {"id":"eps_panel_fan","photo":true,
+            "label":{"en":"Fan panel","zh":"风扇面板","es":"Panel de ventilador"},
+            "help":{"en":"The whole panel in one frame, square on. The fan grille must be clear and undamaged.",
+                    "zh":"正对拍摄整块面板。风扇出风口须通畅无损。",
+                    "es":"El panel entero en un encuadre, de frente. La rejilla del ventilador debe estar libre y sin daños."}},
+           {"id":"sub_ext_knobs","photo":true,
+            "label":{"en":"Knobs","zh":"旋钮","es":"Perillas"}},
+           {"id":"sub_ext_display","photo":true,
+            "label":{"en":"Display","zh":"显示屏","es":"Pantalla"},
+            "help":{"en":"Photograph the display switched on, close enough to read what it shows and to see the glass has no scratches. It is on the knob panel, not on the column.",
+                    "zh":"在显示屏点亮的状态下拍摄，距离足够近以便读出显示内容，并看清屏面无划痕。显示屏位于旋钮面板上，而非立柱上。",
+                    "es":"Fotografíe la pantalla encendida, lo bastante cerca para leer lo que muestra y ver que el vidrio no tiene rayones. Está en el panel de perillas, no en la columna."}},
+           {"id":"sub_ext_volt","code":"PWR-005",
+            "measure":{"unit":"V","step":"1",
+                       "as":{"en":"Position","zh":"档位","es":"Posición"}},
+            "label":{"en":"Voltage selector set for the destination country","zh":"电压选择开关与目的地国家一致","es":"Selector de voltaje en la posición del país de destino"},
+            "help":{"en":"Read the position of the selector, write it in the box — 115 or 230 — and compare it with the destination on the order. 115 V for Colombia, the Dominican Republic, Ecuador and Venezuela. 230 V for Argentina, Chile, Peru and Uruguay.",
+                    "zh":"读取开关位置，将其填入方框——115 或 230——并与订单目的地核对。哥伦比亚、多米尼加、厄瓜多尔、委内瑞拉为 115 V；阿根廷、智利、秘鲁、乌拉圭为 230 V。",
+                    "es":"Lea la posición del selector, escríbala en el recuadro —115 o 230— y compárela con el destino de la orden. 115 V para Colombia, República Dominicana, Ecuador y Venezuela. 230 V para Argentina, Chile, Perú y Uruguay."}},
+           {"id":"sub_ext_volt_photo","code":"PWR-005","photo":true,
+            "sample":"bas_selector_pines",
+            "label":{"en":"Photo of the selector","zh":"选择开关照片","es":"Foto del selector"},
+            "help":{"en":"Close enough that the position can be read in the picture, and with enough panel around it to show where on the cabinet it is.",
+                    "zh":"距离足够近以便在照片中读出开关位置，同时保留周围部分面板以显示其在机器上的位置。",
+                    "es":"Lo bastante cerca para que la posición se lea en la foto, y con panel suficiente alrededor para ver en qué parte de la cabina está."}},
+
+           {/* Sin el soporte del trípode: el Epsilon se arma sobre su poste, no
+                sobre un trípode, así que aquellos cuatro tornillos no existen. */
+            "section":{"en":"Grille and screws","zh":"网罩与螺丝","es":"Parrilla y tornillos"},
+            "help":{"en":"Count the screws one by one. All must be present, done up, and none stripped or crooked.",
+                    "zh":"逐颗清点螺丝。应全部到位、拧紧，且不得有滑牙或歪斜。",
+                    "es":"Cuente los tornillos uno a uno. Deben estar todos, apretados, y ninguno barrido ni torcido."}},
+           {"id":"sub_ext_grille","photo":true,
+            "label":{"en":"Grille","zh":"网罩","es":"Parrilla"}},
+           {"id":"sub_ext_grille_screws","code":"MEC-004",
+            "label":{"en":"The grille has its 14 screws","zh":"网罩螺丝齐全，共 14 颗","es":"La parrilla tiene sus 14 tornillos"},
+            "help":{"en":"Fourteen in all: ten down the sides and four across the front of the grille. Count them one by one; all present, all done up, none stripped or crooked.",
+                    "zh":"共十四颗：两侧十颗，网罩正面四颗。逐颗清点；应全部到位、拧紧，不得有滑牙或歪斜。",
+                    "es":"Catorce en total: diez en los laterales y cuatro en el frente de la parrilla. Cuéntelos uno a uno; todos puestos, todos apretados y ninguno barrido ni torcido."}},
+           {"id":"eps_knob_panel_screws","code":"MEC-004",
+            "label":{"en":"The knob panel has its 10 screws","zh":"旋钮面板螺丝齐全，共 10 颗","es":"El panel de perillas tiene 10 tornillos"},
+            "help":{"en":"Count them round the knob panel. There must be ten.",
+                    "zh":"沿旋钮面板逐颗清点，应为十颗。",
+                    "es":"Cuéntelos alrededor del panel de perillas. Deben ser diez."}},
+           {"id":"eps_fan_panel_screws","code":"MEC-004",
+            "label":{"en":"The fan panel has its 12 screws","zh":"风扇面板螺丝齐全，共 12 颗","es":"El panel de ventilador tiene 12 tornillos"},
+            "help":{"en":"Count them round the fan panel. There must be twelve.",
+                    "zh":"沿风扇面板逐颗清点，应为十二颗。",
+                    "es":"Cuéntelos alrededor del panel de ventilador. Deben ser doce."}},
+
+           {"section":{"en":"Markings","zh":"标识","es":"Marcas"},
+            "help":{"en":"The logos, the grille of the column, the tag, the barcode and the lot code — everything stuck on or printed on the product. Then the video, which is what this section closes with.",
+                    "zh":"标志、立柱网罩、吊牌、条码与批号——凡是贴在或印在产品上的内容。随后是视频，本节以此结束。",
+                    "es":"Los logos, la malla de la columna, la etiqueta, el código de barras y el lote — todo lo que va pegado o impreso en el producto. Después el video, con el que cierra esta sección."}},
+           {"id":"sub_ext_logo_grille","photo":true,
+            "label":{"en":"Logo on the cabinet grille","zh":"箱体网罩上的标志","es":"Logo de la parrilla del gabinete"},
+            "help":{"en":"Close-up. Straight, complete, well fixed, with no scratched or faded lettering.",
+                    "zh":"特写。应端正、完整、牢固，字体无刮伤或褪色。",
+                    "es":"Primer plano. Derecho, completo, bien fijado y sin letras rayadas ni desvanecidas."}},
+           {"id":"eps_logo_col_grille","photo":true,
+            "label":{"en":"Logo on the column grille","zh":"立柱网罩上的标志","es":"Logo de la parrilla de la columna"},
+            "help":{"en":"The same close-up on the column. Check it matches the one on the cabinet in size, colour and finish.",
+                    "zh":"对立柱拍摄同样的特写。确认其与箱体上的标志在尺寸、颜色和工艺上一致。",
+                    "es":"El mismo primer plano en la columna. Compruebe que coincide con el del gabinete en tamaño, color y acabado."}},
+           {/* Viene de la sección de la columna. Es una marca del producto, no
+                una cara de la pieza, así que se juzga con los logos. */
+            "id":"sub_sat_grille","photo":true,
+            "label":{"en":"Column grille","zh":"立柱网罩","es":"Malla de la columna"},
+            "help":{"en":"The grille over the tweeters, whole and without dents.",
+                    "zh":"拍摄高音单元前的网罩，须完整无凹陷。",
+                    "es":"La malla que cubre los tweeters, entera y sin abolladuras."}},
+           {"id":"eps_logo_panel_fan","photo":true,
+            "label":{"en":"Logo on the fan panel","zh":"风扇面板上的标志","es":"Logo del panel de ventilador"},
+            "help":{"en":"Close-up of the logo printed on the fan panel.",
+                    "zh":"拍摄风扇面板上印制标志的特写。",
+                    "es":"Primer plano del logo impreso en el panel de ventilador."}},
+           {"id":"eps_logo_panel_knobs","photo":true,
+            "label":{"en":"Logo on the knob panel","zh":"旋钮面板上的标志","es":"Logo del panel de perillas"},
+            "help":{"en":"Close-up of the logo printed on the knob panel. Check both panel logos match each other and the ones on the grilles.",
+                    "zh":"拍摄旋钮面板上印制标志的特写。确认两块面板的标志彼此一致，并与网罩上的标志一致。",
+                    "es":"Primer plano del logo impreso en el panel de perillas. Compruebe que los dos logos de panel coinciden entre sí y con los de las parrillas."}},
+           {"id":"sub_ext_tag_front","photo":true,
+            "label":{"en":"Tag — front","zh":"吊牌 — 正面","es":"Etiqueta colgante — frente"},
+            "help":{"en":"The printed face of the tag, complete and legible.",
+                    "zh":"拍摄吊牌有印刷的一面，内容完整、清晰可读。",
+                    "es":"La cara impresa de la etiqueta, completa y legible."}},
+           {"id":"sub_ext_tag_back","photo":true,
+            "label":{"en":"Tag — back","zh":"吊牌 — 背面","es":"Etiqueta colgante — atrás"},
+            "help":{"en":"The other face, with the barcode and the country of origin legible.",
+                    "zh":"拍摄另一面，条码与产地需清晰可读。",
+                    "es":"La otra cara, con el código de barras y el país de origen legibles."}},
+           {"id":"sub_barcode_panel","code":"PKG-001","photo":true,"scan":true,
+            "measure":{"unit":"EAN","step":"1"},
+            "label":{"en":"Barcode on the fan panel","zh":"风扇面板条码","es":"Código de barras del panel de ventilador"},
+            "help":{"en":"Photograph it square on, filling the frame, with no glare across the bars. The app reads the number off that photograph; it cannot be typed in. If it does not read, retake the photograph. Compare it with the one recorded on the woofer box: they must be the same.",
+                    "zh":"正对拍摄，使其充满画面，条纹上不得有反光。应用会从该照片中自动识别号码，不可手工输入。若未能识别，请重拍。与低音箱彩盒上记录的号码核对：两者必须一致。",
+                    "es":"Fotografíelo de frente, llenando el encuadre y sin reflejos sobre las barras. La app lee el número de esa foto; no se puede escribir a mano. Si no lo lee, repita la foto. Compárelo con el registrado en la caja del woofer: deben ser el mismo."}},
+           {"id":"sub_ext_lot","photo":true,
+            "label":{"en":"Lot number","zh":"批号","es":"Número de lote"},
+            "help":{"en":"Close-up of the lot code on the cabinet itself, of the form 25076411. Every digit sharp, and matching the lot on the paperwork.",
+                    "zh":"拍摄机身上批号的特写，格式如 25076411。每一位数字都要清晰，并与检验单上的批号一致。",
+                    "es":"Primer plano del código de lote en la propia cabina, del tipo 25076411. Cada dígito nítido, y coincidiendo con el lote del papeleo."}}]},
+
+        {/* El Epsilon entró aquí en el plan 105 y salió de la prueba compartida
+              de accesorios, que le pedía micrófonos y trípode que no trae. Lleva
+              lo mismo que los BAS —el cable de poder— más el control remoto, que
+              los BAS no tienen.
+
+              `first` 5 la pone justo detrás de MATERIAL IMPRESO, que es donde
+              HOKLAN la quiere: los accesorios se sacan de la caja junto con los
+              impresos, en el mismo momento del desempaque. En los BAS no altera
+              nada, porque allí ya venía después de las tres primeras. */
+         "id":"SUB_ACC","optional":false,"only_factory":["RHY"],
+         "only":["HK-BAS115A1","HK-BAS118A1","HK-EPS112A1"],
+         "evidence":[],"first":5,
          "label":{"en":"ACCESSORIES","zh":"配件","es":"ACCESORIOS"},
          "steps":[
            {"en":"Take the power cable out of the box","zh":"将电源线从箱中取出","es":"Saque el cable de poder de la caja"},
@@ -1305,7 +1542,24 @@ const CONFIG = {
             "label":{"en":"Printing on the cable","zh":"线身印字","es":"Especificaciones impresas en el cable"},
             "help":{"en":"Close-up of the text printed along the jacket, close enough to read the gauge and the ratings.",
                     "zh":"拍摄护套上印字的特写，距离足够近以便读出线规与额定值。",
-                    "es":"Primer plano del texto impreso a lo largo del forro, lo bastante cerca para leer el calibre y los valores nominales."}}]},
+                    "es":"Primer plano del texto impreso a lo largo del forro, lo bastante cerca para leer el calibre y los valores nominales."}},
+           {"section":{"en":"The remote control","zh":"遥控器","es":"El control remoto"},
+            "only":["HK-EPS112A1"],
+            "help":{"en":"Two photographs, front and back. The two faces are asked for separately.",
+                    "zh":"正反两张照片，分别拍摄。",
+                    "es":"Dos fotos, frente y reverso, cada una por separado."}},
+           {"id":"eps_remote_front","code":"ACC-001","photo":true,
+            "only":["HK-EPS112A1"],
+            "label":{"en":"Remote control — front","zh":"遥控器 — 正面","es":"Control remoto — frente"},
+            "help":{"en":"The printed face, with every key legible. Check no key is sunken or stuck.",
+                    "zh":"拍摄有印字的一面，所有按键须清晰可读。确认无按键塌陷或卡住。",
+                    "es":"La cara impresa, con todas las teclas legibles. Compruebe que ninguna esté hundida ni trabada."}},
+           {"id":"eps_remote_back","code":"ACC-001","photo":true,
+            "only":["HK-EPS112A1"],
+            "label":{"en":"Remote control — back","zh":"遥控器 — 背面","es":"Control remoto — reverso"},
+            "help":{"en":"The other face, in its own frame, showing the battery cover and any label.",
+                    "zh":"拍摄另一面，单独成图，需拍到电池盖和标签。",
+                    "es":"La otra cara, en su propia foto, mostrando la tapa de la batería y cualquier etiqueta."}}]},
 
         {/* Nació para los subwoofers y ahora cubre toda RHYME: la prueba
             compartida deja de aplicarse a esta fábrica. Conserva el id SUB_
@@ -1365,16 +1619,41 @@ const CONFIG = {
             "help":{"en":"Photograph the desiccant bag with its printing readable, and check it is whole and not burst.",
                     "zh":"拍摄干燥剂袋，印字需清晰可读，并确认袋体完好未破裂。",
                     "es":"Fotografíe la bolsa desecante con su impresión legible, y compruebe que está entera y no reventada."}},
-           {"id":"sub_foam_top","photo":true,
+           {/* Cuatro icopores en el Epsilon y dos en las demás. Allí van dos
+                cajas, cada una con su par, y llamarlos «superior» e «inferior» a
+                secas dejaba al operario adivinando de cuál caja hablaba cada
+                punto. En las referencias de una sola caja no hay con qué
+                confundirlos, así que conservan el nombre corto. */
+            "id":"sub_foam_top","photo":true,"skip":["HK-EPS112A1"],
             "label":{"en":"Top foam support","zh":"上部泡沫支撑","es":"Icopor de soporte superior"},
             "help":{"en":"Take it out of the box and photograph it whole, on a clear surface. Check the corners and edges for breaks, dents or crumbling.",
                     "zh":"从箱中取出，放在干净台面上整块入镜拍摄。检查边角是否有破损、压陷或掉渣。",
                     "es":"Sáquelo de la caja y fotografíelo entero sobre una superficie despejada. Revise esquinas y bordes por roturas, hundimientos o desmoronamiento."}},
-           {"id":"sub_foam_bottom","photo":true,
+           {"id":"sub_foam_bottom","photo":true,"skip":["HK-EPS112A1"],
             "label":{"en":"Bottom foam support","zh":"下部泡沫支撑","es":"Icopor de soporte inferior"},
             "help":{"en":"The same photograph on the other piece. The two are photographed separately.",
                     "zh":"对另一块做同样的拍摄。两块须分开拍摄。",
                     "es":"La misma foto en la otra pieza. Los dos se fotografían por separado."}},
+           {"id":"eps_foam_cab_top","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Cabinet — top foam support","zh":"箱体 — 上部泡沫支撑","es":"Icopor de soporte superior de gabinete"},
+            "help":{"en":"Take it out of the woofer box and photograph it whole, on a clear surface. Check the corners and edges for breaks, dents or crumbling.",
+                    "zh":"从低音箱彩盒中取出，放在干净台面上整块入镜拍摄。检查边角是否有破损、压陷或掉渣。",
+                    "es":"Sáquelo de la caja del woofer y fotografíelo entero sobre una superficie despejada. Revise esquinas y bordes por roturas, hundimientos o desmoronamiento."}},
+           {"id":"eps_foam_cab_bottom","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Cabinet — bottom foam support","zh":"箱体 — 下部泡沫支撑","es":"Icopor de soporte inferior de gabinete"},
+            "help":{"en":"The same photograph on the other piece of the woofer box.",
+                    "zh":"对低音箱彩盒中的另一块做同样的拍摄。",
+                    "es":"La misma foto en la otra pieza de la caja del woofer."}},
+           {"id":"eps_foam_col_top","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Column and pole — top foam support","zh":"立柱与支杆 — 上部泡沫支撑","es":"Icopor de soporte superior de columna y poste"},
+            "help":{"en":"The same, on the second box. Take it out and photograph it whole, checking corners and edges.",
+                    "zh":"对第二箱做同样的处理。取出后整块入镜拍摄，检查边角。",
+                    "es":"Lo mismo, en la segunda caja. Sáquelo y fotografíelo entero, revisando esquinas y bordes."}},
+           {"id":"eps_foam_col_bottom","photo":true,"only":["HK-EPS112A1"],
+            "label":{"en":"Column and pole — bottom foam support","zh":"立柱与支杆 — 下部泡沫支撑","es":"Icopor de soporte inferior de columna y poste"},
+            "help":{"en":"The other piece of the second box.",
+                    "zh":"第二箱中的另一块。",
+                    "es":"La otra pieza de la segunda caja."}},
            /* El código del panel se fotografía en PARTES EXTERNAS, junto al resto
               de lo que va impreso en el producto. El de la caja, en CAJA. Aquí
               queda sólo lo que viaja dentro del empaque. */]},
@@ -3465,8 +3744,10 @@ const CONFIG = {
 
         {"id":"ACCESSORIES","optional":false,"type":"photos",
          "only_factory":["YIS","RHY","EAG"],
+         /* El Epsilon salió en el plan 105: le pedía micrófonos y trípode, que no
+            trae, y corre ahora SUB_ACC con el cable y su control remoto. */
          "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330",
-                 "HK-BAS115A1","HK-BAS118A1"],   // see EXTERNAL above
+                 "HK-BAS115A1","HK-BAS118A1","HK-EPS112A1"],   // see EXTERNAL above
          "label":{"en":"ACCESSORIES","zh":"配件"},
          "steps":[
            {"en":"Take the accessories out of the box onto a clear surface","zh":"将配件从箱中取出，放在干净台面上"},
@@ -3579,19 +3860,19 @@ const CONFIG = {
                 recogía: el número entraba solo, sin nada detrás. En RHYME las
                 mismas tres medidas sí la exigen desde que se rehizo la prueba
                 CAJA, y era la misma medición con dos reglas distintas. */
-            "id":"caja_ancho","photo":true,"measure":{"unit":"cm","step":"0.1"},
+            "id":"caja_ancho","photo":true,"measure":{"unit":"mm","step":"1"},
             "sample":"caja_ancho",
             "label":{"en":"Box — width","zh":"彩盒 — 宽"},
             "help":{"en":"The horizontal side of the front face. Hook the tape on one edge and read it at the opposite edge, with both ends inside the frame. Read the centimetre scale, not the inches.",
                     "zh":"正面的水平边。将卷尺钩在一端，在另一端读数，两端都要在画面之内。读厘米刻度，不要读英寸。",
                     "es":"El lado horizontal de la cara frontal. Enganche la cinta en un borde y lea en el borde opuesto, con los dos extremos dentro del encuadre. Lea la escala en centímetros, no las pulgadas."}},
-           {"id":"caja_largo","photo":true,"measure":{"unit":"cm","step":"0.1"},
+           {"id":"caja_largo","photo":true,"measure":{"unit":"mm","step":"1"},
             "sample":"caja_largo",
             "label":{"en":"Box — depth","zh":"彩盒 — 深"},
             "help":{"en":"The depth: the tape crosses the top face, from the front edge to the back edge. Both ends of the tape in the photo, and centimetres.",
                     "zh":"深度：卷尺横跨顶面，从前沿量到后沿。卷尺两端都要入镜，读厘米。",
                     "es":"El largo: la cinta cruza la cara superior, del borde delantero al trasero. Los dos extremos de la cinta en la foto, y en centímetros."}},
-           {"id":"caja_alto","photo":true,"measure":{"unit":"cm","step":"0.1"},
+           {"id":"caja_alto","photo":true,"measure":{"unit":"mm","step":"1"},
             "sample":"caja_alto",
             "label":{"en":"Box — height","zh":"彩盒 — 高"},
             "help":{"en":"The vertical side, from the base to the top. Stand the box up and run the tape down one corner. Step back until the base and the reading are both in the picture.",
@@ -3708,7 +3989,12 @@ const CONFIG = {
             "help":{"en":"Place the woofer on the scale on its own, with no screws, gasket or cable attached. Photograph the reading and write the value in the box, in kilograms.",
                     "zh":"将低音单元单独放在电子秤上，不带螺丝、垫圈和引线。拍摄读数，并以千克为单位将数值填入方框。",
                     "es":"Ponga el woofer solo sobre la balanza, sin tornillos, empaque ni cable. Fotografíe la lectura y escriba el valor en el recuadro, en kilogramos."}},
-           {"id":"woofer_impedance","only":["HK-BAS115A1","HK-BAS118A1"],
+           {/* Nació sólo para los BAS y en el plan 105 pasó a YISION y a toda
+                RHYME: es la misma medición sobre el mismo componente, y el
+                woofer lo llevan todas. `must` le quita el N/A — no hay
+                referencia sin woofer, así que «no aplica» era una salida que no
+                existía. */
+            "id":"woofer_impedance","only_factory":["YIS","RHY"],"must":true,
             "sample":"bas_impedancia","measure":{"unit":"Ω","step":"0.1"},
             "label":{"en":"Woofer — impedance","zh":"低音单元 — 阻抗","es":"Woofer — impedancia"},
             "help":{"en":"Measure the impedance across the two terminals of the woofer, with nothing else connected to them, and write the value in the box. Photograph the meter with the reading on screen and the probes on the terminals, both in the same picture.",
@@ -3814,6 +4100,27 @@ const CONFIG = {
             "help":{"en":"The magnet and the terminals, in their own frame, with the label readable: brand, model and impedance.",
                     "zh":"拍摄磁钢和接线端子，单独成图，标签需清晰可读：品牌、型号和阻抗。",
                     "es":"El imán y los terminales, en su propia foto, con la etiqueta legible: marca, modelo e impedancia."}},
+           {/* Las dos medidas del tweeter se sumaron en el plan 105, en espejo de
+                las del woofer: es el otro componente que se compra por
+                especificación y el que más silenciosamente se sustituye por uno
+                más barato. Un tweeter de otro peso o de otra impedancia funciona
+                en el puesto y suena distinto en el evento.
+
+                Obligatorias, sin N/A: toda referencia que llegue hasta aquí
+                lleva tweeter — los BAS, que no lo llevan, se saltan el bloque
+                entero unas líneas arriba. */
+            "id":"tweeter_weight","skip":["HK-BAS115A1","HK-BAS118A1"],"must":true,
+            "photo":true,"measure":{"unit":"g","step":"1"},
+            "label":{"en":"Tweeter — weight","zh":"高音单元 — 重量","es":"Tweeter — peso"},
+            "help":{"en":"Put the tweeter on the scale on its own, with no screws, gasket or cable attached. Photograph the reading and write the value in the box.",
+                    "zh":"将高音单元单独放在电子秤上，不带螺丝、垫圈和引线。拍摄读数并将数值填入方框。",
+                    "es":"Ponga el tweeter solo sobre la balanza, sin tornillos, empaque ni cable. Fotografíe la lectura y escriba el valor en el recuadro."}},
+           {"id":"tweeter_impedance","skip":["HK-BAS115A1","HK-BAS118A1"],"must":true,
+            "photo":true,"sample":"bas_impedancia","measure":{"unit":"Ω","step":"0.1"},
+            "label":{"en":"Tweeter — impedance","zh":"高音单元 — 阻抗","es":"Tweeter — impedancia"},
+            "help":{"en":"Measure the impedance across the two terminals of the tweeter, with nothing else connected to them, and write the value in the box. Photograph the meter with the reading on screen and the probes on the terminals, both in the same picture. Compare it with the figure printed on the label.",
+                    "zh":"在高音单元的两个接线端子间测量阻抗，端子上不得连接其他任何线路，并将数值填入方框。拍摄仪表，读数与搭在端子上的表笔须在同一画面内。并与标签上印制的数值核对。",
+                    "es":"Mida la impedancia entre los dos terminales del tweeter, sin nada más conectado a ellos, y escriba el valor en el recuadro. Fotografíe el instrumento con la lectura en pantalla y las puntas sobre los terminales, las dos cosas en la misma foto. Compárela con la cifra impresa en la etiqueta."}},
            {"id":"fuente","skip":["HK-BAS115A1","HK-BAS118A1"],
             "label":{"en":"Power supply","zh":"电源板"}},
            {/* En los subwoofers el amplificador va montado de canto contra el
@@ -3967,7 +4274,13 @@ const CONFIG = {
            adjunta lo que el proveedor entrega y se anota la cifra de cada canal,
            que es lo que después se compara contra la caja y la ficha. Los BAS
            quedan fuera: llevan un solo canal y su propia prueba. */
-        {"id":"RMS_SUPPLIER","optional":false,"only_factory":["RHY"],"evidence":[],"first":5,
+        {/* Primera del plan desde el plan 105, igual que en los BAS, y por lo
+              mismo: la cifra la manda el proveedor del amplificador por correo,
+              y entre que se pide y llega pueden pasar horas. Puesta al final, la
+              inspección entera esperaba. `first` 0.5 y no 1 porque CAJA ocupa el
+              1 y no debe moverse; el cero no sirve, `planTests` ordena por
+              `(a.first || 99)` y el cero es falso. */
+         "id":"RMS_SUPPLIER","optional":false,"only_factory":["RHY"],"evidence":[],"first":0.5,
          "only":["HK-EPS112A1","HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
          /* Sin el prefijo, igual que la capacidad de batería. Quedan tres pruebas
@@ -3986,14 +4299,14 @@ const CONFIG = {
                     "zh":"每个通道一张图片，其中功率数值须清晰可读。每项旁边的示例展示了该报告的样式。",
                     "es":"Una imagen por canal, con la cifra de potencia legible en ella. El ejemplo al lado de cada punto muestra cómo se ve el informe."}},
            {"id":"rms_sup_woofer","code":"AUD-020","photo":true,"gallery":true,
-            "sample":"rms_ejemplo",
+            "sample":"rms_ejemplo","must":true,
             "measure":{"unit":"W","step":"0.1"},
             "label":{"en":"Woofer channel — power","zh":"低音通道 — 功率","es":"Canal del woofer — potencia"},
             "help":{"en":"Attach the supplier image of the woofer channel and write the power it shows in the box.",
                     "zh":"上传供应商提供的低音通道图片，并将其中显示的功率填入方框。",
                     "es":"Adjunte la imagen del proveedor del canal del woofer y escriba en el recuadro la potencia que muestra."}},
            {"id":"rms_sup_tweeter","code":"AUD-020","photo":true,"gallery":true,
-            "sample":"rms_ejemplo",
+            "sample":"rms_ejemplo","must":true,
             "measure":{"unit":"W","step":"0.1"},
             "label":{"en":"Tweeter channel — power","zh":"高音通道 — 功率","es":"Canal del tweeter — potencia"},
             "help":{"en":"The same for the tweeter channel: its own image and its own figure.",
@@ -4080,7 +4393,8 @@ const CONFIG = {
             "help":{"en":"Read the RMS voltage the oscilloscope shows and write it in the box. Make sure it is the RMS reading and not the peak or the peak-to-peak.",
                     "zh":"读取示波器显示的 RMS 电压并填入方框。请确认读的是 RMS 值，而不是峰值或峰峰值。",
                     "es":"Lea el voltaje RMS que muestra el osciloscopio y escríbalo en el recuadro. Asegúrese de que es el valor RMS y no el pico ni el pico a pico."}},
-           {"id":"rms_watts","code":"AUD-020","measure":{"unit":"W","step":"0.1"},
+           {"id":"rms_watts","code":"AUD-020","must":true,
+            "measure":{"unit":"W","step":"0.1"},
             "sample":"rms_calculo",
             "label":{"en":"RMS power","zh":"RMS 功率","es":"Potencia RMS"},
             "help":{"en":"V RMS multiplied by itself, divided by the impedance, times two. 8.4 V into 4 Ω → 8.4 × 8.4 ÷ 4 × 2 = 35.28 W. Write the result in the box. The example photograph shows the whole operation on the calculator.",
@@ -4142,17 +4456,26 @@ const CONFIG = {
               mode — its signal comes in over XLR from something else. Aging one
               is a reasonable thing to want; it is just not this procedure. */
          "id":"AGING","optional":true,"only_factory":["YIS","RHY"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1"],"evidence":[],
-         /* Segunda desde el plan 104, y antes era quinta. Son ocho horas: cada
-            prueba que se le ponga delante son ocho horas que empiezan más
-            tarde, y con cuatro por delante terminaba pasada la jornada.
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1"],
+         /* El video se sumó en el plan 105. La prueba sigue igual —ocho horas y
+            su confirmación al final—, pero ahora hay que dejar constancia de que
+            la unidad estuvo sonando: un clip corto, de unos diez segundos, con
+            la cabina en marcha. Antes lo único que quedaba era la palabra del
+            operario, y una casilla marcada no distingue una cabina que envejeció
+            de una que no se enchufó. */
+         "evidence":["video"],
+         "ask":{"en":"about ten seconds of the unit aging: playing, with the panel lights on.",
+                "zh":"约十秒钟整机老化中的视频：正在发声、面板指示灯点亮。",
+                "es":"unos diez segundos de la unidad envejeciendo: sonando y con los testigos del panel encendidos."},
+         /* Segunda del plan. Son ocho horas: cada prueba que se le ponga delante
+            son ocho horas que empiezan más tarde.
 
             No puede ser la primera. En RHYME la caja se pesa y se mide cerrada,
             y envejecer exige desempacar: si el envejecimiento fuera antes, el
-            peso bruto ya no existiría. Así que va inmediatamente después de
-            abrir la caja — el operario desempaca, pone la cabina a envejecer y
-            se va a hacer el resto. `long` es lo que le dice a la app que una
-            prueba sin responder no bloquea el avance.
+            peso bruto ya no existiría. Va inmediatamente después de abrir la
+            caja — el operario desempaca, la pone a envejecer y se va a hacer el
+            resto. `long` es lo que le dice a la app que una prueba sin responder
+            no bloquea el avance.
 
             En YISION no hay prueba de caja delante, así que allí abre el plan. */
          "first":2,
@@ -4164,6 +4487,7 @@ const CONFIG = {
          "steps":[
            {"en":"Run the aging following the HOKLAN test list","zh":"按 HOKLAN 测试清单执行老化","es":"Realice el envejecimiento siguiendo la lista de pruebas de HOKLAN"},
            {"en":"Leave it running eight hours without stopping it","zh":"连续运行八小时，中途不得停止","es":"Déjelo sonando ocho horas sin detenerlo"},
+           {"en":"Film about ten seconds of it aging","zh":"拍摄约十秒钟其老化中的视频","es":"Grabe unos diez segundos de la unidad envejeciendo"},
            {"en":"Confirm it when the eight hours are up","zh":"八小时结束后确认本项","es":"Confírmelo al cumplirse las ocho horas"}],
          "points":[
            {/* Un solo punto y sin fotografía, por ahora. Antes eran dos fotos
@@ -4171,9 +4495,9 @@ const CONFIG = {
                 mientras se define cómo se va a evidenciar. */
             "id":"age_done","code":"AGE-001",
             "label":{"en":"Aging completed following the HOKLAN test list","zh":"已按 HOKLAN 测试清单完成老化","es":"Envejecimiento realizado con la lista de pruebas de HOKLAN"},
-            "help":{"en":"Confirm the speaker ran the eight hours following the HOKLAN test list, without being stopped, switched off or touched during them.",
-                    "zh":"确认音箱已按 HOKLAN 测试清单连续运行八小时，其间未停止、未关机、未被触碰。",
-                    "es":"Confirme que el parlante sonó las ocho horas siguiendo la lista de pruebas de HOKLAN, sin detenerse, apagarse ni ser tocado durante ellas."}}]},
+            "help":{"en":"Confirm the speaker ran the eight hours following the HOKLAN test list, without being stopped, switched off or touched during them. Attach a clip of about ten seconds showing the unit aging — playing, with the panel lights on.",
+                    "zh":"确认音箱已按 HOKLAN 测试清单连续运行八小时，其间未停止、未关机、未被触碰。请上传约十秒钟的视频，显示整机处于老化状态——正在发声、面板指示灯点亮。",
+                    "es":"Confirme que el parlante sonó las ocho horas siguiendo la lista de pruebas de HOKLAN, sin detenerse, apagarse ni ser tocado durante ellas. Adjunte un video de unos diez segundos donde se vea la unidad envejeciendo — sonando y con los testigos del panel encendidos."}}]},
 
         /* ===== LESHENG — wireless microphone system =========================
            A different product, so a different plan: two microphones and a

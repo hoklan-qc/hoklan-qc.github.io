@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="14.4">
+<meta name="app-version" content="14.5">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 117,
+      "plan_version": 118,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1034,7 +1034,7 @@ const CONFIG = {
                 cabina sola, y es el que se compara contra la ficha del producto
                 y el que discute un transportista. Uno no se deduce del otro sin
                 pesar también el empaque vacío. */
-            "id":"box_net","code":"PKG-002","photo":true,
+            "id":"box_net","code":"PKG-002","photo":true,"skip":["HK-EPS112A1"],
             "sample":"caja_peso",
             "measure":{"unit":"kg","step":"0.1"},
             "label":{"en":"Net weight — cabinet alone","zh":"净重 — 仅音箱本体","es":"Peso neto — la cabina sola"},
@@ -1334,6 +1334,21 @@ const CONFIG = {
            {"en":"Count the screws of the grille and of the two panels","zh":"清点网罩与两块面板的螺丝","es":"Cuente los tornillos de la parrilla y de los dos paneles"},
            {"en":"Finish with one video going round everything","zh":"最后录制一段环绕全部部件的视频","es":"Termine con un video recorriendo todo"}],
          "points":[
+           {/* El peso neto vivía en CAJA, dentro de la sección de la caja del
+                woofer. Aquí el producto ya está desempacado y sobre la mesa,
+                que es donde se pesa. */
+            "section":{"en":"The weight","zh":"重量","es":"El peso"},
+            "help":{"en":"With everything unpacked, before going round the three pieces.",
+                    "zh":"在全部拆包之后、逐一检查三个部件之前进行。",
+                    "es":"Con todo ya desempacado, antes de recorrer las tres piezas."}},
+           {"id":"eps_net","code":"PKG-002","photo":true,
+            "sample":"caja_peso",
+            "measure":{"unit":"kg","step":"0.1"},
+            "label":{"en":"Net weight — cabinet alone","zh":"净重 — 仅音箱本体",
+                     "es":"Peso neto — la cabina sola"},
+            "help":{"en":"Put the cabinet on the scale on its own: no box, no foam, no cable, no printed matter, and without the column or the pole. Photograph the scale with the reading legible and write the figure in the box.",
+                    "zh":"将音箱本体单独放在秤上：不含彩盒、泡沫、线材与印刷品，也不含立柱与支杆。拍摄秤，读数须清晰可读，并将数值填入方框。",
+                    "es":"Ponga la cabina sola sobre la báscula: sin caja, sin icopores, sin cable, sin impresos, y sin la columna ni el poste. Fotografíe la báscula con la lectura legible y escriba la cifra en el recuadro."}},
            {"section":{"en":"The cabinet","zh":"箱体","es":"El gabinete"},
             "help":{"en":"Six faces, one photograph each, in good light and without reflections. Look for scratches, dents, stains and paint defects.",
                     "zh":"六个面各拍一张照片，光线充足且避免反光。检查刮痕、凹陷、污渍与喷涂缺陷。",
@@ -1428,8 +1443,12 @@ const CONFIG = {
             "help":{"en":"Read the position of the selector, write it in the box — 115 or 230 — and compare it with the destination on the order. 115 V for Colombia, the Dominican Republic, Ecuador and Venezuela. 230 V for Argentina, Chile, Peru and Uruguay.",
                     "zh":"读取开关位置，将其填入方框——115 或 230——并与订单目的地核对。哥伦比亚、多米尼加、厄瓜多尔、委内瑞拉为 115 V；阿根廷、智利、秘鲁、乌拉圭为 230 V。",
                     "es":"Lea la posición del selector, escríbala en el recuadro —115 o 230— y compárela con el destino de la orden. 115 V para Colombia, República Dominicana, Ecuador y Venezuela. 230 V para Argentina, Chile, Perú y Uruguay."}},
-           {"id":"sub_ext_volt_photo","code":"PWR-005","photo":true,
-            "sample":"bas_selector_pines",
+           {/* Sin imagen de referencia desde el plan 118. La que había —
+                `bas_selector_pines` — muestra el respaldo del selector con sus
+                pines, vista de dentro de la cabina, y aquí se pide la foto del
+                selector por fuera, con su posición legible. El ejemplo enseñaba
+                otra cosa que la que se pide. */
+            "id":"sub_ext_volt_photo","code":"PWR-005","photo":true,
             "label":{"en":"Photo of the selector","zh":"选择开关照片","es":"Foto del selector"},
             "help":{"en":"Close enough that the position can be read in the picture, and with enough panel around it to show where on the cabinet it is.",
                     "zh":"距离足够近以便在照片中读出开关位置，同时保留周围部分面板以显示其在机器上的位置。",
@@ -2043,7 +2062,8 @@ const CONFIG = {
            {"id":"autoconnect","code":"BT-008","label":{"en":"Reconnects automatically on power on","zh":"开机自动回连"},
             "help":{"en":"With the phone paired and nearby, switch the speaker off and on. It must reconnect by itself, without pairing again.",
                     "zh":"手机保持已配对且在附近，关机后再开机。音箱应自动回连，无需重新配对。"}},
-           {"id":"stable","code":"BT-003","label":{"en":"Does not disconnect during playback","zh":"播放中不断开"},
+           {"id":"stable","code":"BT-003","skip":["HK-EPS112A1"],
+            "label":{"en":"Does not disconnect during playback","zh":"播放中不断开"},
             "help":{"en":"Play for at least 30 seconds with the phone about 3 metres away. There must be no dropouts or disconnections.",
                     "zh":"手机放在约 3 米外，持续播放至少 30 秒。不应出现断音或断开连接。"}},
            {"section":{"en":"Playback","zh":"播放"},
@@ -2718,11 +2738,24 @@ const CONFIG = {
            {"en":"Check the remote has a battery; remove the insulator if new","zh":"确认遥控器有电池，新品请抽出绝缘片"},
            {"en":"Point at the speaker from about 3 metres","zh":"距离音箱约 3 米对准操作"},
            {"en":"Press each button on the list and confirm on the speaker","zh":"逐个按下列按键，并在音箱上确认反应"},
-           {"en":"Repeat some buttons at an angle, not only straight on","zh":"部分按键需侧向角度再测一次，不只正对"}],
+           {"en":"Repeat some buttons at an angle, not only straight on","zh":"部分按键需侧向角度再测一次，不只正对"},
+           {/* El Epsilon lleva dos receptores de infrarrojo, uno al frente y otro
+                en el panel trasero. Con una sola pasada de frente, un receptor
+                trasero muerto sale de la fábrica sin que nadie lo note. */
+            "only":["HK-EPS112A1"],
+            "en":"Two receivers: run the whole list from the front, then again from the back panel",
+            "zh":"两个接收头：先在正面完成全部项目，再到后面板重复一遍",
+            "es":"Dos receptores: recorra toda la lista de frente y repítala apuntando al panel trasero"}],
          "points":[
-           {"section":{"en":"Power and mute","zh":"电源与静音"},
+           {"skip":["HK-EPS112A1"],
+            "section":{"en":"Power and mute","zh":"电源与静音"},
             "help":{"en":"Check the remote has a battery and remove the insulator if new. Point at the speaker from about 3 metres.",
                     "zh":"确认遥控器有电池，新品请抽出绝缘片。距离音箱约 3 米对准操作。"}},
+           {"only":["HK-EPS112A1"],
+            "section":{"en":"Power and mute","zh":"电源与静音","es":"Encendido y silencio"},
+            "help":{"en":"Check the remote has a battery and remove the insulator if new. Point at the speaker from about 3 metres. This cabinet has two infrared receivers, one on the front and one on the back panel: every point of this test is answered only after the key has worked from both. Aim at the front first, go through the whole list, then repeat it aiming at the back panel. A key that answers from one side and not the other is a fail.",
+                    "zh":"确认遥控器有电池，新品请抽出绝缘片。距离音箱约 3 米对准操作。本箱体有两个红外接收头，分别位于正面和后面板：本测试的每一项都必须在两处均有效后才能判定合格。先对准正面走完全部项目，再对准后面板重复一遍。只在一侧有效的按键判定为异常。",
+                    "es":"Compruebe que el control tiene pila y retire el aislante si es nuevo. Apunte al parlante desde unos 3 metros. Esta cabina tiene dos receptores de infrarrojo, uno al frente y otro en el panel trasero: cada punto de esta prueba se responde sólo después de que la tecla haya funcionado desde los dos. Apunte primero al frente y recorra toda la lista; luego repítala apuntando al panel trasero. Una tecla que responde por un lado y no por el otro es no conforme."}},
            {"id":"power","code":"RMT-001","label":{"en":"Power on / off","zh":"电源开关"},
             "help":{"en":"Press it to switch the speaker off, then again to switch it on. Both directions must work from 3 metres.",
                     "zh":"按下关闭音箱，再按一次开机。3 米距离下开和关都必须有效。"}},
@@ -4243,9 +4276,9 @@ const CONFIG = {
             "sample":"bas_cable_woofer",
             "measure":{"unit":"AWG","step":"1"},
             "label":{"en":"Woofer cable — gauge","zh":"低音单元引线 — 线径","es":"Cable del woofer — calibre"},
-            "help":{"en":"Read the gauge printed on the woofer cable and write it in the box, in AWG. Both the BAS115A1 and the BAS118A1 must be 16 AWG. Photograph the printing on the cable; where the cable carries none, measure it with a caliper and photograph the reading with the cable between the jaws.",
-                    "zh":"读取低音单元引线上印制的线规，以 AWG 填入方框。BAS115A1 与 BAS118A1 均应为 16 AWG。拍摄线上的印字；若线上无印字，则用游标卡尺测量，并拍摄读数，引线须夹在量爪之间。",
-                    "es":"Lea el calibre impreso en el cable del woofer y escríbalo en el recuadro, en AWG. Tanto el BAS115A1 como el BAS118A1 deben ser 16 AWG. Fotografíe la impresión del cable; si el cable no la trae, mídalo con un calibrador y fotografíe la lectura con el cable entre las mordazas."}},
+            "help":{"en":"Read the gauge printed on the woofer cable and write it in the box, in AWG. It must be 16 AWG on every RHYME reference. Photograph the printing on the cable; where the cable carries none, measure it with a caliper and photograph the reading with the cable between the jaws.",
+                    "zh":"读取低音单元引线上印制的线规，以 AWG 填入方框。RHYME 所有型号均应为 16 AWG。拍摄线上的印字；若线上无印字，则用游标卡尺测量，并拍摄读数，引线须夹在量爪之间。",
+                    "es":"Lea el calibre impreso en el cable del woofer y escríbalo en el recuadro, en AWG. Debe ser 16 AWG en toda referencia de RHYME. Fotografíe la impresión del cable; si el cable no la trae, mídalo con un calibrador y fotografíe la lectura con el cable entre las mordazas."}},
            {"id":"connectors_glue","only_factory":["RHY"],
             "sample":"bas_pegante",
             "label":{"en":"Connectors — yellow glue","zh":"接插件 — 黄胶","es":"Conectores — pegante amarillo"},
@@ -4354,13 +4387,17 @@ const CONFIG = {
             "label":{"en":"Amplifier — component side","zh":"功放板 — 元件面"},
             "help":{"en":"The side carrying the chips. The board reference and the main IC markings must be readable.",
                     "zh":"拍摄有芯片的一面。板号和主要芯片丝印必须清晰可读。"}},
-           {"id":"amp_side_1","only_factory":["RHY"],
+           {/* Los dos costados son de los subs y sólo de ellos. En una cabina
+                activa el amplificador no va de canto: sus dos caras se
+                fotografían de frente en los dos puntos vecinos, y los costados
+                se sumaban como dos fotos más de la misma tarjeta. */
+            "id":"amp_side_1","only":["HK-BAS115A1","HK-BAS118A1"],
             "sample":"bas_amp_lat1",
             "label":{"en":"Amplifier — one side","zh":"功放板 — 一侧","es":"Amplificador — un costado"},
             "help":{"en":"Photograph the amplifier from one side, with the whole board in the frame and the components on that face visible.",
                     "zh":"从一侧拍摄功放板，整块板须入镜，该面的元件须清晰可见。",
                     "es":"Fotografíe el amplificador por un costado, con la tarjeta entera en el encuadre y los componentes de esa cara a la vista."}},
-           {"id":"amp_side_2","only_factory":["RHY"],
+           {"id":"amp_side_2","only":["HK-BAS115A1","HK-BAS118A1"],
             "sample":"bas_amp_lat2",
             "label":{"en":"Amplifier — the other side","zh":"功放板 — 另一侧","es":"Amplificador — el otro costado"},
             "help":{"en":"The same photograph from the opposite side. The board reference and the main IC markings must be readable between the two pictures.",
@@ -4707,7 +4744,14 @@ const CONFIG = {
 
             En YISION no hay prueba de caja delante, así que allí abre el plan. */
          "first":2,
-         "long":{"t":{"en":"This test is still running","zh":"本测试仍在进行中","es":"Esta prueba sigue en curso"},
+         /* Fuera de RHYME desde el plan 118. `long` es lo que dibuja el botón de
+            «dejar pendiente»: existía para que el inspector siguiera con el
+            resto del plan mientras corrían las ocho horas. En RHYME el
+            envejecimiento ocurre antes de que el inspector llegue y el video ya
+            está grabado en el teléfono, así que no hay nada que esperar. En
+            YISION la prueba sigue corriendo durante la inspección. */
+         "long":{"skip_factory":["RHY"],
+                 "t":{"en":"This test is still running","zh":"本测试仍在进行中","es":"Esta prueba sigue en curso"},
                  "n":{"en":"Come back when the eight hours are up to answer it. Meanwhile you can carry on with the rest of the plan.",
                       "zh":"八小时结束后再回来填写本项。期间可继续进行计划中的其他测试。",
                       "es":"Vuelva al cumplirse las ocho horas para responderla. Mientras tanto puede seguir con el resto del plan."}},
@@ -12028,7 +12072,7 @@ function renderTest(){
     </div>
     ${abortBlock()}`;
 
-  const pend = !!t.long && pendingCount() > 0 && done + 1 < total;
+  const pend = !!testLong(t) && pendingCount() > 0 && done + 1 < total;
   actions.innerHTML = `
     ${done>0?`<button class="skip" style="flex:0 0 52px" onclick="prevTest()">‹</button>`:""}
     ${pend?`<button class="skip" style="flex:1;border-color:var(--amber);color:var(--amber)"
@@ -12360,10 +12404,16 @@ function leavePending(){
    is still unanswered. On every other test an unlit NEXT means "you have missed
    something", which is the right message; here it would mean "wait four hours",
    which is not something a dimmed button can say. */
+/* `long` admite las mismas llaves de filtrado que un punto. Hizo falta en el
+   plan 118: el envejecimiento lo corren YISION y RHYME, y sólo en YISION sigue
+   siendo una espera. En RHYME ocurre antes de que el inspector llegue, así que
+   allí no hay nada que dejar pendiente. */
+const testLong = t => (t && t.long && fits(t.long)) ? t.long : null;
 function longNotice(t){
-  if(!t || !t.long || pendingCount() === 0) return "";
-  return `<div class="brw"><b>${esc(L(t.long.t))}</b>
-    <span>${esc(L(t.long.n))}</span></div>`;
+  const lg = testLong(t);
+  if(!lg || pendingCount() === 0) return "";
+  return `<div class="brw"><b>${esc(L(lg.t))}</b>
+    <span>${esc(L(lg.n))}</span></div>`;
 }
 function goTest(i){
   S.index = i; S.screen = "test";

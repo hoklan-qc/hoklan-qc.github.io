@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 118,
+      "plan_version": 119,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1034,7 +1034,9 @@ const CONFIG = {
                 cabina sola, y es el que se compara contra la ficha del producto
                 y el que discute un transportista. Uno no se deduce del otro sin
                 pesar también el empaque vacío. */
-            "id":"box_net","code":"PKG-002","photo":true,"skip":["HK-EPS112A1"],
+            "id":"box_net","code":"PKG-002","photo":true,
+            "skip":["HK-EPS112A1","HK-DEC115A1","HK-DEL101","HK-DEL103P",
+                    "HK-DEL105","HK-DEL110B1","HK-DEL115B1","HK-DEL210A1"],
             "sample":"caja_peso",
             "measure":{"unit":"kg","step":"0.1"},
             "label":{"en":"Net weight — cabinet alone","zh":"净重 — 仅音箱本体","es":"Peso neto — la cabina sola"},
@@ -1176,6 +1178,26 @@ const CONFIG = {
            {"en":"Count the screws of the grille, the panel and the tripod mount","zh":"清点网罩、面板与三脚架支座的螺丝","es":"Cuente los tornillos de la parrilla, del panel y del soporte del trípode"},
            {"en":"Finish with one video going round the whole cabinet","zh":"最后录制一段环绕整机的视频","es":"Termine con un video recorriendo toda la cabina"}],
          "points":[
+           {/* El peso neto vivía en CAJA. Aquí la cabina ya está desempacada y
+                sobre la mesa, que es donde se pesa. El Epsilon hizo lo mismo en
+                el plan 118, en su propia prueba de partes externas. Sólo los dos
+                subwoofers lo conservan en CAJA. */
+            "only":["HK-DEC115A1","HK-DEL101","HK-DEL103P","HK-DEL105",
+                    "HK-DEL110B1","HK-DEL115B1","HK-DEL210A1"],
+            "section":{"en":"The weight","zh":"重量","es":"El peso"},
+            "help":{"en":"With the cabinet unpacked, before going round its six faces.",
+                    "zh":"在拆包之后、逐一拍摄六个面之前进行。",
+                    "es":"Con la cabina ya desempacada, antes de recorrer sus seis caras."}},
+           {"id":"ext_net","code":"PKG-002","photo":true,
+            "only":["HK-DEC115A1","HK-DEL101","HK-DEL103P","HK-DEL105",
+                    "HK-DEL110B1","HK-DEL115B1","HK-DEL210A1"],
+            "sample":"caja_peso",
+            "measure":{"unit":"kg","step":"0.1"},
+            "label":{"en":"Net weight — cabinet alone","zh":"净重 — 仅音箱本体",
+                     "es":"Peso neto — la cabina sola"},
+            "help":{"en":"Put the cabinet on the scale on its own: no box, no foam, no cable, no printed matter. Photograph the scale with the reading legible and write the figure in the box.",
+                    "zh":"将音箱本体单独放在秤上：不含彩盒、泡沫、线材与印刷品。拍摄秤，读数须清晰可读，并将数值填入方框。",
+                    "es":"Ponga la cabina sola sobre la báscula: sin caja, sin icopores, sin cable y sin impresos. Fotografíe la báscula con la lectura legible y escriba la cifra en el recuadro."}},
            {"section":{"en":"The cabinet","zh":"箱体","es":"El gabinete"},
             "help":{"en":"Six faces, one photograph each, in good light and without reflections. Look for scratches, dents, stains and paint defects.",
                     "zh":"六个面各拍一张照片，光线充足且避免反光。检查刮痕、凹陷、污渍与喷涂缺陷。",
@@ -1541,7 +1563,14 @@ const CONFIG = {
               impresos, en el mismo momento del desempaque. En los BAS no altera
               nada, porque allí ya venía después de las tres primeras. */
          "id":"SUB_ACC","optional":false,"only_factory":["RHY"],
-         "only":["HK-BAS115A1","HK-BAS118A1","HK-EPS112A1"],
+         /* En el plan 119 entraron también los siete Delta y el DEC115: salieron
+            de la prueba compartida de accesorios, que les pedía micrófonos y
+            trípode, y llevan lo mismo que el Epsilon — cable de poder y control
+            remoto. Con eso RHYME entera queda en esta prueba y `first` 5 la deja
+            en todas justo detrás de MATERIAL IMPRESO. */
+         "only":["HK-BAS115A1","HK-BAS118A1","HK-EPS112A1","HK-DEC115A1",
+                 "HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
+                 "HK-DEL115B1","HK-DEL210A1"],
          "evidence":[],"first":5,
          "label":{"en":"ACCESSORIES","zh":"配件","es":"ACCESORIOS"},
          "steps":[
@@ -1576,22 +1605,39 @@ const CONFIG = {
                     "zh":"拍摄护套上印字的特写，距离足够近以便读出线规与额定值。",
                     "es":"Primer plano del texto impreso a lo largo del forro, lo bastante cerca para leer el calibre y los valores nominales."}},
            {"section":{"en":"The remote control","zh":"遥控器","es":"El control remoto"},
-            "only":["HK-EPS112A1"],
+            "skip":["HK-BAS115A1","HK-BAS118A1"],
             "help":{"en":"Two photographs, front and back. The two faces are asked for separately.",
                     "zh":"正反两张照片，分别拍摄。",
                     "es":"Dos fotos, frente y reverso, cada una por separado."}},
            {"id":"eps_remote_front","code":"ACC-001","photo":true,
-            "only":["HK-EPS112A1"],
+            "skip":["HK-BAS115A1","HK-BAS118A1"],
             "label":{"en":"Remote control — front","zh":"遥控器 — 正面","es":"Control remoto — frente"},
             "help":{"en":"The printed face, with every key legible. Check no key is sunken or stuck.",
                     "zh":"拍摄有印字的一面，所有按键须清晰可读。确认无按键塌陷或卡住。",
                     "es":"La cara impresa, con todas las teclas legibles. Compruebe que ninguna esté hundida ni trabada."}},
            {"id":"eps_remote_back","code":"ACC-001","photo":true,
-            "only":["HK-EPS112A1"],
+            "skip":["HK-BAS115A1","HK-BAS118A1"],
             "label":{"en":"Remote control — back","zh":"遥控器 — 背面","es":"Control remoto — reverso"},
             "help":{"en":"The other face, in its own frame, showing the battery cover and any label.",
                     "zh":"拍摄另一面，单独成图，需拍到电池盖和标签。",
-                    "es":"La otra cara, en su propia foto, mostrando la tapa de la batería y cualquier etiqueta."}}]},
+                    "es":"La otra cara, en su propia foto, mostrando la tapa de la batería y cualquier etiqueta."}},
+           {/* La pila fuera del mando y por sus dos caras. Con la tapa puesta no
+                se lee ni la marca ni el modelo, y una foto sola de la cara de
+                arriba deja la de abajo sin ver. */
+            "id":"eps_remote_bat_top","code":"ACC-001","photo":true,
+            "skip":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Remote battery — upper face","zh":"遥控器电池 — 正面",
+                     "es":"Batería del control remoto — cara superior"},
+            "help":{"en":"Take the battery out of the remote and photograph its upper face, close enough to read the brand, the model and the voltage.",
+                    "zh":"从遥控器中取出电池，拍摄其正面，距离足够近以便读出品牌、型号和电压。",
+                    "es":"Saque la batería del control remoto y fotografíe su cara superior, lo bastante cerca para leer la marca, el modelo y el voltaje."}},
+           {"id":"eps_remote_bat_bottom","code":"ACC-001","photo":true,
+            "skip":["HK-BAS115A1","HK-BAS118A1"],
+            "label":{"en":"Remote battery — lower face","zh":"遥控器电池 — 背面",
+                     "es":"Batería del control remoto — cara inferior"},
+            "help":{"en":"The other face of the same battery, in its own frame.",
+                    "zh":"同一电池的另一面，单独成图。",
+                    "es":"La otra cara de la misma batería, en su propia foto."}}]},
 
         {/* Nació para los subwoofers y ahora cubre toda RHYME: la prueba
             compartida deja de aplicarse a esta fábrica. Conserva el id SUB_
@@ -2555,26 +2601,37 @@ const CONFIG = {
            {"id":"dsp_audible","code":"AUD-018","label":{"en":"Each mode sounds different","zh":"各模式声音互不相同","es":"Cada modo suena distinto"},
             "help":{"en":"With the same track playing, go through the four modes listening. Each one must change the sound audibly. Four modes that sound the same means the firmware was never loaded, and from the outside it looks identical to a good one.",
                     "zh":"用同一首曲目走完四个模式并细听，每个模式都应使声音发生可闻的变化。四个模式声音一样，说明固件根本没有烧录，而从外观上与正常机器毫无区别。",
-                    "es":"Con la misma pista sonando, recorra los cuatro modos escuchando. Cada uno debe cambiar el sonido de forma audible. Cuatro modos que suenan igual es firmware sin cargar, y por fuera se ve idéntico a uno bueno."}}]},
+                    "es":"Con la misma pista sonando, recorra los cuatro modos escuchando. Cada uno debe cambiar el sonido de forma audible. Cuatro modos que suenan igual es firmware sin cargar, y por fuera se ve idéntico a uno bueno."}},
+           {/* El cuarto modo es el que cambia de un modelo a otro, y hasta ahora
+                sólo se comprobaba que sonara distinto de los otros tres. En el
+                DEL115B1 se llama BAJO y tiene un criterio propio: recorta los
+                graves de la cabina porque de ellos se encarga el sub. */
+            "id":"dsp_bajo","code":"AUD-018","only":["HK-DEL115B1"],
+            "label":{"en":"BAJO mode — bass attenuated","zh":"BAJO 模式 — 低频衰减",
+                     "es":"Modo BAJO conectado — los graves se atenúan"},
+            "help":{"en":"With a track with bass playing, switch to the BAJO mode. The low end coming out of the cabinet must drop clearly with respect to the previous mode. Bass that stays the same is a fail.",
+                    "zh":"播放有低音的曲目，切换到 BAJO 模式。音箱送出的低频应相对上一模式明显减弱。低频毫无变化即判定为异常。",
+                    "es":"Con una pista con graves sonando, pase al modo BAJO. El bajo que sale de la cabina debe caer con claridad respecto al modo anterior. Que los graves se mantengan igual es no conforme."}},
+           {/* El mismo cuarto modo en las otras seis del grupo y en el DEC115.
+                Aquí sólo se comprueba el nombre: HOKLAN no fijó todavía un
+                criterio de sonido para MONITOR. */
+            "id":"dsp_monitor","code":"DSP-007",
+            "only":["HK-DEC115A1","HK-DEL101","HK-DEL103P","HK-DEL105",
+                    "HK-DEL110B1","HK-DEL210A1"],
+            "label":{"en":"MONITOR mode","zh":"MONITOR 模式","es":"Modo MONITOR"},
+            "help":{"en":"Read the fourth mode on the panel. It must say MONITOR.",
+                    "zh":"读取面板上的第四个模式，应为 MONITOR。",
+                    "es":"Lea el cuarto modo del panel. Debe decir MONITOR."}}]},
         /* «El modo queda guardado al apagar» se retiró en el plan 112 a petición
            de HOKLAN. La prueba es sólo de RHYME, así que el punto se elimina en
            vez de filtrarse. */
 
-        {/* Era LEDS SEÑAL Y LÍMITE. El LED LÍMITE pasó a Controles de audio,
-              dentro de USB, donde el barrido de volumen que ese punto necesita
-              ya está hecho. Aquí queda sólo el LED SEÑAL, y el nombre y los
-              pasos se ajustaron a eso. */
-         "id":"SIGNAL_LIMIT","optional":false,"only_factory":["RHY"],"evidence":["video"],
-         "skip":["HK-EPS112A1","HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330",
-                 "HK-BRA130","HK-BRA330"],
-         "label":{"en":"SIGNAL LED","zh":"信号指示灯","es":"LED SEÑAL"},
-         "steps":[
-           {"en":"With programme playing, watch the SIGNAL LED on the panel","zh":"在有节目声时观察面板上的信号指示灯","es":"Con programa sonando, observe el LED SEÑAL del panel"}],
-         "points":[
-           {"id":"led_signal","code":"LED-008","label":{"en":"SIGNAL LED lights with signal present","zh":"有信号时信号灯点亮","es":"LED SEÑAL enciende con señal presente"},
-            "help":{"en":"With audio playing it must light and follow the programme. Dark while signal is present is a fail.",
-                    "zh":"有音频播放时应点亮并随节目变化。有信号却不亮，判定为异常。",
-                    "es":"Con audio sonando debe encender y seguir el programa. Apagado con señal presente es falla."}}]},
+        /* LEDS SEÑAL Y LÍMITE se desmontó en dos pasos. En el plan 110 el LED
+           LÍMITE se mudó a Controles de audio, dentro de USB, donde el barrido de
+           volumen que ese punto necesita ya está hecho. En el 118 el Epsilon
+           salió de lo que quedaba, y en el 119 salieron las siete restantes: la
+           prueba se quedó sin una sola referencia y se eliminó. El código de
+           falla LED-008 sigue en la tabla por si vuelve a hacer falta. */
 
         {"id":"XLR_OUT","optional":false,"only_factory":["RHY"],"evidence":[],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
@@ -2583,27 +2640,22 @@ const CONFIG = {
            {"en":"Connect the XLR output to a second unit","zh":"将 XLR 输出接到第二台设备","es":"Conecte la SALIDA XLR a un segundo equipo"},
            {"en":"Listen at the second unit, first with programme and then in silence","zh":"在第二台设备上先听节目声，再听静音状态","es":"Escuche en el segundo equipo, primero con programa y luego en silencio"}],
          "points":[
-           {/* Dos versiones del mismo punto desde el plan 112. En el Epsilon el
-                segundo equipo es otro EPS112 y lo que se juzga son sus agudos y
-                sus graves; en las demás referencias sigue bastando con que
-                llegue señal. La frase sobre las reclamaciones en instalación se
-                retiró de las dos. */
-            "id":"xlr_signal","code":"AUD-013","skip":["HK-EPS112A1"],
+           {/* Las tres pruebas eran del Epsilon desde el plan 112 y en el 119
+                pasaron a las ocho cabinas activas de RHYME: es la misma salida y
+                la misma forma de juzgarla. Se dejó de nombrar el EPS112 y se
+                habla de una segunda cabina de la misma referencia, que es lo que
+                el operario tiene al lado en cualquiera de las ocho. */
+            "id":"xlr_signal_eps","code":"AUD-013",
             "label":{"en":"Signal comes out of the XLR output","zh":"XLR 输出有信号送出","es":"Sale señal por la SALIDA XLR"},
-            "help":{"en":"Connect the output to a second unit and confirm audio arrives at working level.",
-                    "zh":"将输出接到第二台设备，确认音频以可用电平送达。",
-                    "es":"Conecte la salida a un segundo equipo y confirme que le llega audio con nivel de uso."}},
-           {"id":"xlr_signal_eps","code":"AUD-013","only":["HK-EPS112A1"],
-            "label":{"en":"Signal comes out of the XLR output","zh":"XLR 输出有信号送出","es":"Sale señal por la SALIDA XLR"},
-            "help":{"en":"Connect the XLR output to a second EPS112 unit and confirm audio arrives at working level. Listen at that second cabinet: the treble and the bass must both come through, complete and clean.",
-                    "zh":"将 XLR 输出接到第二台 EPS112，确认音频以可用电平送达。在第二台音箱上试听：高音与低音都应完整送出且干净。",
-                    "es":"Conecte la SALIDA XLR a una segunda unidad EPS112 y confirme que le llega audio con nivel de uso. Escuche en esa segunda cabina: deben salir tanto los agudos como los graves, completos y limpios."}},
-           {"id":"xlr_controls_eps","code":"AUD-013","only":["HK-EPS112A1"],
+            "help":{"en":"Connect the XLR output to a second cabinet of the same reference and confirm audio arrives at working level. Listen at that second cabinet: the treble and the bass must both come through, complete and clean.",
+                    "zh":"将 XLR 输出接到第二台同型号音箱，确认音频以可用电平送达。在第二台音箱上试听：高音与低音都应完整送出且干净。",
+                    "es":"Conecte la SALIDA XLR a una segunda cabina de la misma referencia y confirme que le llega audio con nivel de uso. Escuche en esa segunda cabina: deben salir tanto los agudos como los graves, completos y limpios."}},
+           {"id":"xlr_controls_eps","code":"AUD-013",
             "label":{"en":"The controls act on the second cabinet","zh":"旋钮对第二台音箱起作用",
                      "es":"Los controles actúan sobre la segunda cabina"},
-            "help":{"en":"With the second EPS112 connected by XLR and playing, take the volume, the treble and the bass up and back down, one at a time. Listening at the second cabinet, each one must change the sound across its whole travel, with no dead spots and no jumps.",
-                    "zh":"在第二台 EPS112 经 XLR 连接并出声的状态下，逐一将音量、高音和低音调高再调低。在第二台音箱上试听，每一项都应在全程改变声音，无死区、无跳变。",
-                    "es":"Con la segunda EPS112 conectada por XLR y sonando, suba y baje el volumen, los agudos y los graves, uno por uno. Escuchando en la segunda cabina, cada uno debe cambiar el sonido en todo su recorrido, sin zonas muertas ni saltos."}},
+            "help":{"en":"With the second cabinet connected by XLR and playing, take the volume, the treble and the bass up and back down, one at a time. Listening at the second cabinet, each one must change the sound across its whole travel, with no dead spots and no jumps.",
+                    "zh":"在第二台音箱经 XLR 连接并出声的状态下，逐一将音量、高音和低音调高再调低。在第二台音箱上试听，每一项都应在全程改变声音，无死区、无跳变。",
+                    "es":"Con la segunda cabina conectada por XLR y sonando, suba y baje el volumen, los agudos y los graves, uno por uno. Escuchando en esa segunda cabina, cada uno debe cambiar el sonido en todo su recorrido, sin zonas muertas ni saltos."}},
            {"id":"xlr_noise","code":"AUX-003","label":{"en":"The output adds no noise","zh":"输出不带杂音","es":"La salida no mete ruido"},
             "help":{"en":"Listen at the second unit with the cabinet silent: no hum and no hiss.",
                     "zh":"在音箱静音时于第二台设备上细听：不应有嗡嗡声或嘶声。",
@@ -3946,10 +3998,11 @@ const CONFIG = {
 
         {"id":"ACCESSORIES","optional":false,"type":"photos",
          "only_factory":["YIS","RHY","EAG"],
-         /* El Epsilon salió en el plan 105: le pedía micrófonos y trípode, que no
-            trae, y corre ahora SUB_ACC con el cable y su control remoto. */
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330",
-                 "HK-BAS115A1","HK-BAS118A1","HK-EPS112A1"],   // see EXTERNAL above
+         /* El Epsilon salió en el plan 105 y RHYME entera en el 119: esta prueba
+            pide micrófonos y trípode, que ninguna de sus referencias trae. Todas
+            corren SUB_ACC, con el cable de poder y el control remoto. */
+         "skip_factory":["RHY"],
+         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],   // see EXTERNAL above
          "label":{"en":"ACCESSORIES","zh":"配件"},
          "steps":[
            {"en":"Take the accessories out of the box onto a clear surface","zh":"将配件从箱中取出，放在干净台面上"},
@@ -4320,6 +4373,17 @@ const CONFIG = {
             "help":{"en":"The diaphragm and horn seen from the front. Look for a dented dome, glue marks, or a horn that is not properly seated.",
                     "zh":"正面拍摄振膜和号角。注意振膜是否凹陷、是否有溢胶、号角是否装配到位。",
                     "es":"El diafragma y la bocina vistos de frente. Busque la cúpula golpeada, marcas de pegante o la bocina mal asentada."}},
+           {/* La membrana con el motor ya abierto, no el diafragma visto por la
+                boca de la bocina. Es la pieza que se cambia por una más barata
+                sin que nada se note desde fuera. */
+            "id":"tweeter_membrane","sample":"tweeter_membrana",
+            "only":["HK-DEC115A1","HK-DEL101","HK-DEL103P","HK-DEL105",
+                    "HK-DEL110B1","HK-DEL115B1","HK-DEL210A1"],
+            "label":{"en":"Tweeter — diaphragm","zh":"高音单元 — 膜片",
+                     "es":"Tweeter — membrana"},
+            "help":{"en":"Open the driver and photograph the diaphragm on its own, square on and close enough to see the whole surface. Look for dents, creases, tears and glue marks on the edge.",
+                    "zh":"拆开单元，单独正对拍摄膜片，距离足够近以便看清整个表面。检查是否有凹陷、褶皱、破损，以及边缘的溢胶。",
+                    "es":"Abra el driver y fotografíe la membrana sola, de frente y lo bastante cerca para ver toda la superficie. Busque abolladuras, arrugas, roturas y marcas de pegante en el borde."}},
            {"id":"tweeter_back","skip":["HK-BAS115A1","HK-BAS118A1"],
             "label":{"en":"Tweeter — back","zh":"高音单元 — 背面"},
             "help":{"en":"The magnet and the terminals, in their own frame, with the label readable: brand, model and impedance.",

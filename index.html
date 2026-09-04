@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 114,
+      "plan_version": 117,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2729,23 +2729,37 @@ const CONFIG = {
            {"id":"mute","code":"RMT-002","label":{"en":"MUTE","zh":"静音"},
             "help":{"en":"With music playing, press MUTE: the sound must stop instantly. Press again: it must come back at the same volume.",
                     "zh":"播放音乐时按静音键，声音应立即消失；再按一次应以原音量恢复。"}},
-           {"section":{"en":"Source selection","zh":"音源选择"},
+           {"skip_factory":["RHY"],
+            "section":{"en":"Source selection","zh":"音源选择"},
             "help":{"en":"Press each source key and confirm the speaker switches to it. Mark N/A for sources this reference does not have.",
                     "zh":"逐个按下音源键，确认音箱切换到对应音源。本型号没有的音源标记为“不适用”。"}},
+           {/* En RHYME sólo queda la tecla de modo, así que el encabezado ya no
+                puede hablar de «cada tecla de fuente». */
+            "only_factory":["RHY"],
+            "section":{"en":"Source selection","zh":"音源选择","es":"Selección de fuente"},
+            "help":{"en":"This remote has no direct source keys: the mode key is the one that steps through them.",
+                    "zh":"本遥控器没有直接的音源键：切换音源靠模式键逐一循环。",
+                    "es":"Este mando no tiene teclas de fuente directa: la de modo es la que las recorre."}},
            {"id":"src_fm","code":"RMT-003","skip_factory":["RHY"],"label":{"en":"FM RADIO","zh":"收音"},
             "help":{"en":"Press it from another source. The speaker must switch straight to radio and the display must show it.",
                     "zh":"在其他音源下按此键，音箱应直接切到收音，屏幕应显示。"}},
-           {"id":"src_usb","code":"RMT-004","label":{"en":"USB","zh":"USB"},
+           {/* El mando de RHYME no trae teclas de fuente directa: sólo la de
+                modo, que las recorre todas. Se estaban pidiendo tres botones que
+                no existen en ese control. */
+            "id":"src_usb","code":"RMT-004","skip_factory":["RHY"],
+            "label":{"en":"USB","zh":"USB"},
             "help":{"en":"With the USB drive inserted, press it from another source. The speaker must switch to USB and start playing.",
                     "zh":"插着 U 盘时从其他音源按此键，音箱应切到 USB 并开始播放。"}},
-           {"id":"src_bt","code":"RMT-005","label":{"en":"BLUETOOTH","zh":"蓝牙"},
+           {"id":"src_bt","code":"RMT-005","skip_factory":["RHY"],
+            "label":{"en":"BLUETOOTH","zh":"蓝牙"},
             "help":{"en":"Press it from another source. The speaker must switch to Bluetooth and become discoverable or reconnect to the phone.",
                     "zh":"在其他音源下按此键，音箱应切到蓝牙并可被搜索或自动回连手机。"}},
            {"id":"src_sd","code":"RMT-006","skip_factory":["RHY"],
             "label":{"en":"SD","zh":"SD 卡"},
             "help":{"en":"With the card inserted, press it from another source. Mark N/A if this reference has no SD slot.",
                     "zh":"插着 SD 卡时从其他音源按此键。本型号没有 SD 卡槽时标记为“不适用”。"}},
-           {"id":"src_aux","code":"RMT-007","label":{"en":"AUX","zh":"AUX"},
+           {"id":"src_aux","code":"RMT-007","skip_factory":["RHY"],
+            "label":{"en":"AUX","zh":"AUX"},
             "help":{"en":"With the AUX cable connected, press it from another source. The speaker must switch to AUX.",
                     "zh":"连接 AUX 音频线后从其他音源按此键，音箱应切到 AUX。"}},
            {"id":"modes","code":"RMT-012","label":{"en":"Mode button","zh":"模式键"},
@@ -2763,10 +2777,14 @@ const CONFIG = {
            {"id":"song_prev","code":"RMT-014","label":{"en":"Previous track","zh":"上一曲"},
             "help":{"en":"Press it three times. The track number must go back one at a time, without jumping or restarting.",
                     "zh":"连续按三次。曲目编号应逐一递减，不应跳号或重头开始。"}},
-           {"id":"fast_fwd","code":"RMT-018","label":{"en":"Fast forward","zh":"快进"},
+           {/* Tampoco están en el mando de RHYME: ni avance, ni retroceso, ni EQ,
+                ni VOICE OUT. */
+            "id":"fast_fwd","code":"RMT-018","skip_factory":["RHY"],
+            "label":{"en":"Fast forward","zh":"快进"},
             "help":{"en":"Hold it down during a track. The music must move forward while held and carry on normally when released.",
                     "zh":"播放中长按此键。按住时音乐应快速前进，松开后正常继续播放。"}},
-           {"id":"rewind","code":"RMT-019","label":{"en":"Rewind","zh":"快退"},
+           {"id":"rewind","code":"RMT-019","skip_factory":["RHY"],
+            "label":{"en":"Rewind","zh":"快退"},
             "help":{"en":"Hold it down during a track. The music must move backward while held and carry on normally when released.",
                     "zh":"播放中长按此键。按住时音乐应快速后退，松开后正常继续播放。"}},
            {"id":"repeat","code":"RMT-024","label":{"en":"Repeat track","zh":"循环播放"},
@@ -2781,39 +2799,33 @@ const CONFIG = {
            {"id":"keypad","code":"RMT-020","label":{"en":"Numeric keypad","zh":"数字键盘"},
             "help":{"en":"Type a track number, for example 005. The speaker must jump straight to that track. Test every digit from 0 to 9, not just one.",
                     "zh":"输入曲目编号，例如 005，音箱应直接跳到该曲。0 到 9 每个数字键都要测，不能只测一个。"}},
-           {"section":{"en":"Volume and audio","zh":"音量与音效"},
+           {"skip_factory":["RHY"],
+            "section":{"en":"Volume and audio","zh":"音量与音效"},
             "help":{"en":"Hold VOL + and VOL − and confirm the level moves on the display. Press EQ and check the preset changes.",
                     "zh":"长按音量加/减键，确认屏幕音量数值变化。按 EQ 键确认音效模式切换。"}},
+           {"only_factory":["RHY"],
+            "section":{"en":"Volume","zh":"音量","es":"Volumen"},
+            "help":{"en":"Hold VOL + and VOL − and confirm the level moves on the display.",
+                    "zh":"长按音量加/减键，确认屏幕音量数值变化。",
+                    "es":"Mantenga VOL + y VOL − y confirme que el nivel se mueve en la pantalla."}},
            {"id":"vol_up","code":"RMT-016","label":{"en":"VOL +","zh":"音量 +"},
             "help":{"en":"Press it several times and hold it once. The level must rise step by step on the display and the sound must follow.",
                     "zh":"连按几次并长按一次。屏幕音量应逐级上升，声音应随之变大。"}},
            {"id":"vol_down","code":"RMT-017","label":{"en":"VOL −","zh":"音量 −"},
             "help":{"en":"Press it several times and hold it once. The level must fall step by step, all the way down to zero.",
                     "zh":"连按几次并长按一次。音量应逐级下降，直到降为零。"}},
-           {"id":"eq","code":"RMT-023","label":{"en":"EQ button","zh":"EQ 键"},
+           {"id":"eq","code":"RMT-023","skip_factory":["RHY"],
+            "label":{"en":"EQ button","zh":"EQ 键"},
             "help":{"en":"Press it through every preset. The display must show the name change and the sound must be audibly different between presets.",
                     "zh":"逐一切换所有音效预设。屏幕应显示名称变化，且不同预设之间声音应有明显差异。"}},
-           {/* Two headings for one group, because on RHYME the group is not the
-                same group: priority, REC and REC PLAY are all filtered out
-                there and only VOICE OUT survives. The old heading told the
-                RHYME inspector to record a few seconds and play them back on a
-                cabinet with no REC key and nowhere to store a recording. */
+           {/* El encabezado propio de RHYME desapareció en el plan 115: existía
+                sólo para presentar VOICE OUT, y VOICE OUT tampoco está en ese
+                mando. El grupo entero queda fuera de RHYME. */
             "skip_factory":["RHY"],
             "section":{"en":"Microphone and recording","zh":"麦克风与录音"},
             "help":{"en":"Record a few seconds with REC, play it back with REC PLAY. Retest some keys at an angle, not only straight on.",
                     "zh":"用 REC 键录几秒，再用 REC PLAY 播放。部分按键需侧向角度再测一次，不只正对。"}},
-           {"only_factory":["RHY"],
-            "section":{"en":"Microphone","zh":"麦克风","es":"Micrófono"},
-            "help":{"en":"With a microphone connected, press the key and listen to the voice. Retest it at an angle, not only straight on.",
-                    "zh":"接上麦克风后按下该键并注意人声变化。需侧向角度再测一次，不只正对。",
-                    "es":"Con un micrófono conectado, pulse la tecla y escuche la voz. Pruébela también en ángulo, no sólo de frente."}},
-           {/* The three keys below act on functions RHYME's panels do not have:
-                 there is no priority key, no REC and nowhere to store a
-                 recording. A remote key that the cabinet cannot obey is not a
-                 remote fault, so it is filtered out rather than left to be
-                 failed. VOICE OUT stays: it acts on the microphone path, which
-                 these cabinets do have. */
-            "id":"mic_priority","code":"RMT-008","skip_factory":["RHY"],"label":{"en":"Microphone priority","zh":"麦克风优先"},
+           {"id":"mic_priority","code":"RMT-008","skip_factory":["RHY"],"label":{"en":"Microphone priority","zh":"麦克风优先"},
             "help":{"en":"With music playing, press it and speak into the microphone. The music must drop to about 10% of its level while you speak — the same 90% drop the front panel key has to give — and return afterwards.",
                     "zh":"播放音乐时按下此键并对麦克风说话。说话时音乐应降到原音量的约 10%（与面板优先键相同的约 90% 衰减），停止后恢复。"}},
            {"id":"rec","code":"RMT-009","skip_factory":["RHY"],"label":{"en":"REC — record","zh":"REC — 录音"},
@@ -2822,7 +2834,7 @@ const CONFIG = {
            {"id":"rec_play","code":"RMT-010","skip_factory":["RHY"],"label":{"en":"REC PLAY — play the recording","zh":"REC PLAY — 播放录音"},
             "help":{"en":"Press it and confirm the recording you just made plays back clearly through the speaker.",
                     "zh":"按下后确认刚才的录音能通过音箱清晰回放。"}},
-           {"id":"voice_out","code":"RMT-011",
+           {"id":"voice_out","code":"RMT-011","skip_factory":["RHY"],
             "label":{"en":"VOICE OUT","zh":"VOICE OUT（消原音）"},
             "help":{"en":"Press it while speaking into the microphone and listen for the change in the voice effect. Mark N/A if this reference has no VOICE OUT.",
                     "zh":"对麦克风说话时按下此键，注意人声效果的变化（该键用于消去原唱人声）。遥控器上仍印英文 VOICE OUT。本型号没有此键时标记为“不适用”。"}}]},
@@ -4218,26 +4230,29 @@ const CONFIG = {
             "help":{"en":"Photograph the back of the voltage selector from inside the cabinet, close enough to see each pin. All must be soldered, with the solder covering the joint and no pin left bare.",
                     "zh":"从箱体内部拍摄电压选择开关的背面，距离足够近以便看清每个引脚。所有引脚均须焊接，焊锡覆盖焊点，不得有裸露未焊的引脚。",
                     "es":"Fotografíe el respaldo del selector de voltaje desde dentro de la cabina, lo bastante cerca para ver cada pin. Todos deben estar soldados, con el estaño cubriendo la unión y ninguno sin soldar."}},
-           /* Los seis siguientes son sólo de los subwoofers. */
+           /* Los siguientes nacieron en los subwoofers y en el plan 116 pasaron a
+              toda RHYME: son las mismas piezas —cable del woofer, pegante de los
+              conectores, preamplificador, EVA del panel y los dos costados del
+              amplificador— y las llevan igual las cabinas activas. */
            {/* En AWG y no en milímetros desde el plan 97. El calibre del cable se
                 especifica y se compra en AWG, y traducirlo a milímetros obligaba
                 al operario a convertir en la cabeza para contrastar contra la
                 especificación. Ojo con la escala: en AWG el número baja cuando el
                 cable engorda. El BAS115A1 lleva 16 AWG. */
-            "id":"woofer_cable_gauge","only":["HK-BAS115A1","HK-BAS118A1"],
+            "id":"woofer_cable_gauge","only_factory":["RHY"],
             "sample":"bas_cable_woofer",
             "measure":{"unit":"AWG","step":"1"},
             "label":{"en":"Woofer cable — gauge","zh":"低音单元引线 — 线径","es":"Cable del woofer — calibre"},
             "help":{"en":"Read the gauge printed on the woofer cable and write it in the box, in AWG. Both the BAS115A1 and the BAS118A1 must be 16 AWG. Photograph the printing on the cable; where the cable carries none, measure it with a caliper and photograph the reading with the cable between the jaws.",
                     "zh":"读取低音单元引线上印制的线规，以 AWG 填入方框。BAS115A1 与 BAS118A1 均应为 16 AWG。拍摄线上的印字；若线上无印字，则用游标卡尺测量，并拍摄读数，引线须夹在量爪之间。",
                     "es":"Lea el calibre impreso en el cable del woofer y escríbalo en el recuadro, en AWG. Tanto el BAS115A1 como el BAS118A1 deben ser 16 AWG. Fotografíe la impresión del cable; si el cable no la trae, mídalo con un calibrador y fotografíe la lectura con el cable entre las mordazas."}},
-           {"id":"connectors_glue","only":["HK-BAS115A1","HK-BAS118A1"],
+           {"id":"connectors_glue","only_factory":["RHY"],
             "sample":"bas_pegante",
             "label":{"en":"Connectors — yellow glue","zh":"接插件 — 黄胶","es":"Conectores — pegante amarillo"},
             "help":{"en":"Go over every connector inside the cabinet, the one on the preamplifier included, and photograph them. All must carry the yellow glue over the joint between the connector and its housing.",
                     "zh":"检查箱体内所有接插件（含前置放大板上的接插件）并拍照。每个接插件与插座的接合处均应打有黄胶。",
                     "es":"Recorra todos los conectores dentro de la cabina, incluido el del preamplificador, y fotografíelos. Todos deben llevar el pegante amarillo sobre la unión entre el conector y su alojamiento."}},
-           {"id":"preamp_back","only":["HK-BAS115A1","HK-BAS118A1"],
+           {"id":"preamp_back","only_factory":["RHY"],
             "sample":"bas_preamp_back",
             "label":{"en":"Preamplifier — back","zh":"前置放大板 — 背面","es":"Preamplificador — parte posterior"},
             "help":{"en":"Photograph the back of the preamplifier board, whole and square on.",
@@ -4246,23 +4261,32 @@ const CONFIG = {
            {/* El punto suelto del pegante del conector del preamplificador se
                 retiró en el plan 97: ese conector es uno de los que ya recorre
                 CONECTORES · PEGANTE AMARILLO, y se fotografiaba dos veces. */
-            "id":"preamp_pcb_ver","only":["HK-BAS115A1","HK-BAS118A1"],
+            "id":"preamp_pcb_ver","only_factory":["RHY"],
             "sample":"bas_preamp_pcb",
             "label":{"en":"Preamplifier — PCB version","zh":"前置放大板 — 板版本","es":"Preamplificador — versión de la PCB"},
             "help":{"en":"Close-up of the version printed on the board, close enough to read every character.",
                     "zh":"拍摄板上印制的版本号特写，距离足够近以便读出每一个字符。",
                     "es":"Primer plano de la versión impresa en la tarjeta, lo bastante cerca para leer cada carácter."}},
-           {"id":"eva_foam_panel","only":["HK-BAS115A1","HK-BAS118A1"],
+           {"id":"eva_foam_panel","only_factory":["RHY"],
             "sample":"bas_eva",
             "label":{"en":"EVA foam around the panel","zh":"面板周围的 EVA 泡棉","es":"Espuma EVA alrededor del panel"},
             "help":{"en":"Photograph the EVA foam running round the panel. It must go the whole way round, seated in its channel, with no gaps and no pieces missing.",
                     "zh":"拍摄面板四周的 EVA 泡棉。应完整环绕一圈，嵌入卡槽，无断口、无缺失。",
                     "es":"Fotografíe la espuma EVA que rodea el panel. Debe dar toda la vuelta, asentada en su canal, sin huecos ni tramos faltantes."}},
-           {/* Los subwoofers no llevan tweeter. */
-            "id":"tweeter_front","skip":["HK-BAS115A1","HK-BAS118A1"],
+           {/* Los subwoofers no llevan tweeter. Y el Epsilon corre su propia
+                versión de este punto desde el plan 117: es el mismo texto, con
+                la imagen de referencia de su tweeter, que no es el de las demás
+                referencias. Partirlo es la única forma — `sample` es del punto,
+                no del modelo. */
+            "id":"tweeter_front","skip":["HK-BAS115A1","HK-BAS118A1","HK-EPS112A1"],
             "label":{"en":"Tweeter — front","zh":"高音单元 — 正面"},
             "help":{"en":"The diaphragm and horn seen from the front. Look for a dented dome, glue marks, or a horn that is not properly seated.",
                     "zh":"正面拍摄振膜和号角。注意振膜是否凹陷、是否有溢胶、号角是否装配到位。"}},
+           {"id":"tweeter_front_eps","only":["HK-EPS112A1"],"sample":"eps_tweeter",
+            "label":{"en":"Tweeter — front","zh":"高音单元 — 正面","es":"Tweeter — frente"},
+            "help":{"en":"The diaphragm and horn seen from the front. Look for a dented dome, glue marks, or a horn that is not properly seated.",
+                    "zh":"正面拍摄振膜和号角。注意振膜是否凹陷、是否有溢胶、号角是否装配到位。",
+                    "es":"El diafragma y la bocina vistos de frente. Busque la cúpula golpeada, marcas de pegante o la bocina mal asentada."}},
            {"id":"tweeter_back","skip":["HK-BAS115A1","HK-BAS118A1"],
             "label":{"en":"Tweeter — back","zh":"高音单元 — 背面"},
             "help":{"en":"The magnet and the terminals, in their own frame, with the label readable: brand, model and impedance.",
@@ -4289,6 +4313,37 @@ const CONFIG = {
             "help":{"en":"Measure the impedance across the two terminals of the tweeter, with nothing else connected to them, and write the value in the box. Photograph the meter with the reading on screen and the probes on the terminals, both in the same picture. Compare it with the figure printed on the label.",
                     "zh":"在高音单元的两个接线端子间测量阻抗，端子上不得连接其他任何线路，并将数值填入方框。拍摄仪表，读数与搭在端子上的表笔须在同一画面内。并与标签上印制的数值核对。",
                     "es":"Mida la impedancia entre los dos terminales del tweeter, sin nada más conectado a ellos, y escriba el valor en el recuadro. Fotografíe el instrumento con la lectura en pantalla y las puntas sobre los terminales, las dos cosas en la misma foto. Compárela con la cifra impresa en la etiqueta."}},
+           {/* Sólo el Epsilon lleva medios: cuatro, y ninguna otra referencia del
+                plan los tiene. Se recorren como el woofer y el tweeter —frente,
+                reverso, peso e impedancia—, y las cuatro respuestas cubren los
+                cuatro parlantes: si uno solo falla, el punto falla. */
+            "only":["HK-EPS112A1"],
+            "section":{"en":"Mid-range drivers","zh":"中音单元","es":"Medios"},
+            "help":{"en":"This cabinet carries four mid-range drivers. Go over all four on each point below: one that differs from the rest fails the point.",
+                    "zh":"本箱体共有四只中音单元。以下每一项都需检查全部四只：只要有一只与其余不一致，该项即判定为异常。",
+                    "es":"Esta cabina lleva cuatro medios. Recorra los cuatro en cada punto de abajo: uno que se salga del resto hace fallar el punto."}},
+           {"id":"mid_front","only":["HK-EPS112A1"],"sample":"eps_medio",
+            "label":{"en":"Mid-range — front","zh":"中音单元 — 正面","es":"Medio — frente"},
+            "help":{"en":"The cone and surround of the four drivers, seen from the front. Look for tears, glue marks or a misaligned dust cap.",
+                    "zh":"正面拍摄四只单元的振膜和折环，注意是否有破损、溢胶或防尘帽偏位。",
+                    "es":"El cono y la suspensión de los cuatro, vistos de frente. Busque roturas, marcas de pegante o el guardapolvo descentrado."}},
+           {"id":"mid_back","only":["HK-EPS112A1"],
+            "label":{"en":"Mid-range — back","zh":"中音单元 — 背面","es":"Medio — reverso"},
+            "help":{"en":"The magnet and the terminals, with the label readable: brand, model and impedance. All four must carry the same label.",
+                    "zh":"拍摄磁钢和接线端子，标签须清晰可读：品牌、型号和阻抗。四只的标签须一致。",
+                    "es":"El imán y los terminales, con la etiqueta legible: marca, modelo e impedancia. Los cuatro deben llevar la misma etiqueta."}},
+           {"id":"mid_weight","only":["HK-EPS112A1"],"must":true,
+            "photo":true,"measure":{"unit":"g","step":"1"},
+            "label":{"en":"Mid-range — weight","zh":"中音单元 — 重量","es":"Medio — peso"},
+            "help":{"en":"Place one driver on the scale on its own, with no screws, gasket or cable attached. Photograph the reading and write the value in the box.",
+                    "zh":"将一只单元单独放在电子秤上，不带螺丝、垫圈和引线。拍摄读数并将数值填入方框。",
+                    "es":"Ponga un medio solo sobre la balanza, sin tornillos, empaque ni cable. Fotografíe la lectura y escriba el valor en el recuadro."}},
+           {"id":"mid_impedance","only":["HK-EPS112A1"],"must":true,
+            "photo":true,"sample":"bas_impedancia","measure":{"unit":"Ω","step":"0.1"},
+            "label":{"en":"Mid-range — impedance","zh":"中音单元 — 阻抗","es":"Medio — impedancia"},
+            "help":{"en":"Measure the impedance across the two terminals of the driver, with nothing else connected to them, and write the value in the box. Photograph the meter with the reading on screen and the probes on the terminals, both in the same picture. Compare it with the figure printed on the label.",
+                    "zh":"在单元的两个接线端子间测量阻抗，端子上不得连接其他任何线路，并将数值填入方框。拍摄仪表，读数与搭在端子上的表笔须在同一画面内。并与标签上印制的数值核对。",
+                    "es":"Mida la impedancia entre los dos terminales del medio, sin nada más conectado a ellos, y escriba el valor en el recuadro. Fotografíe el instrumento con la lectura en pantalla y las puntas sobre los terminales, las dos cosas en la misma foto. Compárela con la cifra impresa en la etiqueta."}},
            {"id":"fuente","skip":["HK-BAS115A1","HK-BAS118A1"],
             "label":{"en":"Power supply","zh":"电源板"}},
            {/* En los subwoofers el amplificador va montado de canto contra el
@@ -4299,13 +4354,13 @@ const CONFIG = {
             "label":{"en":"Amplifier — component side","zh":"功放板 — 元件面"},
             "help":{"en":"The side carrying the chips. The board reference and the main IC markings must be readable.",
                     "zh":"拍摄有芯片的一面。板号和主要芯片丝印必须清晰可读。"}},
-           {"id":"amp_side_1","only":["HK-BAS115A1","HK-BAS118A1"],
+           {"id":"amp_side_1","only_factory":["RHY"],
             "sample":"bas_amp_lat1",
             "label":{"en":"Amplifier — one side","zh":"功放板 — 一侧","es":"Amplificador — un costado"},
             "help":{"en":"Photograph the amplifier from one side, with the whole board in the frame and the components on that face visible.",
                     "zh":"从一侧拍摄功放板，整块板须入镜，该面的元件须清晰可见。",
                     "es":"Fotografíe el amplificador por un costado, con la tarjeta entera en el encuadre y los componentes de esa cara a la vista."}},
-           {"id":"amp_side_2","only":["HK-BAS115A1","HK-BAS118A1"],
+           {"id":"amp_side_2","only_factory":["RHY"],
             "sample":"bas_amp_lat2",
             "label":{"en":"Amplifier — the other side","zh":"功放板 — 另一侧","es":"Amplificador — el otro costado"},
             "help":{"en":"The same photograph from the opposite side. The board reference and the main IC markings must be readable between the two pictures.",

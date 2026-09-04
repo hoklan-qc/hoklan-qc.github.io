@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 101,
+      "plan_version": 102,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1284,12 +1284,16 @@ const CONFIG = {
             "help":{"en":"One photograph with both connectors in it: the mains plug and the IEC connector that goes into the cabinet. Lay them side by side, contacts facing the camera and close enough that a crack or a bent pin would show. The plug must be the one for the destination country.",
                     "zh":"一张照片同时拍到两端接头：市电插头与接入音箱的 IEC 接头。将两者并排摆放，触点朝向镜头，距离足够近以便能看出开裂或插脚弯曲。插头须符合目的地国家标准。",
                     "es":"Una sola foto con los dos conectores dentro: el enchufe de pared y el conector IEC que entra a la cabina. Póngalos uno al lado del otro, con los contactos hacia la cámara y lo bastante cerca para que se vea una fisura o una pata doblada. El enchufe debe ser el del país de destino."}},
-           {"id":"sub_cab_len","code":"ACC-001","photo":true,
-            "measure":{"unit":"m","step":"0.01"},
+           {/* En centímetros y no en metros desde el plan 102. La cinta está
+                marcada en centímetros y es lo que el operario lee; escribir 1.83
+                obligaba a convertir de cabeza, y un decimal mal puesto en metros
+                cambia el dato por un factor de diez. */
+            "id":"sub_cab_len","code":"ACC-001","photo":true,
+            "measure":{"unit":"cm","step":"0.1"},
             "label":{"en":"Cable length","zh":"线缆长度","es":"Longitud del cable"},
-            "help":{"en":"Stretch it out on the floor without pulling it taut, measure from the face of one plug to the face of the other, and write the figure in the box. Photograph the tape with both ends of the cable in the same frame.",
-                    "zh":"将线缆在地面上展开但不要绷紧，从一端插头端面量到另一端插头端面，并将数值填入方框。拍摄卷尺时，线缆两端须在同一画面内。",
-                    "es":"Estírelo en el piso sin tensarlo, mida de la cara de un enchufe a la cara del otro, y escriba la cifra en el recuadro. Fotografíe la cinta con los dos extremos del cable en el mismo encuadre."}},
+            "help":{"en":"Stretch it out on the floor without pulling it taut, measure from the face of one plug to the face of the other, and write the figure in the box, in centimetres. Photograph the tape with both ends of the cable in the same frame.",
+                    "zh":"将线缆在地面上展开但不要绷紧，从一端插头端面量到另一端插头端面，以厘米填入方框。拍摄卷尺时，线缆两端须在同一画面内。",
+                    "es":"Estírelo en el piso sin tensarlo, mida de la cara de un enchufe a la cara del otro, y escriba la cifra en el recuadro, en centímetros. Fotografíe la cinta con los dos extremos del cable en el mismo encuadre."}},
            {"id":"sub_cab_spec","code":"ACC-001","photo":true,
             "sample":"bas_cable_spec",
             "label":{"en":"Printing on the cable","zh":"线身印字","es":"Especificaciones impresas en el cable"},

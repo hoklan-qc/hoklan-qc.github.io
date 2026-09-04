@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="14.1">
+<meta name="app-version" content="14.2">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 107,
+      "plan_version": 108,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -4470,6 +4470,11 @@ const CONFIG = {
             operario, y una casilla marcada no distingue una cabina que envejeció
             de una que no se enchufó. */
          "evidence":["video"],
+         /* Desde la galería, no desde la cámara. El envejecimiento son ocho
+            horas que pasan antes de que el inspector abra la app: el video ya
+            está grabado en el teléfono de quien montó la prueba, y obligar a la
+            cámara sólo habría servido para filmar una cabina que ya terminó. */
+         "gallery":true,
          "ask":{"en":"about ten seconds of the unit aging: playing, with the panel lights on.",
                 "zh":"约十秒钟整机老化中的视频：正在发声、面板指示灯点亮。",
                 "es":"unos diez segundos de la unidad envejeciendo: sonando y con los testigos del panel encendidos."},
@@ -11739,8 +11744,20 @@ function renderTest(){
         ${want.photo?`<button onclick="document.getElementById('cam').click()">📷 ${tr("photo")}</button>`:""}
         ${want.video?`<button onclick="document.getElementById('vid').click()">🎥 ${tr("video")}</button>`:""}
       </div>
-      <input id="cam" class="hidden" type="file" accept="image/*" capture="environment" multiple onchange="addMedia(this,0)">
-      <input id="vid" class="hidden" type="file" accept="video/*" capture="environment" multiple onchange="addMedia(this,0)">
+      ${/* `capture` obliga al teléfono a abrir la cámara y sólo la cámara. Es lo
+            correcto en casi todas las pruebas: la evidencia se toma delante del
+            producto, en el momento, y una galería abierta es una invitación a
+            reutilizar la foto de otra unidad.
+
+            `gallery` en la prueba lo levanta, para lo que se registra en un
+            momento distinto del de la inspección. El envejecimiento es el caso:
+            son ocho horas que ocurren antes de que el inspector abra la app, así
+            que el video ya está grabado y forzar la cámara sólo conseguiría que
+            filmara una cabina que ya terminó de envejecer. */""}
+      <input id="cam" class="hidden" type="file" accept="image/*"
+        ${t.gallery ? "" : `capture="environment"`} multiple onchange="addMedia(this,0)">
+      <input id="vid" class="hidden" type="file" accept="video/*"
+        ${t.gallery ? "" : `capture="environment"`} multiple onchange="addMedia(this,0)">
       ${mediaBlock(shared)}
       ${needsPhoto||needsVideo?`<div class="needed">${
         needsPhoto && needsVideo ? tr("need_both")

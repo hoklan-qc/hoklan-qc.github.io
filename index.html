@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="14.2">
+<meta name="app-version" content="14.3">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 111,
+      "plan_version": 112,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2002,7 +2002,14 @@ const CONFIG = {
             "help":{"en":"With the card still inserted, switch the speaker off and on. It must return to SD mode and start playing without pressing anything.",
                     "zh":"SD 卡保持插入，关机后再开机。应自动回到 SD 模式并开始播放，无需按任何键。"}}]},
 
-        {"id":"BLUETOOTH","optional":false,"only_factory":["YIS","RHY","EAG"],
+        {/* RHYME deja sus dos clips dentro de las secciones —controles de audio y
+              TWS— y sus dos fotos en los puntos del nombre Bluetooth y del SPL.
+              Pedir además la foto y el clip generales al final era un quinto
+              archivo de lo mismo. YISION y EAGLE siguen con el reparto de
+              siempre. */
+         "id":"BLUETOOTH","optional":false,"only_factory":["YIS","RHY","EAG"],
+         "evidence":[{"kind":"photo","skip_factory":["RHY"]},
+                     {"kind":"video","skip_factory":["RHY"]}],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"BLUETOOTH","zh":"蓝牙"},
          "steps":[
@@ -2071,6 +2078,12 @@ const CONFIG = {
             "label":{"en":"X-BASS function","zh":"X-BASS 功能"},
             "help":{"en":"Playing over Bluetooth, switch X-BASS on and off several times. The low end must jump noticeably when it is on and go back when it is off, and the display must show the change. Then raise the volume to maximum with X-BASS on: the bass must stay clean, with no distortion and no rattle from the woofer.",
                     "zh":"通过蓝牙播放时，反复开关 X-BASS。开启时低音应明显增强，关闭时恢复原状，屏幕应显示状态变化。随后在开启 X-BASS 的状态下将音量调到最大：低音应保持干净，不失真，低音单元不应有异响。"}},
+           {"id":"video_controles","only_factory":["RHY"],"video":true,
+            "label":{"en":"Clip of the audio controls","zh":"音频控制视频",
+                     "es":"Video de los controles de audio"},
+            "help":{"en":"One take covering the points of this group: the volume from minimum to maximum, and the treble and the bass across their whole travel. Frame the knob, the display and the speaker.",
+                    "zh":"录制一段完整视频，覆盖本组各项：音量从最小调到最大，高音与低音走完全程。画面须包含旋钮、显示屏和音箱。",
+                    "es":"Una sola toma que recorra los puntos de este grupo: el volumen del mínimo al máximo, y los agudos y los graves en todo su recorrido. Encuadre la perilla, la pantalla y el parlante."}},
            {"section":{"en":"Sound pressure level at 1 kHz","zh":"1 kHz 声压级测量"},
             "help":{"en":"Measure over Bluetooth, with the volume at maximum on the speaker and on the phone.",
                     "zh":"通过蓝牙测量，音箱和手机的音量均需开到最大。",
@@ -2137,6 +2150,11 @@ const CONFIG = {
            {"id":"tws","code":"BT-010","label":{"en":"TWS mode: link with a second speaker","zh":"TWS 模式：与第二台音箱串联"},
             "help":{"en":"Enable TWS on both speakers and wait for them to pair with each other. Play music: both must sound together and in sync. Mark N/A if this reference has no TWS.",
                     "zh":"在两台音箱上都开启 TWS，等待互相配对。播放音乐：两台应同时出声且同步。本型号没有 TWS 时标记为“不适用”。"}},
+           {"id":"video_tws","only_factory":["RHY"],"video":true,
+            "label":{"en":"Clip of TWS","zh":"TWS 视频","es":"Video del TWS"},
+            "help":{"en":"One take with both speakers in frame, from enabling TWS to both playing together. Mark N/A if this reference has no TWS.",
+                    "zh":"录制一段视频，两台音箱同时入镜，从开启 TWS 到两台同时出声。本型号没有 TWS 时标记为“不适用”。",
+                    "es":"Una sola toma con los dos parlantes en cuadro, desde que activa el TWS hasta que ambos suenan juntos. Marque N/A si esta referencia no tiene TWS."}},
            {"skip_factory":["RHY"],
             "section":{"en":"Settings memory","zh":"设置记忆"},
             "help":{"en":"Move every level to a position that is easy to recognise — not centred, not at the end — and write down where you left each one. Switch the speaker off, wait ten seconds, switch it on and check them one by one. A speaker that returns to factory levels on every power cycle is one the customer has to set up again every single time.",
@@ -2321,7 +2339,11 @@ const CONFIG = {
             "help":{"en":"Plug the guitar into its input and play while moving its volume control from minimum to maximum. Mark N/A if this reference has no guitar input.",
                     "zh":"将吉他插入专用接口，一边弹奏一边把吉他音量从最小调到最大。本型号没有吉他接口时标记为“不适用”。"}}]},
 
-        {"id":"AUX","optional":false,"only_factory":["YIS","RHY","EAG"],
+        {/* Igual que en BLUETOOTH: para RHYME la evidencia son los dos clips de
+              las secciones de jack y de RCA, y nada al final. */
+         "id":"AUX","optional":false,"only_factory":["YIS","RHY","EAG"],
+         "evidence":[{"kind":"photo","skip_factory":["RHY"]},
+                     {"kind":"video","skip_factory":["RHY"]}],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"AUX LINE","zh":"AUX 音频输入"},
          "steps":[
@@ -2333,38 +2355,110 @@ const CONFIG = {
            {"section":{"en":"AUX input","zh":"AUX 输入"},
             "help":{"en":"Connect the AUX cable between the test source and the speaker, select AUX mode and play audio.",
                     "zh":"用音频线连接测试音源与音箱 AUX 接口，切换到 AUX 模式并播放。"}},
-           {"id":"input","code":"AUX-001","label":{"en":"Speaker detects the AUX input","zh":"音箱检测到 AUX 输入"},
+           {"id":"input","code":"AUX-001","skip_factory":["RHY"],
+            "label":{"en":"Speaker detects the AUX input","zh":"音箱检测到 AUX 输入"},
             "help":{"en":"First select AUX mode on the speaker and confirm the display shows it. Only then connect the cable and play from the source: the sound must come through.",
                     "zh":"先在音箱上选择 AUX 模式，确认屏幕显示已切换。之后再接上音频线并播放音源，声音应正常传出。"}},
            {"id":"audio","code":"AUX-002","label":{"en":"Audio comes out of the speaker","zh":"音箱正常出声"},
             "help":{"en":"Play from the source and confirm sound in both channels. Wiggle the plug gently: the sound must not cut out.",
                     "zh":"从音源播放并确认左右声道都有声音。轻轻晃动插头，声音不应中断。"}},
-           {"id":"noise","code":"AUX-003","label":{"en":"No hum or interference","zh":"无杂音或干扰"},
+           {"id":"noise","code":"AUX-003","skip_factory":["RHY"],
+            "label":{"en":"No hum or interference","zh":"无杂音或干扰"},
             "help":{"en":"With the cable connected but the source paused, listen close to the grille. There must be no hum or buzz from the cable or the mains.",
                     "zh":"连接音频线但暂停音源，靠近网罩细听。不应有来自线材或电源的嗡嗡声。"}},
-           {"id":"continuous","code":"AUX-004","label":{"en":"No dropouts during playback","zh":"播放过程无中断"},
+           {"id":"continuous","code":"AUX-004","skip_factory":["RHY"],
+            "label":{"en":"No dropouts during playback","zh":"播放过程无中断"},
             "help":{"en":"Let one full track play without touching anything. Listen for cuts, stutters or channels dropping out.",
                     "zh":"完整播放一首曲目，中途不做任何操作。注意是否有断音、卡顿或某个声道消失。"}},
-           {"section":{"en":"Playback controls","zh":"播放控制"},
+           {"skip_factory":["RHY"],
+            "section":{"en":"Playback controls","zh":"播放控制"},
             "help":{"en":"With the audio still playing from the source, press play/pause and the mode button on the speaker and confirm it reacts.",
                     "zh":"在音源继续播放的状态下，按下音箱上的播放/暂停键和模式键，确认有反应。",
                     "es":"Con el audio aún sonando desde la fuente, pulse reproducir/pausar y la tecla de modo en el parlante y confirme que responde."}},
-           {"id":"play_pause","code":"AUX-005","label":{"en":"PLAY / PAUSE button","zh":"播放/暂停按键"},
+           {"id":"play_pause","code":"AUX-005","skip_factory":["RHY"],
+            "label":{"en":"PLAY / PAUSE button","zh":"播放/暂停按键"},
             "help":{"en":"Press it on the speaker. The sound must stop and resume. Mark N/A if this reference does not control the AUX source.",
                     "zh":"在音箱上按下。声音应停止并可恢复。本型号无法控制 AUX 音源时标记为“不适用”。"}},
-           {"id":"modes","code":"DSP-005","label":{"en":"Mode button","zh":"模式按键"},
+           {"id":"modes","code":"DSP-005","skip_factory":["RHY"],
+            "label":{"en":"Mode button","zh":"模式按键"},
             "help":{"en":"Press the mode button through the full cycle until it returns to AUX. The display must follow every change.",
                     "zh":"反复按模式键走完一轮回到 AUX。显示屏应随每一次切换变化。"}},
-           {"section":{"en":"Audio controls","zh":"音频控制"},
+           {/* Una sola sección de controles de audio no decía por cuál de las dos
+                entradas se había oído: el barrido se hacía una vez, casi siempre
+                por el jack, y el RCA quedaba aprobado sin haberlo tocado. Desde
+                el plan 112 RHYME recorre las dos por separado, cada una con su
+                clip. YISION y EAGLE siguen con la sección única de abajo. */
+            "only_factory":["RHY"],
+            "section":{"en":"Audio controls — 3.5 mm jack input","zh":"音频控制 — 3.5 mm 输入",
+                       "es":"Controles de audio — entrada jack 3.5 mm"},
+            "help":{"en":"Feed the source through the 3.5 mm jack input only, with the RCA disconnected. Move each control through its full range and listen.",
+                    "zh":"仅通过 3.5 mm 输入接入音源，RCA 保持断开。将每个旋钮从最小转到最大并细听。",
+                    "es":"Lleve la fuente sólo por la entrada jack de 3.5 mm, con la RCA desconectada. Mueva cada control en todo su recorrido y escuche."}},
+           {"id":"jack_volume_max","code":"AUD-006","only_factory":["RHY"],
+            "label":{"en":"Volume to maximum — 3.5 mm jack","zh":"音量调到最大 — 3.5 mm",
+                     "es":"Volumen al máximo — jack 3.5 mm"},
+            "help":{"en":"Take the volume from minimum to maximum slowly. It must rise continuously the whole way, with no jumps, dead spots or scratchy sound, and where there is a number on the display it must follow.",
+                    "zh":"缓慢将音量从最小调到最大。全程应连续上升，不应跳变、无死区、无刮擦杂音；若屏幕显示数值，应同步变化。",
+                    "es":"Lleve el volumen del mínimo al máximo lentamente. Debe crecer de forma continua en todo el recorrido, sin saltos, zonas muertas ni sonido rasposo, y donde haya número en pantalla debe seguirlo."}},
+           {"id":"jack_treble","code":"AUD-007","only_factory":["RHY"],
+            "label":{"en":"Treble level — 3.5 mm jack","zh":"高音调节 — 3.5 mm",
+                     "es":"Nivel de agudos — jack 3.5 mm"},
+            "help":{"en":"With music playing, take the treble fully down and fully up. The change must be clearly audible across the whole travel, with no dead spots and no scratchy noise as the knob turns.",
+                    "zh":"播放音乐时，将高音从最小调到最大。全程声音变化应清晰可辨，无死区，旋转时无刮擦杂音。",
+                    "es":"Con música sonando, lleve los agudos al mínimo y al máximo. El cambio debe oírse con claridad en todo el recorrido, sin zonas muertas ni ruido rasposo al girar."}},
+           {"id":"jack_bass","code":"AUD-008","only_factory":["RHY"],
+            "label":{"en":"Bass level — 3.5 mm jack","zh":"低音调节 — 3.5 mm",
+                     "es":"Nivel de graves — jack 3.5 mm"},
+            "help":{"en":"Same check on the bass control, across its whole travel.",
+                    "zh":"对低音旋钮做同样的检查，走完全程。",
+                    "es":"La misma verificación en la perilla de graves, en todo su recorrido."}},
+           {"id":"jack_video","only_factory":["RHY"],"video":true,
+            "label":{"en":"Clip of the 3.5 mm jack input","zh":"3.5 mm 输入视频",
+                     "es":"Video de la entrada jack 3.5 mm"},
+            "help":{"en":"One take covering the three points of this group. The plug in the 3.5 mm socket must be visible in the frame, along with the knob and the display.",
+                    "zh":"录制一段完整视频，覆盖本组三项。画面须看得见插入 3.5 mm 接口的插头，以及旋钮和显示屏。",
+                    "es":"Una sola toma que recorra los tres puntos de este grupo. En el cuadro debe verse el plug metido en el jack de 3.5 mm, junto con la perilla y la pantalla."}},
+           {"only_factory":["RHY"],
+            "section":{"en":"Audio controls — RCA input","zh":"音频控制 — RCA 输入",
+                       "es":"Controles de audio — entrada RCA"},
+            "help":{"en":"Now the white and red RCA input on the panel, with the 3.5 mm jack disconnected. The same three controls. Mark N/A if this reference has no RCA input.",
+                    "zh":"改用面板上的红白 RCA 输入，3.5 mm 插头保持拔出。同样的三项。本型号没有 RCA 接口时标记为“不适用”。",
+                    "es":"Ahora la entrada RCA blanca y roja del panel, con el jack de 3.5 mm desconectado. Los mismos tres controles. Marque N/A si esta referencia no tiene entrada RCA."}},
+           {"id":"rca_volume_max","code":"AUD-006","only_factory":["RHY"],
+            "label":{"en":"Volume to maximum — RCA","zh":"音量调到最大 — RCA",
+                     "es":"Volumen al máximo — RCA"},
+            "help":{"en":"Take the volume from minimum to maximum slowly. It must rise continuously the whole way, with no jumps, dead spots or scratchy sound, and where there is a number on the display it must follow.",
+                    "zh":"缓慢将音量从最小调到最大。全程应连续上升，不应跳变、无死区、无刮擦杂音；若屏幕显示数值，应同步变化。",
+                    "es":"Lleve el volumen del mínimo al máximo lentamente. Debe crecer de forma continua en todo el recorrido, sin saltos, zonas muertas ni sonido rasposo, y donde haya número en pantalla debe seguirlo."}},
+           {"id":"rca_treble","code":"AUD-007","only_factory":["RHY"],
+            "label":{"en":"Treble level — RCA","zh":"高音调节 — RCA","es":"Nivel de agudos — RCA"},
+            "help":{"en":"With music playing, take the treble fully down and fully up. The change must be clearly audible across the whole travel, with no dead spots and no scratchy noise as the knob turns.",
+                    "zh":"播放音乐时，将高音从最小调到最大。全程声音变化应清晰可辨，无死区，旋转时无刮擦杂音。",
+                    "es":"Con música sonando, lleve los agudos al mínimo y al máximo. El cambio debe oírse con claridad en todo el recorrido, sin zonas muertas ni ruido rasposo al girar."}},
+           {"id":"rca_bass","code":"AUD-008","only_factory":["RHY"],
+            "label":{"en":"Bass level — RCA","zh":"低音调节 — RCA","es":"Nivel de graves — RCA"},
+            "help":{"en":"Same check on the bass control, across its whole travel.",
+                    "zh":"对低音旋钮做同样的检查，走完全程。",
+                    "es":"La misma verificación en la perilla de graves, en todo su recorrido."}},
+           {"id":"rca_video","only_factory":["RHY"],"video":true,
+            "label":{"en":"Clip of the RCA input","zh":"RCA 输入视频","es":"Video de la entrada RCA"},
+            "help":{"en":"One take covering the three points of this group. The two plugs in the white and red sockets must be visible in the frame, along with the knob and the display. Mark N/A if this reference has no RCA input.",
+                    "zh":"录制一段完整视频，覆盖本组三项。画面须看得见插入红白接口的两个插头，以及旋钮和显示屏。本型号没有 RCA 接口时标记为“不适用”。",
+                    "es":"Una sola toma que recorra los tres puntos de este grupo. En el cuadro deben verse los dos plugs metidos en los conectores blanco y rojo, junto con la perilla y la pantalla. Marque N/A si esta referencia no tiene entrada RCA."}},
+           {"skip_factory":["RHY"],
+            "section":{"en":"Audio controls","zh":"音频控制"},
             "help":{"en":"Move each control through its full range and listen. If the reference shows the level on screen, the indicator must follow the knob.",
                     "zh":"将每个旋钮从最小转到最大并细听。若本型号在屏幕上显示数值，指示应随旋钮同步变化。"}},
-           {"id":"volume_max","code":"AUD-006","label":{"en":"Volume to maximum","zh":"音量调到最大"},
+           {"id":"volume_max","code":"AUD-006","skip_factory":["RHY"],
+            "label":{"en":"Volume to maximum","zh":"音量调到最大"},
             "help":{"en":"Take the volume from minimum to maximum slowly. It must rise continuously the whole way, with no jumps, dead spots or scratchy sound, and where there is a number on the display it must follow.",
                     "zh":"缓慢将音量从最小调到最大。全程应连续上升，不应跳变、无死区、无刮擦杂音；若屏幕显示数值，应同步变化。"}},
-           {"id":"treble","code":"AUD-007","label":{"en":"Treble level","zh":"高音调节"},
+           {"id":"treble","code":"AUD-007","skip_factory":["RHY"],
+            "label":{"en":"Treble level","zh":"高音调节"},
             "help":{"en":"With music playing, take the treble fully down and fully up. The change must be clearly audible across the whole travel, with no dead spots and no scratchy noise as the knob turns. Where there is an on-screen indicator, it must follow.",
                     "zh":"播放音乐时，将高音从最小调到最大。全程声音变化应清晰可辨，无死区，旋转时无刮擦杂音。若有屏幕指示，应同步变化。"}},
-           {"id":"bass","code":"AUD-008","label":{"en":"Bass level","zh":"低音调节"},
+           {"id":"bass","code":"AUD-008","skip_factory":["RHY"],
+            "label":{"en":"Bass level","zh":"低音调节"},
             "help":{"en":"Same check on the bass control, across its whole travel. Where there is an on-screen indicator, it must follow.",
                     "zh":"对低音旋钮做同样的检查，走完全程。若有屏幕指示，应同步变化。"}},
            {"skip_factory":["RHY"],
@@ -2441,18 +2535,18 @@ const CONFIG = {
            {"id":"dsp_audible","code":"AUD-018","label":{"en":"Each mode sounds different","zh":"各模式声音互不相同","es":"Cada modo suena distinto"},
             "help":{"en":"With the same track playing, go through the four modes listening. Each one must change the sound audibly. Four modes that sound the same means the firmware was never loaded, and from the outside it looks identical to a good one.",
                     "zh":"用同一首曲目走完四个模式并细听，每个模式都应使声音发生可闻的变化。四个模式声音一样，说明固件根本没有烧录，而从外观上与正常机器毫无区别。",
-                    "es":"Con la misma pista sonando, recorra los cuatro modos escuchando. Cada uno debe cambiar el sonido de forma audible. Cuatro modos que suenan igual es firmware sin cargar, y por fuera se ve idéntico a uno bueno."}},
-           {"id":"dsp_memory","code":"AUD-011","label":{"en":"The mode is kept after power off","zh":"关机后保留所选模式","es":"El modo queda guardado al apagar"},
-            "help":{"en":"Leave a mode other than the first, switch off and on. It must come back to the same one.",
-                    "zh":"停在第一个以外的模式，关机再开机，应回到同一模式。",
-                    "es":"Deje un modo distinto del primero, apague y encienda. Debe volver al mismo."}}]},
+                    "es":"Con la misma pista sonando, recorra los cuatro modos escuchando. Cada uno debe cambiar el sonido de forma audible. Cuatro modos que suenan igual es firmware sin cargar, y por fuera se ve idéntico a uno bueno."}}]},
+        /* «El modo queda guardado al apagar» se retiró en el plan 112 a petición
+           de HOKLAN. La prueba es sólo de RHYME, así que el punto se elimina en
+           vez de filtrarse. */
 
         {/* Era LEDS SEÑAL Y LÍMITE. El LED LÍMITE pasó a Controles de audio,
               dentro de USB, donde el barrido de volumen que ese punto necesita
               ya está hecho. Aquí queda sólo el LED SEÑAL, y el nombre y los
               pasos se ajustaron a eso. */
          "id":"SIGNAL_LIMIT","optional":false,"only_factory":["RHY"],"evidence":["video"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-EPS112A1","HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330",
+                 "HK-BRA130","HK-BRA330"],
          "label":{"en":"SIGNAL LED","zh":"信号指示灯","es":"LED SEÑAL"},
          "steps":[
            {"en":"With programme playing, watch the SIGNAL LED on the panel","zh":"在有节目声时观察面板上的信号指示灯","es":"Con programa sonando, observe el LED SEÑAL del panel"}],
@@ -2469,10 +2563,27 @@ const CONFIG = {
            {"en":"Connect the XLR output to a second unit","zh":"将 XLR 输出接到第二台设备","es":"Conecte la SALIDA XLR a un segundo equipo"},
            {"en":"Listen at the second unit, first with programme and then in silence","zh":"在第二台设备上先听节目声，再听静音状态","es":"Escuche en el segundo equipo, primero con programa y luego en silencio"}],
          "points":[
-           {"id":"xlr_signal","code":"AUD-013","label":{"en":"Signal comes out of the XLR output","zh":"XLR 输出有信号送出","es":"Sale señal por la SALIDA XLR"},
-            "help":{"en":"Connect the output to a second unit and confirm audio arrives at working level. It is the output that gets tested least and complained about most in installations.",
-                    "zh":"将输出接到第二台设备，确认音频以可用电平送达。这是最少被测试、却在工程安装中投诉最多的一路输出。",
-                    "es":"Conecte la salida a un segundo equipo y confirme que le llega audio con nivel de uso. Es la salida que menos se prueba y la que más se reclama en instalación."}},
+           {/* Dos versiones del mismo punto desde el plan 112. En el Epsilon el
+                segundo equipo es otro EPS112 y lo que se juzga son sus agudos y
+                sus graves; en las demás referencias sigue bastando con que
+                llegue señal. La frase sobre las reclamaciones en instalación se
+                retiró de las dos. */
+            "id":"xlr_signal","code":"AUD-013","skip":["HK-EPS112A1"],
+            "label":{"en":"Signal comes out of the XLR output","zh":"XLR 输出有信号送出","es":"Sale señal por la SALIDA XLR"},
+            "help":{"en":"Connect the output to a second unit and confirm audio arrives at working level.",
+                    "zh":"将输出接到第二台设备，确认音频以可用电平送达。",
+                    "es":"Conecte la salida a un segundo equipo y confirme que le llega audio con nivel de uso."}},
+           {"id":"xlr_signal_eps","code":"AUD-013","only":["HK-EPS112A1"],
+            "label":{"en":"Signal comes out of the XLR output","zh":"XLR 输出有信号送出","es":"Sale señal por la SALIDA XLR"},
+            "help":{"en":"Connect the XLR output to a second EPS112 unit and confirm audio arrives at working level. Listen at that second cabinet: the treble and the bass must both come through, complete and clean.",
+                    "zh":"将 XLR 输出接到第二台 EPS112，确认音频以可用电平送达。在第二台音箱上试听：高音与低音都应完整送出且干净。",
+                    "es":"Conecte la SALIDA XLR a una segunda unidad EPS112 y confirme que le llega audio con nivel de uso. Escuche en esa segunda cabina: deben salir tanto los agudos como los graves, completos y limpios."}},
+           {"id":"xlr_controls_eps","code":"AUD-013","only":["HK-EPS112A1"],
+            "label":{"en":"The controls act on the second cabinet","zh":"旋钮对第二台音箱起作用",
+                     "es":"Los controles actúan sobre la segunda cabina"},
+            "help":{"en":"With the second EPS112 connected by XLR and playing, take the volume, the treble and the bass up and back down, one at a time. Listening at the second cabinet, each one must change the sound across its whole travel, with no dead spots and no jumps.",
+                    "zh":"在第二台 EPS112 经 XLR 连接并出声的状态下，逐一将音量、高音和低音调高再调低。在第二台音箱上试听，每一项都应在全程改变声音，无死区、无跳变。",
+                    "es":"Con la segunda EPS112 conectada por XLR y sonando, suba y baje el volumen, los agudos y los graves, uno por uno. Escuchando en la segunda cabina, cada uno debe cambiar el sonido en todo su recorrido, sin zonas muertas ni saltos."}},
            {"id":"xlr_noise","code":"AUX-003","label":{"en":"The output adds no noise","zh":"输出不带杂音","es":"La salida no mete ruido"},
             "help":{"en":"Listen at the second unit with the cabinet silent: no hum and no hiss.",
                     "zh":"在音箱静音时于第二台设备上细听：不应有嗡嗡声或嘶声。",
@@ -3847,7 +3958,10 @@ const CONFIG = {
             "help":{"en":"The other face, in its own frame. The barcode and the country of origin must be legible.",
                     "zh":"拍摄另一面，单独成图。条码和产地须清晰可读。",
                     "es":"La otra cara, en su propia foto. El código de barras y el país de origen deben quedar legibles."}},
-           {"id":"carta_fidelizacion","label":{"en":"Loyalty card","zh":"客户回馈卡"},
+           {/* YISION no la empaca: se estaba pidiendo la foto de algo que no
+                viene en la caja. EAGLE sí la lleva. */
+            "id":"carta_fidelizacion","skip_factory":["YIS"],
+            "label":{"en":"Loyalty card","zh":"客户回馈卡"},
             "help":{"en":"The card inviting the customer to register the product. Photograph both faces if it is printed on both, and check the QR code or web address is legible.",
                     "zh":"拍摄邀请客户注册产品的卡片。若双面印刷则两面都要拍，并确认二维码或网址清晰可读。"}},
            {"id":"bolsa","label":{"en":"Bag the speaker is packed in","zh":"音箱的包装袋"},
@@ -6185,6 +6299,7 @@ const T = {
   ev_free:"Nothing is required here. Attach a photo or a clip if something is worth showing.",
   need_photo:"At least one photo is required, whether the test passes or fails.",
   need_point_photo:"This point needs its own photo, whether it passes or fails.",
+  need_point_video:"This point needs its own clip, whether it passes or fails.",
   a_point_photos:"%n point(s) are still missing their photo.\n\nThese points are documented whether they pass or fail: the picture is the proof of what was on the display.",
   need_video:"Video missing: one take covering the points above.",
   need_both:"Photo and video of the test being run are missing.",
@@ -6414,6 +6529,7 @@ const T = {
   ev_free:"Aquí no se requiere nada. Adjunte una foto o un video si hay algo que valga la pena mostrar.",
   need_photo:"Se requiere al menos una foto, apruebe o falle la prueba.",
   need_point_photo:"Este punto necesita su propia foto, apruebe o falle.",
+  need_point_video:"Este punto necesita su propio video, apruebe o falle.",
   a_point_photos:"Faltan %n punto(s) por fotografiar.\n\nEstos puntos se documentan aprueben o fallen: la foto es la prueba de lo que mostraba la pantalla.",
   need_video:"Falta el video: una toma que recorra los puntos de arriba.",
   need_both:"Faltan la foto y el video de la prueba en ejecución.",
@@ -6639,6 +6755,7 @@ const T = {
   ev_free:"本项无强制要求。若有值得记录的内容，可自行上传照片或视频。",
   need_photo:"无论合格与否，本项至少需要一张照片。",
   need_point_photo:"无论合格与否，本检查项都需要单独拍照。",
+  need_point_video:"无论合格与否，本检查项都需要单独录制视频。",
   a_point_photos:"还有 %n 个检查项未拍照。\n\n这些项目无论合格与否都要留存照片：照片就是显示屏内容的证据。",
   need_video:"缺少视频：需一镜拍完上方各检查项。",
   need_both:"缺少测试过程的照片和视频。",
@@ -8288,11 +8405,12 @@ function nextTest(){
     alert(fmt("a_point_photos",{n:missShots}));
     let first = null;
     realPoints(t).forEach(p => {
-      if(!p.photo) return;
+      if(!p.photo && !p.video) return;
       allUnits().forEach(u => {
         const r = row(u);
         if(first || r.points[p.id] === "NA") return;
-        if(shotsFor(r, p.id).filter(m => m.kind === "photo").length === 0)
+        const falta = k => shotsFor(r, p.id).filter(m => m.kind === k).length === 0;
+        if((p.photo && falta("photo")) || (p.video && falta("video")))
           first = {u, id:p.id};
       });
     });
@@ -9277,6 +9395,10 @@ ${runId()}
        display word photographed and passed left no trace in the report. */
     const pointShots = [];
     if(!isDoc){
+      /* Sólo fotos: esta rejilla pinta cada celda con una etiqueta de imagen, y
+         un video puesto aquí saldría roto. Los clips de un punto ya tienen su
+         sitio en la lista de videos de arriba, que lee `m.slot` y escribe al
+         lado el nombre del punto. */
       realPoints(t).forEach(p => {
         if(!p.photo) return;
         allUnits().forEach(u => {
@@ -11576,14 +11698,22 @@ function pointRow(p, u, showTag){
   const wantShot = p.photo && v !== "FAIL";
   const shotMissing = p.photo && v !== "NA" &&
     shots.filter(m => m.kind === "photo").length === 0;
+  /* Un punto puede pedir su propio clip, igual que pide su propia foto. Hasta el
+     plan 112 el video era una sola pieza al final de la prueba entera, y eso no
+     sirve cuando lo que hay que ver ocurre en un tramo concreto: un barrido de
+     volumen por la entrada RCA no se demuestra con un clip genérico de la prueba
+     de AUX. `video` marca el punto donde el clip tiene que estar. */
+  const wantClip = p.video && v !== "FAIL";
+  const clipMissing = p.video && v !== "NA" &&
+    shots.filter(m => m.kind === "video").length === 0;
   // Declared before the boxes below, all of which build element ids from it.
   // It used to sit further down: `const` is not hoisted the way `var` is, so
   // the first point that asked for its own photo threw on render and took the
   // whole test screen with it.
   const id = u + "_" + p.id;
   const wantValue = !!p.measure && v !== "NA";
-  const shotBox = wantShot || wantValue ? `
-    <div class="pshot${shotMissing?" miss":""}" id="psb_${id}">
+  const shotBox = wantShot || wantValue || wantClip ? `
+    <div class="pshot${shotMissing||clipMissing?" miss":""}" id="psb_${id}">
       ${wantShot?`<button onclick="document.getElementById('ps_${id}').click()">${
         p.gallery ? "🖼" : "📷"} ${tr(p.doc ? "photo_doc"
           : p.gallery ? "photo_pick" : "photo")}</button>
@@ -11603,9 +11733,23 @@ function pointRow(p, u, showTag){
         <div class="thumb" onclick="zoomMedia('${m.uid}')">${thumbFace(m)}
           <span onclick="event.stopPropagation();dropMedia('${m.uid}')">×</span>
         </div>`).join("")}</div>`:""}
+      ${wantClip?`<button onclick="document.getElementById('pv_${id}').click()">🎥 ${
+        tr("video")}</button>
+      ${/* `capture` abre la cámara directamente. Aquí es lo correcto: lo que hay
+            que filmar está delante del operario en ese momento — un barrido de
+            perilla, un tono sonando. A diferencia del envejecimiento, no es algo
+            que ocurrió horas antes y quedó en la galería. */""}
+      <input id="pv_${id}" class="hidden" type="file" accept="video/*"
+        ${p.gallery ? "" : `capture="environment"`} multiple
+        onchange="addMedia(this,${u},'${p.id}')">
+      <div class="media">${shots.filter(m=>m.kind==="video").map(m=>`
+        <div class="thumb" onclick="zoomMedia('${m.uid}')">${thumbFace(m)}
+          <span onclick="event.stopPropagation();dropMedia('${m.uid}')">×</span>
+        </div>`).join("")}</div>`:""}
       ${sampleBox(p)}
       ${wantValue?measureBox(p, u, id):""}
       ${shotMissing?`<em>${tr("need_point_photo")}</em>`:""}
+      ${clipMissing?`<em>${tr("need_point_video")}</em>`:""}
     </div>` : "";
 
   // Once the evidence is complete the box folds into one green line, so a test
@@ -11895,9 +12039,17 @@ function allNA(t){
    pressing a button next to a point that already records whether the button
    worked — and a formality collected fifteen times is how an inspector starts
    filming the ceiling to get past the screen. */
+/* Una entrada de la lista puede ser el nombre a secas —"photo"— o un objeto con
+   las mismas llaves de filtrado que un punto: {"kind":"video","skip_factory":
+   ["RHY"]}. Hizo falta en el plan 112: la evidencia final es del test, pero un
+   mismo test lo corren tres fábricas que no piden lo mismo. BLUETOOTH y AUX ya
+   dejan sus videos dentro de las secciones para RHYME, y repetirlos al final era
+   pedir un cuarto clip de lo mismo. */
 function evidenceWanted(t){
   if(!t || t.evidence === undefined) return {photo:true, video:true};
-  const want = [].concat(t.evidence);
+  const want = [].concat(t.evidence)
+    .filter(e => typeof e === "string" || fits(e))
+    .map(e => typeof e === "string" ? e : e.kind);
   return {photo: want.indexOf("photo") >= 0, video: want.indexOf("video") >= 0};
 }
 
@@ -11922,10 +12074,14 @@ function evidenceComplete(){
 function pointShotsMissing(t){
   let n = 0;
   allUnits().forEach(u => realPoints(t).forEach(p => {
-    if(!p.photo) return;
+    if(!p.photo && !p.video) return;
     const r = row(u);
     if(r.points[p.id] === "NA") return;
-    if(shotsFor(r, p.id).filter(m => m.kind === "photo").length === 0) n++;
+    const have = k => shotsFor(r, p.id).filter(m => m.kind === k).length > 0;
+    /* Se cuentan por separado: un punto que pide foto y clip y sólo trae la foto
+       sigue incompleto, y el número tiene que decirlo. */
+    if(p.photo && !have("photo")) n++;
+    if(p.video && !have("video")) n++;
   }));
   return n;
 }

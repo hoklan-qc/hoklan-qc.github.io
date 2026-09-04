@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="13.5">
+<meta name="app-version" content="13.6">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -663,6 +663,7 @@ const CONFIG = {
        anterior nombra. */
     "PWR-013":{"en":"Automatic power-off does not follow the rule","zh":"自动关机不符合规则","es":"El apagado automático no cumple la regla"},
     "PWR-014":{"en":"USB-C output does not deliver or does not cut off","zh":"USB-C 输出无电或未按规则切断","es":"La salida USB-C no entrega o no corta"},
+    "PWR-015":{"en":"Power supply missing the approved support","zh":"电源板缺少承认的支架","es":"Falta el soporte aprobado en la fuente de poder"},
     "BAT-010":{"en":"Low battery is not signalled as specified","zh":"低电量提示不符合规格","es":"La batería baja no se señaliza como se especifica"},
     "UI-001":{"en":"The display does not show the specified text","zh":"显示屏未显示规定的内容","es":"La pantalla no muestra el texto especificado"},
     "UI-002":{"en":"An LED does not follow its specified state","zh":"指示灯状态不符合规定","es":"Un LED no sigue el estado especificado"},
@@ -761,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 99,
+      "plan_version": 101,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -958,7 +959,12 @@ const CONFIG = {
            {"en":"Come back and attach the photo or the PDF","zh":"收到后回到本项，上传照片或 PDF","es":"Vuelva y adjunte la foto o el PDF"},
            {"en":"Write the figure in the box","zh":"将数值填入方框","es":"Escriba la cifra en el recuadro"}],
          "points":[
-           {"id":"sub_rms_w","code":"AUD-020","photo":true,"gallery":true,
+           {/* `must` retira el N/A: la potencia RMS la tiene que entregar el
+                proveedor de todas las unidades, y marcarla «no aplica» era la
+                salida cómoda cuando el correo no llegaba. Sin ella, la
+                inspección no se puede cerrar sin la foto o el PDF. */
+            "id":"sub_rms_w","code":"AUD-020","photo":true,"gallery":true,"must":true,
+            "sample":"rms_ejemplo",
             "measure":{"unit":"W","step":"0.1"},
             "label":{"en":"RMS power","zh":"RMS 功率","es":"Potencia RMS"},
             "help":{"en":"Ask the amplifier supplier for the RMS power of this model and attach what they send, a photograph or a PDF, with the figure legible in it. Write the figure in the box. If it has not arrived yet, leave the test open and carry on with the rest of the plan.",
@@ -3648,11 +3654,18 @@ const CONFIG = {
             "en":"For the FM antenna, show its full routing and fixing point","zh":"收音天线需拍出完整走线和固定位置"},
            {"en":"Mark N/A anything this reference does not include","zh":"本型号不包含的项目请标记为 N/A"}],
          "points":[
-           {/* El tinsel abre la sección desde el plan 97. Los dos puntos son lo
-                único que exige el woofer todavía montado y con luz encima: una
-                vez desmontado para pesarlo, el calibrador ya no entra igual y la
-                soldadura queda contra la mesa. */
-            "id":"tinsel_gauge","only_factory":["RHY"],
+           {/* Los terminales abren la sección desde el plan 101, y el tinsel va
+                detrás. Los tres puntos son lo único que exige el woofer todavía
+                montado y con luz encima: una vez desmontado para pesarlo, el
+                calibrador ya no entra igual y las soldaduras quedan contra la
+                mesa. */
+            "id":"terminals_solder","only_factory":["RHY"],
+            "sample":"bas_terminales",
+            "label":{"en":"Terminals — soldered","zh":"接线端子 — 已焊接","es":"Terminales — soldados"},
+            "help":{"en":"Photograph the two terminals close enough to see that both are soldered, with the solder covering the joint and no loose strands.",
+                    "zh":"拍摄两个接线端子，距离足够近以便确认两者均已焊接，焊锡覆盖焊点且无散股。",
+                    "es":"Fotografíe los dos terminales lo bastante cerca para ver que ambos están soldados, con el estaño cubriendo la unión y sin hilos sueltos."}},
+           {"id":"tinsel_gauge","only_factory":["RHY"],
             "sample":"bas_tinsel_calibre",
             "measure":{"unit":"mm","step":"0.01"},
             "label":{"en":"Tinsel lead — gauge","zh":"引出线 — 线径","es":"Tinsel — calibre"},
@@ -3685,13 +3698,10 @@ const CONFIG = {
             "help":{"en":"The magnet, with its label readable: brand, size and impedance.",
                     "zh":"拍摄磁钢及其标签：品牌、尺寸和阻抗必须清晰可读。",
                     "es":"El imán, con su etiqueta legible: marca, tamaño e impedancia."}},
-           {"id":"terminals_solder","only_factory":["RHY"],
-            "sample":"bas_terminales",
-            "label":{"en":"Terminals — soldered","zh":"接线端子 — 已焊接","es":"Terminales — soldados"},
-            "help":{"en":"Photograph the two terminals close enough to see that both are soldered, with the solder covering the joint and no loose strands.",
-                    "zh":"拍摄两个接线端子，距离足够近以便确认两者均已焊接，焊锡覆盖焊点且无散股。",
-                    "es":"Fotografíe los dos terminales lo bastante cerca para ver que ambos están soldados, con el estaño cubriendo la unión y sin hilos sueltos."}},
-           {"id":"voice_coil_line","only_factory":["RHY"],
+           {/* `must`: la bobina de la línea se pide en todas las referencias de
+                RHYME y no hay ninguna que no la tenga, así que el N/A sólo servía
+                para saltarse el trámite de pedírsela a producción. */
+            "id":"voice_coil_line","only_factory":["RHY"],"must":true,
             "sample":"bas_bobina",
             "label":{"en":"Voice coil from the production line","zh":"产线上的音圈","es":"Bobina de la línea de producción"},
             "help":{"en":"Do not take the woofer apart. Ask the line for a loose voice coil of the same model, still unassembled, and photograph it with the winding and its markings visible.",
@@ -3814,6 +3824,54 @@ const CONFIG = {
            {"id":"antena_fm","skip_factory":["RHY"],
             "label":{"en":"FM antenna position","zh":"收音天线位置"}}]},
 
+        /* ===== GPE · Guía de pruebas especiales =============================
+           Un contenedor, no una prueba. Aquí entra lo que HOKLAN pide sólo para
+           una referencia concreta: una mejora que hay que confirmar en línea, un
+           componente que cambió de proveedor, un defecto que apareció en un lote
+           y hay que vigilar durante los siguientes. Cosas que no pertenecen al
+           plan general y que, metidas en él, obligarían a marcar N/A en las otras
+           cincuenta y cuatro referencias.
+
+           `only` la limita a los modelos que hoy tienen alguna prueba especial;
+           quien no esté en esa lista no la ve. Para agregar una prueba especial
+           a otro modelo: añadir el modelo aquí y, abajo, una sección con sus
+           puntos, cada uno con su propio `only`. Los puntos de un modelo no le
+           aparecen a los demás aunque compartan la prueba.
+
+           Va después de PARTES INTERNAS a propósito: la primera que entró mira
+           dentro de la fuente de poder, y ahí la cabina ya está abierta. Si algún
+           día entra una que se hace con el producto cerrado, habrá que revisar
+           esta posición. */
+        {"id":"GPE","optional":false,"type":"photos",
+         "only":["HK-POW102"],
+         "label":{"en":"SPECIAL TEST GUIDE (GPE)",
+                  "zh":"专项检验指引（GPE）",
+                  "es":"GUÍA DE PRUEBAS ESPECIALES (GPE)"},
+         "steps":[
+           {"en":"Check what this reference asks for in particular",
+            "zh":"检查本型号特别要求的项目",
+            "es":"Revise lo que esta referencia pide en particular"},
+           {"en":"Compare against the reference picture before deciding",
+            "zh":"判定前请与参考图片核对",
+            "es":"Compare con la imagen de referencia antes de decidir"},
+           {"en":"Photograph what you checked","zh":"拍摄所检查的部位",
+            "es":"Fotografíe lo que revisó"}],
+         "points":[
+           {"section":{"en":"POW102 · Power supply","zh":"POW102 · 电源板",
+                       "es":"POW102 · Fuente de poder"},
+            "only":["HK-POW102"],
+            "help":{"en":"Inside the cabinet, on the power supply board, by the pins marked GND and 9V/15V.",
+                    "zh":"位于箱体内部电源板上，靠近标注 GND 与 9V/15V 的引脚处。",
+                    "es":"Dentro de la cabina, en la tarjeta de la fuente de poder, junto a los pines marcados GND y 9V/15V."}},
+           {"id":"gpe_pow102_support","code":"PWR-015","only":["HK-POW102"],
+            "sample":"pow102_gpe",
+            "label":{"en":"Support across the GND and 9V/15V pins",
+                     "zh":"GND 与 9V/15V 引脚间的支架",
+                     "es":"Soporte en los pines GND y 9V/15V"},
+            "help":{"en":"Photograph the four pins marked GND and 9V/15V close up, with the gap between the two rows visible. A black support must run across the middle of the pins, as in the reference picture. A power supply without it is a fail.",
+                    "zh":"近距离拍摄标注 GND 与 9V/15V 的四个引脚，两排之间的间隙须清晰可见。引脚中间应横贯一条黑色支架，与参考图片一致。缺少该支架的电源板判定为异常。",
+                    "es":"Fotografíe de cerca los cuatro pines marcados GND y 9V/15V, con el espacio entre las dos filas a la vista. Por la mitad de los pines debe cruzar un soporte negro, como en la imagen de referencia. Una fuente que no lo lleve es un fallo."}}]},
+
         /* ===== Real battery capacity ========================================
            Last in the plan, and it has to be: a 3600 mAh pack at a quarter of
            its own rating takes about four hours to empty. Nothing else can be
@@ -3904,14 +3962,14 @@ const CONFIG = {
                     "zh":"每个通道一张图片，其中功率数值须清晰可读。每项旁边的示例展示了该报告的样式。",
                     "es":"Una imagen por canal, con la cifra de potencia legible en ella. El ejemplo al lado de cada punto muestra cómo se ve el informe."}},
            {"id":"rms_sup_woofer","code":"AUD-020","photo":true,"gallery":true,
-            "sample":"rms_proveedor",
+            "sample":"rms_ejemplo",
             "measure":{"unit":"W","step":"0.1"},
             "label":{"en":"Woofer channel — power","zh":"低音通道 — 功率","es":"Canal del woofer — potencia"},
             "help":{"en":"Attach the supplier image of the woofer channel and write the power it shows in the box.",
                     "zh":"上传供应商提供的低音通道图片，并将其中显示的功率填入方框。",
                     "es":"Adjunte la imagen del proveedor del canal del woofer y escriba en el recuadro la potencia que muestra."}},
            {"id":"rms_sup_tweeter","code":"AUD-020","photo":true,"gallery":true,
-            "sample":"rms_proveedor",
+            "sample":"rms_ejemplo",
             "measure":{"unit":"W","step":"0.1"},
             "label":{"en":"Tweeter channel — power","zh":"高音通道 — 功率","es":"Canal del tweeter — potencia"},
             "help":{"en":"The same for the tweeter channel: its own image and its own figure.",
@@ -5811,6 +5869,7 @@ const T = {
   a_pending:"%n point(s) still to answer.",
   leave_pending:"LEAVE PENDING",
   a_left_tests:"%n test(s) still to answer.\n\nThe inspection cannot be closed and the report cannot be issued until they are finished.",
+  a_one_left:"Only one test left: %t.\n\nHere it is. Finish it and the inspection is closed.",
   a_photo:"Photo missing.\n\nEvery test must be left with evidence, pass or fail.",
   a_video:"Video missing.\n\nEvery test must be left with a clip of it being run, pass or fail.",
   a_both:"Photo and video missing.\n\nEvery test must be left with at least one photo and one video, pass or fail.",
@@ -6040,6 +6099,7 @@ const T = {
   a_pending:"Faltan %n punto(s) por responder.",
   leave_pending:"DEJAR PENDIENTE",
   a_left_tests:"Faltan %n prueba(s) por responder.\n\nNo se puede cerrar la inspección ni generar el informe hasta terminarlas.",
+  a_one_left:"Falta una sola prueba: %t.\n\nAquí la tiene. Termínela y la inspección queda cerrada.",
   a_photo:"Falta la foto.\n\nToda prueba debe quedar con evidencia, apruebe o falle.",
   a_video:"Falta el video.\n\nToda prueba debe quedar con un clip de su ejecución, apruebe o falle.",
   a_both:"Faltan la foto y el video.\n\nToda prueba debe quedar con al menos una foto y un video, apruebe o falle.",
@@ -6260,6 +6320,7 @@ const T = {
   a_pending:"还有 %n 项未回答。",
   leave_pending:"暂时搁置",
   a_left_tests:"还有 %n 项测试未回答。\n\n在完成之前，无法结束本次检验，也无法生成报告。",
+  a_one_left:"仅剩一项测试：%t。\n\n已为您打开。完成后本次检验即告结束。",
   a_photo:"缺少照片。\n\n无论合格与否，每项测试都必须留下照片证据。",
   a_video:"缺少视频。\n\n无论合格与否，每项测试都必须留下测试过程的视频。",
   a_both:"缺少照片和视频。\n\n无论合格与否，每项测试都必须留下至少一张照片和一段视频。",
@@ -7894,6 +7955,21 @@ function unansweredTests(){
 }
 
 function advance(){
+  /* La inspección termina cuando no queda nada por responder, no cuando se
+     acaba la lista.
+
+     Antes había que caminar hasta el borde para llegar a la pantalla final. Eso
+     valía cuando el plan se recorría en orden, pero POTENCIA RMS abre el plan y
+     se deja para el final a propósito —el dato lo manda el proveedor por
+     correo—, así que lo normal es completarla estando en la posición uno. El
+     operario terminaba lo único que le faltaba y la app lo mandaba a la prueba
+     dos, y a la tres, y así hasta el final, pasando por pruebas ya resueltas. */
+  if(!unansweredTests().length){
+    S.screen = "done"; markFinished();
+    window.scrollTo(0,0);
+    render(); save(); ensureTranslations();
+    return;
+  }
   S.index++;
   if(S.index >= tests().length){
     /* The last test is not the end of the inspection — it is only the end of
@@ -7903,6 +7979,18 @@ function advance(){
        INCOMPLETE, so it never lied, but it let a packet be downloaded for an
        inspection that had not happened. */
     const left = unansweredTests();
+    /* Si falta una sola, llevar a ella. El índice es la respuesta correcta
+       cuando faltan varias y hay que elegir por dónde seguir; cuando falta una,
+       es un paso de más entre el operario y lo único que le queda por hacer. */
+    if(left.length === 1){
+      S.index = left[0];
+      S.screen = "test";
+      window.scrollTo(0,0);
+      render(); save();
+      ensureTranslations();
+      alert(fmt("a_one_left",{t: L(tests()[left[0]].label)}));
+      return;
+    }
     if(left.length){
       S.index = tests().length - 1;
       S.screen = "index";
@@ -11115,8 +11203,11 @@ function pointRow(p, u, showTag){
       <span>${esc(L(p.label))}</span>
       <button class="${v==="PASS"?"on-p":""}" onclick="setPoint(${u},'${p.id}','PASS')">✓</button>
       <button class="${v==="FAIL"?"on-f":""}" onclick="setPoint(${u},'${p.id}','FAIL')">✗</button>
-      <button class="na-btn ${v==="NA"?"on-n":""}" onclick="setPoint(${u},'${p.id}','NA')"
-        title="${tr("na_title")}">${tr("na")}</button></div>
+      ${/* `must` retira el N/A de un punto concreto: hay comprobaciones que toda
+            unidad tiene que pasar, y ofrecer «no aplica» ahí es ofrecer una
+            salida que no existe. */""}
+      ${p.must?"":`<button class="na-btn ${v==="NA"?"on-n":""}" onclick="setPoint(${u},'${p.id}','NA')"
+        title="${tr("na_title")}">${tr("na")}</button>`}</div>
     ${shotBox}${fail}${fold}`;
 }
 
@@ -11489,7 +11580,7 @@ function renderPhotoTest(t, r, done, total){
         <span>${tr("th_result")}</span>
         <button class="${v==="PASS"?"on-p":""}" onclick="setPoint(0,'${p.id}','PASS')">✓</button>
         <button class="${v==="FAIL"?"on-f":""}" onclick="setPoint(0,'${p.id}','FAIL')">✗</button>
-        ${allowNA?`<button class="na-btn ${na?"on-n":""}"
+        ${allowNA && !p.must?`<button class="na-btn ${na?"on-n":""}"
           onclick="setPoint(0,'${p.id}','NA')" title="${tr("na_title")}">${tr("na")}</button>`:""}
       </div>
       ${na?"":`<div class="row">

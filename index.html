@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 112,
+      "plan_version": 113,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2595,7 +2595,6 @@ const CONFIG = {
          "steps":[
            {"en":"Microphone on XLR into channel 1, then the same on a 1/4 inch plug","zh":"先用 XLR 将麦克风接入通道 1，再改用 6.35 mm 插头","es":"Micrófono por XLR en el canal 1, y después lo mismo con plug de 1/4\""},
            {"en":"Repeat the whole thing on channel 2","zh":"在通道 2 上重复全部步骤","es":"Repita todo en el canal 2"},
-           {"en":"Line source into AUX and into the RCA inputs","zh":"将线路音源接入 AUX 及 RCA 输入","es":"Fuente de línea en AUX y en las entradas RCA"},
            {"en":"One clip covering both channels is enough","zh":"一段涵盖两个通道的视频即可","es":"Basta un video que cubra los dos canales"}],
          "points":[
            {"section":{"en":"Channel 1","zh":"通道 1","es":"Canal 1"},
@@ -2633,27 +2632,10 @@ const CONFIG = {
            {"id":"ch_both","code":"MIC-004","label":{"en":"Both channels sound together","zh":"两个通道可同时发声","es":"Los dos canales suenan a la vez"},
             "help":{"en":"With both inputs connected, speak into both. Both must be heard, without one cutting the other and without feedback.",
                     "zh":"两路输入同时接入并同时讲话。两个声音都应听得到，不应互相切断，也不应啸叫。",
-                    "es":"Con las dos entradas conectadas, hable por las dos. Deben oírse las dos, sin que una corte a la otra y sin acople."}},
-           {"section":{"en":"Channel 3","zh":"通道 3","es":"Canal 3"},
-            "help":{"en":"The line channel: AUX and RCA. The RCA sides are checked one at a time.",
-                    "zh":"线路通道：AUX 与 RCA。RCA 左右两路需分别检查。",
-                    "es":"El canal de línea: AUX y RCA. Los lados del RCA se revisan uno a la vez."}},
-           {"id":"ch3_aux","code":"AUX-001","label":{"en":"Channel 3 — AUX 3.5 mm input","zh":"通道 3 — AUX 3.5 mm 输入","es":"CANAL 3 — entrada AUX 3.5 mm"},
-            "help":{"en":"Connect the test source on AUX. It must play on both sides, with no background noise.",
-                    "zh":"用 AUX 接入测试音源，左右两侧都应出声，且无背景杂音。",
-                    "es":"Conecte la fuente de prueba por AUX. Debe sonar por los dos lados, sin ruido de fondo."}},
-           {"id":"ch3_rca_l","code":"AUX-002","label":{"en":"Channel 3 — RCA left","zh":"通道 3 — RCA 左","es":"CANAL 3 — RCA izquierdo"},
-            "help":{"en":"Connect the left RCA only. Audio must come in, and from the correct side.",
-                    "zh":"仅接入左声道 RCA，应有音频进入，且来自正确的一侧。",
-                    "es":"Conecte sólo el RCA izquierdo. Debe entrar audio y venir del lado correcto."}},
-           {"id":"ch3_rca_r","code":"AUX-002","label":{"en":"Channel 3 — RCA right","zh":"通道 3 — RCA 右","es":"CANAL 3 — RCA derecho"},
-            "help":{"en":"Now the right one only. Tested one at a time it shows up when they arrive crossed or summed to mono, which with both plugged in is invisible.",
-                    "zh":"改为仅接右声道。分开测试才能发现左右接反或被并成单声道的情况，两路同时接入时完全看不出来。",
-                    "es":"Ahora sólo el derecho. Probados por separado se detecta que lleguen cruzados o sumados a mono, cosa que con los dos puestos no se nota."}},
-           {"id":"ch3_vol","code":"AUD-017","label":{"en":"Channel 3 — volume knob","zh":"通道 3 — 音量旋钮","es":"CANAL 3 — perilla de volumen"},
-            "help":{"en":"It must attenuate the music without touching the level of the microphones on channels 1 and 2.",
-                    "zh":"应能衰减音乐，而不影响通道 1、2 上麦克风的音量。",
-                    "es":"Debe atenuar la música sin tocar el nivel de los micrófonos de los canales 1 y 2."}}]},
+                    "es":"Con las dos entradas conectadas, hable por las dos. Deben oírse las dos, sin que una corte a la otra y sin acople."}}]},
+        /* El canal 3 —AUX, RCA izquierdo, RCA derecho y su perilla— se retiró en
+           el plan 113: sus entradas se recorren ahora en ENTRADA AUX, en las dos
+           secciones de jack 3.5 mm y RCA que el plan 112 dejó allí. */
 
         {"id":"DISPLAY","optional":true,"only_factory":["YIS","RHY","EAG"],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],

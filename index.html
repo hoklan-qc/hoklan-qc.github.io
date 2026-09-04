@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="14.3">
+<meta name="app-version" content="14.4">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 113,
+      "plan_version": 114,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2637,28 +2637,60 @@ const CONFIG = {
            el plan 113: sus entradas se recorren ahora en ENTRADA AUX, en las dos
            secciones de jack 3.5 mm y RCA que el plan 112 dejó allí. */
 
-        {"id":"DISPLAY","optional":true,"only_factory":["YIS","RHY","EAG"],
+        {/* RHYME cambió los seis puntos de texto por una sola toma continua: la
+              pantalla apagada, el arranque, la pantalla principal y la USB
+              reproduciendo. YISION y EAGLE siguen con los puntos de abajo, y
+              siguen pudiendo marcar la prueba entera N/A; RHYME no, porque su
+              clip es la evidencia de que el equipo arranca. */
+         "id":"DISPLAY","optional":["YIS","EAG"],"only_factory":["YIS","RHY","EAG"],
+         "evidence":[{"kind":"photo","skip_factory":["RHY"]},
+                     {"kind":"video","skip_factory":["RHY"]}],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
          "label":{"en":"DISPLAY","zh":"显示屏"},
          "steps":[
-           {"en":"Switch the speaker on and let the display settle","zh":"开机并等待显示屏稳定"},
-           {"en":"Check the colour of the characters against the specification","zh":"对照规格确认字符颜色"},
-           {"en":"Step through every mode this reference has","zh":"依次切换本型号具备的所有模式"},
-           {"en":"Photograph the display on each mode, close and square","zh":"每个模式都要正对近距离拍摄显示屏"},
-           {"en":"Read each word letter by letter before judging it","zh":"逐字母阅读每个词后再判定"}],
+           {"only_factory":["RHY"],
+            "en":"Start filming the display with the cabinet switched off","zh":"在音箱关机状态下开始拍摄显示屏",
+            "es":"Empiece a filmar la pantalla con la cabina apagada"},
+           {"only_factory":["RHY"],
+            "en":"Switch it on and wait until it reaches its main screen","zh":"开机并等待其进入主界面",
+            "es":"Enciéndala y espere hasta que llegue a su pantalla principal"},
+           {"only_factory":["RHY"],
+            "en":"Insert the USB drive and let a track play for five seconds","zh":"插入 U 盘，让曲目播放五秒",
+            "es":"Inserte la USB y deje sonar una canción cinco segundos"},
+           {"only_factory":["RHY"],
+            "en":"All of it in one take, without stopping the camera","zh":"全程一镜到底，中途不停机",
+            "es":"Todo en una sola toma, sin parar la cámara"},
+           {"skip_factory":["RHY"],
+            "en":"Switch the speaker on and let the display settle","zh":"开机并等待显示屏稳定"},
+           {"skip_factory":["RHY"],
+            "en":"Check the colour of the characters against the specification","zh":"对照规格确认字符颜色"},
+           {"skip_factory":["RHY"],
+            "en":"Step through every mode this reference has","zh":"依次切换本型号具备的所有模式"},
+           {"skip_factory":["RHY"],
+            "en":"Photograph the display on each mode, close and square","zh":"每个模式都要正对近距离拍摄显示屏"},
+           {"skip_factory":["RHY"],
+            "en":"Read each word letter by letter before judging it","zh":"逐字母阅读每个词后再判定"}],
          "points":[
-           {"section":{"en":"Display","zh":"显示屏"},
+           {"id":"boot_usb","code":"DSP-007","only_factory":["RHY"],"video":true,
+            "label":{"en":"Power on and USB mode, filmed","zh":"开机与 USB 模式，录像",
+                     "es":"Encendido y modo USB grabado"},
+            "help":{"en":"One continuous take of the display, without stopping the camera. Start with the cabinet switched off. Switch it on and wait until it reaches its main screen. Then insert the USB drive and let a track play for five seconds with the display in frame.",
+                    "zh":"对显示屏录制一段一镜到底的视频，中途不停机。从关机状态开始拍摄，开机后等待进入主界面，随后插入 U 盘，让曲目播放五秒，全程显示屏须在画面内。",
+                    "es":"Una sola toma continua de la pantalla, sin parar la cámara. Empiece con la cabina apagada. Enciéndala y espere hasta que llegue a su pantalla principal. Luego inserte la USB y deje sonar una canción cinco segundos, con la pantalla en cuadro."}},
+           {"skip_factory":["RHY"],
+            "section":{"en":"Display","zh":"显示屏"},
             "help":{"en":"Photograph each mode, with the word on the display legible in the photograph.",
                     "zh":"每个模式都要拍照，显示屏上的字样须在照片中清晰可读。",
                     "es":"Fotografíe cada modo, con la palabra de la pantalla legible en la foto."}},
-           {"id":"colour","code":"DSP-006","label":{"en":"Characters are white","zh":"字符为白色"},
+           {"id":"colour","code":"DSP-006","skip_factory":["RHY"],
+            "label":{"en":"Characters are white","zh":"字符为白色"},
             "help":{"en":"Look at the display straight on, in shade. Every character must be white, all of them the same white. A segment that reads bluish or yellowish next to the others is a fault even when the word is legible.",
                     "zh":"在阴影处正对显示屏观察。所有字符都应为白色，且白度一致。若某一段相比其他偏蓝或偏黄，即使文字仍可辨认也判定为异常。"}},
-           {"id":"word_usb","code":"DSP-007","photo":true,
+           {"id":"word_usb","code":"DSP-007","photo":true,"skip_factory":["RHY"],
             "label":{"en":"USB — text correct on the display","zh":"USB — 屏显文字正确"},
             "help":{"en":"Select USB mode and read what the display shows, letter by letter. Photograph it. Compare against the specification: USB, not U5B or U58.",
                     "zh":"切换到 USB 模式，逐字母阅读显示内容并拍照。与规格对照：应为 USB，而非 U5B 或 U58。"}},
-           {"id":"word_bt","code":"DSP-007","photo":true,
+           {"id":"word_bt","code":"DSP-007","photo":true,"skip_factory":["RHY"],
             "label":{"en":"Bluetooth — text correct on the display","zh":"蓝牙 — 屏显文字正确"},
             "help":{"en":"Select Bluetooth mode and read what the display shows, letter by letter. Photograph it. Whether it says BLUETOOTH, BT or BLUE, it must be spelled the way the specification requires.",
                     "zh":"切换到蓝牙模式，逐字母阅读显示内容并拍照。无论显示 BLUETOOTH、BT 还是 BLUE，都必须与规格要求的写法一致。"}},
@@ -2670,21 +2702,14 @@ const CONFIG = {
             "label":{"en":"SD — text correct on the display","zh":"SD — 屏显文字正确"},
             "help":{"en":"With the card inserted, select SD mode, read the display and photograph it. Mark N/A if this reference has no SD slot.",
                     "zh":"插入 SD 卡后切换到 SD 模式，阅读显示内容并拍照。本型号没有 SD 卡槽时标记为“不适用”。"}},
-           {"id":"word_aux","code":"DSP-007","photo":true,
+           {"id":"word_aux","code":"DSP-007","photo":true,"skip_factory":["RHY"],
             "label":{"en":"AUX / LINE — text correct on the display","zh":"AUX / LINE — 屏显文字正确"},
             "help":{"en":"With the cable connected, select the auxiliary input, read the display and photograph it. Some references write AUX and others LINE: either is correct as long as it matches the specification for this model and is spelled properly. Mark N/A if this reference has no auxiliary input.",
-                    "zh":"接上音频线后切换到辅助输入，阅读显示内容并拍照。部分型号显示 AUX，部分显示 LINE：只要与本型号规格一致且拼写无误，两者均可。本型号没有辅助输入时标记为“不适用”。"}},
-           {/* The DSP mode is the one word on a RHYME display that changes from
-                model to model - BAJO on one panel, MONITOR on the next - so it
-                is also the one the artwork is most likely to get wrong. Read on
-                screen, not on the silkscreen: the two are printed by different
-                suppliers and only the screen proves the firmware agrees. */
-            "id":"word_dsp","code":"DSP-007","photo":true,"only_factory":["RHY"],
-            "label":{"en":"DSP mode — text correct on the display","zh":"DSP 模式 — 屏显文字正确",
-                     "es":"Modo DSP — texto correcto en pantalla"},
-            "help":{"en":"Step through the DSP modes and photograph the display on each one. Read every name letter by letter and compare it against the specification for this model.",
-                    "zh":"逐一切换 DSP 模式，每个模式都拍摄显示屏。逐字母阅读每个名称，并与本型号规格核对。",
-                    "es":"Recorra los modos DSP y fotografíe la pantalla en cada uno. Lea cada nombre letra por letra y compárelo con la especificación de este modelo."}}]},
+                    "zh":"接上音频线后切换到辅助输入，阅读显示内容并拍照。部分型号显示 AUX，部分显示 LINE：只要与本型号规格一致且拼写无误，两者均可。本型号没有辅助输入时标记为“不适用”。"}}]},
+        /* «Modo DSP — texto correcto en pantalla» era exclusivo de RHYME y se
+           retiró con el resto de los puntos de texto en el plan 114. Lo que
+           quedaba de él —que los cuatro modos suenen distintos— sigue en MODOS
+           DSP, que también es de RHYME. */
 
         {"id":"REMOTE","optional":true,"only_factory":["YIS","RHY","EAG"],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
@@ -7162,7 +7187,15 @@ const noNA = t => {
    en que una sección compartida cubre un producto al que le faltan piezas de
    verdad. Es una decisión sobre toda la sección, no sobre cada punto: por eso
    vive arriba, junto al nombre, y no repartida en diecinueve botones. */
-const canTestNA = t => !!t && (t.optional ||
+/* `optional` puede ser `true` —cualquiera puede saltarse la prueba entera— o la
+   lista de fábricas que conservan ese permiso. Hizo falta en el plan 114: una
+   misma prueba la corren tres fábricas y no todas la tienen al mismo nivel.
+   PANTALLA es opcional en YISION y EAGLE, y obligatoria en RHYME, donde su video
+   es la evidencia de que el equipo arranca. */
+const testOptional = t => Array.isArray(t && t.optional)
+  ? t.optional.indexOf(S.factory) >= 0
+  : !!(t && t.optional);
+const canTestNA = t => !!t && (testOptional(t) ||
   (t.na_ok || []).indexOf(S.model) >= 0);
 
 const pointsOf = t => ((t && t.points) || []).filter(fits);
@@ -10560,7 +10593,7 @@ function renderAdmin(){
     const n = realPoints(t).length;
     return `<button class="pk ${on?"on":""}" onclick="togglePick('${t.id}')">
       <i>${on?"✓":""}</i><b>${esc(L(t.label))}</b>
-      <em>${fmt("points_n",{n})}${t.optional?" · "+tr("is_optional"):""}</em>
+      <em>${fmt("points_n",{n})}${testOptional(t)?" · "+tr("is_optional"):""}</em>
     </button>`;
   }).join("");
 
@@ -12079,7 +12112,7 @@ function openFailCount(t){
 function hintHtml(t){
   // Said before anything else, because it explains why the checklist below is
   // already full of N/A and how to get it back.
-  if(t.optional && allNA(t))
+  if(testOptional(t) && allNA(t))
     return `<b style="color:var(--amber)">${tr("na_test_on")}</b>`;
   const pending = pendingCount();
   if(pending) return fmt("remaining",{n:pending});
@@ -12323,7 +12356,7 @@ function renderIndex(){
       <b>${i+1}</b>
       <span>${esc(L(t.label))}
         <i>${fmt("points_n",{n:total})}${files?" · "+fmt("files_n",{n:files}):""}${
-          t.optional?" · "+tr("is_optional"):""}</i></span>
+          testOptional(t)?" · "+tr("is_optional"):""}</i></span>
       <em class="${cls}">${esc(status)}</em></div>`;
   }).join("");
 

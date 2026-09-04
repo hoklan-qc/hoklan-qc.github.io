@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="13.7">
+<meta name="app-version" content="13.8">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -5925,7 +5925,7 @@ const T = {
   home:"HOME",
   a_home:"Go back to the start screen?\n\nThe current inspection will be discarded. Download the report first if you have not.",
   download_done:"✓ REPORT DOWNLOADED — DOWNLOAD AGAIN",
-  a_home_nodl:"You have NOT downloaded the report.\n\nThe inspection is finished, but nothing has left this phone yet. Going back to the start screen discards it and it cannot be recovered.\n\nGo back anyway?",
+  a_home_nodl:"Download the report before going back to the start screen.",
   how_to:"How to check this",
   open_fails:"%n failed point(s) still need a photo and a note.",
   fail_evidence:"EVIDENCE REQUIRED FOR THIS DEFECT",
@@ -6156,7 +6156,7 @@ const T = {
   home:"INICIO",
   a_home:"¿Volver a la pantalla inicial?\n\nLa inspección actual se descartará. Descargue el informe primero si aún no lo ha hecho.",
   download_done:"✓ INFORME DESCARGADO — DESCARGAR DE NUEVO",
-  a_home_nodl:"NO ha descargado el informe.\n\nLa inspección está terminada, pero todavía no ha salido nada de este teléfono. Volver a la pantalla inicial la descarta y no se puede recuperar.\n\n¿Volver de todas formas?",
+  a_home_nodl:"Descargue el informe antes de volver al inicio.",
   how_to:"Cómo verificar esto",
   open_fails:"%n punto(s) fallidos aún necesitan foto y observación.",
   fail_evidence:"EVIDENCIA OBLIGATORIA PARA ESTE DEFECTO",
@@ -6378,7 +6378,7 @@ const T = {
   home:"首页",
   a_home:"返回首页？\n\n当前检验记录将被清除。如果还没有下载报告，请先下载。",
   download_done:"✓ 报告已下载 — 再次下载",
-  a_home_nodl:"您尚未下载报告。\n\n本次检验已完成，但尚未有任何内容离开这台手机。返回首页将清除记录，且无法恢复。\n\n仍要返回吗？",
+  a_home_nodl:"请先下载报告，然后再返回首页。",
   how_to:"如何检查",
   open_fails:"仍有 %n 个异常项缺少照片和说明。",
   fail_evidence:"此异常项必须提供证据",
@@ -11897,15 +11897,19 @@ function goHome(){
   // An inspection in progress is real work; never discard it on one tap.
   const working = S.screen !== "setup" &&
     S.data.some(u => (u || []).some(r => r));
-  /* Terminada y sin descargar es el caso que más duele: la inspección está
-     hecha entera y se pierde en el último toque. El aviso genérico decía
-     «descargue el informe primero si aún no lo ha hecho» — un condicional que
-     el operario no puede resolver, porque nada en pantalla le dice si lo hizo.
-     Éste no supone nada: sabe que no se ha descargado y lo afirma. */
+  /* Terminada y sin descargar no se puede abandonar: no es una pregunta, es un
+     bloqueo. Antes era un `confirm` —«¿volver de todas formas?»— y ahí el
+     operario apurado pulsaba «sí» y perdía una inspección entera en un toque.
+     Ahora la app se queda donde está y sólo dice qué hacer.
+
+     La salida no es esta pantalla: es el botón ámbar, que después de descargar
+     se pone verde y deja pasar. Lo pidió HOKLAN sin excepción, sabiendo que una
+     inspección terminada por error tampoco se puede descartar desde aquí. */
   if(working && S.screen === "done" && !PACKET_SAVED){
-    if(!confirm(tr("a_home_nodl"))) return;
+    alert(tr("a_home_nodl"));
+    return;
   }
-  else if(working && !confirm(tr("a_home"))) return;
+  if(working && !confirm(tr("a_home"))) return;
 
   clearDraft();
   S.screen = "setup"; S.index = 0; S.units = 1;

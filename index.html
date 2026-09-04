@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="13.6">
+<meta name="app-version" content="13.7">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -5886,7 +5886,8 @@ const T = {
   po_min_hint:"At least %n digits.",
   a_pending:"%n point(s) still to answer.",
   leave_pending:"LEAVE PENDING",
-  a_left_tests:"%n test(s) still to answer.\n\nThe inspection cannot be closed and the report cannot be issued until they are finished.",
+  a_left_tests:"%n test(s) still to answer:",
+  a_left_tail:"\n\nThe inspection cannot be closed and the report cannot be issued until they are finished. The first one is now open.",
   a_one_left:"Only one test left: %t.\n\nHere it is. Finish it and the inspection is closed.",
   a_photo:"Photo missing.\n\nEvery test must be left with evidence, pass or fail.",
   a_video:"Video missing.\n\nEvery test must be left with a clip of it being run, pass or fail.",
@@ -6116,7 +6117,8 @@ const T = {
   po_min_hint:"Al menos %n dígitos.",
   a_pending:"Faltan %n punto(s) por responder.",
   leave_pending:"DEJAR PENDIENTE",
-  a_left_tests:"Faltan %n prueba(s) por responder.\n\nNo se puede cerrar la inspección ni generar el informe hasta terminarlas.",
+  a_left_tests:"Faltan %n prueba(s) por responder:",
+  a_left_tail:"\n\nNo se puede cerrar la inspección ni generar el informe hasta terminarlas. La primera queda abierta.",
   a_one_left:"Falta una sola prueba: %t.\n\nAquí la tiene. Termínela y la inspección queda cerrada.",
   a_photo:"Falta la foto.\n\nToda prueba debe quedar con evidencia, apruebe o falle.",
   a_video:"Falta el video.\n\nToda prueba debe quedar con un clip de su ejecución, apruebe o falle.",
@@ -6337,7 +6339,8 @@ const T = {
   po_min_hint:"至少 %n 位数字。",
   a_pending:"还有 %n 项未回答。",
   leave_pending:"暂时搁置",
-  a_left_tests:"还有 %n 项测试未回答。\n\n在完成之前，无法结束本次检验，也无法生成报告。",
+  a_left_tests:"还有 %n 项测试未回答：",
+  a_left_tail:"\n\n在完成之前，无法结束本次检验，也无法生成报告。第一项已为您打开。",
   a_one_left:"仅剩一项测试：%t。\n\n已为您打开。完成后本次检验即告结束。",
   a_photo:"缺少照片。\n\n无论合格与否，每项测试都必须留下照片证据。",
   a_video:"缺少视频。\n\n无论合格与否，每项测试都必须留下测试过程的视频。",
@@ -7988,44 +7991,41 @@ function advance(){
     render(); save(); ensureTranslations();
     return;
   }
-  S.index++;
-  if(S.index >= tests().length){
-    /* The last test is not the end of the inspection — it is only the end of
-       the list. Reaching it after jumping about, which is now the normal way to
-       work a plan that opens with a four-hour test, used to drop straight onto
-       the finish screen with half the plan unanswered. The report said
-       INCOMPLETE, so it never lied, but it let a packet be downloaded for an
-       inspection that had not happened. */
-    const left = unansweredTests();
-    /* Si falta una sola, llevar a ella. El índice es la respuesta correcta
-       cuando faltan varias y hay que elegir por dónde seguir; cuando falta una,
-       es un paso de más entre el operario y lo único que le queda por hacer. */
-    if(left.length === 1){
-      S.index = left[0];
-      S.screen = "test";
-      window.scrollTo(0,0);
-      render(); save();
-      ensureTranslations();
-      alert(fmt("a_one_left",{t: L(tests()[left[0]].label)}));
-      return;
-    }
-    if(left.length){
-      S.index = tests().length - 1;
-      S.screen = "index";
-      window.scrollTo(0,0);
-      render(); save();
-      ensureTranslations();
-      alert(fmt("a_left_tests",{n:left.length}));
-      return;
-    }
-    S.screen = "done"; markFinished();
-  }
+  /* La siguiente que falte, no la siguiente de la lista. Trabajando en orden es
+     lo mismo, porque la de al lado siempre está sin responder; la diferencia
+     aparece cuando el operario ha ido saltando, y entonces esto es justo lo que
+     quiere: encadenar lo que le queda sin volver a pasar por lo ya resuelto. */
+  const left = unansweredTests();
+  const next = left.find(i => i > S.index);
+  /* Si no queda ninguna por delante, se vuelve a la primera que falta: el plan
+     se recorre en círculo hasta que no falte nada. La salida de este bucle es la
+     comprobación de arriba, que ya devolvió si la lista estaba vacía.
+
+     Dar la vuelta es el momento en que antes se llegaba al final de la lista, y
+     es donde sigue saliendo el aviso de lo que queda. */
+  const wrapped = next === undefined;
+  S.index = wrapped ? left[0] : next;
+  S.screen = "test";
   window.scrollTo(0,0);
   render(); save();
-  // Translate the note just left behind while the operator reads the next test:
-  // by the time the report is asked for, the English lines are already there.
   ensureTranslations();
+  if(wrapped) alert(leftTestsMsg(left));
+  return;
 }
+
+/* El aviso de lo que falta, con los nombres. Un número suelto —«faltan 3»—
+   obligaba al operario a abrir el índice para averiguar cuáles eran; ahora se
+   los dice aquí y además la app abre la primera. Se cortan en seis, la misma
+   regla que el aviso de fotos faltantes, para que el cuadro quepa en el
+   teléfono en vez de convertirse en una pantalla de texto. */
+function leftTestsMsg(left){
+  if(left.length === 1) return fmt("a_one_left",{t: L(tests()[left[0]].label)});
+  return fmt("a_left_tests",{n:left.length}) + "\n\n" +
+    left.slice(0,6).map(i => "· " + L(tests()[i].label)).join("\n") +
+    (left.length > 6 ? "\n" + fmt("a_and_more",{n:left.length-6}) : "") +
+    tr("a_left_tail");
+}
+
 
 /* A switch, and it does not advance. Marking a test as not applicable and being
    thrown into the next one gave the operator no chance to see what had just

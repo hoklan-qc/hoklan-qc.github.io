@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="13.10">
+<meta name="app-version" content="14.0">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 103,
+      "plan_version": 104,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -975,7 +975,13 @@ const CONFIG = {
            caja todavía cerrada. Se toma la muestra, se pesa, se mide, y sólo
            entonces se destapa para seguir. Después ya no hay forma de conocer el
            peso bruto sin volver a empacar. */
-        {"id":"SUB_BOX","optional":false,"only_factory":["RHY"],
+        {/* Sigue abriendo el plan, y tiene que seguir haciéndolo: es lo único
+              que se mide con la caja cerrada. En el plan 104 se estudió poner el
+              envejecimiento delante —son ocho horas y conviene arrancarlas
+              cuanto antes— y no se puede: envejecer exige desempacar, y una vez
+              desempacado ya no hay peso bruto que tomar. El envejecimiento
+              quedó de segundo, inmediatamente después de abrir la caja. */
+         "id":"SUB_BOX","optional":false,"only_factory":["RHY"],
          "evidence":[],"first":1,
          "label":{"en":"BOX","zh":"彩盒","es":"CAJA"},
          "steps":[
@@ -1109,7 +1115,7 @@ const CONFIG = {
             y con ella se van las ruedas, que RHYME no lleva. Conserva el id
             SUB_ para no romper inspecciones en curso. */
          "id":"SUB_EXTERNAL","optional":false,"only_factory":["RHY"],
-         "evidence":["video"],"first":2,
+         "evidence":["video"],"first":3,
          "ask":{"en":"one continuous take going round the speaker, showing the panel, the grille and the rest, no longer than a minute.",
                 "zh":"一镜到底环绕音箱拍摄，需拍到面板、网罩及其余部分，时长不超过一分钟。",
                 "es":"una sola toma continua recorriendo el parlante, donde se observe el panel, la parrilla y las demás funciones, no mayor a un minuto."},
@@ -1308,7 +1314,7 @@ const CONFIG = {
          /* Segunda del plan, detrás de PARTES EXTERNAS. Las dos se hacen con la
             caja abierta y el producto todavía sin conectar; dejarla al final
             obligaba a volver al empaque cuando ya estaba apartado. */
-         "evidence":[],"first":3,
+         "evidence":[],"first":4,
          "label":{"en":"PRINTED MATERIAL","zh":"印刷品","es":"MATERIAL IMPRESO"},
          "steps":[
            {"en":"Photograph each printed item","zh":"逐项拍摄印刷品","es":"Fotografíe cada impreso"},
@@ -3768,9 +3774,9 @@ const CONFIG = {
             "sample":"bas_cable_woofer",
             "measure":{"unit":"AWG","step":"1"},
             "label":{"en":"Woofer cable — gauge","zh":"低音单元引线 — 线径","es":"Cable del woofer — calibre"},
-            "help":{"en":"Read the gauge printed on the woofer cable and write it in the box, in AWG. The BAS115A1 must be 16 AWG. Photograph the printing on the cable; where the cable carries none, measure it with a caliper and photograph the reading with the cable between the jaws.",
-                    "zh":"读取低音单元引线上印制的线规，以 AWG 填入方框。BAS115A1 应为 16 AWG。拍摄线上的印字；若线上无印字，则用游标卡尺测量，并拍摄读数，引线须夹在量爪之间。",
-                    "es":"Lea el calibre impreso en el cable del woofer y escríbalo en el recuadro, en AWG. El BAS115A1 debe ser 16 AWG. Fotografíe la impresión del cable; si el cable no la trae, mídalo con un calibrador y fotografíe la lectura con el cable entre las mordazas."}},
+            "help":{"en":"Read the gauge printed on the woofer cable and write it in the box, in AWG. Both the BAS115A1 and the BAS118A1 must be 16 AWG. Photograph the printing on the cable; where the cable carries none, measure it with a caliper and photograph the reading with the cable between the jaws.",
+                    "zh":"读取低音单元引线上印制的线规，以 AWG 填入方框。BAS115A1 与 BAS118A1 均应为 16 AWG。拍摄线上的印字；若线上无印字，则用游标卡尺测量，并拍摄读数，引线须夹在量爪之间。",
+                    "es":"Lea el calibre impreso en el cable del woofer y escríbalo en el recuadro, en AWG. Tanto el BAS115A1 como el BAS118A1 deben ser 16 AWG. Fotografíe la impresión del cable; si el cable no la trae, mídalo con un calibrador y fotografíe la lectura con el cable entre las mordazas."}},
            {"id":"connectors_glue","only":["HK-BAS115A1","HK-BAS118A1"],
             "sample":"bas_pegante",
             "label":{"en":"Connectors — yellow glue","zh":"接插件 — 黄胶","es":"Conectores — pegante amarillo"},
@@ -3961,7 +3967,7 @@ const CONFIG = {
            adjunta lo que el proveedor entrega y se anota la cifra de cada canal,
            que es lo que después se compara contra la caja y la ficha. Los BAS
            quedan fuera: llevan un solo canal y su propia prueba. */
-        {"id":"RMS_SUPPLIER","optional":false,"only_factory":["RHY"],"evidence":[],"first":3,
+        {"id":"RMS_SUPPLIER","optional":false,"only_factory":["RHY"],"evidence":[],"first":5,
          "only":["HK-EPS112A1","HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
          /* Sin el prefijo, igual que la capacidad de batería. Quedan tres pruebas
@@ -4008,7 +4014,7 @@ const CONFIG = {
          "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1",
                  "HK-EPS112A1","HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
-         "evidence":[],"first":5,
+         "evidence":[],"first":6,
          /* Sin el prefijo, igual que la capacidad de batería. Quedan tres pruebas
             con el mismo título —ésta, la de YISION y la de los BAS—, pero ningún
             plan lleva más de una: son 7 modelos, 37 y 2, sin cruce. */
@@ -4137,11 +4143,19 @@ const CONFIG = {
               is a reasonable thing to want; it is just not this procedure. */
          "id":"AGING","optional":true,"only_factory":["YIS","RHY"],
          "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1"],"evidence":[],
-         /* Cuarta, no primera: en RHYME la caja se pesa y se mide cerrada antes
-            de nada, y el envejecimiento necesita el producto desempacado. Sigue
-            arrancando lo antes posible para que las ocho horas corran mientras
-            se hace el resto. */
-         "first":4,
+         /* Segunda desde el plan 104, y antes era quinta. Son ocho horas: cada
+            prueba que se le ponga delante son ocho horas que empiezan más
+            tarde, y con cuatro por delante terminaba pasada la jornada.
+
+            No puede ser la primera. En RHYME la caja se pesa y se mide cerrada,
+            y envejecer exige desempacar: si el envejecimiento fuera antes, el
+            peso bruto ya no existiría. Así que va inmediatamente después de
+            abrir la caja — el operario desempaca, pone la cabina a envejecer y
+            se va a hacer el resto. `long` es lo que le dice a la app que una
+            prueba sin responder no bloquea el avance.
+
+            En YISION no hay prueba de caja delante, así que allí abre el plan. */
+         "first":2,
          "long":{"t":{"en":"This test is still running","zh":"本测试仍在进行中","es":"Esta prueba sigue en curso"},
                  "n":{"en":"Come back when the eight hours are up to answer it. Meanwhile you can carry on with the rest of the plan.",
                       "zh":"八小时结束后再回来填写本项。期间可继续进行计划中的其他测试。",
@@ -5775,7 +5789,7 @@ const T = {
   need_video_les:"A video of the microphone is required, pass or fail: one take covering the points above.",
   po_ph:"Order number this shipment belongs to",
   operator_ph:"Who is running the inspection", next_po:"Order no. %p · %o",
-  acct_factory:"FACTORY %f", acct_admin:"HOKLAN ADMIN",
+  acct_admin:"HOKLAN ADMIN",
   dev_group:"IN DEVELOPMENT · not in production",
   dev_tag:"IN DEVELOPMENT",
   panel_ref:"Control panel · tap to enlarge",
@@ -5936,7 +5950,6 @@ const T = {
   tab_factory:"FACTORY TESTS", tab_admin:"ADMIN",
   to_start:"← START SCREEN",
   admin_refs_hint:"%n references. Tap one to choose which tests to run.",
-  po_factory:"Write the order number this shipment belongs to. Left empty, the inspection goes out as %p.",
   a_na_section:"Mark the whole section \"%s\" as N/A?\n\nEvery point in it, on every speaker, including any already answered.",
   a_na_section_les:"Mark the whole section \"%s\" as N/A?\n\nEvery point in it, on every set, including any already answered.",
   a_na_section_undo:"Undo the N/A on the whole section \"%s\"?\n\nEvery point in it goes back to unanswered, on every speaker.",
@@ -5948,9 +5961,7 @@ const T = {
   abort:"✕ ABORT INSPECTION",
   a_abort:"Abort this inspection?\n\nEverything answered and every photo taken will be discarded, and nothing will be reported.",
   a_pick_tests:"Select at least one test.",
-  factory_mode:"FACTORY ACCOUNT",
   origin:"Origin", origin_hoklan:"HOKLAN QC inspection",
-  origin_factory:"FACTORY SELF-INSPECTION",
   scope:"Scope", scope_full:"Complete plan",
   scope_part:"PARTIAL — only %n of the %tot tests in the plan were performed",
   scope_part_note:"This is a partial inspection: only the tests listed in section II were performed. It does not certify the tests that were not.",
@@ -6007,7 +6018,7 @@ const T = {
   need_video_les:"Se requiere un video del micrófono, apruebe o falle: una toma que recorra los puntos de arriba.",
   po_ph:"Número de orden al que pertenece el despacho",
   operator_ph:"Quién ejecuta la inspección", next_po:"OC %p · %o",
-  acct_factory:"FÁBRICA %f", acct_admin:"ADMIN HOKLAN",
+  acct_admin:"ADMIN HOKLAN",
   dev_group:"EN DESARROLLO · sin producción",
   dev_tag:"EN DESARROLLO",
   panel_ref:"Panel de mandos · toque para ampliar",
@@ -6167,7 +6178,6 @@ const T = {
   tab_factory:"PRUEBAS FÁBRICA", tab_admin:"ADMIN",
   to_start:"← PANTALLA INICIAL",
   admin_refs_hint:"%n referencias. Toque una para elegir qué pruebas ejecutar.",
-  po_factory:"Escriba el número de orden al que pertenece el despacho. Si lo deja vacío, la inspección sale como %p.",
   a_na_section:"¿Marcar toda la sección \"%s\" como N/A?\n\nTodos sus puntos, en todos los parlantes, incluidos los que ya haya respondido.",
   a_na_section_les:"¿Marcar toda la sección \"%s\" como N/A?\n\nTodos sus puntos, en todos los juegos, incluidos los que ya haya respondido.",
   a_na_section_undo:"¿Deshacer el N/A de toda la sección \"%s\"?\n\nTodos sus puntos vuelven a quedar sin responder, en todos los parlantes.",
@@ -6179,9 +6189,7 @@ const T = {
   abort:"✕ ABORTAR INSPECCIÓN",
   a_abort:"¿Abortar esta inspección?\n\nTodo lo respondido y todas las fotos tomadas se descartarán, y no se reportará nada.",
   a_pick_tests:"Seleccione al menos una prueba.",
-  factory_mode:"CUENTA DE FÁBRICA",
   origin:"Origen", origin_hoklan:"Inspección QC HOKLAN",
-  origin_factory:"AUTOINSPECCIÓN DE FÁBRICA",
   scope:"Alcance", scope_full:"Plan completo",
   scope_part:"PARCIAL — solo se ejecutaron %n de las %tot pruebas del plan",
   scope_part_note:"Esta es una inspección parcial: solo se ejecutaron las pruebas listadas en la sección II. No certifica las pruebas que no se ejecutaron.",
@@ -6235,7 +6243,7 @@ const T = {
   need_video_les:"无论合格与否，本项需一段麦克风的视频：一镜拍完上方各检查项。",
   po_ph:"本批货所属的订单号",
   operator_ph:"由谁执行本次检验", next_po:"订单号 %p · %o",
-  acct_factory:"工厂 %f", acct_admin:"HOKLAN 管理端",
+  acct_admin:"HOKLAN 管理端",
   dev_group:"开发中 · 尚未量产",
   dev_tag:"开发中",
   panel_ref:"控制面板 · 点击放大",
@@ -6389,7 +6397,6 @@ const T = {
   tab_factory:"工厂测试", tab_admin:"管理",
   to_start:"← 返回首页",
   admin_refs_hint:"共 %n 个型号。点击其中一个以选择要执行的测试。",
-  po_factory:"请填写本批货所属的订单号。留空时，本次检验将以 %p 出具。",
   a_na_section:"将整个“%s”分组标记为不适用？\n\n该分组的所有检查项、所有音箱都会被标记，包括已经作答的项目。",
   a_na_section_les:"将整个“%s”分组标记为不适用？\n\n该分组的所有检查项、每一套都会被标记，包括已经作答的项目。",
   a_na_section_undo:"撤销整个“%s”分组的不适用标记？\n\n该分组的所有检查项将在所有音箱上恢复为未作答。",
@@ -6401,9 +6408,7 @@ const T = {
   abort:"✕ 中止检验",
   a_abort:"确定中止本次检验？\n\n已填写的所有回答和拍摄的所有照片都将被丢弃，且不会生成任何报告。",
   a_pick_tests:"请至少选择一项测试。",
-  factory_mode:"工厂账号",
   origin:"来源", origin_hoklan:"HOKLAN QC 检验",
-  origin_factory:"工厂自检",
   scope:"检验范围", scope_full:"完整方案",
   scope_part:"部分检验 — 方案共 %tot 项，仅执行了 %n 项",
   scope_part_note:"本次为部分检验：仅执行了第 II 节所列的测试项目，未执行的项目不在本报告的判定范围内。",
@@ -6493,14 +6498,10 @@ const S = {
   // A targeted inspection launched from Admin: `pick` is the list of test ids
   // to run, and `fromAdmin` is what puts the ABORT button on the screen. Both
   // null/false in the normal factory flow, which always runs the whole plan.
-  pick:null, fromAdmin:false, poLetter:"", poAuto:false,
+  pick:null, fromAdmin:false, poAuto:false,
   // Whether the test list is unfolded in Admin. Folded by default: the common
   // case is running all of them and never opening it.
   adminTests:false,
-  // Started from a factory account: the factory checked its own product. Travels
-  // into the report, the spreadsheet and the file name, because the reader has to
-  // know that the one who inspected is the one who built it.
-  selfCheck:false,
   // Run against a scope HOKLAN published and the factory typed in: neither a
   // HOKLAN inspection nor a self-inspection, and the report says which.
   assigned:false,
@@ -7112,7 +7113,9 @@ function restore(){
       // list must read as "the whole plan", never as "no tests at all".
       if(!Array.isArray(S.pick) || !S.pick.length) S.pick = null;
       S.fromAdmin = !!S.fromAdmin;
-      S.selfCheck = !!S.selfCheck;
+      /* Un borrador guardado antes de la v14.0 puede traer `selfCheck` y
+         `poLetter`. No se normalizan ni se borran: nada los lee ya, y quitarlos
+         obligaría a distinguir un borrador viejo de uno nuevo sin ganar nada. */
       S.adminTests = !!S.adminTests;
       return true;
     }
@@ -8140,8 +8143,12 @@ function fileName(){
      escriben la orden a mano: el nombre del archivo salía «…-004477-…», seis
      dígitos sueltos entre guiones que no se distinguen de una fecha. */
   const orden = S.po
-    ? clean(tr("po_prefix") + (S.poLetter || "") + S.po).replace(/\s+/g,"")
+    ? clean(tr("po_prefix") + S.po).replace(/\s+/g,"")
     : "";
+  /* Sin el nombre del inspector. Se probó en la v14.0 y se retiró: el nombre va
+     en el informe y en la hoja de cálculo, que es donde se consulta, y en el
+     nombre del archivo sólo alargaba una cadena que ya identifica la inspección
+     sin ambigüedad. */
   return [clean(S.model), orden, stampFin(), part]
     .filter(Boolean).join("-") + ".html";
 }
@@ -8687,9 +8694,8 @@ ${banner}
         to print as "HOKLAN inspection", which is the inaccuracy we found in the
         factory's own report. */""}
   <tr><td class="k">${tr("origin")}</td><td class="v" colspan="3">${
-    S.selfCheck ? `<b class="f">${tr("origin_factory")}</b>`
-    : S.assigned ? `<b>${tr("origin_assigned")}</b>`
-                : tr("origin_hoklan")}</td></tr>
+    S.assigned ? `<b>${tr("origin_assigned")}</b>`
+               : tr("origin_hoklan")}</td></tr>
 </table>
 ${refImgForReport()?`<div class="ri"><img src="${refImgForReport()}" alt=""></div>`:""}
 </div>
@@ -9324,8 +9330,7 @@ function reportCsv(){
   const base = [S.testId, S.model, S.po, S.operator,
                 inspectionDate(S.startedAt), finalVerdict(),
                 sc ? fmt("scope_part",{n:sc.n, tot:sc.tot}) : tr("scope_full"),
-                S.selfCheck ? tr("origin_factory")
-                  : S.assigned ? tr("origin_assigned") : tr("origin_hoklan")];
+                S.assigned ? tr("origin_assigned") : tr("origin_hoklan")];
   const rows = [head];
 
   allUnits().forEach(u => {
@@ -9848,7 +9853,11 @@ function render(){
    company. A shared sequence would need a server.
 ------------------------------------------------------------------------- */
 const PO_SEQ_KEY = "hoklan_qc_po_";
-const poSeqName = () => PO_SEQ_KEY + (ADMIN_FACTORY || "HK");
+/* Una sola serie desde la v14.0. Llevaba el sufijo de la fábrica cuando cada
+   planta numeraba sus propias autoinspecciones; retiradas aquéllas, sólo queda
+   la de HOKLAN. El nombre de la clave se conserva para no perder el contador
+   que ya existe en los teléfonos. */
+const poSeqName = () => PO_SEQ_KEY + "HK";
 const poDigits = n => String(n).padStart(3, "0");
 
 /* What the next inspection will get, without consuming it: shown on the screen
@@ -9874,8 +9883,7 @@ function takePo(){
 
    `poAuto` distingue el número que generó la app del que la fábrica copió de la
    orden del cliente: a un PO-88213 ajeno no se le antepone nada. */
-const poPrinted = () => (S.poAuto ? tr("po_prefix") + " " : "") +
-                        (S.poLetter || "") + (S.po || "");
+const poPrinted = () => (S.poAuto ? tr("po_prefix") + " " : "") + (S.po || "");
 
 const ADMIN_ID = {digits:"365", code:"365-H8Q2K7L4"};
 
@@ -9969,7 +9977,6 @@ function applyAssignment(a){
   S.units = a.units;
   S.assigned = true;
   S.fromAdmin = false;
-  S.selfCheck = false;
   ASSIGN = a;
 }
 
@@ -10009,22 +10016,23 @@ const FACTORY_NAMES = {
 };
 
 let ADMIN_OK = false;      // per session on purpose: never remembered on disk
-/* "" while the full admin code is in use; the factory key for a factory
-   account. Deliberately not cleared when Admin is left: once the phone has been
-   handed to a factory in this session, it keeps the narrower permissions until
-   the page is reloaded.
 
-   ATENCIÓN — desde la v12.1 esta variable ya no puede dejar de ser "". El único
-   sitio que la ponía era la rama de las cuentas de administrador de fábrica, y
-   esas cuentas se retiraron. En consecuencia `isFactoryUser()` devuelve siempre
-   falso y `S.selfCheck` nunca se activa, de modo que la autoinspección de
-   fábrica —el rótulo FACTORY en el nombre del archivo, el origen «fábrica» del
-   informe, la letra de fábrica en el número de orden— está fuera de servicio.
-   Se conserva entera, sin ejecutarse, a la espera de que HOKLAN decida si la
-   reactiva o se retira también. No es código olvidado: está aquí a propósito y
-   documentado. */
-let ADMIN_FACTORY = "";
-const isFactoryUser = () => !!ADMIN_FACTORY;
+/* La autoinspección de fábrica se retiró en la v14.0, por decisión de HOKLAN.
+
+   Qué era: con las cuentas de administrador de fábrica —711 YISION, 722 RHYME,
+   733 EAGLE— la propia planta podía inspeccionarse a sí misma, y el informe lo
+   decía. Traía consigo un catálogo recortado a su fábrica, una serie de órdenes
+   propia con la letra de la planta delante, el rótulo FACTORY en el nombre del
+   archivo y el origen «autoinspección» en el informe.
+
+   Aquellas cuentas se retiraron en la v12.1 y la variable que las distinguía
+   quedó imposible de activar, así que todo lo anterior llevaba dos versiones
+   sin poder ejecutarse. Se conservó documentado un tiempo por si HOKLAN quería
+   reactivarlo; no lo quiso, y aquí se fue.
+
+   Para reponerlo hay que rehacer tres cosas, no una: el mapa de cuentas de
+   fábrica, su punto de entrada en `openCode`, y el rótulo de origen en el
+   informe. El historial de git lo tiene entero. */
 
 const inAdmin = () => S.screen === "admin";
 
@@ -10049,7 +10057,6 @@ function adminCode(){ return ADMIN_ID.code; }
 
 function exitAdmin(){
   ADMIN_OK = false;
-  // ADMIN_FACTORY is left alone on purpose: see where it is declared.
   S.adminTests = false;
   S.pick = null; S.fromAdmin = false;
   goHomeReset();
@@ -10084,22 +10091,18 @@ function renderAdmin(){
     ${tabBar()}
     <div class="card">
       <div class="tag">${esc(adminCode())}</div>
-      ${isFactoryUser()?`<div class="tag" style="background:rgba(245,185,66,.16);
-        border-color:var(--amber);color:var(--amber)">${tr("factory_mode")}</div>`:""}
       ${/* What this account will stamp on the next report. Shown here rather
             than on the start screen, where it belonged to nobody, and read with
             peekPo so that looking at it does not consume a number. */""}
       <div class="tag">${esc(fmt("next_po",{
-        p: tr("po_prefix") + " " +
-           (isFactoryUser() ? ADMIN_FACTORY.charAt(0) : "") + poDigits(peekPo()),
+        p: tr("po_prefix") + " " + poDigits(peekPo()),
         /* The name of the account, translated. It used to be built here in
            Spanish whatever language the app was in, so a Chinese operator read
-           "ADMIN HOKLAN" and "FÁBRICA Y" on his own screen. What goes into
-           `S.operator`, and from there into the report, stays Spanish on
-           purpose: that is a record, and a record that changes wording with the
-           phone's language cannot be searched. */
-        o: isFactoryUser() ? fmt("acct_factory",{f: ADMIN_FACTORY.charAt(0)})
-                           : tr("acct_admin")}))}</div>
+           "ADMIN HOKLAN" on his own screen. What goes into `S.operator`, and
+           from there into the report, stays Spanish on purpose: that is a
+           record, and a record that changes wording with the phone's language
+           cannot be searched. */
+        o: tr("acct_admin")}))}</div>
       <label>${tr("reference")}</label>
       <select id="aref" onchange="setAdminModel(this.value)">${refOptions()}</select>
       <p class="hint" style="margin-top:6px">${
@@ -10133,13 +10136,7 @@ function renderAdmin(){
         `<button class="${S.units===i+1?"on":""}"
           onclick="setUnitsAdmin(${i+1})">${i+1}</button>`).join("")}</div>
 
-      ${isFactoryUser() ? `
-      <label>${tr("po")}</label>
-      <input id="adminPo" value="${esc(S.po)}" maxlength="12" autocomplete="off"
-        placeholder="${tr("po_ph")}" oninput="setAdminPo(this.value)">
-      <p class="hint" style="margin-top:6px">${fmt("po_factory",{
-        p: tr("po_prefix") + " " + ADMIN_FACTORY.charAt(0) +
-           poDigits(peekPo())})}</p>` : ""}`}
+      `}
     </div>
 
     ${S.model && canAssign() ? `
@@ -10157,9 +10154,9 @@ function renderAdmin(){
       </div>
     </div>` : ""}
 
-    ${isFactoryUser()?"":`<p style="text-align:center">
+    <p style="text-align:center">
       <button class="jump" style="text-align:center;width:100%;opacity:.7"
-        onclick="wipeData()">${tr("wipe")}</button></p>`}`;
+        onclick="wipeData()">${tr("wipe")}</button></p>`;
 
   actions.innerHTML = S.model
     ? `<button style="flex:0 0 34%" onclick="exitAdmin()">${tr("to_start")}</button>
@@ -10168,22 +10165,16 @@ function renderAdmin(){
     : `<button onclick="exitAdmin()">${tr("to_start")}</button>`;
 }
 
-/* The references the filter currently leaves. A factory account never sees past
-   its own catalogue: the filter is applied before the text search, so no query
-   can reach a reference that belongs to somebody else. */
+/* El catálogo completo. Aquí vivía el recorte por fábrica de las cuentas de
+   autoinspección, retiradas en la v14.0: sólo entra el administrador de HOKLAN,
+   y HOKLAN ve todas las referencias, las de desarrollo incluidas. */
 function refList(){
-  let all = Object.keys(CONFIG.models).sort();
-  /* A factory Admin account is still the factory. Development references are
-     HOKLAN's to inspect until they are released, so they come out here too —
-     the only list that shows them is HOKLAN's own Admin. */
-  if(ADMIN_FACTORY) all = all.filter(m => keyOfModel(m) === ADMIN_FACTORY && !isDevRef(m));
-  return all;
+  return Object.keys(CONFIG.models).sort();
 }
 /* The search box and the list of buttons are gone with the second screen. The
    dropdown holds all fifty-three grouped by factory, and a native picker on a
    phone is faster to reach one of them than a text filter that needs the
-   keyboard. refList is kept because the grouping is built from it, and because
-   it is where the factory restriction lives. */
+   keyboard. refList is kept because the grouping is built from it. */
 
 /* The reference decides the factory, and each factory has exactly one test ID,
    so picking a reference in Admin fills in the code the report has to carry —
@@ -10300,7 +10291,7 @@ function pickAll(on){
 /* The same selection, sent instead of run. Only the full admin gets this: what
    the factory should inspect is HOKLAN's decision, and a factory account
    writing its own assignment would be deciding its own scope. */
-const canAssign = () => ADMIN_OK && !ADMIN_FACTORY;
+const canAssign = () => ADMIN_OK;
 
 function assignJson(){
   return JSON.stringify({
@@ -10338,13 +10329,12 @@ function copyAssign(){
 }
 
 /* Never renders: the field would be rebuilt under the operator's fingers. */
-function setAdminPo(v){ S.po = String(v || ""); }
+/* `setAdminPo` se retiró en la v14.0 con el campo que lo llamaba: la orden
+   escrita a mano sólo existía en la pantalla de las cuentas de fábrica. La de
+   HOKLAN numera sola, con `takePo()`. */
 
 function setUnitsAdmin(n){
   S.units = Math.min(MAX_UNITS, Math.max(1, parseInt(n,10) || 1));
-  // Read back before the screen is rebuilt, or the order number typed just
-  // above these buttons is silently cleared by pressing one of them.
-  S.po = (document.getElementById("adminPo")||{}).value || S.po;
   render();
 }
 
@@ -10353,36 +10343,17 @@ function adminStart(){
   if(!planTests().length){ alert(tr("a_no_plan")); return; }
   if(!S.pick || !S.pick.length){ alert(tr("a_pick_tests")); return; }
 
-  /* HOKLAN's own number is assigned now — consumed only at this point, so
-     abandoning the screen leaves no gap in the series. A factory writes the
-     customer's order number instead, and only falls back to the series when it
-     leaves the field empty; taking the number in that case too keeps the series
-     honest, since a report did go out under it. */
-  const typed = isFactoryUser() ? String(S.po || "").trim() : "";
-  /* Empty still means "number it for me", which is why the floor is not applied
-     to an empty field here. What it does catch is the half-typed one: a factory
-     that starts copying the customer's order and stops at two digits gets a
-     number that looks deliberate and is not. */
-  if(typed && typed.length < PO_MIN){
-    alert(fmt("a_po_min",{n:PO_MIN}));
-    const box = document.getElementById("adminPo");
-    if(box){ box.focus(); box.scrollIntoView({block:"center"}); }
-    return;
-  }
-  S.po = typed || takePo();
-  S.poAuto = !typed;   // ver poPrinted(): sólo el número propio lleva prefijo
-  /* The letter belongs to the series, not to the account: it is what tells Y004
-     apart from R004 when three factories number their own inspections from 001.
-     A number the factory copied from the customer's order is already unique and
-     already theirs — prefixing it turned PO-88213 into YPO-88213, which matches
-     nothing in anybody's system. Which account ran it is recorded in the
-     operator field either way. */
-  S.poLetter = (isFactoryUser() && !typed) ? ADMIN_FACTORY.charAt(0) : "";
-  S.operator = isFactoryUser() ? "FÁBRICA " + ADMIN_FACTORY.charAt(0)
-                               : "ADMIN HOKLAN";
+  /* El número de HOKLAN se asigna aquí y no antes: consumido sólo en este
+     punto, abandonar la pantalla no deja un hueco en la serie.
+
+     Aquí vivía también el número escrito a mano por la fábrica, que era lo que
+     distinguía una autoinspección de una inspección de HOKLAN. Retirada aquella
+     en la v14.0, sólo entra el administrador de HOKLAN y sólo hay una serie. */
+  S.po = takePo();
+  S.poAuto = true;     // ver poPrinted(): el número propio lleva prefijo
+  S.operator = "ADMIN HOKLAN";
 
   S.fromAdmin = true;
-  S.selfCheck = isFactoryUser();
   S.index = 0; S.open = {};
   S.data = Array.from({length:S.units}, () => []);
   S.startedAt = Date.now(); S.finishedAt = null; S.screen = "test";
@@ -10397,7 +10368,7 @@ function abortTest(){
   clearDraft();
   S.data = [[]]; S.index = 0; S.open = {};
   S.startedAt = null; S.finishedAt = null; S.mediaDropped = false;
-  S.fromAdmin = false; S.selfCheck = false; S.poLetter = ""; S.poAuto = false;
+  S.fromAdmin = false; S.poAuto = false;
   /* An assignment survives being aborted, and it has to: HOKLAN said this
      inspection is required, and abandoning one unit does not withdraw that. The
      reference, the tests and the unit count are put back exactly as they came, so
@@ -10758,7 +10729,7 @@ function setTestId(value){
   // empty and nothing is stored — so it can never reach a report, a file name
   // or the spreadsheet the way a real test ID does.
   if(digits === ADMIN_ID.digits){
-    ADMIN_OK = true; ADMIN_FACTORY = "";
+    ADMIN_OK = true;
     S.idDigits = ""; S.testId = ""; S.factory = ""; S.model = "";
     S.screen = "admin";
     window.scrollTo(0,0);
@@ -10871,7 +10842,7 @@ function start(){
   // normal inspection and report as if it were complete. An assignment is the
   // one exception — its selection is the whole point, and it survives.
   if(!S.assigned) S.pick = null;
-  S.fromAdmin = false; S.selfCheck = false; S.poLetter = "";
+  S.fromAdmin = false;
   /* El número que escribe el operario es la orden de compra del despacho, así
      que se rotula OC o PO según el idioma del informe, igual que el que genera
      la app. Lo que no lleva prefijo es el número que una fábrica copia de la
@@ -10890,7 +10861,7 @@ function start(){
    would be filed under a number that belongs to another account. */
 function goHomeReset(){
   S.idDigits = ""; S.testId = ""; S.factory = ""; S.model = "";
-  S.po = ""; S.operator = ""; S.poLetter = ""; S.poAuto = false;
+  S.po = ""; S.operator = ""; S.poAuto = false;
   // The assignment goes with it: the next operator on this phone must type the
   // code again and get whatever is published then, not what was published when
   // somebody else opened the app this morning.
@@ -10984,7 +10955,7 @@ function wipeDraft(){
   clearDraft();
   S.data = [[]]; S.units = 1; S.index = 0; S.open = {};
   S.po = ""; S.operator = ""; S.startedAt = null; S.finishedAt = null; S.mediaDropped = false;
-  S.pick = null; S.fromAdmin = false; S.selfCheck = false; S.poLetter = ""; S.poAuto = false;
+  S.pick = null; S.fromAdmin = false; S.poAuto = false;
   // Back to Admin, which is where the button now lives: dropping to the start
   // screen would mean typing the code again to carry on doing what you were.
   S.screen = ADMIN_OK ? "admin" : "setup";
@@ -11014,7 +10985,7 @@ function wipeAll(){
   }catch(e){}
   S.data = [[]]; S.units = 1; S.index = 0; S.open = {};
   S.po = ""; S.operator = ""; S.startedAt = null; S.finishedAt = null; S.mediaDropped = false;
-  S.pick = null; S.fromAdmin = false; S.selfCheck = false; S.poLetter = ""; S.poAuto = false;
+  S.pick = null; S.fromAdmin = false; S.poAuto = false;
   S.screen = ADMIN_OK ? "admin" : "setup";
   goHomeReset();
   closeWipe();
@@ -11467,7 +11438,7 @@ function renderTest(){
    optional hardware, and answering fifteen points one by one with N/A is how a
    checklist stops being read. A factory account does not get it: deciding that
    a section does not apply is a judgement about the plan, not about the unit. */
-const canSectionNA = () => S.fromAdmin && !S.selfCheck;
+const canSectionNA = () => S.fromAdmin;
 
 /* Whether the whole section is already N/A, on every speaker. Drives both the
    look of the button and what pressing it does. */
@@ -12001,7 +11972,7 @@ function goHome(){
   S.screen = "setup"; S.index = 0; S.units = 1;
   S.data = [[]]; S.open = {};
   S.startedAt = null; S.finishedAt = null; S.mediaDropped = false;
-  S.pick = null; S.fromAdmin = false; S.selfCheck = false; S.poLetter = ""; S.poAuto = false;
+  S.pick = null; S.fromAdmin = false; S.poAuto = false;
   goHomeReset();
   window.scrollTo(0,0);
   render();

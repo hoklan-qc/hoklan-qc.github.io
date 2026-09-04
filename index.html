@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 108,
+      "plan_version": 109,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -786,6 +786,7 @@ const CONFIG = {
          "skip":["HK-BAS115A1","HK-BAS118A1"],
          "label":{"en":"AC POWER","zh":"交流供电","es":"ALIMENTACIÓN AC"},
          "steps":[
+           {"en":"Check the destination country on the order and work at its voltage","zh":"核对订单上的目的地国家，并按该国电压进行测试","es":"Mire el país de destino en la orden y trabaje a su tensión"},
            {"en":"Connect the power cable and switch the cabinet on","zh":"接上电源线并开机","es":"Conecte el cable de alimentación y encienda la cabina"},
            {"en":"Check the switch, the start-up and the outputs","zh":"检查开关、开机过程与输出","es":"Revise el interruptor, el arranque y las salidas"}],
          "points":[
@@ -796,19 +797,31 @@ const CONFIG = {
             "help":{"en":"Plug the cabinet in and switch it on.",
                     "zh":"接入市电并开机。",
                     "es":"Conecte la cabina y enciéndala."}},
+           {/* El POWERCON abre la sección desde el plan 109: es lo que define el
+                montaje —dos cabinas encadenadas, a la tensión del país de
+                destino— y todo lo que viene después se juzga sobre él. Puesto
+                al final, el operario armaba el montaje dos veces. */
+            "id":"ac_out","code":"PWR-009","only":["HK-EPS112A1"],
+            "label":{"en":"POWERCON AC output","zh":"POWERCON 交流输出","es":"Salida de CA POWERCON"},
+            "help":{"en":"Before connecting anything, check the destination country on the purchase order and work at the voltage that country uses: 115 V or 220 V. Then chain the two units through the POWERCON port — mains into the first, POWERCON out of the first into the second — and confirm the second one receives power. Turn each connector to its lock: it must latch and must not pull out when the cable is tugged.",
+                    "zh":"接线之前，先核对采购订单上的目的地国家，并按该国电压进行测试：115 V 或 220 V。随后用 POWERCON 端口将两台串联——市电接入第一台，第一台的 POWERCON 输出接入第二台——并确认第二台得电。每个接头都旋至锁定位：应能锁住，拉扯电缆时不应脱落。",
+                    "es":"Antes de conectar nada, mire el país de destino en la orden de compra y trabaje a la tensión de ese país: 115 V o 220 V. Después encadene las dos unidades por el puerto POWERCON —la red a la primera, y de la salida POWERCON de la primera a la segunda— y confirme que la segunda recibe corriente. Gire cada conector hasta el bloqueo: debe trabar y no salirse al tirar del cable."}},
+           {"id":"powers_up_eps","code":"PWR-001","only":["HK-EPS112A1"],
+            "label":{"en":"Both cabinets start up","zh":"两台音箱均正常开机","es":"Las dos cabinas encienden"},
+            "help":{"en":"Switch on the cabinet connected to the mains and, straight after it, the one fed from the POWERCON. On each of the two check three things: the fan starts turning; the display lights up and the start-up sound plays; and the SIGNAL indicator lights green. Neither may thump or crack from the drivers as it comes up.",
+                    "zh":"先打开接市电的那台，随即打开由 POWERCON 供电的那台。两台都需检查三项：风扇开始转动；显示屏点亮并发出开机提示音；信号指示灯亮绿色。两台在开机瞬间喇叭均不应有砰声或爆音。",
+                    "es":"Encienda la cabina conectada a la red y, enseguida, la que se alimenta del POWERCON. En cada una de las dos compruebe tres cosas: que el ventilador empieza a girar; que la pantalla enciende y suena el sonido de encendido; y que el testigo SEÑAL enciende en verde. Ninguna debe dar golpes ni chasquidos en los parlantes al encender."}},
            {"id":"power_switch","code":"PWR-008","label":{"en":"POWER switch","zh":"电源开关","es":"Interruptor ENCENDIDO"},
             "help":{"en":"It must switch on and off firmly, without stopping halfway. If the switch has a pilot lamp, the lamp must light with it.",
                     "zh":"开关应干脆地开和关，不应停在中间位置。若开关带指示灯，指示灯应随之点亮。",
                     "es":"Debe encender y apagar con firmeza, sin quedarse a medio camino. Si el interruptor tiene piloto, debe encender con él."}},
-           {"id":"powers_up","code":"PWR-001","label":{"en":"Cabinet starts on mains power","zh":"接入市电后正常开机","es":"La cabina enciende conectada a la red"},
+           {/* La versión de una sola cabina. El Epsilon corre la suya arriba,
+                que comprueba las dos encadenadas. */
+            "id":"powers_up","code":"PWR-001","skip":["HK-EPS112A1"],
+            "label":{"en":"Cabinet starts on mains power","zh":"接入市电后正常开机","es":"La cabina enciende conectada a la red"},
             "help":{"en":"Connect and switch on. It must start on its own, with no thump or crack from the drivers as it comes up.",
                     "zh":"接电开机，应自行启动，开机瞬间喇叭不应有砰声或爆音。",
-                    "es":"Conecte y encienda. Debe arrancar sola, sin golpes ni chasquidos en los parlantes al encender."}},
-           {"id":"ac_out","code":"PWR-009","only":["HK-EPS112A1"],
-            "label":{"en":"POWERCON AC output","zh":"POWERCON 交流输出","es":"Salida de CA POWERCON"},
-            "help":{"en":"Connect a second unit to the AC OUT and confirm it receives power. Turn the connector to its lock: it must latch and must not pull out when the cable is tugged.",
-                    "zh":"将第二台设备接到交流输出，确认其得电。将接头旋至锁定位：应能锁住，拉扯电缆时不应脱落。",
-                    "es":"Conecte un segundo equipo a la SALIDA DE CA y confirme que recibe corriente. Gire el conector hasta el bloqueo: debe trabar y no salirse al tirar del cable."}}]},
+                    "es":"Conecte y encienda. Debe arrancar sola, sin golpes ni chasquidos en los parlantes al encender."}}]},
 
         /* ---------------- RHYME subwoofers: HK-BAS115A1, HK-BAS118A1 -------
            A powered sub has no source, no display and no channels. What it does

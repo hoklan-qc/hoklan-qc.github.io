@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="14.5">
+<meta name="app-version" content="14.6">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -7871,8 +7871,29 @@ function shrink(file){
       return;
     }
     if(!file.type.startsWith("image/")){
-      resolve({kind:"video", name:file.name, size:file.size, file,
-               url:URL.createObjectURL(file)});
+      /* Se copian los bytes en vez de guardar el archivo de la cámara.
+         Una foto se convierte aquí mismo a data URL, así que deja de depender
+         del original en el mismo instante en que se adjunta. Un video no se
+         puede convertir —pesa demasiado— y hasta ahora se guardaba la
+         referencia al archivo que dejó la cámara o la galería. Horas después,
+         al armar el ZIP, ese archivo podía haber desaparecido: Android borra
+         temporales, la galería retira el permiso, la tarjeta se vuelve a
+         montar. El navegador respondía NotReadableError con el paquete ya
+         empezado.
+
+         `arrayBuffer()` lo lee una vez, ahora, mientras el archivo todavía está
+         ahí, y lo que queda guardado es un Blob propio de la app. Chrome
+         mantiene en disco los blobs grandes, así que esto no se paga en
+         memoria. Si la lectura falla ya en este momento, se guarda la
+         referencia como antes: peor eso que perder la evidencia de una vez. */
+      file.arrayBuffer().then(buf => {
+        const copia = new Blob([buf], {type:file.type || "video/mp4"});
+        resolve({kind:"video", name:file.name, size:file.size, file:copia,
+                 url:URL.createObjectURL(copia)});
+      }).catch(() => {
+        resolve({kind:"video", name:file.name, size:file.size, file,
+                 url:URL.createObjectURL(file)});
+      });
       return;
     }
     /* Both failure paths resolve as a video-shaped record rather than hanging:
@@ -10243,7 +10264,8 @@ async function buildPacket(){
      phone's gallery. Named, they can be found there and sent by hand. */
   const lostVideos = [];
 
-  mediaList().forEach(v => {
+  /* Bucle con `await`: cada video se comprueba antes de meterlo. Ver abajo. */
+  for(const v of mediaList()){
     const isVideo = v.m.kind === "video";
     let stem = mediaName(v, 1), n = 1;
     while(seen[stem]) stem = mediaName(v, ++n);
@@ -10258,7 +10280,25 @@ async function buildPacket(){
       if(!(v.m.file instanceof Blob)){
         lost++;
         lostVideos.push(stem + (v.m.at ? "  ·  " + shotStamp(v.m.at) : ""));
-        return;
+        continue;
+      }
+      /* Que el File exista no quiere decir que se pueda leer. Un clip que sigue
+         en la lista puede haberse quedado sin su archivo: Android mueve o borra
+         el temporal de la cámara, la galería retira el permiso, la tarjeta se
+         vuelve a montar. Al leerlo, el navegador responde NotReadableError.
+
+         Antes ese error saltaba dentro del ZIP, ya empezado, y se llevaba por
+         delante el paquete entero: ciento doce archivos buenos no salían por
+         uno malo. Aquí se le pide un solo byte a cada clip antes de aceptarlo.
+         Es barato — no lee el archivo, sólo comprueba que se deja abrir — y
+         convierte la caída en un video listado por su nombre, como los que se
+         pierden al recargar la página. */
+      try{
+        await v.m.file.slice(0, 1).arrayBuffer();
+      }catch(err){
+        lost++;
+        lostVideos.push(stem + (v.m.at ? "  ·  " + shotStamp(v.m.at) : ""));
+        continue;
       }
       const ext = (v.m.name && v.m.name.indexOf(".") >= 0)
         ? v.m.name.split(".").pop().toLowerCase().slice(0,4) : "mp4";
@@ -10290,7 +10330,7 @@ async function buildPacket(){
         }
       }catch(err){ lost++; }
     }
-  });
+  }
 
   // Both languages, always. The factory fills the checklist in Chinese and the
   // office in Colombia reads English; issuing only the operator's language

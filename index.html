@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="14.7">
+<meta name="app-version" content="15.0">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 121,
+      "plan_version": 122,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1185,7 +1185,7 @@ const CONFIG = {
          "steps":[
            {"en":"Put the cabinet in good light, avoiding reflections","zh":"将音箱置于光线充足处，避免反光","es":"Ponga la cabina con buena luz, evitando reflejos"},
            {"en":"Photograph each area on the list","zh":"逐项拍摄下列部位","es":"Fotografíe cada zona de la lista"},
-           {"en":"Count the screws of the grille, the panel and the tripod mount","zh":"清点网罩、面板与三脚架支座的螺丝","es":"Cuente los tornillos de la parrilla, del panel y del soporte del trípode"},
+           {"en":"Count the screws of the grille, the panel, the tripod mount and the feet","zh":"清点网罩、面板、三脚架支座与脚垫的螺丝","es":"Cuente los tornillos de la parrilla, del panel, del soporte del trípode y de los pies"},
            {"en":"Finish with one video going round the whole cabinet","zh":"最后录制一段环绕整机的视频","es":"Termine con un video recorriendo toda la cabina"}],
          "points":[
            {/* El peso neto vivía en CAJA. Aquí la cabina ya está desempacada y
@@ -1269,26 +1269,48 @@ const CONFIG = {
                     "zh":"距离足够近以便在照片中读出开关位置，同时保留周围部分面板以显示其在机器上的位置。",
                     "es":"Lo bastante cerca para que la posición se lea en la foto, y con panel suficiente alrededor para ver en qué parte de la cabina está."}},
            {"section":{"en":"Grille and screws","zh":"网罩与螺丝","es":"Parrilla y tornillos"},
-            "help":{"en":"Count the screws of the grille, the panel and the tripod mount one by one. All must be present, done up, and none stripped or crooked.",
-                    "zh":"逐颗清点网罩、面板与三脚架支座的螺丝。应全部到位、拧紧，且不得有滑牙或歪斜。",
-                    "es":"Cuente uno a uno los tornillos de la parrilla, del panel y del soporte del trípode. Deben estar todos, apretados, y ninguno barrido ni torcido."}},
+            "help":{"en":"Count the screws of the grille, the panel, the tripod mount and the feet one by one. All must be present, done up, and none stripped or crooked.",
+                    "zh":"逐颗清点网罩、面板、三脚架支座与脚垫的螺丝。应全部到位、拧紧，且不得有滑牙或歪斜。",
+                    "es":"Cuente uno a uno los tornillos de la parrilla, del panel, del soporte del trípode y de los pies. Deben estar todos, apretados, y ninguno barrido ni torcido."}},
            {"id":"sub_ext_grille","photo":true,
             "label":{"en":"Grille","zh":"网罩","es":"Parrilla"}},
-           {"id":"sub_ext_grille_screws","code":"MEC-004",
+           {/* La cuenta va en el rótulo, no en la descripción, porque es lo que
+                el operario compara sin abrir nada. Y cambia de una referencia a
+                otra, así que cada cifra distinta necesita su propio punto: el
+                DEL115B1 lleva ocho en la parrilla y cinco en el soporte. */
+            "id":"sub_ext_grille_screws","code":"MEC-004","skip":["HK-DEL115B1"],
             "label":{"en":"The grille has its 10 screws","zh":"网罩螺丝齐全，共 10 颗","es":"La parrilla tiene sus 10 tornillos"},
             "help":{"en":"Count them one by one round the grille. There must be ten, all present, all done up and none stripped or crooked.",
                     "zh":"沿网罩逐颗清点，应为十颗，全部到位、拧紧，且不得有滑牙或歪斜。",
                     "es":"Cuéntelos uno a uno alrededor de la parrilla. Deben ser diez, todos puestos, todos apretados y ninguno barrido ni torcido."}},
+           {"id":"sub_ext_grille_screws_8","code":"MEC-004","only":["HK-DEL115B1"],
+            "label":{"en":"The grille has its 8 screws","zh":"网罩螺丝齐全，共 8 颗","es":"La parrilla tiene sus 8 tornillos"},
+            "help":{"en":"Count them one by one round the grille. There must be eight, all present, all done up and none stripped or crooked.",
+                    "zh":"沿网罩逐颗清点，应为八颗，全部到位、拧紧，且不得有滑牙或歪斜。",
+                    "es":"Cuéntelos uno a uno alrededor de la parrilla. Deben ser ocho, todos puestos, todos apretados y ninguno barrido ni torcido."}},
            {"id":"sub_ext_back_screws","code":"MEC-004",
             "label":{"en":"The panel has its 12 screws","zh":"面板螺丝齐全，共 12 颗","es":"El panel tiene sus 12 tornillos"},
             "help":{"en":"Count them round the panel. There must be twelve.",
                     "zh":"沿面板逐颗清点，应为十二颗。",
                     "es":"Cuéntelos alrededor del panel. Deben ser doce."}},
-           {"id":"sub_ext_tripod_screws","code":"MEC-004",
+           {"id":"sub_ext_tripod_screws","code":"MEC-004","skip":["HK-DEL115B1"],
             "label":{"en":"The tripod mount has its 4 screws","zh":"三脚架支座螺丝齐全，共 4 颗","es":"El soporte del trípode tiene sus 4 tornillos"},
             "help":{"en":"Turn the cabinet over and count the screws of the tripod mount. There must be four, all done up and none stripped.",
                     "zh":"将箱体翻转，清点三脚架支座的螺丝，应为四颗，全部拧紧且无滑牙。",
                     "es":"Voltee la cabina y cuente los tornillos del soporte del trípode. Deben ser cuatro, todos apretados y ninguno barrido."}},
+           {"id":"sub_ext_tripod_screws_5","code":"MEC-004","only":["HK-DEL115B1"],
+            "label":{"en":"The tripod mount has its 5 screws","zh":"三脚架支座螺丝齐全，共 5 颗","es":"El soporte del trípode tiene sus 5 tornillos"},
+            "help":{"en":"Turn the cabinet over and count the screws of the tripod mount. There must be five, all done up and none stripped.",
+                    "zh":"将箱体翻转，清点三脚架支座的螺丝，应为五颗，全部拧紧且无滑牙。",
+                    "es":"Voltee la cabina y cuente los tornillos del soporte del trípode. Deben ser cinco, todos apretados y ninguno barrido."}},
+           {/* La cabina ya está volteada del punto anterior, así que las patas se
+                cuentan aquí y no en otra parte. */
+            "id":"sub_ext_feet_screws","code":"MEC-004",
+            "label":{"en":"The rubber feet have their 4 screws","zh":"橡胶脚垫螺丝齐全，共 4 颗",
+                     "es":"Los pies de goma tienen sus 4 tornillos"},
+            "help":{"en":"With the cabinet still turned over, count the screws of the rubber feet. There must be four, all present, all done up and none stripped. Check the feet themselves too: none missing, torn or coming unstuck.",
+                    "zh":"保持箱体翻转状态，清点橡胶脚垫的螺丝，应为四颗，全部到位、拧紧且无滑牙。同时检查脚垫本身：不得缺失、破损或脱胶。",
+                    "es":"Con la cabina aún volteada, cuente los tornillos de los pies de goma. Deben ser cuatro, todos puestos, todos apretados y ninguno barrido. Revise también los pies: que no falte ninguno, ni esté roto ni despegado."}},
            {"section":{"en":"Markings","zh":"标识","es":"Marcas"},
             "help":{"en":"The logos, the tag, the barcode and the lot code — everything stuck on or printed on the product. Then the video, which is what this section closes with: one clip going round the cabinet showing everything photographed above.",
                     "zh":"标志、吊牌、条码与批号——凡是贴在或印在产品上的内容。随后是视频，本节以此结束：一段环绕整机的视频，逐一展示上面拍过的所有内容。",
@@ -6601,6 +6623,13 @@ const T = {
   a_mark_na:"Mark N/A anything this reference does not include.",
   a_resume:"There is an unfinished inspection.\n\nContinue where you left off?",
   a_lost:"\n\nNOTE: some photos could not be recovered on this phone. Your answers were. Retake them from the ☰ menu before generating the report.",
+  a_lost_videos:"%n video(s) not recovered. Film them again from the ☰ menu:",
+  a_no_leave:"Remember you are running this inspection. You cannot leave without finishing it.",
+  resume_head:"Inspection in progress",
+  resume_sum:"%n answered · %f photos · %v videos",
+  resume_go:"Continue",
+  /* Sin `resume_drop`: descartar salió de este diálogo y vive dentro de la
+     inspección, en ✕ ABORTAR y en INICIO. */
   na_title:"Does not apply to this reference",
   na_test:"Does not apply", na_test_undo:"Does not apply · clear",
   po_prefix:"PO",
@@ -6830,6 +6859,11 @@ const T = {
   a_mark_na:"Marque N/A todo lo que esta referencia no incluya.",
   a_resume:"Hay una inspección sin terminar.\n\n¿Continuar donde la dejó?",
   a_lost:"\n\nNOTA: algunas fotos no se pudieron recuperar en este teléfono. Sus respuestas sí. Vuelva a tomarlas desde el menú ☰ antes de generar el informe.",
+  a_lost_videos:"%n video(s) no se recuperaron. Vuelva a grabarlos desde el menú ☰:",
+  a_no_leave:"Recuerde que está realizando esta prueba. No puede salir sin terminarla.",
+  resume_head:"Inspección en curso",
+  resume_sum:"%n respondidos · %f fotos · %v videos",
+  resume_go:"Continuar",
   na_title:"No aplica a esta referencia",
   na_test:"No aplica", na_test_undo:"No aplica · quitar",
   po_prefix:"OC",
@@ -7050,6 +7084,11 @@ const T = {
   a_mark_na:"本型号不包含的项目请标记为“不适用”。",
   a_resume:"有一次未完成的检验。\n\n是否从上次中断处继续？",
   a_lost:"\n\n注意：本机上有部分照片无法恢复；回答已保留。生成报告前请从 ☰ 菜单重新拍照。",
+  a_lost_videos:"%n 段视频未恢复。请从 ☰ 菜单重新录制：",
+  a_no_leave:"请注意，本次检验尚未完成，未完成前不可离开。",
+  resume_head:"检验进行中",
+  resume_sum:"已作答 %n 项 · %f 张照片 · %v 段视频",
+  resume_go:"继续",
   na_title:"本型号不适用",
   na_test:"不适用", na_test_undo:"不适用 · 撤销",
   po_prefix:"PO",
@@ -7641,6 +7680,17 @@ function mediaTx(mode){
 /* Written after the answers, and never awaited by anything the operator is
    waiting on: the answers are already safe in localStorage by then, and a
    picture that has not finished being written is one that is still on screen. */
+/* Lo que ya está escrito en el almacén, por uid. Hasta la v14.9 `saveShots`
+   reescribía todas las fotos en cada guardado, y como se guarda en cada toque,
+   una prueba con cincuenta fotos reescribía diez megas por pulsación. Se
+   aguantaba. Con los videos dentro serían ciento cuarenta megas por pulsación, y
+   eso no se aguanta: el teléfono se arrastra y la escritura no alcanza a
+   terminar antes de la siguiente.
+
+   Vive en memoria y no en el borrador: al recargar, `loadShots` vuelve a
+   llenarlo con lo que encontró, que es exactamente lo que ya está guardado. */
+let MEDIA_WRITTEN = {};
+
 function saveShots(){
   const st = mediaTx("readwrite");
   if(!st){ SHOTS_FAILED = true; return; }
@@ -7649,9 +7699,19 @@ function saveShots(){
     allUnits().forEach(u => unitRows(u).forEach(r => {
       if(!r) return;
       (r.media || []).forEach(m => {
-        if(m.kind !== "photo" || !m.url) return;
+        /* Una foto se guarda como su data URL; un video, como el Blob mismo —
+           IndexedDB los admite tal cual, sin convertirlos a texto, que es lo que
+           haría inviable un archivo de quince megas. */
+        const dato = m.kind === "photo"
+          ? (m.url && m.url.indexOf("data:") === 0 ? m.url : null)
+          : m.kind === "video"
+          ? (m.file instanceof Blob ? m.file : null)
+          : null;
+        if(!dato) return;
         keep[m.uid] = true;
-        st.put(m.url, m.uid);
+        if(MEDIA_WRITTEN[m.uid]) return;   // ya está en el almacén
+        st.put(dato, m.uid);
+        MEDIA_WRITTEN[m.uid] = true;
       });
     }));
     /* This is the only place photographs are written, so a failure here is a
@@ -7661,8 +7721,13 @@ function saveShots(){
        fills up or the transaction aborts and the app used to say nothing at
        all. It says it now, and the finish screen refuses to call the packet
        complete while it is set. */
-    st.transaction.onabort = () => { SHOTS_FAILED = true; render(); };
-    st.transaction.onerror = () => { SHOTS_FAILED = true; render(); };
+    /* Si la transacción se cae —el caso normal es el disco lleno— hay que
+       olvidar que se escribió algo, o el siguiente guardado daría por puestos
+       archivos que no llegaron y no volvería a intentarlo nunca. */
+    st.transaction.onabort = () => {
+      MEDIA_WRITTEN = {}; SHOTS_FAILED = true; render(); };
+    st.transaction.onerror = () => {
+      MEDIA_WRITTEN = {}; SHOTS_FAILED = true; render(); };
     st.transaction.oncomplete = () => {
       if(SHOTS_FAILED){ SHOTS_FAILED = false; render(); }
     };
@@ -7689,6 +7754,26 @@ function saveShots(){
 const shotsMissing = () => allUnits().some(u => unitRows(u).some(r =>
   r && (r.media || []).some(m => m.kind === "photo" && !m.url)));
 
+/* Los videos que quedaron sin su archivo, por prueba y por punto. Un video no
+   sobrevive a la recarga por sí solo: `JSON.stringify` convierte el Blob en
+   `{}`, así que un borrador recuperado trae el registro y no el archivo. Desde
+   la v14.9 se guardan en el almacén y normalmente vuelven; cuando no —el disco
+   estaba lleno cuando se grabó—, hay que decirlo al recuperar y no al final,
+   con la cabina ya embalada. */
+function videosMissing(){
+  const out = [];
+  allUnits().forEach(u => unitRows(u).forEach((r, i) => {
+    if(!r) return;
+    const t = tests()[i];
+    (r.media || []).forEach(m => {
+      if(m.kind !== "video" || m.file instanceof Blob) return;
+      const p = m.slot && t ? realPoints(t).find(x => x.id === m.slot) : null;
+      out.push((t ? L(t.label) : "?") + (p ? " · " + pLab(p) : ""));
+    });
+  }));
+  return out;
+}
+
 function loadShots(){
   return new Promise(ok => {
     const st = mediaTx("readonly");
@@ -7704,8 +7789,20 @@ function loadShots(){
         allUnits().forEach(u => unitRows(u).forEach(r => {
           if(!r) return;
           (r.media || []).forEach(m => {
+            const dato = byId[m.uid];
+            if(dato !== undefined) MEDIA_WRITTEN[m.uid] = true;
+            if(m.kind === "video"){
+              /* El Blob vuelve entero. El enlace que tenía el registro murió con
+                 la página anterior, así que se crea uno nuevo: es lo que usan la
+                 miniatura y el visor. */
+              if(dato instanceof Blob){
+                m.file = dato;
+                m.url = URL.createObjectURL(dato);
+              }
+              return;
+            }
             if(m.kind !== "photo" || m.url) return;
-            if(byId[m.uid]) m.url = byId[m.uid]; else missing = true;
+            if(typeof dato === "string") m.url = dato; else missing = true;
           });
         }));
         ok(missing);
@@ -7722,11 +7819,15 @@ function loadShots(){
 function clearShots(){
   const st = mediaTx("readwrite");
   if(st) try{ st.clear(); }catch(e){}
+  // El almacén queda vacío, así que lo que creíamos escrito ya no lo está.
+  MEDIA_WRITTEN = {};
 }
 
 /* The draft as it goes into localStorage: every photograph reduced to its
-   description. The video keeps `size` and `name` and loses its object URL,
-   which was never worth anything after a reload anyway. */
+   description. El video conserva `size` y `name` y pierde su enlace, que después
+   de una recarga no valía nada. Ni la foto ni el video llevan aquí sus bytes:
+   los dos viven en el almacén del navegador, que es lo que `loadShots` vuelve a
+   pegar a cada registro. */
 function draftForStorage(state){
   return Object.assign({}, state, {
     data: (state.data || []).map(unit => (unit || []).map(r => r
@@ -7799,6 +7900,10 @@ function restore(){
       Object.assign(S, d);
 
       S.units = Math.min(MAX_UNITS, Math.max(1, S.units || S.data.length || 1));
+      /* Un borrador de RHYME abierto en 3 antes de la v14.8 se sigue abriendo
+         en 3: bajarlo aquí tiraría las respuestas de los parlantes 2 y 3, que ya
+         están dadas. Sólo se cierra la puerta a los que empiezan de ahora en
+         adelante. */
       S.index = Math.min(Math.max(0, S.index|0), tests().length - 1);
       S.open = S.open || {};
 
@@ -10590,6 +10695,10 @@ function downloadPacket(){
 
 /* ---------- screens ------------------------------------------------------- */
 function render(){
+  /* La entrada de más en el historial se pone al llegar a la primera prueba y
+     se retira al volver al inicio, para que fuera de la inspección el botón
+     atrás siga funcionando como siempre. */
+  if(enPrueba()) armBack(); else BACK_ARMED = false;
   if(S.screen === "setup")  renderSetup();
   else if(S.screen === "admin") renderAdmin();
   else if(S.screen === "test")   renderTest();
@@ -10744,7 +10853,10 @@ function applyAssignment(a){
   S.idDigits = digitsOfKey(S.factory);
   S.testId = S.idDigits ? CONFIG.test_ids[S.idDigits].code : "";
   S.pick = a.tests.slice();
-  S.units = a.units;
+  /* La asignación puede venir con cualquier cifra — la escribe quien la publica,
+     desde otra pantalla y a veces desde otra fábrica. En las que inspeccionan de
+     a una, manda la fábrica. */
+  S.units = unitsLocked() ? 1 : a.units;
   S.assigned = true;
   S.fromAdmin = false;
   ASSIGN = a;
@@ -10904,10 +11016,12 @@ function renderAdmin(){
         </div>
         ${rows}` : ""}
 
-      <label>${tr("units")}</label>
+      ${/* Tampoco aquí: una asignación publicada con 3 cabinas para RHYME sería
+            una instrucción que el plan no puede cumplir. */""}
+      ${unitsLocked() ? "" : `<label>${tr("units")}</label>
       <div class="units">${Array.from({length:MAX_UNITS},(_,i)=>
         `<button class="${S.units===i+1?"on":""}"
-          onclick="setUnitsAdmin(${i+1})">${i+1}</button>`).join("")}</div>
+          onclick="setUnitsAdmin(${i+1})">${i+1}</button>`).join("")}</div>`}
 
       `}
     </div>
@@ -11127,6 +11241,7 @@ function adminStart(){
   S.operator = "ADMIN HOKLAN";
 
   S.fromAdmin = true;
+  if(unitsLocked()) S.units = 1;
   S.index = 0; S.open = {};
   S.data = Array.from({length:S.units}, () => []);
   S.startedAt = Date.now(); S.finishedAt = null; S.screen = "test";
@@ -11350,6 +11465,10 @@ function setModel(value){
 }
 
 function renderSetup(){
+  /* Antes de dibujar nada. El operario pudo dejar la cuenta en 3 con otra
+     fábrica y volver a ésta: sin esto, el recuadro desaparece pero el número
+     viejo sigue vivo, y el resumen de abajo anunciaría tres parlantes. */
+  if(unitsLocked()) S.units = 1;
   const valid = !!S.testId;
   const bad = S.idDigits.length === 3 && !valid;
   const list = valid ? modelsOf(S.factory) : [];
@@ -11435,7 +11554,10 @@ function renderSetup(){
       <input id="operator" value="${esc(S.operator)}" maxlength="40"
         placeholder="${tr("operator_ph")}"
         autocomplete="off" oninput="onlyLetters(this)">
-      <label>${tr("units")}</label>
+      ${/* Ni el rótulo ni los botones donde la fábrica inspecciona de a una: no
+            hay nada que elegir y el recuadro sólo invitaba a equivocarse. El
+            campo oculto se queda, en 1, porque es lo que lee `start()`. */""}
+      ${unitsLocked() ? "" : `<label>${tr("units")}</label>
       ${/* Fixed when it came in an assignment. The count is part of the
             instruction — one unit to re-check a defect, five to sample a
             shipment — so it is shown, not offered. The hidden field stays
@@ -11444,8 +11566,8 @@ function renderSetup(){
         ? `<div class="units fixed"><button class="on">${S.units}</button></div>`
         : `<div class="units">${Array.from({length:MAX_UNITS},(_,i)=>
         `<button class="${S.units===i+1?"on":""}"
-          onclick="setUnits(${i+1})">${i+1}</button>`).join("")}</div>`}
-      <input id="units" class="hidden" value="${S.units}">
+          onclick="setUnits(${i+1})">${i+1}</button>`).join("")}</div>`}`}
+      <input id="units" class="hidden" value="${unitsLocked() ? 1 : S.units}">
       <p class="hint">${fmt(S.units>1?"plan_info_n":"plan_info",
         {n:tests().length, u:S.units, tot:tests().length*S.units})}<br>
       ${tr("report_note")}</p>
@@ -11462,6 +11584,17 @@ function renderSetup(){
      times a day; it lives in Admin, behind the code. */
   actions.innerHTML = `<button class="primary" onclick="start()">${tr("start")}</button>`;
 }
+
+/* Fábricas que inspeccionan de a una unidad. En RHYME la cabina se desarma —
+   partes internas, peso del woofer, impedancia del tweeter, membrana — y eso no
+   se hace por muestreo: se hace sobre la cabina que se abrió. Ofrecer de dos a
+   cinco era ofrecer un modo que su procedimiento no contempla, y una inspección
+   arrancada en 3 por descuido pedía tres veces cada punto hasta el final.
+
+   Es una lista y no una comparación suelta porque la próxima fábrica que trabaje
+   así se agrega escribiendo su código aquí. */
+const ONE_UNIT = ["RHY"];
+const unitsLocked = () => ONE_UNIT.indexOf(S.factory) >= 0;
 
 /* How many speakers this inspection covers. Kept on the setup screen only —
    changing it once the checklist has started would orphan answers already
@@ -11610,6 +11743,9 @@ function start(){
   if(!S.operator){ alert(tr("a_operator")); return; }
   const un = document.getElementById("units");
   S.units = un ? Math.min(MAX_UNITS, Math.max(1, parseInt(un.value,10)||1)) : 1;
+  // La última palabra, pase lo que pase con el campo oculto o con una asignación
+  // que traiga otra cifra.
+  if(unitsLocked()) S.units = 1;
   // The factory flow always runs the whole plan: any selection left over from
   // an Admin session is dropped here, or a partial plan would leak into a
   // normal inspection and report as if it were complete. An assignment is the
@@ -12843,6 +12979,92 @@ document.documentElement.lang = LANG === "zh" ? "zh-CN" : LANG;
    after there is something on screen: if the store is slow or unreachable the
    app is already usable, and the worst case is the message that says which
    pictures have to be taken again. It is never a blank page. */
+
+/* ---------- salir a mitad de una inspección -------------------------------
+   Tres formas de irse, y sólo una se deja gobernar del todo.
+
+   El botón atrás sí: se deja una entrada de más en el historial y, cuando el
+   sistema intenta consumirla, se repone y se explica. El operario se queda
+   donde estaba y ningún botón le ofrece salir.
+
+   Refrescar o cerrar la pestaña se frenan más abajo, con `beforeunload`, pero el
+   texto lo escribe el navegador. Los navegadores retiraron los mensajes propios
+   de ese aviso hace años, precisamente para que ninguna página pudiera poner
+   ahí lo que quisiera. Sale el genérico y no hay forma de cambiarlo.
+
+   Pasar a segundo plano no se puede impedir: ninguna página puede evitar que se
+   pulse inicio. Lo que queda es recibirlo al volver.
+
+   `var` y declaración de función, no `const`: este bloque vive delante del
+   arranque justo para que `render()` pueda llamarlos, y `render()` corre unas
+   líneas más abajo. Con `const` quedarían en zona muerta y el primer dibujado
+   moriría antes de pintar nada. */
+var BACK_ARMED = false;
+function enPrueba(){ return S.screen === "test" || S.screen === "done"; }
+
+/* ---------- reanudar o descartar -------------------------------------------
+   Era un `confirm` del navegador. `confirm` sólo sabe decir Cancelar y Aceptar,
+   con el mismo peso visual los dos — y aquí «Cancelar» borraba la inspección
+   entera: respuestas, fotos y videos, sin vuelta atrás. Un operario que abría la
+   app sin querer perdía la mañana por tocar el botón de la izquierda.
+
+   Éste los nombra por lo que hacen y los pinta por lo que cuestan, y dice de
+   antemano cuánto hay dentro. Va con estilos en línea a propósito: es una sola
+   pantalla, se usa una vez por arranque y no vale ensuciar la hoja de estilos
+   con reglas que nadie más mira. */
+/* `resumeCounts` y no `draftSummary`: ese nombre ya lo lleva la función que
+   describe el borrador para el diálogo de borrar datos del teléfono, y dos
+   declaraciones con el mismo nombre no chocan — la última gana en silencio y la
+   primera deja de existir. */
+function resumeCounts(){
+  let pts = 0, fotos = 0, videos = 0;
+  allUnits().forEach(u => unitRows(u).forEach(r => {
+    if(!r) return;
+    Object.keys(r.points || {}).forEach(k => {
+      if(ANSWERED.indexOf(r.points[k]) >= 0) pts++;
+    });
+    (r.media || []).forEach(m => { m.kind === "video" ? videos++ : fotos++; });
+  }));
+  return fmt("resume_sum", {n:pts, f:fotos, v:videos});
+}
+
+function askResume(aviso, onGo){
+  const wrap = document.createElement("div");
+  wrap.setAttribute("style", "position:fixed;inset:0;z-index:9999;"+
+    "background:rgba(3,8,15,.86);display:flex;align-items:center;"+
+    "justify-content:center;padding:18px");
+  const cab = [S.model, S.po ? tr("po_prefix") + " " + S.po : ""]
+    .filter(Boolean).join("  ·  ");
+  /* Una sola salida. Descartar vivía aquí sólo porque `confirm` obligaba a
+     poner dos botones; con un diálogo propio esa obligación desaparece, y la
+     acción irreversible no tiene por qué estar en la pantalla que sale al abrir
+     la app, antes de que nadie haya mirado nada. Se descarta desde dentro de la
+     inspección: ✕ ABORTAR al pie de cada prueba, o INICIO arriba, las dos con su
+     propia confirmación y con el operario ya orientado.
+
+     La jerarquía la hace la tipografía: la referencia grande, lo demás en gris.
+     Sin degradados, sin mayúsculas y sin recuadro de alarma — el aviso de los
+     videos es una línea bajo un filete, que es todo lo que necesita ser. */
+  const meta = [S.po ? tr("po_prefix") + " " + S.po : "", resumeCounts()]
+    .filter(Boolean).join("<br>");
+  wrap.innerHTML = `<div style="width:100%;max-width:300px;background:#0d1a2a;
+      border:1px solid #1b2f47;border-radius:14px;padding:20px 18px">
+    <p style="margin:0 0 12px;font-size:10px;letter-spacing:1.4px;
+      text-transform:uppercase;color:#6d8299">${tr("resume_head")}</p>
+    <p style="margin:0 0 3px;font-size:17px;color:#f2f6fa">${esc(S.model || "")}</p>
+    <p style="margin:0 0 ${aviso ? "16px" : "20px"};font-size:12.5px;color:#7f93a8;
+      line-height:1.6">${meta}</p>
+    ${aviso ? `<div style="border-top:1px solid #1b2f47;padding-top:14px;
+        margin-bottom:18px"><p style="margin:0;font-size:11.5px;color:#7f93a8;
+        line-height:1.6">${esc(aviso).replace(/\n/g,"<br>")}</p></div>` : ""}
+    <button id="askGo" style="width:100%;border:1px solid #38546f;
+      border-radius:8px;padding:13px 10px;font-size:13.5px;letter-spacing:.3px;
+      color:#0d1a2a;background:#f2f6fa">${tr("resume_go")}</button>
+  </div>`;
+  document.body.appendChild(wrap);
+  wrap.querySelector("#askGo").onclick = () => { wrap.remove(); onGo(); };
+}
+
 if(restore()){
   /* The restored screen is held back until the pictures are in and the question
      has been answered. Drawing the checklist first would put the operator in
@@ -12856,18 +13078,25 @@ if(restore()){
   openMediaDb().then(loadShots).then(missing => {
     S.screen = target;
     if(missing) S.mediaDropped = true;
-    const lost = S.mediaDropped ? tr("a_lost") : "";
-    if(confirm(tr("a_resume") + lost)){
+    const avisos = [];
+    if(S.mediaDropped) avisos.push(tr("a_lost").trim());
+    /* Los videos que no volvieron, nombrados y aquí — no en la pantalla final.
+       Un video se regraba en dos minutos si el producto sigue en el puesto, y
+       en ninguno si ya se embaló. Tres y no seis: el cuadro tiene que caber en
+       la pantalla, y con tres ya se sabe si fue un descuido o un desastre. */
+    const sinVideo = videosMissing();
+    if(sinVideo.length) avisos.push(
+      fmt("a_lost_videos",{n:sinVideo.length}) + "\n" +
+      sinVideo.slice(0,3).join("\n") +
+      (sinVideo.length > 3 ? "\n" + fmt("a_and_more",{n:sinVideo.length-3}) : ""));
+
+    askResume(avisos.join("\n\n"), () => {
       S.mediaDropped = false;
       /* Rewrites the draft in the new shape. A draft left by the version that
          kept its pictures inside localStorage moves across here, on its own,
          the first time it is opened - so publishing this loses nobody's work. */
-      save();
-    } else {
-      clearDraft(); S.screen="setup"; S.data=[[]]; S.units=1;
-      S.index=0; S.mediaDropped=false; goHomeReset();
-    }
-    render();
+      save(); render();
+    });
   });
 } else {
   openMediaDb();
@@ -12881,6 +13110,45 @@ window.addEventListener("beforeunload", e => {
   if(S.screen === "test" || S.screen === "done"){
     e.preventDefault(); e.returnValue = "";
   }
+});
+
+function armBack(){
+  if(BACK_ARMED || !enPrueba()) return;
+  try{ history.pushState({hoklan:1}, "", location.href); BACK_ARMED = true; }
+  catch(e){}
+}
+window.addEventListener("popstate", () => {
+  if(!enPrueba()){ BACK_ARMED = false; return; }
+  /* Reponer antes de avisar. Al revés, el `alert` bloquea el hilo con el
+     historial ya consumido, y un segundo toque de atrás durante el aviso se
+     lleva al operario fuera de la app. */
+  try{ history.pushState({hoklan:1}, "", location.href); }catch(e){}
+  alert(tr("a_no_leave"));
+});
+
+/* La cámara y la galería también mandan la app al fondo, y son la mitad de lo
+   que el operario hace aquí: cincuenta fotos por inspección son cincuenta
+   salidas y cincuenta regresos. Avisarle en cada una convierte el recordatorio
+   en un botón que se aprende a despachar sin leer, y para cuando de verdad se
+   fue a WeChat ya nadie lo mira.
+
+   Se marca la salida cuando la abre la app misma. En captura y sobre el
+   documento entero para no tener que tocar los quince sitios que disparan un
+   selector de archivos. */
+var PICKING = false;
+document.addEventListener("click", e => {
+  const el = e.target;
+  if(el && el.tagName === "INPUT" && el.type === "file") PICKING = true;
+}, true);
+
+/* Al volver de segundo plano. `visibilitychange` es lo que se dispara al
+   regresar de la cámara, de WeChat o de la pantalla de inicio. */
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState !== "visible") return;
+  if(PICKING){ PICKING = false; return; }   // volvió de la cámara, no se fue
+  if(!enPrueba()) return;
+  armBack();
+  alert(tr("a_no_leave"));
 });
 updateTopBtn();
 </script>

@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="15.1">
+<meta name="app-version" content="15.2">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -768,7 +768,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 123,
+      "plan_version": 124,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -4320,6 +4320,10 @@ const CONFIG = {
                 RHYME y no hay ninguna que no la tenga, así que el N/A sólo servía
                 para saltarse el trámite de pedírsela a producción. */
             "id":"voice_coil_line","only_factory":["RHY"],"must":true,
+            /* Desde la galería además de la cámara: la bobina la entrega
+               producción, y esa foto suele estar ya en el teléfono de quien la
+               pidió antes de que el inspector llegue al puesto. */
+            "gallery":true,
             "sample":"bas_bobina",
             "label":{"en":"Voice coil from the production line","zh":"产线上的音圈","es":"Bobina de la línea de producción"},
             "help":{"en":"Do not take the woofer apart. Ask the line for a loose voice coil of the same model, still unassembled, and photograph it with the winding and its markings visible.",
@@ -7727,8 +7731,13 @@ function saveShots(){
           : null;
         if(!dato) return;
         keep[m.uid] = true;
+        /* La miniatura va bajo su propia llave. Sin esto, un borrador
+           recuperado volvía a pintar las listas con las imágenes grandes y el
+           ahorro de memoria duraba hasta la primera recarga. */
+        if(m.thumb) keep[m.uid + "#t"] = true;
         if(MEDIA_WRITTEN[m.uid]) return;   // ya está en el almacén
         st.put(dato, m.uid);
+        if(m.thumb) st.put(m.thumb, m.uid + "#t");
         MEDIA_WRITTEN[m.uid] = true;
       });
     }));
@@ -7819,7 +7828,10 @@ function loadShots(){
               }
               return;
             }
-            if(m.kind !== "photo" || m.url) return;
+            if(m.kind !== "photo") return;
+            const chica = byId[m.uid + "#t"];
+            if(typeof chica === "string") m.thumb = chica;
+            if(m.url) return;
             if(typeof dato === "string") m.url = dato; else missing = true;
           });
         }));
@@ -7988,6 +8000,10 @@ const humanSize = b => b > 1048576 ? (b/1048576).toFixed(1)+" MB"
    the photographs travel inside the report itself: fifty of them at the old
    setting made a file too heavy to send by mail. */
 const MAX_PHOTO_PX = 1280, JPEG_QUALITY = 0.6;
+/* La miniatura de las listas. 160 px y no 58 porque el cuadro se dibuja a 58 en
+   una pantalla que puede tener el triple de densidad, y porque la misma imagen
+   se reutiliza en el recuadro del punto, que es más grande. */
+const THUMB_PX = 160, THUMB_QUALITY = 0.55;
 /* Sin uso desde la v12.1: el aviso por video pesado se retiró. Se deja el
    umbral por si vuelve a hacer falta medir el tamaño de un clip.
    A clip past this gets a word of warning, never a refusal. The evidence is
@@ -8062,12 +8078,27 @@ function shrink(file){
       const img = new Image();
       img.onerror = raw;
       img.onload = () => {
-        const scale = Math.min(1, MAX_PHOTO_PX / Math.max(img.width, img.height));
-        const c = document.createElement("canvas");
-        c.width = Math.round(img.width*scale); c.height = Math.round(img.height*scale);
-        c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+        const dibuja = px => {
+          const k = Math.min(1, px / Math.max(img.width, img.height));
+          const c = document.createElement("canvas");
+          c.width = Math.round(img.width*k); c.height = Math.round(img.height*k);
+          c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+          return c;
+        };
+        /* Dos tamaños, y el pequeño es el que arregla el consumo de memoria.
+           La foto se guarda a 1280 px porque el informe y la ampliación la
+           necesitan así, pero en las listas se dibuja en un cuadro de 58 px — y
+           el teléfono descomprime la imagen entera para pintar ese cuadro: 34 KB
+           en disco se vuelven 4,7 MB en memoria. Veinte miniaturas en pantalla
+           eran noventa y cuatro megas, y ésa es la presión que hacía a Android
+           descartar la pestaña y llevarse los videos por delante.
+
+           La miniatura de 160 px pesa unos 6 KB y ocupa 76 KB descomprimida. Se
+           usa en todas las listas; la grande sólo al ampliar y en el informe. */
+        const grande = dibuja(MAX_PHOTO_PX);
         resolve({kind:"photo", name:file.name, size:file.size,
-                 url:c.toDataURL("image/jpeg", JPEG_QUALITY)});
+                 url:   grande.toDataURL("image/jpeg", JPEG_QUALITY),
+                 thumb: dibuja(THUMB_PX).toDataURL("image/jpeg", THUMB_QUALITY)});
       };
       img.src = reader.result;
     };
@@ -8171,9 +8202,14 @@ const shotsFor = (r, slot) => r.media.filter(m => m.slot === slot);
    its icon and its file name — which is the only thing that tells one report
    from another once three of them are sitting side by side. */
 const docName = m => String(m.name || "PDF");
+/* La imagen que va en una lista: la miniatura si existe, y la grande si no.
+   El «si no» cubre dos casos reales — las fotos adjuntadas antes de la v15.2, y
+   las que llegan por el camino de respaldo de `shrink`, cuando el teléfono no
+   pudo decodificar la imagen y se guardó el archivo original tal cual. */
+const caraChica = m => m.thumb || m.url;
 const thumbFace = m => isPdfMedia(m)
   ? `<u class="doc"><b>PDF</b><i>${esc(docName(m))}</i></u>`
-  : m.kind === "photo" ? `<img src="${m.url}">`
+  : m.kind === "photo" ? `<img src="${caraChica(m)}">`
                        : `<video src="${m.url}" muted></video>`;
 const thumbTag = m => isPdfMedia(m) ? tr("doc")
   : m.kind === "photo" ? tr("photo") : tr("video");
@@ -12638,12 +12674,17 @@ function renderPhotoTest(t, r, done, total){
           onclick="setPoint(0,'${p.id}','NA')" title="${tr("na_title")}">${tr("na")}</button>`:""}
       </div>
       ${na||p.no_photo?"":`<div class="row">
-        <button onclick="document.getElementById('s_${p.id}').click()">📷 ${tr("photo")}</button>
+        <button onclick="document.getElementById('s_${p.id}').click()">${
+          p.gallery ? "🖼" : "📷"} ${tr(p.gallery ? "photo_pick" : "photo")}</button>
       </div>`}
+      ${/* `capture` abre la cámara y nada más. Es lo correcto casi siempre —el
+            producto está delante—, pero no cuando lo que se pide ya existe en el
+            teléfono. Sin el atributo, Android ofrece cámara y galería. Igual que
+            en las pruebas normales, lo decide `gallery` en el punto. */""}
       ${p.no_photo?"":`<input id="s_${p.id}" class="hidden" type="file" accept="image/*"
-        capture="environment" multiple onchange="addMedia(this,0,'${p.id}')">
+        ${p.gallery ? "" : `capture="environment"`} multiple onchange="addMedia(this,0,'${p.id}')">
       <div class="media">${shots.map(m=>`
-        <div class="thumb" onclick="zoomMedia('${m.uid}')"><img src="${m.url}">
+        <div class="thumb" onclick="zoomMedia('${m.uid}')"><img src="${caraChica(m)}">
           <span onclick="event.stopPropagation();dropMedia('${m.uid}')">×</span>
         </div>`).join("")}</div>`}
       ${p.no_photo?"":sampleBox(p)}

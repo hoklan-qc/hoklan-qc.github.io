@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="15.3">
+<meta name="app-version" content="15.5">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -567,8 +567,6 @@ const CONFIG = {
     "HK-ARC106A2":"YIS","HK-ARC108A2":"YIS","HK-BAS115A1":"RHY",
     "HK-BAS118A1":"RHY","HK-BRA208A1":"YIS","HK-BRA208B1":"YIS",
     "HK-BRA210A1":"YIS","HK-BRA210B1":"YIS","HK-BRA212B1":"YIS",
-    /* Desarrollo. Ver DEV_REFS. */
-    "HK-BRA130":"YIS","HK-BRA330":"YIS",
     "HK-DEC115A1":"RHY","HK-DEL101":"RHY","HK-DEL103P":"RHY",
     "HK-DEL105":"RHY","HK-DEL110B1":"RHY","HK-DEL115B1":"RHY",
     "HK-DEL210A1":"RHY","HK-EPS112A1":"RHY","HK-NOV01":"YIS",
@@ -582,9 +580,16 @@ const CONFIG = {
     "HK-RNW102":"YIS","HK-RNW103":"YIS","HK-RNW105":"YIS",
     "HK-RNW212A2":"YIS","HK-SKA108A1":"YIS","HK-SKA108B1":"YIS",
     "HK-STB103":"EAG",
-    /* In development, not in production. They are YISION, they carry the KAP
-       plan, and DEV_REFS keeps them off the factory's list — see below. */
-    "HK-KAP103":"YIS","HK-KAP330":"YIS"
+    /* En desarrollo, no en producción. Son de YISION y `DEV_REFS` las mantiene
+       fuera de la lista de la fábrica — ver más abajo.
+
+       Salieron cuatro y entraron dos en el plan 126. El KAP103 y el BRA130 eran
+       el mismo producto descrito dos veces, y otro tanto el KAP330 y el BRA330:
+       cada pareja se unificó en una sola referencia, KAP206 y KAP208. Las dos
+       corren el esquema BRAGI, que es el que describe el panel real — gestos,
+       perilla P1, memoria y salida USB-C. El esquema KAPPA describía otro panel
+       y se retiró entero. */
+    "HK-KAP206":"YIS","HK-KAP208":"YIS"
   },
 
   "failure_codes": {
@@ -768,7 +773,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 125,
+      "plan_version": 127,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1779,7 +1784,7 @@ const CONFIG = {
               queda sólo lo que viaja dentro del empaque. */]},
 
         {"id":"USB","optional":false,"only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
          "label":{"en":"USB","zh":"USB","es":"USB"},
          "steps":[
            {"en":"Insert the HOKLAN test USB drive into the speaker","zh":"将 HOKLAN 测试 U 盘插入音箱","es":"Inserte la memoria USB de prueba HOKLAN en el parlante"},
@@ -2009,7 +2014,7 @@ const CONFIG = {
         {/* RHYME's cabinets carry no SD slot, so the test is filtered out rather
               than left for the inspector to mark N/A thirty times. */
          "id":"SD","optional":true,"only_factory":["YIS","RHY","EAG"],
-         "skip_factory":["RHY"],"skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip_factory":["RHY"],"skip":["HK-KAP206","HK-KAP208"],
          "label":{"en":"SD CARD","zh":"SD 卡"},
          "steps":[
            {"en":"Insert the HOKLAN test SD card into the speaker","zh":"将 HOKLAN 测试 SD 卡插入音箱"},
@@ -2117,7 +2122,7 @@ const CONFIG = {
          "id":"BLUETOOTH","optional":false,"only_factory":["YIS","RHY","EAG"],
          "evidence":[{"kind":"photo","skip_factory":["RHY"]},
                      {"kind":"video","skip_factory":["RHY"]}],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
          "label":{"en":"BLUETOOTH","zh":"蓝牙"},
          "steps":[
            {"en":"Put the speaker in Bluetooth mode and leave it discoverable","zh":"将音箱切换到蓝牙模式并保持可被搜索"},
@@ -2305,7 +2310,7 @@ const CONFIG = {
            es lo que se aprueba, pero el proveedor del módulo cambia entre lotes
            y el lote es lo que se embarca. */
         {"id":"RX_FM_COMPAT","optional":false,"only_factory":["YIS"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],"evidence":[],
+         "skip":["HK-KAP206","HK-KAP208"],"evidence":[],
          "label":{"en":"COMPATIBILITY · WIRELESS RECEIVER AND FM",
                   "zh":"兼容性 · 无线接收模块与调频",
                   "es":"COMPATIBILIDAD · RECEPTOR INALÁMBRICO Y FM"},
@@ -2356,7 +2361,7 @@ const CONFIG = {
               received - which is also why INTERNAL asked for a photograph of the
               FM antenna routing. Both come out together. */
          "id":"RADIO_FM","optional":true,"only_factory":["YIS","RHY","EAG"],
-         "skip_factory":["RHY"],"skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip_factory":["RHY"],"skip":["HK-KAP206","HK-KAP208"],
          "label":{"en":"FM RADIO","zh":"调频收音"},
          "steps":[
            {"en":"Select radio mode on the speaker","zh":"将音箱切换到收音模式"},
@@ -2452,7 +2457,7 @@ const CONFIG = {
          "id":"AUX","optional":false,"only_factory":["YIS","RHY","EAG"],
          "evidence":[{"kind":"photo","skip_factory":["RHY"]},
                      {"kind":"video","skip_factory":["RHY"]}],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
          "label":{"en":"AUX LINE","zh":"AUX 音频输入"},
          "steps":[
            {"en":"Select AUX mode on the speaker first","zh":"先在音箱上切换到 AUX 模式"},
@@ -2620,7 +2625,7 @@ const CONFIG = {
            source up for on its own.
            ------------------------------------------------------------------ */
         {"id":"DSP_MODES","optional":false,"only_factory":["RHY"],"evidence":["video"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
          "label":{"en":"DSP MODES","zh":"DSP 模式","es":"MODOS DSP"},
          "steps":[
            {"en":"With audio playing, press the DSP MODE button","zh":"在有音频播放时按下 DSP 模式键","es":"Con audio sonando, pulse la tecla MODOS DSP"},
@@ -2676,7 +2681,7 @@ const CONFIG = {
            falla LED-008 sigue en la tabla por si vuelve a hacer falta. */
 
         {"id":"XLR_OUT","optional":false,"only_factory":["RHY"],"evidence":[],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
          "label":{"en":"XLR OUTPUT","zh":"XLR 输出","es":"SALIDA XLR"},
          "steps":[
            {"en":"Connect the XLR output to a second unit","zh":"将 XLR 输出接到第二台设备","es":"Conecte la SALIDA XLR a un segundo equipo"},
@@ -2704,7 +2709,7 @@ const CONFIG = {
                     "es":"Escuche en el segundo equipo con la cabina en silencio: no debe haber zumbido ni siseo."}}]},
 
         {"id":"INPUT_CHANNELS","optional":false,"only_factory":["RHY"],"evidence":["video"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
          "label":{"en":"INPUT CHANNELS","zh":"输入通道","es":"CANALES DE ENTRADA"},
          "steps":[
            {"en":"Microphone on XLR into channel 1, then the same on a 1/4 inch plug","zh":"先用 XLR 将麦克风接入通道 1，再改用 6.35 mm 插头","es":"Micrófono por XLR en el canal 1, y después lo mismo con plug de 1/4\""},
@@ -2759,7 +2764,7 @@ const CONFIG = {
          "id":"DISPLAY","optional":["YIS","EAG"],"only_factory":["YIS","RHY","EAG"],
          "evidence":[{"kind":"photo","skip_factory":["RHY"]},
                      {"kind":"video","skip_factory":["RHY"]}],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
          "label":{"en":"DISPLAY","zh":"显示屏"},
          "steps":[
            {"only_factory":["RHY"],
@@ -2826,7 +2831,7 @@ const CONFIG = {
            DSP, que también es de RHYME. */
 
         {"id":"REMOTE","optional":true,"only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
          "label":{"en":"REMOTE CONTROL","zh":"遥控器"},
          "steps":[
            {"en":"Check the remote has a battery; remove the insulator if new","zh":"确认遥控器有电池，新品请抽出绝缘片"},
@@ -2966,7 +2971,26 @@ const CONFIG = {
             "help":{"en":"Press it while speaking into the microphone and listen for the change in the voice effect. Mark N/A if this reference has no VOICE OUT.",
                     "zh":"对麦克风说话时按下此键，注意人声效果的变化（该键用于消去原唱人声）。遥控器上仍印英文 VOICE OUT。本型号没有此键时标记为“不适用”。"}}]},
 
-        /* ===== KAPPA — HK-KAP103 y HK-KAP330 ================================
+        /* ===== KAPPA — RETIRADO EN EL PLAN 126 ==============================
+
+           NADA DE ESTE BLOQUE SE EJECUTA. Las once pruebas llevan `"only":[]`,
+           que no coincide con ninguna referencia, así que no aparecen en ningún
+           plan. Se puede borrar entero cuando alguien tenga el archivo abierto
+           con calma; queda aquí por si el esquema KAPPA vuelve.
+
+           Por qué se retiró. El KAP103 y el BRA130 eran el mismo producto
+           descrito dos veces, y otro tanto el KAP330 y el BRA330. HOKLAN
+           unificó cada pareja en una sola referencia —KAP206 y KAP208— y
+           decidió que el panel real es el que describe el esquema BRAGI: gestos,
+           perilla P1, memoria tras apagar y salida USB-C. Este esquema describía
+           otro panel, con pantalla y ranura SD, y se quedó sin producto.
+
+           Seis funciones estaban descritas en los dos esquemas con nombres
+           distintos —encendido, modos, Bluetooth, micrófono, iluminación y
+           radio—, así que unirlos habría preguntado seis cosas dos veces.
+
+           ---- lo que decía el bloque cuando estaba vivo -----------------------
+
            Producto en desarrollo. Las dos referencias comparten esquema de
            funciones, así que comparten plan: `only` las nombra a las dos y no
            hay una sola diferencia entre ellas.
@@ -2999,7 +3023,7 @@ const CONFIG = {
            plan propia.
            ------------------------------------------------------------------ */
         {"id":"KAP_POWER","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-KAP103","HK-KAP330"],
+         "only":[],
          "label":{"en":"POWER ON","zh":"开机","es":"ENCENDIDO"},
          "steps":[
            {"en":"Switch S1 on and listen","zh":"打开 S1 开关并注意声音","es":"Ponga el switch S1 en encendido y escuche"},
@@ -3034,7 +3058,7 @@ const CONFIG = {
            obliga a apagar y encender muchas veces y para entonces el operador
            ya dejó de oírlo. */
         {"id":"KAP_BOOT","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-KAP103","HK-KAP330"],
+         "only":[],
          "label":{"en":"START-UP SOUND","zh":"开机声音","es":"SONIDO DE INICIO"},
          "steps":[
            {"en":"Leave the volume at about half before switching on","zh":"开机前将音量置于约一半","es":"Deje el volumen a la mitad antes de encender"},
@@ -3082,7 +3106,7 @@ const CONFIG = {
                     "es":"Entre el encendido y el tono no debe haber golpe, chasquido ni crujido. Ese ruido es el amplificador llegando al parlante antes de estar listo, y le acorta la vida al driver."}}]},
 
         {"id":"KAP_MODES","optional":false,"only_factory":["YIS"],"evidence":["video"],
-         "only":["HK-KAP103","HK-KAP330"],
+         "only":[],
          "label":{"en":"MODES AND SWITCHING","zh":"模式与切换","es":"MODOS Y CONMUTACIÓN"},
          "steps":[
            {"en":"Press B2 to walk the full cycle of modes","zh":"按 B2 走完一轮模式","es":"Pulse B2 para recorrer el ciclo completo de modos"},
@@ -3129,7 +3153,7 @@ const CONFIG = {
                     "es":"Desconecte el teléfono desde el teléfono. La cabina debe volver sola a buscar dispositivo, sin pulsar ninguna tecla."}}]},
 
         {"id":"KAP_BT","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-KAP103","HK-KAP330"],
+         "only":[],
          "label":{"en":"BLUETOOTH AND TWS","zh":"蓝牙与 TWS","es":"BLUETOOTH Y TWS"},
          "steps":[
            {"en":"Use B1 for everything in this test","zh":"本测试全部使用 B1 键","es":"Use B1 para todo en esta prueba"},
@@ -3175,7 +3199,7 @@ const CONFIG = {
                     "es":"Pulse dos veces otra vez. Deben separarse y cada una volver a sonar por su cuenta. Una pareja que no se puede deshacer es una pareja de la que el cliente sólo sale apagando."}}]},
 
         {"id":"KAP_USB","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-KAP103","HK-KAP330"],
+         "only":[],
          "label":{"en":"USB AND SD","zh":"U 盘与 SD 卡","es":"USB Y SD"},
          "steps":[
            {"en":"Insert the HOKLAN test USB drive in C2","zh":"将 HOKLAN 测试 U 盘插入 C2","es":"Inserte la memoria USB de prueba HOKLAN en C2"},
@@ -3232,7 +3256,7 @@ const CONFIG = {
                     "es":"Pulse una vez: el sonido se detiene y la pantalla muestra pausa. Pulse otra vez: continúa desde el mismo punto, no desde el inicio."}}]},
 
         {"id":"KAP_RADIO","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-KAP103","HK-KAP330"],
+         "only":[],
          "label":{"en":"RADIO","zh":"收音","es":"RADIO"},
          "steps":[
            {"en":"Switch to radio with B2","zh":"用 B2 切换到收音模式","es":"Pase a radio con B2"},
@@ -3266,7 +3290,7 @@ const CONFIG = {
                     "es":"Escuche media emisora guardada durante medio minuto. La voz debe entenderse y la señal mantenerse estable, sin irse en siseo."}}]},
 
         {"id":"KAP_LIGHT","optional":false,"only_factory":["YIS"],"evidence":["video"],
-         "only":["HK-KAP103","HK-KAP330"],
+         "only":[],
          "label":{"en":"LIGHTING","zh":"灯光","es":"ILUMINACIÓN"},
          "steps":[
            {"en":"B3 is the only button in this test","zh":"本测试只使用 B3 键","es":"B3 es el único botón de esta prueba"},
@@ -3293,7 +3317,7 @@ const CONFIG = {
                     "es":"Recorra los colores a doble pulsación y vuelva al primero. Cada uno debe ser un color propio, no el mismo con otro brillo."}}]},
 
         {"id":"KAP_MIC","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-KAP103","HK-KAP330"],
+         "only":[],
          "label":{"en":"MICROPHONE AND PRIORITY","zh":"麦克风与优先","es":"MICRÓFONO Y PRIORIDAD"},
          "steps":[
            {"en":"Plug a microphone into C4, printed AUX 2","zh":"将麦克风插入 C4（面板印字 AUX 2）","es":"Conecte un micrófono en C4, impreso AUX 2"},
@@ -3340,7 +3364,7 @@ const CONFIG = {
                     "es":"Con música sonando y un micrófono conectado, mantenga B7. La pantalla debe indicar que la prioridad quedó activa. Hable: la música debe bajar mientras habla y volver al parar. Sin micrófono conectado la función no tiene efecto, y eso es por diseño, no una falla."}}]},
 
         {"id":"KAP_EQ","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-KAP103","HK-KAP330"],
+         "only":[],
          "label":{"en":"EQUALISATION","zh":"均衡","es":"ECUALIZACIÓN"},
          "steps":[
            {"en":"Play the HOKLAN test track","zh":"播放 HOKLAN 测试音频","es":"Reproduzca la pista de prueba HOKLAN"},
@@ -3362,7 +3386,7 @@ const CONFIG = {
                     "es":"Con la misma pista sonando, cambie entre los dos escuchando. El cambio debe ser evidente — normalmente más graves en exterior. Si hay que esforzarse para notar la diferencia, es un fallo."}}]},
 
         {"id":"KAP_SCREEN","optional":false,"only_factory":["YIS"],"evidence":["photo"],
-         "only":["HK-KAP103","HK-KAP330"],
+         "only":[],
          "label":{"en":"DISPLAY AND BATTERY","zh":"显示屏与电池","es":"PANTALLA Y BATERÍA"},
          "steps":[
            {"en":"Photograph the display in each mode","zh":"在每种模式下拍摄显示屏","es":"Fotografíe la pantalla en cada modo"},
@@ -3399,7 +3423,7 @@ const CONFIG = {
                     "es":"El conteo debe terminar con la cabina apagándose sola, no con la celda vaciada del todo. Una celda de litio llevada a cero no vuelve igual."}}]},
 
         {"id":"KAP_CONN","optional":false,"only_factory":["YIS"],"type":"photos","no_na":true,
-         "only":["HK-KAP103","HK-KAP330"],
+         "only":[],
          "label":{"en":"CONNECTORS","zh":"接口","es":"CONECTORES"},
          "steps":[
            {"en":"One photo of the connector panel with all six visible","zh":"拍摄接口面板，六个接口需全部入镜","es":"Una foto del panel de conectores con los seis a la vista"},
@@ -3441,9 +3465,14 @@ const CONFIG = {
                     "zh":"先拍照，再接上电源确认可充电。充电时轻微活动插头：不应断电。整台音箱都依赖这个接口。",
                     "es":"Fotografíelo, luego conecte la fuente y confirme que carga. Mueva el plug dentro del jack mientras carga: no debe cortarse. Es el conector del que depende toda la cabina."}}]},
 
-        /* ===== BRAGI — HK-BRA130 y HK-BRA330 ================================
+        /* ===== BRAGI — HK-KAP206 y HK-KAP208 ================================
            Producto en desarrollo. Las dos referencias comparten esquema, así
            que comparten plan.
+
+           Se llamaban BRA130 y BRA330 hasta el plan 126. HOKLAN unificó cada una
+           con su gemela del esquema KAPPA —que describía el mismo producto con
+           otro panel— y las renombró KAP206 y KAP208. El plan no cambió: éste es
+           el esquema que describe el panel real, y es el que sobrevivió.
 
            Escrito contra el esquema de funciones completo: T1 estados, T2
            acciones por botón y gesto, T3 realimentación por evento y T4 reglas
@@ -3463,8 +3492,14 @@ const CONFIG = {
            ACCESORIOS, MATERIAL IMPRESO y PARTES INTERNAS son las de siempre y
            estas referencias las heredan por no llevar etiqueta de plan propia.
            ------------------------------------------------------------------ */
-        {"id":"BRG_POWER","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-BRA130","HK-BRA330"],
+        {/* Video en cada punto, y ninguno general al final. Vale para las doce
+              secciones de este plan, a petición de HOKLAN: un clip por prueba
+              dice qué se hizo en esa prueba, y uno solo al final del bloque no
+              dice de cuál de las seis habla. `point_video` lo pide para todos
+              los puntos de la sección sin repetirlo punto por punto. */
+         "id":"BRG_POWER","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,
+         "only":["HK-KAP206","HK-KAP208"],
          "label":{"en":"POWER ON AND OFF","zh":"开机与关机","es":"ENCENDIDO Y APAGADO"},
          "steps":[
            {"en":"Hold B1 for two seconds to switch on","zh":"长按 B1 两秒开机","es":"Mantenga B1 dos segundos para encender"},
@@ -3487,10 +3522,11 @@ const CONFIG = {
                     "zh":"显示屏应显示 HOLA 两秒，同时播放开机音乐。两者缺一不可。",
                     "es":"La pantalla debe decir HOLA durante dos segundos y sonar la melodía de arranque. Las dos cosas, juntas."}},
            {"id":"brg_leds_init","code":"UI-002",
-            "label":{"en":"Every LED at its initial state","zh":"各指示灯处于初始状态","es":"Todos los LED en su estado inicial"},
-            "help":{"en":"With no microphone connected: B1 off, B2 slow flashing, B3 as the lighting was left, B4 to B6 full, B7 and B8 off.",
-                    "zh":"未接麦克风时：B1 熄灭，B2 慢闪，B3 与上次灯光状态一致，B4 至 B6 常亮，B7 与 B8 熄灭。",
-                    "es":"Sin micrófono conectado: B1 apagado, B2 en parpadeo lento, B3 como quedó la iluminación, B4 a B6 plenos, y B7 y B8 apagados."}},
+            "label":{"en":"Every button LED at its initial state","zh":"各按键指示灯处于初始状态",
+                     "es":"Todos los LED translúcidos de los botones en su estado inicial"},
+            "help":{"en":"The translucent LEDs behind the buttons themselves, not the cabinet lighting. With no microphone connected: B1 off, B2 slow flashing, B3 as the lighting was left, B4 to B6 full, B7 and B8 off.",
+                    "zh":"指按键本身的半透明指示灯，不是箱体灯光。未接麦克风时：B1 熄灭，B2 慢闪，B3 与上次灯光状态一致，B4 至 B6 常亮，B7 与 B8 熄灭。",
+                    "es":"Los LED translúcidos que están detrás de los botones, no la iluminación de la cabina. Sin micrófono conectado: B1 apagado, B2 en parpadeo lento, B3 como quedó la iluminación, B4 a B6 plenos, y B7 y B8 apagados."}},
            {"section":{"en":"Starting values — R4","zh":"开机默认值 — R4","es":"Valores de arranque — R4"},
             "help":{"en":"Four values fixed by rule. They exist to stop the two commonest field complaints: starting loud, and feedback the moment a microphone is plugged in.",
                     "zh":"由规则规定的四个默认值。其目的是避免该品类最常见的两种客诉：开机音量过大，以及插入麦克风瞬间的啸叫。",
@@ -3515,8 +3551,11 @@ const CONFIG = {
                     "zh":"长按 B1。显示屏应显示 CHAO 两秒，播放关机音乐，所有指示灯熄灭。",
                     "es":"Mantenga B1. La pantalla debe decir CHAO dos segundos, sonar la melodía de apagado y apagarse todos los LED."}}]},
 
-        {"id":"BRG_GESTURES","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-BRA130","HK-BRA330"],
+        {/* La única sección que pide las dos cosas en cada punto: el gesto se ve
+              en el clip y el botón que no responde se documenta en la foto. */
+         "id":"BRG_GESTURES","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,"point_photo":true,
+         "only":["HK-KAP206","HK-KAP208"],
          "label":{"en":"GESTURES AND DISABLED BUTTONS","zh":"按键手势与无功能按键","es":"GESTOS Y BOTONES SIN FUNCIÓN"},
          "steps":[
            {"en":"Check the three gestures on a button that has all three","zh":"在具备三种手势的按键上逐一验证","es":"Compruebe los tres gestos en un botón que tenga los tres"},
@@ -3551,8 +3590,9 @@ const CONFIG = {
                     "zh":"B5 为例外：在 AUX 模式下仍保留功能，因此在 B4、B6 熄灭时其指示灯应保持常亮。",
                     "es":"B5 es la excepción: conserva su función en AUX, así que su LED debe seguir pleno mientras B4 y B6 están apagados."}}]},
 
-        {"id":"BRG_MODES","optional":false,"only_factory":["YIS"],"evidence":["video"],
-         "only":["HK-BRA130","HK-BRA330"],
+        {"id":"BRG_MODES","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,
+         "only":["HK-KAP206","HK-KAP208"],
          "label":{"en":"MODES AND SWITCHING","zh":"模式与切换","es":"MODOS Y CONMUTACIÓN"},
          "steps":[
            {"en":"With nothing plugged in, walk the modes with a long press of B5","zh":"在未插任何设备时，长按 B5 逐一切换模式","es":"Sin nada conectado, recorra los modos con pulsación larga de B5"},
@@ -3600,7 +3640,8 @@ const CONFIG = {
                     "es":"Retírelo. Debe volver al modo en que estaba antes de conectar el cable —no siempre a Bluetooth— sin mensaje y sin sonido."}}]},
 
         {"id":"BRG_BT","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-BRA130","HK-BRA330"],
+         "point_video":true,
+         "only":["HK-KAP206","HK-KAP208"],
          "label":{"en":"BLUETOOTH","zh":"蓝牙","es":"BLUETOOTH"},
          "steps":[
            {"en":"Switch on and leave it in Bluetooth without connecting","zh":"开机后停留在蓝牙模式，暂不连接","es":"Encienda y déjelo en Bluetooth sin conectar"},
@@ -3634,8 +3675,9 @@ const CONFIG = {
                     "es":"Mantenga B2. Debe sonar el tono de desconexión y volver de inmediato a emparejando —B2 parpadeo lento, BT parpadeando— sin quedarse callado en medio."}}]},
 
         {"id":"BRG_TWS","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-BRA130","HK-BRA330"],
-         "label":{"en":"TWS CHAINING","zh":"串联（TWS）","es":"ENCADENADO TWS"},
+         "point_video":true,
+         "only":["HK-KAP206","HK-KAP208"],
+         "label":{"en":"TWS FUNCTION","zh":"TWS 功能","es":"FUNCIÓN TWS"},
          "steps":[
            {"en":"Two speakers, both in Bluetooth mode","zh":"准备两台音箱，均处于蓝牙模式","es":"Dos parlantes, los dos en modo Bluetooth"},
            {"en":"Double press B2 on one of them","zh":"在其中一台上双击 B2","es":"Pulse B2 dos veces en uno de ellos"},
@@ -3663,8 +3705,9 @@ const CONFIG = {
                     "zh":"再次双击 B2。显示屏应根据已连接设备返回 BT 1 或 BT 2，B2 恢复蓝牙状态。",
                     "es":"Pulse B2 dos veces otra vez. La pantalla debe volver a BT 1 o BT 2 según lo que haya conectado, y B2 a su estado de Bluetooth."}}]},
 
-        {"id":"BRG_MIC","optional":false,"only_factory":["YIS"],"evidence":["video"],
-         "only":["HK-BRA130","HK-BRA330"],
+        {"id":"BRG_MIC","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,
+         "only":["HK-KAP206","HK-KAP208"],
          "label":{"en":"MICROPHONE AND INSTRUMENT","zh":"麦克风与乐器","es":"MICRÓFONO E INSTRUMENTO"},
          "steps":[
            {"en":"Plug a microphone into MIC1 and watch B7 and B8","zh":"将麦克风插入 MIC1，观察 B7 与 B8","es":"Conecte un micrófono en MIC1 y mire B7 y B8"},
@@ -3721,7 +3764,8 @@ const CONFIG = {
                     "es":"Con el cable AUX puesto y micrófono conectado, B7 debe estar apagado y no hacer nada. El micrófono debe seguir oyéndose. Las dos cosas a la vez, y es por diseño."}}]},
 
         {"id":"BRG_KNOB","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-BRA130","HK-BRA330"],
+         "point_video":true,
+         "only":["HK-KAP206","HK-KAP208"],
          "label":{"en":"KNOB P1 AND BUTTON B8","zh":"旋钮 P1 与按键 B8","es":"PERILLA P1 Y BOTÓN B8"},
          "steps":[
            {"en":"With a microphone connected, press B8 to walk the three parameters","zh":"在已接麦克风时，按 B8 循环三个参数","es":"Con micrófono conectado, pulse B8 para recorrer los tres parámetros"},
@@ -3754,8 +3798,9 @@ const CONFIG = {
                     "zh":"拔出麦克风。B8 应熄灭，P1 应自动回到主音量，此时按 B8 不应有任何反应。",
                     "es":"Desconecte el micrófono. B8 debe apagarse, P1 volver sola a volumen maestro, y pulsar B8 no debe hacer absolutamente nada."}}]},
 
-        {"id":"BRG_LIGHT","optional":false,"only_factory":["YIS"],"evidence":["video"],
-         "only":["HK-BRA130","HK-BRA330"],
+        {"id":"BRG_LIGHT","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,
+         "only":["HK-KAP206","HK-KAP208"],
          "label":{"en":"LIGHTING","zh":"灯光","es":"ILUMINACIÓN"},
          "steps":[
            {"en":"With the lighting on, try the three gestures of B3","zh":"在灯光开启状态下，验证 B3 的三种手势","es":"Con la iluminación encendida, pruebe los tres gestos de B3"},
@@ -3791,8 +3836,9 @@ const CONFIG = {
                     "zh":"三种手势逐一尝试：短按、长按、双击。三者都应点亮灯光，显示屏显示 EF 及当前效果。",
                     "es":"Pruebe los tres: corta, larga y doble. Los tres deben encender la iluminación y la pantalla mostrar EF con el efecto activo."}}]},
 
-        {"id":"BRG_FM","optional":false,"only_factory":["YIS"],"evidence":["video"],
-         "only":["HK-BRA130","HK-BRA330"],
+        {"id":"BRG_FM","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,
+         "only":["HK-KAP206","HK-KAP208"],
          "label":{"en":"FM RADIO AND LIGHTING","zh":"调频收音与灯光","es":"RADIO FM Y LUCES"},
          "steps":[
            {"en":"Leave the lighting on and note which effect it is showing","zh":"保持灯光开启，并记下当前效果","es":"Deje la iluminación encendida y anote qué efecto muestra"},
@@ -3845,7 +3891,8 @@ const CONFIG = {
               ido. Un firmware que memorice de más pasa cualquier otra prueba
               del plan sin una marca. */
          "id":"BRG_MEMORY","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-BRA130","HK-BRA330"],
+         "point_video":true,
+         "only":["HK-KAP206","HK-KAP208"],
          "label":{"en":"MEMORY AFTER SWITCHING OFF","zh":"关机后的记忆","es":"MEMORIA TRAS APAGAR"},
          "steps":[
            {"en":"In FM, tune a station and change the lighting effect","zh":"在收音模式下调好一个电台并更改灯光效果","es":"En FM, sintonice una emisora y cambie el efecto de luz"},
@@ -3888,7 +3935,8 @@ const CONFIG = {
                     "es":"Deje X-Bass activo y la prioridad en 100% antes de apagar. Al encender, B1 debe estar apagado y B7 blanco. Un parlante que recuerda el X-Bass arranca más fuerte de lo que el usuario espera."}}]},
 
         {"id":"BRG_BATTERY","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-BRA130","HK-BRA330"],
+         "point_video":true,
+         "only":["HK-KAP206","HK-KAP208"],
          "label":{"en":"BATTERY AND CHARGING","zh":"电池与充电","es":"BATERÍA Y CARGA"},
          "steps":[
            {"en":"Connect the AC cable with the speaker on","zh":"在开机状态下接入 AC 电源线","es":"Conecte el cable AC con el parlante encendido"},
@@ -3931,7 +3979,8 @@ const CONFIG = {
                     "es":"La pantalla debe atenuarse de forma visible al entrar en batería baja y quedarse así hasta salir del estado. Fuera de batería baja el brillo es siempre 100%: una pantalla atenuada con la batería llena es la falla contraria."}}]},
 
         {"id":"BRG_USBC","optional":false,"only_factory":["YIS"],"evidence":[],
-         "only":["HK-BRA130","HK-BRA330"],
+         "point_video":true,
+         "only":["HK-KAP206","HK-KAP208"],
          "label":{"en":"USB-C OUTPUT AND AUTOMATIC POWER-OFF",
                   "zh":"USB-C 输出与自动关机",
                   "es":"SALIDA USB-C Y APAGADO AUTOMÁTICO"},
@@ -3988,7 +4037,7 @@ const CONFIG = {
          /* RHYME entera pasó a SUB_EXTERNAL. Aquí quedan YISION y EAGLE, que son
             las que llevan ruedas y pantalla en esta prueba. */
          "only_factory":["YIS","EAG"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-KAP206","HK-KAP208"],
          "label":{"en":"EXTERNAL PARTS","zh":"外观部件"},
          "steps":[
            {"en":"Place the speaker in good light, avoiding direct reflections","zh":"将音箱置于光线充足处，避免反光"},
@@ -4044,7 +4093,7 @@ const CONFIG = {
             pide micrófonos y trípode, que ninguna de sus referencias trae. Todas
             corren SUB_ACC, con el cable de poder y el control remoto. */
          "skip_factory":["RHY"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],   // see EXTERNAL above
+         "skip":["HK-KAP206","HK-KAP208"],   // see EXTERNAL above
          "label":{"en":"ACCESSORIES","zh":"配件"},
          "steps":[
            {"en":"Take the accessories out of the box onto a clear surface","zh":"将配件从箱中取出，放在干净台面上"},
@@ -4083,7 +4132,7 @@ const CONFIG = {
             de HOKLAN. EAGLE conserva la prohibición: no la pidió. */
          "id":"GRAPHICS","optional":false,"type":"photos","no_na":["EAG"],
          "only_factory":["YIS","EAG"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-KAP206","HK-KAP208"],
          "label":{"en":"PRINTED MATERIAL","zh":"印刷品"},
          "steps":[
            {"en":"Take a photo of each item on the list","zh":"逐项拍摄下列物品"},
@@ -4189,7 +4238,7 @@ const CONFIG = {
 
         {"id":"EXT_BATTERY","optional":true,"skip_factory":["RHY"],
          "only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-KAP206","HK-KAP208"],
          "label":{"en":"EXTERNAL BATTERY","zh":"外置电池"},
          "steps":[
            {"en":"Switch the speaker off and disconnect it from the mains","zh":"关机并断开市电"},
@@ -4243,7 +4292,7 @@ const CONFIG = {
          "only_factory":["YIS","RHY","EAG"],
          /* Los subwoofers sí corren ésta: sólo tienen versión propia de las
             tres anteriores. */
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],
+         "skip":["HK-KAP206","HK-KAP208"],
          "label":{"en":"INTERNAL PARTS","zh":"内部部件"},
          "steps":[
            {"en":"Remove the screws and open the speaker carefully","zh":"拆下螺丝，小心打开箱体"},
@@ -4597,7 +4646,7 @@ const CONFIG = {
            seis fotos de referencia quedan en el historial de git por si algún
            día vuelve a medirse en casa. */
         {"id":"BAT_CAPACITY","optional":true,"only_factory":["YIS"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"],"evidence":[],
+         "skip":["HK-KAP206","HK-KAP208"],"evidence":[],
          /* Sin el prefijo «VERIFICACIÓN DE ESPECIFICACIONES ·» desde el plan 99:
             en la pantalla del teléfono ocupaba dos renglones antes de llegar a
             lo que la prueba es. */
@@ -4709,7 +4758,7 @@ const CONFIG = {
          /* Epsilon y los Delta corren su propia versión, RMS_SUPPLIER: en ellos
             la potencia se toma del informe del proveedor de amplificadores, por
             canal, y no del osciloscopio. */
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1",
+         "skip":["HK-KAP206","HK-KAP208","HK-BAS115A1","HK-BAS118A1",
                  "HK-EPS112A1","HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
          "evidence":[],"first":6,
@@ -4841,7 +4890,7 @@ const CONFIG = {
               mode — its signal comes in over XLR from something else. Aging one
               is a reasonable thing to want; it is just not this procedure. */
          "id":"AGING","optional":true,"only_factory":["YIS","RHY"],
-         "skip":["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330","HK-BAS115A1","HK-BAS118A1"],
+         "skip":["HK-KAP206","HK-KAP208","HK-BAS115A1","HK-BAS118A1"],
          /* El video se sumó en el plan 105. La prueba sigue igual —ocho horas y
             su confirmación al final—, pero ahora hay que dejar constancia de que
             la unidad estuvo sonando: un clip corto, de unos diez segundos, con
@@ -7343,6 +7392,69 @@ const planTagOf = m => REF_PLAN[m] || "";
    scoped instead by name: `only` on the three tests that are theirs, `skip` on
    the ones that assume a full-range cabinet. */
 
+/* ---------- el número de cada prueba ---------------------------------------
+   Un número fijo por prueba, el mismo en toda referencia que la corra. Sirve
+   para hablar: «la 34» significa lo mismo en Colombia y en la fábrica, y quien
+   pide un ajuste ya no tiene que describir en qué sección estaba.
+
+   Es una tabla y no la posición en el archivo, y ésa es la decisión importante.
+   Numerar por posición sale gratis hoy y se rompe mañana: al insertar una prueba
+   en medio, todas las de abajo cambian de número y cualquier correo anterior
+   pasa a hablar de otra cosa. Aquí el número se escribe una vez y no se mueve
+   nunca, aunque la prueba cambie de sitio, de nombre o de plan.
+
+   Reglas para mantenerla:
+   · una prueba nueva toma el siguiente número libre y se agrega al final de esta
+     tabla, no en medio;
+   · un número no se reutiliza jamás, ni aunque su prueba se retire — el hueco es
+     la prueba que hubo, y reciclarlo hace que un informe viejo mienta;
+   · si una prueba no está aquí, la app la muestra sin número en vez de inventarle
+     uno.
+
+   Los números 21 a 31 son del esquema KAPPA, retirado en el plan 126. Se quedan
+   ocupados a propósito. */
+const TEST_NO = {
+  POWER_AC:1, SUB_IN:2, SUB_OUT:3, SUB_RMS:4, SUB_BOX:5, SUB_EXTERNAL:6,
+  EPS_EXTERNAL:7, SUB_ACC:8, SUB_GRAPHICS:9, USB:10, SD:11, BLUETOOTH:12,
+  RX_FM_COMPAT:13, RADIO_FM:14, AUX:15, DSP_MODES:16, XLR_OUT:17,
+  INPUT_CHANNELS:18, DISPLAY:19, REMOTE:20,
+  KAP_POWER:21, KAP_BOOT:22, KAP_MODES:23, KAP_BT:24, KAP_USB:25, KAP_RADIO:26,
+  KAP_LIGHT:27, KAP_MIC:28, KAP_EQ:29, KAP_SCREEN:30, KAP_CONN:31,
+  BRG_POWER:32, BRG_GESTURES:33, BRG_MODES:34, BRG_BT:35, BRG_TWS:36,
+  BRG_MIC:37, BRG_KNOB:38, BRG_LIGHT:39, BRG_FM:40, BRG_MEMORY:41,
+  BRG_BATTERY:42, BRG_USBC:43,
+  EXTERNAL:44, ACCESSORIES:45, GRAPHICS:46, EXT_BATTERY:47, INTERNAL:48,
+  GPE:49, BAT_CAPACITY:50, RMS_SUPPLIER:51, RMS_POWER:52, AGING:53,
+  IDENTIFICATION:54, MIC_ACCESSORIES:55, MIC_BUTTONS:56, MIC_VISUAL:57,
+  MIC_POWER_LIGHT:58, RECEIVER_CHARGE:59, MIC_CHARGE:60, RHO102_BAG:61,
+  SIMULTANEOUS:62, CHANNELS:63, AUDIO_VOLUME:64, WIRELESS_RANGE:65,
+  DISTORTION:66, AUTO_OFF:67, MIC_BATTERY:68,
+  PHI_VISUAL:69, PHI_LINK:70, PHI_BUTTONS:71, PHI_MIC_OFF:72, PHI_CHARGE:73,
+  PHI_RECONNECT:74, PHI_POWER_CUT:75, PHI_RANGE:76, PHI_INTERNAL:77,
+  PHI_BAT_VOLT:78
+};
+/* El siguiente número libre. Está aquí para que quien agregue una prueba no
+   tenga que contar: es 79 y sube de uno en uno. */
+const NEXT_TEST_NO = 79;
+
+const testNo = t => (t && TEST_NO[t.id]) || null;
+/* El número delante del nombre, donde haya sitio. Sin número, el nombre solo. */
+const testTag = t => { const n = testNo(t); return n ? "#" + n + " · " : ""; };
+
+/* Foto o video punto por punto, dicho una vez en la prueba.
+
+   Un punto pide su propia foto con `"photo":true` y su propio clip con
+   `"video":true`. Cuando lo piden todos los puntos de una prueba —que es lo
+   normal en el plan del KAP206: doce secciones, sesenta y dos puntos, todos con
+   video— escribirlo sesenta y dos veces es sesenta y dos ocasiones de olvidar
+   una. `"point_video":true` y `"point_photo":true` lo dicen una sola vez, en la
+   prueba, y además dicen la intención: «todas las pruebas de esta sección».
+
+   Se suman, no se pisan: un punto puede pedir video por su cuenta aunque su
+   prueba no lo pida para todos. */
+const wantsPhoto = (p, t) => !!(p && (p.photo || (t && t.point_photo)));
+const wantsVideo = (p, t) => !!(p && (p.video || (t && t.point_video)));
+
 function fits(o){
   if(o.only && o.only.indexOf(S.model) < 0) return false;
   if(o.skip && o.skip.indexOf(S.model) >= 0) return false;
@@ -7405,7 +7517,7 @@ function partialScope(){
    would sit in the dashboard next to real ones.
 
    Taking a reference out of here is what releases it. Nothing else changes. */
-const DEV_REFS = ["HK-KAP103","HK-KAP330","HK-BRA130","HK-BRA330"];
+const DEV_REFS = ["HK-KAP206","HK-KAP208"];
 const isDevRef = m => DEV_REFS.indexOf(m) >= 0;
 
 /* What the factory can choose on the start screen. Development references are
@@ -7449,7 +7561,7 @@ const noNA = t => {
 const testOptional = t => Array.isArray(t && t.optional)
   ? t.optional.indexOf(S.factory) >= 0
   : !!(t && t.optional);
-const canTestNA = t => !!t && (testOptional(t) ||
+const canTestNA = t => !!t && (testOptional(t) || isDevRef(S.model) ||
   (t.na_ok || []).indexOf(S.model) >= 0);
 
 const pointsOf = t => ((t && t.points) || []).filter(fits);
@@ -7607,8 +7719,11 @@ function secNeedsWork(sec){
       if(ANSWERED.indexOf(r.points[p.id]) < 0) return true;
       if(failOpen(r, p)) return true;
       if(valueMissing(r, p)) return true;
-      return p.photo && r.points[p.id] !== "NA" &&
-        shotsFor(r, p.id).filter(m => m.kind === "photo").length === 0;
+      if(r.points[p.id] === "NA") return false;
+      const t = current();
+      const falta = k => shotsFor(r, p.id).filter(m => m.kind === k).length === 0;
+      return (wantsPhoto(p, t) && falta("photo")) ||
+             (wantsVideo(p, t) && falta("video"));
     });
   });
 }
@@ -8793,12 +8908,12 @@ function nextTest(){
     alert(fmt("a_point_photos",{n:missShots}));
     let first = null;
     realPoints(t).forEach(p => {
-      if(!p.photo && !p.video) return;
+      if(!wantsPhoto(p, t) && !wantsVideo(p, t)) return;
       allUnits().forEach(u => {
         const r = row(u);
         if(first || r.points[p.id] === "NA") return;
         const falta = k => shotsFor(r, p.id).filter(m => m.kind === k).length === 0;
-        if((p.photo && falta("photo")) || (p.video && falta("video")))
+        if((wantsPhoto(p, t) && falta("photo")) || (wantsVideo(p, t) && falta("video")))
           first = {u, id:p.id};
       });
     });
@@ -9655,7 +9770,7 @@ ${runId()}
        portrait page, and a seventh pushes the remark column off the sheet. */
     const rowTime = r.seconds ? secondsText(r.seconds) : "";
 
-    h += `<tr><td>${esc(L(t.label))}${
+    h += `<tr><td>${testTag(t)}${esc(L(t.label))}${
         rowTime ? `<div class="ttime">${esc(rowTime)}</div>` : ""}</td>
       <td class="c">${ok||"—"}</td><td class="c ${bad?"f":""}">${bad||"—"}</td>
       <td class="c">${na||"—"}</td>
@@ -9797,7 +9912,7 @@ ${runId()}
          sitio en la lista de videos de arriba, que lee `m.slot` y escribe al
          lado el nombre del punto. */
       realPoints(t).forEach(p => {
-        if(!p.photo) return;
+        if(!wantsPhoto(p, t)) return;
         allUnits().forEach(u => {
           const r = unitRows(u)[i];
           if(!r) return;
@@ -9874,7 +9989,7 @@ ${runId()}
        report used to read the same either way. */
     const bt = secondsText(testSeconds(b));
     h += `<div class="sec" style="background:#fdf2ee"><i>&nbsp;</i><b>${
-      esc(L(b.t.label))}</b>${bt ? `<span style="padding:6px 0 6px 10px;
+      testTag(b.t) + esc(L(b.t.label))}</b>${bt ? `<span style="padding:6px 0 6px 10px;
       font-size:8pt;color:#a8887a;font-style:italic">${esc(bt)}</span>` : ""
       }<em style="margin-left:auto;padding:6px 12px;
       font-style:normal;font-size:8.5pt;color:#8a6a5c">${
@@ -9950,7 +10065,7 @@ ${runId()}
       const okTime = secondsText(testSeconds(b));
 
       h += `<table class="okt"><tr>
-        <td class="k">${esc(L(b.t.label))}${
+        <td class="k">${testTag(b.t)}${esc(L(b.t.label))}${
           okTime ? `<div class="ttime">${esc(okTime)}</div>` : ""}</td>
         <td class="v">
           <div><span class="${verdictClass(b.verdict === "PASS" ? "PASS" : "N/A")}">${
@@ -9978,7 +10093,7 @@ ${runId()}
       // printed in the list above, and repeating them over every block of
       // photographs is what made this section read as a third summary.
       h += `<div class="sec" style="background:#f7f9fb"><i>&nbsp;</i><b>${
-        esc(L(b.t.label))}</b></div>`;
+        testTag(b.t) + esc(L(b.t.label))}</b></div>`;
 
       if(b.videos.length)
         h += `<div class="att">🎥 <b>${fmt("video_att",{n:b.videos.length})}</b><br>${
@@ -10048,7 +10163,7 @@ ${runId()}
     h += `${runId()}<div class="sec"><i>VI</i><b>${tr("tests_na")}</b></div>
       <p class="na-note">${tr("tests_na_note")}</p>
       <table class="nal">${naV.map(b => `<tr>
-        <td class="nm">${esc(L(b.t.label))}</td>
+        <td class="nm">${testTag(b.t)}${esc(L(b.t.label))}</td>
         <td>${b.note ? esc(b.note) : "—"}</td></tr>`).join("")}</table>`;
   }
 
@@ -10986,7 +11101,7 @@ function renderAdmin(){
     const on = picked.indexOf(t.id) >= 0;
     const n = realPoints(t).length;
     return `<button class="pk ${on?"on":""}" onclick="togglePick('${t.id}')">
-      <i>${on?"✓":""}</i><b>${esc(L(t.label))}</b>
+      <i>${on?"✓":""}</i><b>${testTag(t)}${esc(L(t.label))}</b>
       <em>${fmt("points_n",{n})}${testOptional(t)?" · "+tr("is_optional"):""}</em>
     </button>`;
   }).join("");
@@ -11942,7 +12057,10 @@ function header(t, done, total){
       border-color:var(--amber);color:var(--amber)">${tr("dev_tag")}</div>` : ""}
     <div class="tag">${esc(inspectionDate(S.startedAt))}</div>
     <div class="bar"><i style="width:${(done/total*100).toFixed(0)}%"></i></div>
-    <h2>${done+1} / ${total} · ${esc(L(t.label))}${
+    ${/* Dos números y no uno, y quieren decir cosas distintas: «3 / 16» es dónde
+          va el operario, y «#34» es qué prueba es — el mismo en toda referencia,
+          el que se escribe en un correo. */""}
+    <h2>${done+1} / ${total} · ${testTag(t)}${esc(L(t.label))}${
       /* The N/A of a whole test used to live at the foot of the screen, beside
          NEXT, and pressing it jumped straight to the next test. Two problems in
          one gesture: the operator could not see afterwards that the test had
@@ -12022,8 +12140,9 @@ function sampleBox(p){
      asked for is an instruction with nowhere to land. Every point of the
      battery capacity test is like that: six pictures of an instrument being set
      up, and not one photograph requested. */
-  const asksPhoto = !!p.photo ||
-    (typeof current === "function" && current() && current().type === "photos");
+  const enCurso = typeof current === "function" ? current() : null;
+  const asksPhoto = wantsPhoto(p, enCurso) ||
+    !!(enCurso && enCurso.type === "photos");
   return `<div class="samp">
     <img src="${base}${IMG_EXTS[0]}" data-base="${base}" alt=""
       onclick="zoomSample(this)" onerror="sampleFallback(this)">
@@ -12128,16 +12247,19 @@ function pointRow(p, u, showTag){
      office can check the spelling later without the speaker in front of it.
      Not shown when the point failed — the red box below already asks for the
      same photo, into the same slot. */
-  const wantShot = p.photo && v !== "FAIL";
-  const shotMissing = p.photo && v !== "NA" &&
+  const enPrueba = current();
+  const pideFoto = wantsPhoto(p, enPrueba);
+  const wantShot = pideFoto && v !== "FAIL";
+  const shotMissing = pideFoto && v !== "NA" &&
     shots.filter(m => m.kind === "photo").length === 0;
   /* Un punto puede pedir su propio clip, igual que pide su propia foto. Hasta el
      plan 112 el video era una sola pieza al final de la prueba entera, y eso no
      sirve cuando lo que hay que ver ocurre en un tramo concreto: un barrido de
      volumen por la entrada RCA no se demuestra con un clip genérico de la prueba
      de AUX. `video` marca el punto donde el clip tiene que estar. */
-  const wantClip = p.video && v !== "FAIL";
-  const clipMissing = p.video && v !== "NA" &&
+  const pideClip = wantsVideo(p, enPrueba);
+  const wantClip = pideClip && v !== "FAIL";
+  const clipMissing = pideClip && v !== "NA" &&
     shots.filter(m => m.kind === "video").length === 0;
   // Declared before the boxes below, all of which build element ids from it.
   // It used to sit further down: `const` is not hoisted the way `var` is, so
@@ -12406,7 +12528,13 @@ function renderTest(){
    optional hardware, and answering fifteen points one by one with N/A is how a
    checklist stops being read. A factory account does not get it: deciding that
    a section does not apply is a judgement about the plan, not about the unit. */
-const canSectionNA = () => S.fromAdmin;
+/* Y en las referencias de desarrollo, desde el plan 127. Un producto que todavía
+   se está definiendo llega al puesto con funciones que aún no existen: el
+   operario tiene que poder decir «esto no aplica» sin inventarse un veredicto ni
+   dejar la prueba a medias. En producción sigue siendo cosa de Admin — allí una
+   sección saltada es una sección no inspeccionada, y eso no lo decide el
+   operario. */
+const canSectionNA = () => S.fromAdmin || isDevRef(S.model);
 
 /* Whether the whole section is already N/A, on every speaker. Drives both the
    look of the button and what pressing it does. */
@@ -12507,14 +12635,14 @@ function evidenceComplete(){
 function pointShotsMissing(t){
   let n = 0;
   allUnits().forEach(u => realPoints(t).forEach(p => {
-    if(!p.photo && !p.video) return;
+    if(!wantsPhoto(p, t) && !wantsVideo(p, t)) return;
     const r = row(u);
     if(r.points[p.id] === "NA") return;
     const have = k => shotsFor(r, p.id).filter(m => m.kind === k).length > 0;
     /* Se cuentan por separado: un punto que pide foto y clip y sólo trae la foto
        sigue incompleto, y el número tiene que decirlo. */
-    if(p.photo && !have("photo")) n++;
-    if(p.video && !have("video")) n++;
+    if(wantsPhoto(p, t) && !have("photo")) n++;
+    if(wantsVideo(p, t) && !have("video")) n++;
   }));
   return n;
 }
@@ -12789,9 +12917,11 @@ function renderIndex(){
     }
     const files = allUnits().reduce((a,u)=>
       a + (((S.data[u]||[])[i]||{}).media||[]).length, 0);
+    ${/* El número gordo de la izquierda es la posición en este plan — por dónde
+          va el operario. El «#34» va con el nombre, que es el número fijo. */""}
     return `<div class="ix" onclick="goTest(${i})">
       <b>${i+1}</b>
-      <span>${esc(L(t.label))}
+      <span>${testTag(t)}${esc(L(t.label))}
         <i>${fmt("points_n",{n:total})}${files?" · "+fmt("files_n",{n:files}):""}${
           testOptional(t)?" · "+tr("is_optional"):""}</i></span>
       <em class="${cls}">${esc(status)}</em></div>`;
@@ -12851,7 +12981,7 @@ function renderDone(){
       if(r && r.verdict === "FAIL") fails.push({r, t});
       // The plan's label, not the one frozen when the operator answered:
       // switching language on this screen has to translate the table too.
-      return `<tr><td>${esc(L(t.label))}</td>
+      return `<tr><td>${testTag(t)}${esc(L(t.label))}</td>
         <td class="${verdictClass(r && r.verdict)}">${
           esc(verdictText(r && r.verdict))}</td></tr>`;
     }).join("");

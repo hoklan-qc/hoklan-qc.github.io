@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="14.6">
+<meta name="app-version" content="14.7">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -762,7 +762,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 119,
+      "plan_version": 120,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1022,6 +1022,16 @@ const CONFIG = {
             "help":{"en":"The first of the two boxes. Everything here is measured before opening anything.",
                     "zh":"两个彩盒中的第一个。本节所有内容均须在开箱之前完成。",
                     "es":"La primera de las dos cajas. Todo lo de esta sección se mide antes de abrir nada."}},
+           {/* Lo primero de todo, antes de pesar y antes de medir: la bolsa que
+                envuelve la caja se rompe al manipularla, y una vez rota ya no se
+                puede fotografiar como llegó. */
+            "id":"box_bag_outer","code":"PKG-002","photo":true,
+            "sample":"caja_bolsa",
+            "label":{"en":"Outer bag over the box","zh":"彩盒外部的包装袋",
+                     "es":"Bolsa exterior del producto empacado"},
+            "help":{"en":"Photograph the closed box with its outer bag still on, whole and from the front. The bag must cover the box completely, be sealed, and arrive with no tears or holes.",
+                    "zh":"拍摄仍套着外包装袋的封箱彩盒，整体正面入镜。袋子应完整包覆彩盒、封口完好，且无破损或孔洞。",
+                    "es":"Fotografíe la caja cerrada con su bolsa exterior todavía puesta, entera y de frente. La bolsa debe cubrir la caja por completo, estar sellada y llegar sin rasgaduras ni huecos."}},
            {"id":"box_gross","code":"PKG-002","photo":true,
             "sample":"caja_peso",
             "measure":{"unit":"kg","step":"0.1"},
@@ -4787,7 +4797,11 @@ const CONFIG = {
             la cabina en marcha. Antes lo único que quedaba era la palabra del
             operario, y una casilla marcada no distingue una cabina que envejeció
             de una que no se enchufó. */
-         "evidence":["video"],
+         /* Y fuera de RHYME en el plan 120: allí la prueba vuelve a ser sólo la
+            confirmación, sin ningún archivo que adjuntar. En YISION el video
+            sigue, porque allí el envejecimiento corre durante la inspección y el
+            operario tiene la cabina delante. */
+         "evidence":[{"kind":"video","skip_factory":["RHY"]}],
          /* Desde la galería, no desde la cámara. El envejecimiento son ocho
             horas que pasan antes de que el inspector abra la app: el video ya
             está grabado en el teléfono de quien montó la prueba, y obligar a la
@@ -4823,17 +4837,26 @@ const CONFIG = {
          "steps":[
            {"en":"Run the aging following the HOKLAN test list","zh":"按 HOKLAN 测试清单执行老化","es":"Realice el envejecimiento siguiendo la lista de pruebas de HOKLAN"},
            {"en":"Leave it running eight hours without stopping it","zh":"连续运行八小时，中途不得停止","es":"Déjelo sonando ocho horas sin detenerlo"},
-           {"en":"Film about ten seconds of it aging","zh":"拍摄约十秒钟其老化中的视频","es":"Grabe unos diez segundos de la unidad envejeciendo"},
+           {"skip_factory":["RHY"],
+            "en":"Film about ten seconds of it aging","zh":"拍摄约十秒钟其老化中的视频","es":"Grabe unos diez segundos de la unidad envejeciendo"},
            {"en":"Confirm it when the eight hours are up","zh":"八小时结束后确认本项","es":"Confírmelo al cumplirse las ocho horas"}],
          "points":[
            {/* Un solo punto y sin fotografía, por ahora. Antes eran dos fotos
                 separadas por cuatro horas; HOKLAN lo redujo a la confirmación
-                mientras se define cómo se va a evidenciar. */
-            "id":"age_done","code":"AGE-001",
+                mientras se define cómo se va a evidenciar.
+
+                Dos versiones desde el plan 120: en RHYME la prueba ya no pide
+                video y el texto no puede seguir pidiéndolo. */
+            "id":"age_done","code":"AGE-001","skip_factory":["RHY"],
             "label":{"en":"Aging completed following the HOKLAN test list","zh":"已按 HOKLAN 测试清单完成老化","es":"Envejecimiento realizado con la lista de pruebas de HOKLAN"},
             "help":{"en":"Confirm the speaker ran the eight hours following the HOKLAN test list, without being stopped, switched off or touched during them. Attach a clip of about ten seconds showing the unit aging — playing, with the panel lights on.",
                     "zh":"确认音箱已按 HOKLAN 测试清单连续运行八小时，其间未停止、未关机、未被触碰。请上传约十秒钟的视频，显示整机处于老化状态——正在发声、面板指示灯点亮。",
-                    "es":"Confirme que el parlante sonó las ocho horas siguiendo la lista de pruebas de HOKLAN, sin detenerse, apagarse ni ser tocado durante ellas. Adjunte un video de unos diez segundos donde se vea la unidad envejeciendo — sonando y con los testigos del panel encendidos."}}]},
+                    "es":"Confirme que el parlante sonó las ocho horas siguiendo la lista de pruebas de HOKLAN, sin detenerse, apagarse ni ser tocado durante ellas. Adjunte un video de unos diez segundos donde se vea la unidad envejeciendo — sonando y con los testigos del panel encendidos."}},
+           {"id":"age_done_rhy","code":"AGE-001","only_factory":["RHY"],
+            "label":{"en":"Aging completed following the HOKLAN test list","zh":"已按 HOKLAN 测试清单完成老化","es":"Envejecimiento realizado con la lista de pruebas de HOKLAN"},
+            "help":{"en":"Confirm the speaker ran the eight hours following the HOKLAN test list, without being stopped, switched off or touched during them.",
+                    "zh":"确认音箱已按 HOKLAN 测试清单连续运行八小时，其间未停止、未关机、未被触碰。",
+                    "es":"Confirme que el parlante sonó las ocho horas siguiendo la lista de pruebas de HOKLAN, sin detenerse, apagarse ni ser tocado durante ellas."}}]},
 
         /* ===== LESHENG — wireless microphone system =========================
            A different product, so a different plan: two microphones and a
@@ -6507,7 +6530,7 @@ const T = {
   packet_note:"All of it travels as one ZIP file. Sending three separate attachments is how one of them gets lost.",
   packing:"Preparing the file… this takes a moment when there are videos.",
   packet_done:"<b>%f</b> · %s · %n photo(s), %v video(s)",
-  saved_hint:"<br><br>Attach it from Downloads to send it by WeChat or e-mail.",
+  saved_hint:"<br><br>Attach it from Downloads to send it by WeChat or e-mail.<br><br>The report is also saved on its own, next to the ZIP, to be opened without unzipping anything. If the browser asks whether to allow several files, say yes.",
   a_no_download:"This browser cannot download files.\n\nOpen this page in Safari or Chrome — in WeChat, tap the ⋯ menu and choose \"Open in browser\" — and try again.",
   a_pack_fail:"The packet could not be built:",
   dl_no:"This browser cannot download files%w. Open the page in <b>Safari</b> or <b>Chrome</b> — tap the ⋯ menu and choose \"Open in browser\" — and download the packet there.",
@@ -6743,7 +6766,7 @@ const T = {
   packet_note:"Todo viaja en un solo archivo ZIP. Enviar tres adjuntos por separado es la forma segura de perder uno.",
   packing:"Preparando el archivo… toma un momento cuando hay videos.",
   packet_done:"<b>%f</b> · %s · %n foto(s), %v video(s)",
-  saved_hint:"<br><br>Adjúntelo desde Descargas para enviarlo por WeChat o correo.",
+  saved_hint:"<br><br>Adjúntelo desde Descargas para enviarlo por WeChat o correo.<br><br>El informe queda además suelto, al lado del ZIP, para abrirlo sin descomprimir nada. Si el navegador pregunta si permite varios archivos, diga que sí.",
   a_no_download:"Este navegador no puede descargar archivos.\n\nAbra esta página en Safari o Chrome — en WeChat, toque el menú ⋯ y elija \"Abrir en el navegador\" — y vuelva a intentarlo.",
   a_pack_fail:"No se pudo generar el paquete:",
   dl_no:"Este navegador no puede descargar archivos%w. Abra la página en <b>Safari</b> o <b>Chrome</b> — toque el menú ⋯ y elija \"Abrir en el navegador\" — y descargue el paquete allí.",
@@ -6963,7 +6986,7 @@ const T = {
   packet_note:"以上内容打包为一个 ZIP 文件一起发送。分成三个附件发送，往往会漏掉其中一个。",
   packing:"正在生成文件……包含视频时需要稍等片刻。",
   packet_done:"<b>%f</b> · %s · %n 张照片，%v 段视频",
-  saved_hint:"<br><br>请从“下载”文件夹中选取该文件，通过微信或邮件发送。",
+  saved_hint:"<br><br>请从“下载”文件夹中选取该文件，通过微信或邮件发送。<br><br>报告还会单独保存一份，与 ZIP 放在一起，无需解压即可打开。若浏览器询问是否允许下载多个文件，请选择允许。",
   a_no_download:"当前浏览器无法下载文件。\n\n请在 Safari 或 Chrome 中打开本页面（在微信中点击 ⋯ 菜单，选择“在浏览器中打开”），然后重试。",
   a_pack_fail:"打包失败：",
   dl_no:"当前浏览器无法下载文件%w。请在 <b>Safari</b> 或 <b>Chrome</b> 中打开本页面（点击 ⋯ 菜单，选择“在浏览器中打开”），然后在浏览器中下载。",
@@ -10335,13 +10358,19 @@ async function buildPacket(){
   // Both languages, always. The factory fills the checklist in Chinese and the
   // office in Colombia reads English; issuing only the operator's language
   // means somebody has to translate a quality record by hand.
+  /* Los tres se guardan aparte porque uno de ellos sale además suelto, al lado
+     del ZIP: el del idioma en que el operario está trabajando. Se reaprovecha el
+     que ya se construyó — armar el informe una cuarta vez costaría otra pasada
+     por todas las fotos. */
+  const informes = {
+    es: new Blob([inLang("es", reportHtml)], {type:"text/html;charset=utf-8"}),
+    en: new Blob([inLang("en", reportHtml)], {type:"text/html;charset=utf-8"}),
+    zh: new Blob([inLang("zh", reportHtml)], {type:"text/html;charset=utf-8"})
+  };
   const entries = [
-    {name: base + "/REPORT_ES.html",
-     data: new Blob([inLang("es", reportHtml)], {type:"text/html;charset=utf-8"})},
-    {name: base + "/REPORT_EN.html",
-     data: new Blob([inLang("en", reportHtml)], {type:"text/html;charset=utf-8"})},
-    {name: base + "/REPORT_ZH.html",
-     data: new Blob([inLang("zh", reportHtml)], {type:"text/html;charset=utf-8"})},
+    {name: base + "/REPORT_ES.html", data: informes.es},
+    {name: base + "/REPORT_EN.html", data: informes.en},
+    {name: base + "/REPORT_ZH.html", data: informes.zh},
     // The spreadsheet carries the full packet name, not "DATA": it is the file
     // that gets pulled out of the folder and opened on its own, and a Downloads
     // folder with four files called DATA.csv identifies nothing.
@@ -10359,7 +10388,13 @@ async function buildPacket(){
                     {type:"text/plain;charset=utf-8"})}
   ].concat(files);
 
+  const idioma = informes[LANG] ? LANG : "es";
   return {blob: await makeZip(entries), name: base + ".zip",
+          /* El mismo informe que va dentro del paquete, servido también suelto.
+             El ZIP es para enviar; éste es para abrirlo en el acto, sin
+             descomprimir nada, que es lo que se hace nueve de cada diez veces. */
+          reportBlob: informes[idioma],
+          reportName: base + "-" + idioma.toUpperCase() + ".html",
           videos, photos, lost, lostVideos, docs};
 }
 
@@ -10518,6 +10553,18 @@ function downloadPacket(){
   if(!CAN_DOWNLOAD){ alert(tr("a_no_download")); return; }
   withPacket(async p => {
     saveBlob(p.blob, p.name);
+    /* El informe suelto va detrás del ZIP, no a la vez. Dos descargas disparadas
+       en el mismo instante hacen que Chrome en Android descarte la segunda sin
+       decir nada; separadas por un momento, el navegador pregunta una vez si
+       permite varios archivos y respeta la respuesta. Y va después a propósito:
+       si el operario dijera que no, lo que se pierde es la copia de cortesía y
+       no el paquete.
+
+       Envuelto en try/catch: este archivo es un extra, y que falle no puede
+       tocar nada de lo que viene detrás — el borrador se borra ahí abajo. */
+    if(p.reportBlob) setTimeout(() => {
+      try{ saveBlob(p.reportBlob, p.reportName); }catch(e){}
+    }, 900);
     showSaved(packetSummary(p) + tr("saved_hint"));
     clearDraft();
     /* Después de `clearDraft`, que no toca esta bandera, y con un render para

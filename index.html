@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="15.2">
+<meta name="app-version" content="15.3">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -768,7 +768,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 124,
+      "plan_version": 125,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -9110,12 +9110,21 @@ function watermark(){
   </div>`;
 }
 
-/* Identificación breve, delante de cada sección. La primera no la lleva: tiene
-   el membrete completo encima. */
-function runId(){
-  return `<div class="runid"><span><b>HOKLAN QC</b> · ${esc(S.testId)} · ${
-    esc(S.model)}</span><span>${esc(poPrinted() || "")}</span></div>`;
-}
+/* Era la franja de identificación delante de cada sección: HOKLAN QC, el código
+   de prueba, la referencia y la orden. Retirada en el plan 125 a petición de
+   HOKLAN — el membrete de la primera página ya lleva todo eso, y repetirlo seis
+   veces no agregaba nada.
+
+   Se retira devolviendo vacío y no borrando las seis llamadas: las seis están
+   dentro de plantillas largas, y cambiar seis sitios para lograr lo que se logra
+   en uno es abrir seis ocasiones de equivocarse. Si algún día vuelve, vuelve
+   escribiendo aquí.
+
+   Nota para quien la reponga: esa línea imprimía el código de acceso de la
+   fábrica —el mismo que autoriza a inspeccionar— en un documento que se le manda
+   al cliente. Sigue estando en el membrete y en el CSV, por decisión de HOKLAN;
+   pero si algún día se cierra esa fuga, este sitio es uno de los seis. */
+function runId(){ return ""; }
 
 /* La leyenda diagonal, ahora como fondo repetido del documento. Un fondo sí se
    repite en todas las páginas al imprimir, y `print-color-adjust:exact` —que ya
@@ -10657,63 +10666,28 @@ function packetSummary(p){
     `${tr("lost_wechat")}</div>`;
 }
 
-/* ---------- respaldo en Drive ---------------------------------------------
-   El paquete se descarga al teléfono y además se sube a una carpeta de HOKLAN
-   en Google Drive. La descarga manda: es la copia que no depende de la red, y
-   es la única que exige la app antes de dejar volver al inicio. El respaldo
-   ocurre después, aparte, y su fracaso no atrapa a nadie — una fábrica sin
-   señal no puede quedarse con el operario de pie frente a una barra de
-   progreso.
+/* ---------- respaldo en línea: retirado en la v15.3 -------------------------
+   Aquí vivía el respaldo automático a una carpeta de HOKLAN en Google Drive.
+   Funcionaba en dos saltos: el teléfono le pedía un permiso de subida al buzón
+   —una función de HOKLAN en Cloudflare— y después subía el ZIP **directo a
+   googleapis.com**, sin que el archivo pasara por el buzón.
 
-   Cómo funciona, en dos pasos. El teléfono le pide al buzón —una función de
-   HOKLAN en Cloudflare— un permiso de subida, presentando el código de la
-   cuenta con la que se inspecciona. El buzón, que es quien guarda las
-   credenciales de Google, devuelve una URL de un solo uso. El ZIP viaja del
-   teléfono directo a Google por esa URL: no pasa por el buzón, así que ni el
-   tamaño del paquete ni el tráfico son problema de nadie.
+   Ese segundo salto es lo que lo mató. Las fábricas están en China continental,
+   donde googleapis.com está bloqueado, así que el teléfono se quedaba siempre en
+   el mismo sitio. Y como el respaldo era callado por decisión de HOKLAN —ni
+   avisaba que subía, ni que fallaba—, nadie se enteró: en semanas de uso no
+   llegó una sola inspección de fábrica. La única que había en la carpeta la
+   había subido HOKLAN desde Colombia, donde el salto sí pasa.
 
-   Vacío desactiva el respaldo por completo, sin tocar nada más. */
-const BUZON = "https://buzon-hoklan.esneyder-q.workers.dev/";
+   El buzón, el proyecto de Google Cloud y la cuenta de servicio siguen en pie y
+   siguen funcionando; lo que se retira es que la app los use. Ningún ajuste de
+   este lado arregla un bloqueo que no es nuestro: para que esto vuelva hay que
+   cambiar el destino por uno alcanzable desde China, y probarlo desde un
+   teléfono de fábrica antes de volver a confiar en él.
 
-/* Callado en los dos sentidos, por decisión de HOKLAN: ni avisa que sube, ni
-   avisa que falló, ni ofrece reintentar. Para el operario esto no existe.
-
-   La razón es que no es su problema. Él ya hizo lo que tenía que hacer —la
-   inspección está descargada en su teléfono— y el respaldo es una comodidad de
-   la oficina. Un aviso rojo por una red de fábrica que se cayó sólo consigue
-   que alguien crea que perdió el trabajo, o que se quede intentando arreglar
-   algo que no puede arreglar.
-
-   Lo que esto cuesta, y hay que saberlo: si falla, nadie se entera en el
-   momento. Quien lo nota es HOKLAN, al ver que ese informe no llegó a la
-   carpeta. Por eso aquí se reintenta tres veces antes de rendirse, con esperas
-   crecientes: el corte de red de una fábrica suele durar segundos, y quien no
-   va a pedir ayuda más vale que insista solo. */
-async function subirRespaldo(p){
-  if(!BUZON) return;
-
-  for(let intento = 0; intento < 3; intento++){
-    if(intento) await new Promise(r => setTimeout(r, intento * 4000));
-    if(navigator.onLine === false) continue;
-    try{
-      const r = await fetch(BUZON, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ code: S.testId, filename: p.name, size: p.blob.size })
-      });
-      const s = await r.json();
-      if(!s || !s.url) throw new Error((s && s.error) || "buzon");
-
-      const up = await fetch(s.url, { method: "PUT", body: p.blob });
-      if(!up.ok) throw new Error("drive " + up.status);
-      return;                                   // subido
-    }catch(e){
-      /* A la consola y a ningún sitio más. Sirve para diagnosticar con el
-         teléfono en la mano; el operario no lo ve. */
-      try{ console.warn("respaldo Drive:", e); }catch(_){}
-    }
-  }
-}
+   Lo que no cambia: el ZIP se descarga al teléfono igual, y sigue siendo lo
+   único que la app exige antes de dejar volver al inicio. Esa siempre fue la
+   copia buena; el respaldo era la comodidad de la oficina. */
 
 function downloadPacket(){
   if(!CAN_DOWNLOAD){ alert(tr("a_no_download")); return; }
@@ -10737,9 +10711,6 @@ function downloadPacket(){
        que el botón cambie a verde en el acto. */
     PACKET_SAVED = true;
     render();
-    /* Sin `await`: la descarga ya ocurrió y el operario no tiene por qué
-       esperar a que termine el respaldo para seguir con lo suyo. */
-    subirRespaldo(p);
   });
 }
 

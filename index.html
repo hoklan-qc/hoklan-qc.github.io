@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="15.0">
+<meta name="app-version" content="15.1">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -189,8 +189,14 @@ button:active{transform:scale(.99)}
   border-radius:9px;padding:12px 13px;font-size:14px;text-align:left}
 .fold b{font-weight:600;color:var(--accent)}
 .fold i{font-style:normal;color:var(--muted);font-size:13px}
+/* `pre-line` para que un encabezado pueda separar dos ideas en dos párrafos.
+   Hizo falta al recoger el montaje que vivía en una sección sin puntos: el
+   texto salía de un tirón, y el montaje y la advertencia de los jacks se leían
+   como una sola frase. Sólo respeta los saltos escritos a mano; el resto del
+   ajuste de línea sigue igual. */
 .grp-help{margin:0 14px 12px;padding:11px;border-radius:9px;background:#0d1f33;
-  border:1px solid #24466b;color:#cfe0f2;font-size:14px;line-height:1.55}
+  border:1px solid #24466b;color:#cfe0f2;font-size:14px;line-height:1.55;
+  white-space:pre-line}
 /* Three Han characters where the other two languages have three letters, so the
    type has to come down a notch to keep 不适用 off the border. */
 .na-btn{font-size:11.5px !important;letter-spacing:0;font-weight:600}
@@ -762,7 +768,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 122,
+      "plan_version": 123,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -855,14 +861,18 @@ const CONFIG = {
             "help":{"en":"Press the switch. It must latch firmly, without stopping halfway. The fan must start turning and the pilot lamp must light green.",
                     "zh":"按下开关。应干脆到位，不应停在中间位置。风扇应开始转动，指示灯应亮起绿色。",
                     "es":"Presione el interruptor. Debe quedar firme, sin pararse a medio camino. El ventilador debe empezar a girar y el testigo debe encender en color verde."}},
-           {"section":{"en":"The source and the bench","zh":"信号源与工位","es":"La fuente y el montaje"},
-            "help":{"en":"Play the HOKLAN Aging playlist from the mixer. Connect the outputs of the cabinet to a DEL103, which is what makes the phase change audible. One video covers the whole test — no photographs are asked for here.",
-                    "zh":"用调音台播放 HOKLAN Aging 歌单。将本机的输出接到一台 DEL103——相位切换要靠它才听得出来。整项测试用一段视频记录，此处不需要照片。",
-                    "es":"Reproduzca desde el mixer la lista de música HOKLAN de Aging. Conecte las salidas de la cabina a un DEL103, que es lo que permite oír el cambio de fase. Un solo video cubre toda la prueba — aquí no se piden fotografías."}},
-           {"section":{"en":"The two inputs","zh":"两个输入口","es":"Las dos entradas"},
-            "help":{"en":"They are hybrid jacks: the same socket takes an XLR plug or a 6.3 mm one. Check one side at a time, never both connected at once.",
-                    "zh":"这是复合插孔：同一个孔既可插 XLR，也可插 6.3 mm 插头。一次只接一侧检查，不要两侧同时接入。",
-                    "es":"Son jacks híbridos: el mismo conector recibe un plug XLR o uno de 6.3 mm. Revise un lado a la vez, nunca con las dos conectadas."}},
+           {/* «La fuente y el montaje» era un encabezado sin un solo punto
+                debajo, y la app no dibuja los encabezados vacíos: existía en el
+                plan y no llegaba nunca a la pantalla. Con él se perdía el
+                montaje entero de la prueba — el mixer, la lista de Aging, el
+                DEL103 y el aviso de que un solo video la cubre.
+
+                Su texto abre ahora el encabezado de las dos entradas, que es
+                donde el operario necesita tenerlo armado. Ningún punto cambia. */
+            "section":{"en":"The two inputs","zh":"两个输入口","es":"Las dos entradas"},
+            "help":{"en":"Play the HOKLAN Aging playlist from the mixer. Connect the outputs of the cabinet to a DEL103, which is what makes the phase change audible. One video covers the whole test — no photographs are asked for here.\n\nThey are hybrid jacks: the same socket takes an XLR plug or a 6.3 mm one. Check one side at a time, never both connected at once.",
+                    "zh":"用调音台播放 HOKLAN Aging 歌单。将本机的输出接到一台 DEL103——相位切换要靠它才听得出来。整项测试用一段视频记录，此处不需要照片。\n\n这是复合插孔：同一个孔既可插 XLR，也可插 6.3 mm 插头。一次只接一侧检查，不要两侧同时接入。",
+                    "es":"Reproduzca desde el mixer la lista de música HOKLAN de Aging. Conecte las salidas de la cabina a un DEL103, que es lo que permite oír el cambio de fase. Un solo video cubre toda la prueba — aquí no se piden fotografías.\n\nSon jacks híbridos: el mismo conector recibe un plug XLR o uno de 6.3 mm. Revise un lado a la vez, nunca con las dos conectadas."}},
            {/* El barrido de volumen era un punto suelto —«la intensidad sigue al
                 volumen»— que se respondía una sola vez, después de haber probado
                 las dos entradas. Así no decía de cuál de las dos hablaba: una
@@ -4676,7 +4686,15 @@ const CONFIG = {
                     "zh":"从同一份报告中读取高音通道的功率。仅填写数值：图片已在上一项上传。",
                     "es":"La potencia del canal del tweeter, leída de ese mismo informe. Sólo la cifra: la imagen se adjunta en el punto de arriba."}}]},
 
-        {"id":"RMS_POWER","optional":true,"only_factory":["YIS","RHY"],
+        {/* Obligatoria desde el plan 123. Venía siendo opcional, y a la vez su
+              punto de los vatios llevaba `must` — es decir, prohibido marcarlo
+              N/A. Las dos cosas juntas no se sostienen: el punto se declaraba
+              obligatorio y la prueba entera se podía saltar desde su encabezado,
+              así que la cifra que no se conseguía se descartaba por la puerta de
+              al lado y el informe salía sin ella y sin decirlo.
+
+              Es la única medición de potencia de estas referencias. */
+         "id":"RMS_POWER","optional":false,"only_factory":["YIS","RHY"],
          /* Written for a full-range cabinet, and only for one: the tone goes in
             over Bluetooth and the tone controls are part of the measurement.
             The BAS subwoofers have neither. They also carry a low-pass filter

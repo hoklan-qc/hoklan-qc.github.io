@@ -12917,8 +12917,8 @@ function renderIndex(){
     }
     const files = allUnits().reduce((a,u)=>
       a + (((S.data[u]||[])[i]||{}).media||[]).length, 0);
-    ${/* El número gordo de la izquierda es la posición en este plan — por dónde
-          va el operario. El «#34» va con el nombre, que es el número fijo. */""}
+    /* El número gordo de la izquierda es la posición en este plan — por dónde va
+       el operario. El «#34» va con el nombre, que es el número fijo. */
     return `<div class="ix" onclick="goTest(${i})">
       <b>${i+1}</b>
       <span>${testTag(t)}${esc(L(t.label))}

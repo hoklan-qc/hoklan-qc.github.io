@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="15.9">
+<meta name="app-version" content="16.0">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -169,6 +169,12 @@ button:active{transform:scale(.99)}
 .grp-h em.bad{background:rgba(255,93,85,.18);color:var(--red)}
 .grp-h i{font-style:normal;color:var(--muted);font-size:15px;width:18px;text-align:center}
 .grp-b{padding:0 14px 12px}
+/* El índice plegado reusa este acordeón, que ya existía para las secciones de
+   una prueba. Sólo le faltaban dos cosas: el borde azul de la subsección donde
+   está parado el operario —`done` y `bad` ya tenían el suyo— y quitarle la
+   línea de arriba al primer renglón, que si no dobla con la de la cabecera. */
+.grp.aqui{border-color:var(--accent)}
+.grp-b .ix:first-child{border-top:none;padding-top:4px}
 .help-b{width:28px;height:28px;padding:0;flex:none;margin-right:8px;border-radius:8px;
   background:#14304a;border:1px solid #2b5f92;color:var(--accent);font-size:17px;
   font-weight:700;line-height:1}
@@ -14556,8 +14562,20 @@ function longNotice(t){
   return `<div class="brw"><b>${esc(L(lg.t))}</b>
     <span>${esc(L(lg.n))}</span></div>`;
 }
+/* Abre una subsección del índice plegado y cierra la anterior. Una sola
+   abierta a la vez, que es lo que sostiene la promesa del diseño: que la
+   inspección entera quepa en la pantalla. Tocar la que ya está abierta la
+   cierra, para poder ver las once de un vistazo. */
+function abrirGrupo(id){
+  S.ixOpen = S.ixOpen === id ? "-" : id;
+  render();
+}
 function goTest(i){
   S.index = i; S.screen = "test";
+  /* Al entrar a una prueba se olvida qué subsección estaba abierta a mano: al
+     volver al índice, la que se abre es la de esta prueba. Sin esto, el
+     operario volvía a un índice abierto donde ya no está. */
+  S.ixOpen = "";
   window.scrollTo(0,0);   // a new test must start at its first step
   render(); save();
 }
@@ -14596,7 +14614,20 @@ function renderIndex(){
     else ult.filas.push({t,i});
   });
 
-  const mapa = tramos.length < 2 ? "" : `<div class="gr-mapa">${
+  /* Dos índices distintos, y a propósito.
+
+     En desarrollo —el KAP206— la cuadrícula encima de la lista completa: es la
+     referencia sobre la que se trabaja de cerca, saltando de una prueba a otra
+     sin recorrerlas en orden, y ahí conviene tenerlas todas a la vista.
+
+     En fábrica, el acordeón: sólo los rótulos, y se abre el que toca. En un
+     plan de dieciséis pruebas repartidas en ocho subsecciones, la cuadrícula y
+     los rótulos decían lo mismo dos veces —cinco de esas subsecciones son de
+     una sola prueba— y el índice ocupaba veinticuatro renglones para mostrar
+     dieciséis. Plegado son ocho, y la inspección entera cabe sin desplazar. */
+  const plegado = !isDevRef(S.model) && tramos.length > 1;
+
+  const mapa = plegado || tramos.length < 2 ? "" : `<div class="gr-mapa">${
     tramos.map(tr => {
       const hechas = tr.filas.filter(f => respondida(f.i)).length;
       const mal = tr.filas.some(f => fallada(f.i));
@@ -14616,7 +14647,32 @@ function renderIndex(){
         <i>${esc(L(tr.g.label))}</i></div>`;
     }).join("")}</div>`;
 
-  const list = mapa + `<div class="card">${
+  /* Cuál subsección está abierta en el acordeón. Si nadie ha tocado nada, la
+     del punto donde va el operario: es adonde va a mirar, y abrirla sola le
+     ahorra el primer toque de cada vuelta al índice. */
+  const abierta = S.ixOpen ||
+    ((tramos.find(x => x.filas.some(f => f.i === S.index)) || tramos[0]).g.id);
+
+  const list = plegado ? tramos.map(tr => {
+    const hechas = tr.filas.filter(f => respondida(f.i)).length;
+    const mal = tr.filas.some(f => fallada(f.i));
+    const aqui = tr.filas.some(f => f.i === S.index);
+    const open = tr.g.id === abierta;
+    /* El borde de color hace el trabajo que hacía la casilla de la cuadrícula.
+       El rojo gana al verde por lo mismo de siempre: una subsección terminada
+       con una falla dentro tiene que verse como lo que es. */
+    const cls = mal ? "bad" : hechas === tr.filas.length ? "done"
+      : aqui ? "aqui" : "";
+    return `<div class="grp ${cls}${open ? " open" : ""}">
+      <div class="grp-h" onclick="abrirGrupo('${tr.g.id}')">
+        <b>${esc(L(tr.g.label))}</b>
+        <em class="${mal ? "bad" : hechas === tr.filas.length ? "ok" : ""}">${
+          hechas}/${tr.filas.length}</em>
+        <i>${open ? "⌄" : "›"}</i></div>
+      ${open ? `<div class="grp-b">${
+        tr.filas.map(f => renderIxRow(f.t, f.i)).join("")}</div>` : ""}
+    </div>`;
+  }).join("") : mapa + `<div class="card">${
     tramos.map(tr => {
       const hechas = tr.filas.filter(f => respondida(f.i)).length;
       const cab = tramos.length < 2 ? "" : `<div class="ix-grupo">${
@@ -14687,9 +14743,9 @@ function renderIndex(){
     ${units}
     <h2>${tr("tests_title")}</h2>
     <p class="hint" style="margin:0 0 12px">${tr("index_hint")}</p>
-    ${/* `list` ya trae su propia caja — la cuadrícula por fuera y la lista
-          dentro de una tarjeta. Envolverlo otra vez metía una tarjeta en
-          otra y encerraba la cuadrícula donde no va. */""}
+    ${/* `list` ya trae su propia caja — el acordeón son tarjetas sueltas, y en
+          desarrollo la cuadrícula va por fuera y la lista dentro de una.
+          Envolverlo otra vez metía una tarjeta en otra. */""}
     ${list}
     ${/* The index is the other place you stand inside an inspection, and the one
           you reach when looking for a way out of it. */""}

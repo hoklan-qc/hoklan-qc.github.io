@@ -773,7 +773,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 134,
+      "plan_version": 136,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1292,13 +1292,19 @@ const CONFIG = {
            {/* La cuenta va en el rótulo, no en la descripción, porque es lo que
                 el operario compara sin abrir nada. Y cambia de una referencia a
                 otra, así que cada cifra distinta necesita su propio punto: el
-                DEL115B1 lleva ocho en la parrilla y cinco en el soporte. */
-            "id":"sub_ext_grille_screws","code":"MEC-004","skip":["HK-DEL115B1"],
+                DEL115B1 y el DEL101 llevan ocho en la parrilla y cinco en el
+                soporte. Son dos referencias que no se parecen en nada más, y
+                por eso la lista se lleva por cifra y no por familia: cualquier
+                otra que mañana traiga ocho se agrega aquí y no hace falta
+                escribir un punto nuevo. */
+            "id":"sub_ext_grille_screws","code":"MEC-004",
+            "skip":["HK-DEL115B1","HK-DEL101"],
             "label":{"en":"The grille has its 10 screws","zh":"网罩螺丝齐全，共 10 颗","es":"La parrilla tiene sus 10 tornillos"},
             "help":{"en":"Count them one by one round the grille. There must be ten, all present, all done up and none stripped or crooked.",
                     "zh":"沿网罩逐颗清点，应为十颗，全部到位、拧紧，且不得有滑牙或歪斜。",
                     "es":"Cuéntelos uno a uno alrededor de la parrilla. Deben ser diez, todos puestos, todos apretados y ninguno barrido ni torcido."}},
-           {"id":"sub_ext_grille_screws_8","code":"MEC-004","only":["HK-DEL115B1"],
+           {"id":"sub_ext_grille_screws_8","code":"MEC-004",
+            "only":["HK-DEL115B1","HK-DEL101"],
             "label":{"en":"The grille has its 8 screws","zh":"网罩螺丝齐全，共 8 颗","es":"La parrilla tiene sus 8 tornillos"},
             "help":{"en":"Count them one by one round the grille. There must be eight, all present, all done up and none stripped or crooked.",
                     "zh":"沿网罩逐颗清点，应为八颗，全部到位、拧紧，且不得有滑牙或歪斜。",
@@ -1308,12 +1314,14 @@ const CONFIG = {
             "help":{"en":"Count them round the panel. There must be twelve.",
                     "zh":"沿面板逐颗清点，应为十二颗。",
                     "es":"Cuéntelos alrededor del panel. Deben ser doce."}},
-           {"id":"sub_ext_tripod_screws","code":"MEC-004","skip":["HK-DEL115B1"],
+           {"id":"sub_ext_tripod_screws","code":"MEC-004",
+            "skip":["HK-DEL115B1","HK-DEL101"],
             "label":{"en":"The tripod mount has its 4 screws","zh":"三脚架支座螺丝齐全，共 4 颗","es":"El soporte del trípode tiene sus 4 tornillos"},
             "help":{"en":"Turn the cabinet over and count the screws of the tripod mount. There must be four, all done up and none stripped.",
                     "zh":"将箱体翻转，清点三脚架支座的螺丝，应为四颗，全部拧紧且无滑牙。",
                     "es":"Voltee la cabina y cuente los tornillos del soporte del trípode. Deben ser cuatro, todos apretados y ninguno barrido."}},
-           {"id":"sub_ext_tripod_screws_5","code":"MEC-004","only":["HK-DEL115B1"],
+           {"id":"sub_ext_tripod_screws_5","code":"MEC-004",
+            "only":["HK-DEL115B1","HK-DEL101"],
             "label":{"en":"The tripod mount has its 5 screws","zh":"三脚架支座螺丝齐全，共 5 颗","es":"El soporte del trípode tiene sus 5 tornillos"},
             "help":{"en":"Turn the cabinet over and count the screws of the tripod mount. There must be five, all done up and none stripped.",
                     "zh":"将箱体翻转，清点三脚架支座的螺丝，应为五颗，全部拧紧且无滑牙。",
@@ -4698,7 +4706,11 @@ const CONFIG = {
 
         {"id":"KAP_WEAR","optional":false,"only_factory":["YIS"],"evidence":[],
          "point_video":true,
-         "only":["HK-KAP206"],
+         /* `first` por encima de 99 —el valor que toma una prueba que no lo
+            declara— es lo que la empuja detrás de todas las demás. Aquí no es
+            comodidad de orden: esta prueba y la de caída gastan el producto, y
+            hacerlas antes contamina todo lo que venga después. */
+         "only":["HK-KAP206"],"first":100,
          "label":{"en":"WEAR CYCLES — SWITCH AND SOCKETS",
                   "zh":"耐久循环 — 开关与接口",
                   "es":"CICLOS DE DESGASTE — SWITCH Y CONECTORES"},
@@ -4950,7 +4962,9 @@ const CONFIG = {
 
         {"id":"KAP_DROP","optional":false,"only_factory":["YIS"],"evidence":[],
          "point_photo":true,
-         "only":["HK-KAP206"],
+         /* La última de todas, y por eso 101: después de dejar caer el producto
+            no queda ninguna prueba que siga siendo válida. */
+         "only":["HK-KAP206"],"first":101,
          "label":{"en":"DROP TEST IN ITS BOX",
                   "zh":"包装跌落测试",
                   "es":"CAÍDA DEL PRODUCTO EN SU CAJA"},

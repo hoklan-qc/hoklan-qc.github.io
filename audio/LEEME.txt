@@ -1,0 +1,41 @@
+CARPETA DE AUDIOS DE REFERENCIA
+===============================
+
+Aquí van los sonidos que el operario tiene que comparar con lo que oye del
+producto. La app los busca por nombre exacto, igual que hace con las imágenes
+de img/: si el archivo no está, el botón de reproducir sencillamente no
+aparece y el punto se responde igual.
+
+Este archivo LEEME.txt está aquí por una razón práctica: git no sube carpetas
+vacías. Sin él, la carpeta no llegaría al repositorio. Puede borrarlo en
+cuanto haya un audio dentro.
+
+
+QUÉ SUBIR
+---------
+
+Carpeta:   audio/
+Formato:   .mp3
+Duración:  tres o cuatro segundos, sólo el sonido, sin silencio antes
+
+  kap_melodia_inicio.mp3     La melodía de arranque del KAP206
+  kap_melodia_apagado.mp3    La melodía de apagado del KAP206
+
+
+CÓMO SE NOMBRAN LOS DEMÁS
+-------------------------
+
+La misma regla de las imágenes: prefijo del producto, guion bajo, qué es.
+kap_ para el KAP206, bas_ para el BAS115A1, eps_ para Epsilon. Si mañana hace
+falta la melodía de otro producto, se llama igual con su prefijo.
+
+Nada de espacios, tildes ni mayúsculas en el nombre del archivo. La app lo
+busca literal.
+
+
+LO QUE FALTA DEL LADO DE LA APP
+-------------------------------
+
+Hoy la app no reproduce sonido. Con los dos archivos dentro construyo el botón
+de reproducir junto al ejemplo visual del punto. Mientras tanto la carpeta
+puede llenarse sin que nada se rompa.

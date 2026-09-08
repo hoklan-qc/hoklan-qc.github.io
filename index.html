@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="15.7">
+<meta name="app-version" content="15.8">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -127,6 +127,25 @@ button:active{transform:scale(.99)}
 .pk.on i{background:var(--accent);border-color:var(--accent)}
 .pk b{flex:1;font-weight:500}
 .pk em{font-style:normal;font-size:10.5px;color:var(--grey);font-weight:700}
+/* Los botones de subsección de la pantalla de selección. Envuelven porque son
+   entre cuatro y once y sus nombres son largos; una fila con desplazamiento
+   horizontal escondería la mitad y nadie la buscaría. */
+.pkg{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.pkg-c{font-size:12px;font-weight:500;padding:6px 11px;border-radius:16px;
+  background:#0a1523;border:1px solid var(--border);color:var(--muted);
+  width:auto;margin:0}
+.pkg-c em{font-style:normal;font-weight:700;font-size:11px;opacity:.75;
+  margin-left:3px}
+.pkg-c.on{background:var(--accent);border-color:var(--accent);color:#04121e}
+/* El tercer estado. Es el que evita que el botón mienta cuando alguien
+   destilda una prueba suelta más abajo: ni lleno ni vacío, y el contador
+   pasa a decir «7/10» en vez de sólo el total. */
+.pkg-c.half{border-color:var(--accent);background:rgba(46,163,242,.16);
+  color:var(--accent)}
+/* El rótulo de subsección dentro de la lista de casillas. */
+.pk-rot{font-size:11px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--accent);margin:14px 0 6px}
+.pk-rot:first-child{margin-top:2px}
 
 .grp{background:var(--panel);border:1px solid var(--border);border-radius:12px;
   margin-bottom:10px;overflow:hidden}
@@ -345,8 +364,14 @@ button:active{transform:scale(.99)}
   line-height:1.2}
 .gr-c i{display:block;font-style:normal;font-size:10px;color:var(--muted);
   margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.gr-c.va{border-color:var(--accent);background:rgba(46,163,242,.16)}
-.gr-c.va b{color:var(--accent)}
+/* «Aquí» es un aro, no un color. Cuando era un color más, una subsección con
+   una falla dentro se pintaba de azul por tener el dedo encima y la falla
+   desaparecía de la cuadrícula — justo lo que la cuadrícula existe para
+   mostrar. El aro se lleva bien con los tres estados. */
+.gr-c.va{box-shadow:inset 0 0 0 2px var(--accent)}
+.gr-c.va:not(.ok):not(.mal){border-color:var(--accent);
+  background:rgba(46,163,242,.16)}
+.gr-c.va:not(.ok):not(.mal) b{color:var(--accent)}
 .gr-c.ok{border-color:var(--green);background:rgba(46,204,113,.16)}
 .gr-c.ok b{color:var(--green)}
 .gr-c.mal{border-color:var(--red);background:rgba(255,93,85,.16)}
@@ -8054,6 +8079,7 @@ const T = {
   a_na_section_undo:"Undo the N/A on the whole section \"%s\"?\n\nEvery point in it goes back to unanswered, on every speaker.",
   na_undo_title:"The whole section is marked N/A — press to undo",
   tests_pick:"Tests to run", all_on:"Select all", all_off:"Clear all",
+  pick_group_hint:"Tap a subsection to include or remove it whole.",
   n_selected_short:"%n of %tot selected",
   admin_refs_pick:"%n references, grouped by factory.",
   admin_start:"START SELECTED TESTS",
@@ -8288,6 +8314,7 @@ const T = {
   a_na_section_undo:"¿Deshacer el N/A de toda la sección \"%s\"?\n\nTodos sus puntos vuelven a quedar sin responder, en todos los parlantes.",
   na_undo_title:"La sección completa está en N/A — pulse para deshacer",
   tests_pick:"Pruebas a ejecutar", all_on:"Seleccionar todas", all_off:"Quitar todas",
+  pick_group_hint:"Toque una subsección para incluirla o quitarla completa.",
   n_selected_short:"%n de %tot seleccionadas",
   admin_refs_pick:"%n referencias, agrupadas por fábrica.",
   admin_start:"INICIAR PRUEBAS SELECCIONADAS",
@@ -8513,6 +8540,7 @@ const T = {
   a_na_section_undo:"撤销整个“%s”分组的不适用标记？\n\n该分组的所有检查项将在所有音箱上恢复为未作答。",
   na_undo_title:"整个分组已标记为不适用 — 点击可撤销",
   tests_pick:"要执行的测试", all_on:"全选", all_off:"全部取消",
+  pick_group_hint:"点击子项可整体加入或移除。",
   n_selected_short:"已选 %n / %tot",
   admin_refs_pick:"共 %n 个型号，按工厂分组。",
   admin_start:"开始所选测试",
@@ -12602,10 +12630,48 @@ function renderAdmin(){
   // whether or not the list below it is open.
   const all = S.model ? planTests() : [];
   const picked = S.pick || [];
+
+  /* Los botones de subsección. Mandar a la fábrica sólo el bloque de batería
+     del KAP206 costaba «Quitar todas» más diez casillas buscadas entre
+     cincuenta y cinco; aquí son dos toques.
+
+     Cada botón tiene tres estados y no dos, y ésa es la parte que importa:
+     lleno cuando va la subsección entera, vacío cuando no va ninguna, y a
+     medias cuando alguien destildó una prueba suelta más abajo. Sin el tercer
+     estado el botón mentiría en cuanto se toca una casilla individual, que era
+     el defecto que le veía a este diseño. */
+  const tramos = [];
+  all.forEach(t => {
+    const g = groupOf(t) || SIN_GRUPO;
+    const u = tramos[tramos.length-1];
+    if(!u || u.g.id !== g.id) tramos.push({g, tests:[t]}); else u.tests.push(t);
+  });
+  const chips = tramos.length < 2 ? "" : `
+    <p class="hint" style="margin:8px 0 6px">${tr("pick_group_hint")}</p>
+    <div class="pkg">${tramos.map((tr_, k) => {
+      const n = tr_.tests.filter(t => picked.indexOf(t.id) >= 0).length;
+      const cls = n === tr_.tests.length ? "on" : n ? "half" : "";
+      return `<button class="pkg-c ${cls}" onclick="pickGroup(${k})">
+        ${esc(L(tr_.g.label))} <em>${n === tr_.tests.length ? tr_.tests.length
+          : n + "/" + tr_.tests.length}</em></button>`;
+    }).join("")}</div>`;
+  /* El índice del tramo viaja por el DOM, así que se recalcula igual en
+     `pickGroup`. Guardarlo en `S` sería un segundo sitio donde el reparto
+     puede quedar desfasado del plan. */
+
+  let vistoG = null;
   const rows = all.map(t => {
     const on = picked.indexOf(t.id) >= 0;
     const n = realPoints(t).length;
-    return `<button class="pk ${on?"on":""}" onclick="togglePick('${t.id}')">
+    /* El rótulo dentro de la lista, para que al desplazar se siga sabiendo de
+       qué subsección es la casilla que se está tocando. */
+    let cab = "";
+    const g = groupOf(t) || SIN_GRUPO;
+    if(tramos.length > 1 && g.id !== vistoG){
+      vistoG = g.id;
+      cab = `<div class="pk-rot">${esc(L(g.label))}</div>`;
+    }
+    return cab + `<button class="pk ${on?"on":""}" onclick="togglePick('${t.id}')">
       <i>${on?"✓":""}</i><b>${testTag(t)}${esc(L(t.label))}</b>
       <em>${fmt("points_n",{n})}${testOptional(t)?" · "+tr("is_optional"):""}</em>
     </button>`;
@@ -12659,6 +12725,7 @@ function renderAdmin(){
           <button onclick="pickAll(true)">${tr("all_on")}</button>
           <button onclick="pickAll(false)">${tr("all_off")}</button>
         </div>
+        ${chips}
         ${rows}` : ""}
 
       ${/* Tampoco aquí: una asignación publicada con 3 cabinas para RHYME sería
@@ -12817,6 +12884,31 @@ function togglePick(id){
 }
 function pickAll(on){
   S.pick = on ? planTests().map(t => t.id) : [];
+  render();
+}
+/* Enciende o apaga una subsección entera. Los tramos se recalculan aquí en vez
+   de guardarse: el plan puede haber cambiado entre el dibujo y el toque, y un
+   índice guardado apuntaría a otra subsección sin avisar.
+
+   La regla del toque es la que la gente espera de una casilla a medias: si
+   falta aunque sea una, el toque completa; sólo cuando están todas, quita. Al
+   revés — vaciar una subsección a medias — obliga a dos toques para el caso
+   más común, que es querer el bloque completo. */
+function pickGroup(k){
+  const all = planTests();
+  const tramos = [];
+  all.forEach(t => {
+    const g = groupOf(t) || SIN_GRUPO;
+    const u = tramos[tramos.length-1];
+    if(!u || u.g.id !== g.id) tramos.push({g, tests:[t]}); else u.tests.push(t);
+  });
+  const tr_ = tramos[k];
+  if(!tr_) return;
+  S.pick = S.pick || [];
+  const ids = tr_.tests.map(t => t.id);
+  const todas = ids.every(id => S.pick.indexOf(id) >= 0);
+  if(todas) S.pick = S.pick.filter(id => ids.indexOf(id) < 0);
+  else ids.forEach(id => { if(S.pick.indexOf(id) < 0) S.pick.push(id); });
   render();
 }
 
@@ -14429,10 +14521,12 @@ function renderIndex(){
       const mal = tr.filas.some(f => fallada(f.i));
       const aqui = tr.filas.some(f => f.i === S.index);
       /* El rojo gana al verde: una subsección terminada con una falla dentro
-         tiene que verse como lo que es. Y el azul de «aquí» gana a los dos,
-         porque es lo único de la cuadrícula que dice dónde está el dedo. */
-      const cls = aqui ? "va" : mal ? "mal"
-        : hechas === tr.filas.length ? "ok" : "";
+         tiene que verse como lo que es. «Aquí» no compite con ninguno de los
+         dos porque no es un color sino un aro; así una subsección puede estar
+         fallada y ser la actual al mismo tiempo, que es lo normal cuando el
+         operario acaba de reprobar algo. */
+      const cls = (mal ? "mal" : hechas === tr.filas.length ? "ok" : "")
+        + (aqui ? " va" : "");
       /* Salta al primer pendiente de esa subsección, no a su primera prueba:
          quien toca «Funcionales 6/8» quiere las dos que faltan. */
       const dest = (tr.filas.find(f => !respondida(f.i)) || tr.filas[0]).i;

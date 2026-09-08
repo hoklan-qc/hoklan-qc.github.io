@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="15.5">
+<meta name="app-version" content="15.6">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -773,7 +773,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 127,
+      "plan_version": 134,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1784,7 +1784,7 @@ const CONFIG = {
               queda sólo lo que viaja dentro del empaque. */]},
 
         {"id":"USB","optional":false,"only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP208"],
          "label":{"en":"USB","zh":"USB","es":"USB"},
          "steps":[
            {"en":"Insert the HOKLAN test USB drive into the speaker","zh":"将 HOKLAN 测试 U 盘插入音箱","es":"Inserte la memoria USB de prueba HOKLAN en el parlante"},
@@ -2014,7 +2014,7 @@ const CONFIG = {
         {/* RHYME's cabinets carry no SD slot, so the test is filtered out rather
               than left for the inspector to mark N/A thirty times. */
          "id":"SD","optional":true,"only_factory":["YIS","RHY","EAG"],
-         "skip_factory":["RHY"],"skip":["HK-KAP206","HK-KAP208"],
+         "skip_factory":["RHY"],"skip":["HK-KAP208"],
          "label":{"en":"SD CARD","zh":"SD 卡"},
          "steps":[
            {"en":"Insert the HOKLAN test SD card into the speaker","zh":"将 HOKLAN 测试 SD 卡插入音箱"},
@@ -2122,7 +2122,7 @@ const CONFIG = {
          "id":"BLUETOOTH","optional":false,"only_factory":["YIS","RHY","EAG"],
          "evidence":[{"kind":"photo","skip_factory":["RHY"]},
                      {"kind":"video","skip_factory":["RHY"]}],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP208"],
          "label":{"en":"BLUETOOTH","zh":"蓝牙"},
          "steps":[
            {"en":"Put the speaker in Bluetooth mode and leave it discoverable","zh":"将音箱切换到蓝牙模式并保持可被搜索"},
@@ -2310,7 +2310,7 @@ const CONFIG = {
            es lo que se aprueba, pero el proveedor del módulo cambia entre lotes
            y el lote es lo que se embarca. */
         {"id":"RX_FM_COMPAT","optional":false,"only_factory":["YIS"],
-         "skip":["HK-KAP206","HK-KAP208"],"evidence":[],
+         "skip":["HK-KAP208"],"evidence":[],
          "label":{"en":"COMPATIBILITY · WIRELESS RECEIVER AND FM",
                   "zh":"兼容性 · 无线接收模块与调频",
                   "es":"COMPATIBILIDAD · RECEPTOR INALÁMBRICO Y FM"},
@@ -2361,7 +2361,7 @@ const CONFIG = {
               received - which is also why INTERNAL asked for a photograph of the
               FM antenna routing. Both come out together. */
          "id":"RADIO_FM","optional":true,"only_factory":["YIS","RHY","EAG"],
-         "skip_factory":["RHY"],"skip":["HK-KAP206","HK-KAP208"],
+         "skip_factory":["RHY"],"skip":["HK-KAP208"],
          "label":{"en":"FM RADIO","zh":"调频收音"},
          "steps":[
            {"en":"Select radio mode on the speaker","zh":"将音箱切换到收音模式"},
@@ -2457,7 +2457,7 @@ const CONFIG = {
          "id":"AUX","optional":false,"only_factory":["YIS","RHY","EAG"],
          "evidence":[{"kind":"photo","skip_factory":["RHY"]},
                      {"kind":"video","skip_factory":["RHY"]}],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP208"],
          "label":{"en":"AUX LINE","zh":"AUX 音频输入"},
          "steps":[
            {"en":"Select AUX mode on the speaker first","zh":"先在音箱上切换到 AUX 模式"},
@@ -2764,7 +2764,7 @@ const CONFIG = {
          "id":"DISPLAY","optional":["YIS","EAG"],"only_factory":["YIS","RHY","EAG"],
          "evidence":[{"kind":"photo","skip_factory":["RHY"]},
                      {"kind":"video","skip_factory":["RHY"]}],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP208"],
          "label":{"en":"DISPLAY","zh":"显示屏"},
          "steps":[
            {"only_factory":["RHY"],
@@ -2831,7 +2831,7 @@ const CONFIG = {
            DSP, que también es de RHYME. */
 
         {"id":"REMOTE","optional":true,"only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP208"],
          "label":{"en":"REMOTE CONTROL","zh":"遥控器"},
          "steps":[
            {"en":"Check the remote has a battery; remove the insulator if new","zh":"确认遥控器有电池，新品请抽出绝缘片"},
@@ -3491,6 +3491,14 @@ const CONFIG = {
            Las pruebas fotográficas no se repiten aquí: PARTES EXTERNAS,
            ACCESORIOS, MATERIAL IMPRESO y PARTES INTERNAS son las de siempre y
            estas referencias las heredan por no llevar etiqueta de plan propia.
+
+           Desde el plan 128 el KAP206 corre además once pruebas de YISION que ya
+           existían y de las que estaba excluido: potencia RMS, USB, tarjeta SD,
+           Bluetooth, compatibilidad del receptor, radio FM, entrada AUX, control
+           remoto, partes externas, batería externa, partes internas y
+           envejecimiento. No se escribió ninguna: se le quitó de las listas que
+           lo dejaban fuera. El KAP208 sigue excluido a propósito — se probará
+           primero en el 206, y cuando sirva se le quita también.
            ------------------------------------------------------------------ */
         {/* Video en cada punto, y ninguno general al final. Vale para las doce
               secciones de este plan, a petición de HOKLAN: un clip por prueba
@@ -4028,6 +4036,1065 @@ const CONFIG = {
                     "zh":"在插入麦克风的状态下重复上一项。超过十五分钟仍应保持开机。",
                     "es":"Repita la comprobación anterior con un micrófono conectado. Debe seguir encendido pasados los quince minutos."}}]},
 
+        /* ------------------------------------------------------------------
+           KAP206 · pruebas nuevas, tanda 1 — el producto físico.
+           Son las cinco que se pueden escribir sin pedir ningún criterio
+           adicional: se abre el producto una sola vez y se mide todo lo que
+           hay dentro. Van juntas a propósito (bloque de desarme), porque
+           desarmar cuesta más que cualquiera de las mediciones.
+           Donde no hay criterio definido el punto lo dice en voz alta: el
+           operario anota y no juzga. Un punto que parece criterio y no lo es
+           es peor que no tenerlo.
+           ------------------------------------------------------------------ */
+
+        {"id":"KAP_SHIPBOX","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"SHIPPING PACK — BOX AND FOAMS",
+                  "zh":"运输包装 — 外箱与泡棉",
+                  "es":"EMPAQUE DE ENVÍO — CAJA Y ESPUMAS"},
+         "steps":[
+           {"en":"Photograph the closed box before opening anything","zh":"开箱前先拍摄封箱状态","es":"Fotografíe la caja cerrada antes de abrir nada"},
+           {"en":"Open it and photograph the foams in place","zh":"开箱后拍摄泡棉的安放状态","es":"Ábrala y fotografíe las espumas en su sitio"},
+           {"en":"Only then take the product out","zh":"之后再取出产品","es":"Sólo después saque el producto"}],
+         "points":[
+           {"section":{"en":"The box","zh":"外箱","es":"La caja"},
+            "help":{"en":"What protects the product in transit is inspected before it is destroyed by opening it. Once the foams are out of the box nobody can say how they were sitting.",
+                    "zh":"运输中保护产品的部分必须在拆箱破坏之前检查。泡棉一旦取出，就无法还原其原始位置。",
+                    "es":"Lo que protege al producto en el transporte se inspecciona antes de destruirlo al abrir. Una vez fuera las espumas, nadie puede decir cómo estaban puestas."}},
+           {"id":"kap_box_state","code":"PKG-001","photo":true,
+            "label":{"en":"Closed box — no blows, no damp, tape well applied","zh":"封箱状态 — 无撞击、无受潮、胶带粘贴良好","es":"Caja cerrada — sin golpes, sin humedad, cinta bien aplicada"},
+            "help":{"en":"Photograph it closed from the printed face. Dents, crushed corners, damp marks or lifted tape are a fail.",
+                    "zh":"从印刷面拍摄封箱状态。凹陷、压角、受潮痕迹或胶带翘起均判不合格。",
+                    "es":"Fotografíela cerrada por la cara impresa. Abolladuras, esquinas aplastadas, marcas de humedad o cinta despegada son falla."}},
+           {"id":"kap_box_wall","code":"PKG-001","measure":{"unit":"mm","step":"0.1"},
+            "label":{"en":"Cardboard thickness","zh":"纸板厚度","es":"Espesor del cartón"},
+            "help":{"en":"Measure the wall on the cut edge with a caliper. Record the value: there is no agreed figure yet, this data is compared between units and against the history.",
+                    "zh":"用卡尺在切口处测量箱壁厚度。记录数值：目前尚无约定标准，该数据用于单位之间及历史数据的比对。",
+                    "es":"Mida la pared en el borde cortado con calibrador. Anote el valor: todavía no hay cifra acordada, este dato se compara entre unidades y contra el histórico."}},
+           {"section":{"en":"The foams","zh":"泡棉","es":"Las espumas"},
+            "help":{"en":"The foam is what decides whether a drop reaches the product. It is judged by how it sits, not by how it looks loose.",
+                    "zh":"泡棉决定跌落冲击是否会传到产品。评判依据是其安放状态，而非单独摆放时的外观。",
+                    "es":"La espuma es la que decide si un golpe llega al producto. Se juzga por cómo queda puesta, no por cómo se ve suelta."}},
+           {"id":"kap_foam_fit","code":"PKG-002","photo":true,
+            "label":{"en":"Foams in place — product held with no play","zh":"泡棉到位 — 产品固定无晃动","es":"Espumas en su sitio — el producto queda sin juego"},
+            "help":{"en":"Photograph the open box with the product still inside. The foams must hold it on every face with no play: if it can be moved by hand inside the box, it is a fail.",
+                    "zh":"在产品未取出的状态下拍摄开箱情形。泡棉应在各面将产品固定且无晃动：若可用手在箱内移动产品，判不合格。",
+                    "es":"Fotografíe la caja abierta con el producto todavía dentro. Las espumas deben sujetarlo por todas las caras sin juego: si se mueve con la mano dentro de la caja, es falla."}},
+           {"id":"kap_foam_state","code":"PKG-002","photo":true,
+            "label":{"en":"Foams whole — not torn, not crushed, not reused","zh":"泡棉完好 — 无破损、无压塌、非回收再用","es":"Espumas íntegras — sin roturas, sin aplastar, sin reutilizar"},
+            "help":{"en":"Take them out and photograph them together. Tears, crumbling edges, previous marks of another product or pieces glued back together are a fail.",
+                    "zh":"取出泡棉并合影拍摄。破裂、边缘掉屑、留有其他产品压痕或拼接粘合的泡棉均判不合格。",
+                    "es":"Sáquelas y fotografíelas juntas. Roturas, bordes desmoronados, marcas previas de otro producto o piezas pegadas de nuevo son falla."}},
+           {"id":"kap_foam_thick","code":"PKG-002","measure":{"unit":"mm","step":"1"},
+            "label":{"en":"Foam thickness at the thinnest point","zh":"泡棉最薄处厚度","es":"Espesor de la espuma en el punto más delgado"},
+            "help":{"en":"Measure where there is least material between the product and the cardboard — usually a corner. Record the value; there is no agreed minimum yet.",
+                    "zh":"在产品与纸箱之间材料最少处测量，通常位于角部。记录数值；目前尚无约定最小值。",
+                    "es":"Mida donde hay menos material entre el producto y el cartón — suele ser una esquina. Anote el valor; todavía no hay mínimo acordado."}}]},
+
+        {"id":"KAP_WIRING","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"CABLES AND GAUGES",
+                  "zh":"线材与线径",
+                  "es":"CABLES Y CALIBRES"},
+         "steps":[
+           {"en":"Open the cabinet and photograph the wiring before touching it","zh":"打开箱体，在未触碰前拍摄内部布线","es":"Abra el gabinete y fotografíe el cableado antes de tocarlo"},
+           {"en":"Read the gauge printed on each cable, or measure it","zh":"读取每根线上印刷的线径，或直接测量","es":"Lea el calibre impreso en cada cable, o mídalo"},
+           {"en":"Record one value per cable","zh":"每根线记录一个数值","es":"Anote un valor por cada cable"}],
+         "points":[
+           {"section":{"en":"What is being asked here","zh":"本项检查内容","es":"Qué se pide aquí"},
+            "help":{"en":"One number per cable, taken from the print on the insulation. If a cable carries no print, measure the conductor and write the gauge you get. There is no approved figure yet for any of them: the operator records and does not judge. The gauges will become a criterion once there is history from three or four units.",
+                    "zh":"每根线记录一个数值，取自绝缘层上的印字。若无印字，则测量导体并写出所得线径。目前所有线材均无批准值：操作员只记录，不作判定。待积累三到四台的历史数据后，线径才会成为判定标准。",
+                    "es":"Un número por cable, tomado de lo impreso en el aislante. Si un cable no trae impresión, mida el conductor y escriba el calibre que salga. Todavía no hay cifra aprobada para ninguno: el operario anota y no juzga. Los calibres pasarán a ser criterio cuando haya histórico de tres o cuatro unidades."}},
+           {"id":"kap_wire_all","code":"INT-020","photo":true,
+            "label":{"en":"Overall photo of the internal wiring","zh":"内部布线整体照片","es":"Foto general del cableado interno"},
+            "help":{"en":"One photo of the open cabinet where every harness can be seen, before disconnecting anything.",
+                    "zh":"在拆卸任何连接前，拍摄一张能看到全部线束的箱体内部照片。",
+                    "es":"Una foto del gabinete abierto donde se vean todos los ramales, antes de desconectar nada."}},
+           {"id":"kap_wire_ps","code":"INT-020","measure":{"unit":"AWG","step":"1"},
+            "label":{"en":"Power supply cable","zh":"电源线","es":"Cable de la fuente"},
+            "help":{"en":"The one that goes from the AC socket to the power supply board.",
+                    "zh":"从 AC 插座连接至电源板的线。",
+                    "es":"El que va del conector AC a la tarjeta de la fuente."}},
+           {"id":"kap_wire_bat","code":"INT-020","measure":{"unit":"AWG","step":"1"},
+            "label":{"en":"Battery cable","zh":"电池线","es":"Cable de la batería"},
+            "help":{"en":"Between the pack and the board. It is the one that carries the most current in the whole product.",
+                    "zh":"连接电池组与电路板的线，是整机中通过电流最大的一根。",
+                    "es":"Entre el pack y la tarjeta. Es el que más corriente lleva de todo el producto."}},
+           {"id":"kap_wire_woofer","code":"INT-020","measure":{"unit":"AWG","step":"1"},
+            "label":{"en":"Woofer cable","zh":"低音单元线","es":"Cable del woofer"},
+            "help":{"en":"From the amplifier to the woofer terminals.",
+                    "zh":"从功放至低音单元接线端子。",
+                    "es":"Del amplificador a los terminales del woofer."}},
+           {"id":"kap_wire_tweeter","code":"INT-020","measure":{"unit":"AWG","step":"1"},
+            "label":{"en":"Tweeter cable","zh":"高音单元线","es":"Cable del tweeter"},
+            "help":{"en":"From the crossover or the amplifier to the tweeter.",
+                    "zh":"从分频器或功放至高音单元。",
+                    "es":"Del divisor o del amplificador al tweeter."}},
+           {"id":"kap_wire_switch","code":"INT-020","measure":{"unit":"AWG","step":"1"},
+            "label":{"en":"Power switch cable","zh":"电源开关线","es":"Cable del switch de encendido"},
+            "help":{"en":"The pair that reaches the on/off switch.",
+                    "zh":"连接至开关机按键的一对线。",
+                    "es":"El par que llega al interruptor de encendido."}},
+           {"id":"kap_wire_route","code":"INT-020",
+            "label":{"en":"Routing — tied down, away from edges and from the driver","zh":"走线 — 已固定，远离锐边与喇叭","es":"Recorrido — amarrado, lejos de bordes y del parlante"},
+            "help":{"en":"No cable may rub against a sheet-metal edge, pass over a screw or touch the moving cone. All of them tied with their clamps or ties.",
+                    "zh":"任何线材不得摩擦钣金锐边、跨越螺丝或接触振动的锥盆。全部应使用线夹或扎带固定。",
+                    "es":"Ningún cable puede rozar un borde de lámina, pasar sobre un tornillo ni tocar el cono en movimiento. Todos amarrados con sus grapas o bridas."}}]},
+
+        {"id":"KAP_DIMS","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"PRODUCT DIMENSIONS",
+                  "zh":"产品尺寸",
+                  "es":"DIMENSIONES DEL PRODUCTO"},
+         "steps":[
+           {"en":"Measure the product alone, out of its box","zh":"取出包装后单独测量产品","es":"Mida el producto solo, fuera de su caja"},
+           {"en":"Photograph the tape against the product at each measurement","zh":"每次测量都拍摄卷尺贴合产品的照片","es":"Fotografíe la cinta contra el producto en cada medida"},
+           {"en":"Include handles and feet in the outer envelope","zh":"外形尺寸应包含提手与脚垫","es":"Incluya asas y pies en el contorno exterior"}],
+         "points":[
+           {"section":{"en":"How it is measured","zh":"测量方法","es":"Cómo se mide"},
+            "help":{"en":"The outer envelope: the largest box the product would fit into. Handles, grilles and feet count, because they are what decides whether it fits in its packaging.",
+                    "zh":"取外形包络尺寸，即产品可放入的最小外接立方体。提手、网罩与脚垫均计入，因为它们决定产品能否装入包装。",
+                    "es":"El contorno exterior: la caja más grande que ocuparía el producto. Asas, rejilla y pies cuentan, porque son los que deciden si entra en su empaque."}},
+           {"id":"kap_dim_h","code":"EXT-010","photo":true,"measure":{"unit":"mm","step":"1"},
+            "label":{"en":"Height","zh":"高","es":"Alto"},
+            "help":{"en":"Standing on its feet, from the floor to the highest point.",
+                    "zh":"以脚垫着地状态，从地面量至最高点。",
+                    "es":"De pie sobre sus pies, del piso al punto más alto."}},
+           {"id":"kap_dim_w","code":"EXT-010","photo":true,"measure":{"unit":"mm","step":"1"},
+            "label":{"en":"Width","zh":"宽","es":"Ancho"},
+            "help":{"en":"Across the front face, at its widest.",
+                    "zh":"沿正面最宽处测量。",
+                    "es":"A lo ancho de la cara frontal, por su parte más ancha."}},
+           {"id":"kap_dim_d","code":"EXT-010","photo":true,"measure":{"unit":"mm","step":"1"},
+            "label":{"en":"Depth","zh":"深","es":"Largo"},
+            "help":{"en":"From the grille to the back, including anything that sticks out.",
+                    "zh":"从网罩量至背面，包含任何凸出部分。",
+                    "es":"De la rejilla a la parte trasera, incluyendo lo que sobresalga."}}]},
+
+        {"id":"KAP_DRIVERS","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"WOOFER AND TWEETER — MATERIALS",
+                  "zh":"低音与高音单元 — 材料",
+                  "es":"WOOFER Y TWEETER — MATERIALES"},
+         "steps":[
+           {"en":"Take the driver out and photograph it from the back","zh":"取出喇叭并从背面拍摄","es":"Saque el parlante y fotografíelo por detrás"},
+           {"en":"Measure the tinsel and read what the voice coils say","zh":"测量弹波引线并读取音圈标识","es":"Mida el tinsel y lea lo que digan las bobinas"},
+           {"en":"Record each value with its photo","zh":"每个数值配一张照片记录","es":"Anote cada valor con su foto"}],
+         "points":[
+           {"section":{"en":"The tinsel","zh":"弹波引线","es":"El tinsel"},
+            "help":{"en":"The braided lead that goes from the terminal to the cone. It is the part that fails first from fatigue, and its free length is what decides how long it lasts.",
+                    "zh":"从接线端子连至锥盆的编织引线。该部件最易因疲劳而先失效，其自由长度决定使用寿命。",
+                    "es":"El cable trenzado que va del terminal al cono. Es la pieza que primero falla por fatiga, y su longitud libre es la que decide cuánto dura."}},
+           {"id":"kap_tinsel_len","code":"INT-021","photo":true,"measure":{"unit":"mm","step":"0.5"},
+            "label":{"en":"Free length of the tinsel","zh":"弹波引线自由长度","es":"Longitud libre del tinsel"},
+            "help":{"en":"Measure between the two fixing points, with the cone at rest. Record the value: there is no agreed figure yet.",
+                    "zh":"在锥盆处于静止状态下，测量两个固定点之间的距离。记录数值：目前尚无约定标准。",
+                    "es":"Mida entre los dos puntos de fijación, con el cono en reposo. Anote el valor: todavía no hay cifra acordada."}},
+           {"id":"kap_tinsel_state","code":"INT-021",
+            "label":{"en":"Tinsel whole and free — it does not rub","zh":"引线完好且不受阻 — 无摩擦","es":"Tinsel íntegro y libre — no roza"},
+            "help":{"en":"No broken strands, no ugly solder, and it must not touch the cone or the frame at any point of its travel.",
+                    "zh":"无断丝、无虚焊，且在行程的任何位置都不得接触锥盆或盆架。",
+                    "es":"Sin hilos rotos, sin soldadura fea, y no debe tocar el cono ni el marco en ningún punto del recorrido."}},
+           {"section":{"en":"The voice coils","zh":"音圈","es":"Las bobinas"},
+            "help":{"en":"The diameter is what the supplier declares and what should be verifiable on the unit. If it is not printed anywhere, measure the former and say so in the note.",
+                    "zh":"直径为供应商申报值，且应可在实物上核实。若无任何标识，则测量骨架并在备注中说明。",
+                    "es":"El diámetro es lo que declara el proveedor y lo que debería poder verificarse en la unidad. Si no está impreso en ningún sitio, mida el soporte y dígalo en la nota."}},
+           {"id":"kap_coil_woofer","code":"INT-021","photo":true,"measure":{"unit":"mm","step":"0.5"},
+            "label":{"en":"Woofer voice coil diameter","zh":"低音单元音圈直径","es":"Diámetro de la bobina del woofer"},
+            "help":{"en":"Photograph the back of the magnet where the marking is, and write the diameter.",
+                    "zh":"拍摄磁钢背面的标识处，并填写直径。",
+                    "es":"Fotografíe la parte trasera del imán donde está la marcación, y escriba el diámetro."}},
+           {"id":"kap_coil_tweeter","code":"INT-021","photo":true,"measure":{"unit":"mm","step":"0.5"},
+            "label":{"en":"Tweeter voice coil diameter","zh":"高音单元音圈直径","es":"Diámetro de la bobina del tweeter"},
+            "help":{"en":"The same, on the tweeter.",
+                    "zh":"高音单元同上。",
+                    "es":"Lo mismo, en el tweeter."}}]},
+
+        {"id":"KAP_CABINET","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"CABINET — JOINTS AND FIT",
+                  "zh":"箱体 — 接合与配合",
+                  "es":"GABINETE — UNIONES Y AJUSTES"},
+         "steps":[
+           {"en":"Go around the whole cabinet with the product closed","zh":"在整机装配完成状态下环视箱体一周","es":"Recorra todo el gabinete con el producto cerrado"},
+           {"en":"Photograph every joint you find open or misaligned","zh":"拍摄所有发现开缝或错位的接合处","es":"Fotografíe toda unión que encuentre abierta o desalineada"},
+           {"en":"Press the caps and the corner pieces with your hand","zh":"用手按压端盖与护角","es":"Presione con la mano las tapas y las esquineras"}],
+         "points":[
+           {"section":{"en":"Why it matters","zh":"重要性","es":"Por qué importa"},
+            "help":{"en":"An open joint in the cabinet is not just a finish problem: an enclosure that leaks air loses bass and buzzes at high volume. It is checked with the eye and with the hand.",
+                    "zh":"箱体开缝不仅是外观问题：漏气的箱体会损失低频并在大音量下产生杂音。需目视并用手检查。",
+                    "es":"Una unión abierta en el gabinete no es sólo acabado: una caja que fuga aire pierde graves y suena a zumbido en volumen alto. Se revisa con el ojo y con la mano."}},
+           {"id":"kap_cab_joints","code":"EXT-011","photo":true,
+            "label":{"en":"Joints closed all the way round — no visible gap","zh":"四周接合闭合 — 无可见缝隙","es":"Uniones cerradas en todo el contorno — sin luz visible"},
+            "help":{"en":"Look at every seam against the light. If light comes through, or a fingernail goes into the joint, it is a fail.",
+                    "zh":"迎光检查每条接缝。若可透光，或指甲可插入缝隙，判不合格。",
+                    "es":"Mire cada costura a contraluz. Si pasa luz, o si la uña entra en la unión, es falla."}},
+           {"id":"kap_cab_caps","code":"EXT-011","photo":true,
+            "label":{"en":"Caps aligned and firm","zh":"端盖对位且牢固","es":"Tapas alineadas y firmes"},
+            "help":{"en":"The top and bottom caps must sit flush with the body and not move when pressed. A cap that creaks under the hand is a fail.",
+                    "zh":"上下端盖应与箱体齐平，按压时不得松动。手按有异响的端盖判不合格。",
+                    "es":"Las tapas superior e inferior deben quedar a ras del cuerpo y no moverse al presionar. Una tapa que cruje bajo la mano es falla."}},
+           {"id":"kap_cab_corners","code":"EXT-011","photo":true,
+            "label":{"en":"Corner pieces complete, level and with all their screws","zh":"护角齐全、平整且螺丝无缺","es":"Esquineras completas, a nivel y con todos sus tornillos"},
+            "help":{"en":"Eight corners. All present, none proud of the surface, none missing a screw and none with the screw over-tightened into the wood.",
+                    "zh":"共八个护角。应全部齐备，不得凸出表面，不得缺少螺丝，也不得将螺丝拧入木材过深。",
+                    "es":"Ocho esquinas. Todas puestas, ninguna sobresaliendo, ninguna a la que le falte un tornillo y ninguna con el tornillo pasado de apriete sobre la madera."}},
+           {"id":"kap_cab_gaps","code":"EXT-011","measure":{"unit":"mm","step":"0.1"},
+            "label":{"en":"Largest gap found","zh":"发现的最大缝隙","es":"Holgura mayor encontrada"},
+            "help":{"en":"Of all the joints, measure the one that opens the most with a feeler gauge or the caliper. Record the value even if everything looked fine: zero is also a datum.",
+                    "zh":"在所有接缝中，用塞尺或卡尺测量开口最大处。即使外观正常也应记录数值：零同样是数据。",
+                    "es":"De todas las uniones, mida con galga o calibrador la que más se abra. Anote el valor aunque todo se vea bien: cero también es un dato."}}]},
+
+        /* ------------------------------------------------------------------
+           KAP206 · tanda 2 — el producto sonando y el multímetro puesto.
+           Dos montajes, no seis: el multímetro se conecta una vez para las dos
+           medidas de consumo, y el producto se sube a volumen máximo una sola
+           vez para el limitador, las partes sueltas y la temperatura. Cambiar
+           de montaje cinco veces para volver al primero es como se pierde una
+           tarde en el puesto.
+           ------------------------------------------------------------------ */
+
+        {"id":"KAP_DRAW","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"POWER DRAW — OFF AND STANDBY",
+                  "zh":"耗电 — 关机与待机",
+                  "es":"CONSUMO ELÉCTRICO — APAGADO Y EN ESPERA"},
+         "steps":[
+           {"en":"Wire the multimeter in series on the AC line, in current mode","zh":"将万用表串联接入 AC 线，置于电流档","es":"Conecte el multímetro en serie sobre la línea AC, en modo corriente"},
+           {"en":"Take one reading with the product off","zh":"在关机状态下读取一次","es":"Tome una lectura con el producto apagado"},
+           {"en":"Take the other with it on and doing nothing","zh":"另一次在开机但无操作状态下读取","es":"Tome la otra encendido y sin hacer nada"}],
+         "points":[
+           {"section":{"en":"One setup, two readings","zh":"一次接线，两次读数","es":"Un montaje, dos lecturas"},
+            "help":{"en":"A product that is off is not disconnected: the power supply keeps drawing something. What is being looked for here is how much, because that is what runs the battery down in the warehouse and what heats a supply that is supposed to be resting.",
+                    "zh":"关机不等于断电：电源仍有一定耗电。本项要确认的是耗电量，因为它决定了产品在仓库中电池的自放电速度，也会使本应处于休息状态的电源发热。",
+                    "es":"Un producto apagado no está desconectado: la fuente sigue consumiendo algo. Lo que se busca aquí es cuánto, porque eso es lo que descarga la batería en bodega y lo que calienta una fuente que debería estar descansando."}},
+           {"id":"kap_draw_off","code":"PWR-020","photo":true,"measure":{"unit":"mA","step":"0.1"},
+            "label":{"en":"Draw with the product switched off","zh":"关机状态耗电","es":"Consumo con el producto apagado"},
+            "help":{"en":"AC connected, switch off, nothing plugged into any socket. Photograph the meter reading. Record the value: there is no agreed maximum yet, this data is compared between units and against the history.",
+                    "zh":"接入 AC，关闭开关，各接口不接任何设备。拍摄表头读数。记录数值：目前尚无约定上限，该数据用于单位之间及历史数据的比对。",
+                    "es":"AC conectado, interruptor apagado, nada enchufado en ningún conector. Fotografíe la lectura del instrumento. Anote el valor: todavía no hay máximo acordado, este dato se compara entre unidades y contra el histórico."}},
+           {"id":"kap_draw_idle","code":"PWR-020","photo":true,"measure":{"unit":"mA","step":"0.1"},
+            "label":{"en":"Draw on standby — on, no audio","zh":"待机耗电 — 开机无音频","es":"Consumo en espera — encendido, sin audio"},
+            "help":{"en":"Switched on, no source playing and no button touched, with the battery already full so the charge does not distort the reading. Photograph the reading.",
+                    "zh":"开机状态，无音源播放且不操作任何按键，电池须已充满，以免充电影响读数。拍摄读数。",
+                    "es":"Encendido, sin fuente reproduciendo y sin tocar ningún botón, con la batería ya llena para que la carga no falsee la lectura. Fotografíe la lectura."}},
+           {"id":"kap_draw_warm","code":"PWR-020",
+            "label":{"en":"The supply does not heat up with the product off","zh":"关机状态下电源不发热","es":"La fuente no se calienta con el producto apagado"},
+            "help":{"en":"After thirty minutes off and plugged in, touch the area of the supply with your hand. Noticeable warmth is a fail, and it is normally the same fault as an out-of-range reading above.",
+                    "zh":"通电关机三十分钟后，用手触摸电源区域。明显发热判不合格，通常与上述读数超标属同一故障。",
+                    "es":"Tras treinta minutos apagado y conectado, toque con la mano la zona de la fuente. Un calor perceptible es falla, y normalmente es la misma falla que una lectura fuera de rango arriba."}}]},
+
+        {"id":"KAP_MAXVOL","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"MAXIMUM VOLUME — LIMITER, RATTLES AND TEMPERATURE",
+                  "zh":"最大音量 — 限幅、异响与温度",
+                  "es":"VOLUMEN MÁXIMO — LIMITADOR, PARTES SUELTAS Y TEMPERATURA"},
+         "steps":[
+           {"en":"Take it to maximum volume with music with bass","zh":"播放含低频的音乐并调至最大音量","es":"Súbalo a volumen máximo con música con graves"},
+           {"en":"Hold it there ten minutes without touching anything","zh":"保持十分钟，期间不作任何操作","es":"Sosténgalo diez minutos sin tocar nada"},
+           {"en":"Listen for rattles and then measure the temperature","zh":"注意听是否有异响，随后测量温度","es":"Escuche partes sueltas y después mida la temperatura"}],
+         "points":[
+           {"section":{"en":"Everything at once, on purpose","zh":"三项同时进行，出于设计","es":"Todo a la vez, a propósito"},
+            "help":{"en":"These three checks share one condition — the product at maximum for ten minutes — so they are done in a single run. The video covers the whole section: it is the only evidence that lets someone else hear what the operator heard.",
+                    "zh":"这三项共用同一条件——最大音量持续十分钟——因此一次完成。视频覆盖整个环节：这是唯一能让他人听到操作员所听内容的证据。",
+                    "es":"Estas tres comprobaciones comparten una sola condición —el producto al máximo durante diez minutos—, así que se hacen en una sola corrida. El video cubre toda la sección: es la única evidencia que permite a otro oír lo que oyó el operario."}},
+           {"id":"kap_limiter","code":"AUD-030",
+            "label":{"en":"The limiter works — it does not distort at maximum","zh":"限幅有效 — 最大音量下不失真","es":"El limitador actúa — no distorsiona al máximo"},
+            "help":{"en":"At maximum volume the sound must stay clean. Crackling, clipping or a sound that breaks up on the bass hits means the limiter is not doing its job, and that is a fail even if the product survives.",
+                    "zh":"最大音量下声音应保持干净。出现爆音、削波或低频冲击时破音，说明限幅未起作用，即使产品未损坏也判不合格。",
+                    "es":"A volumen máximo el sonido debe mantenerse limpio. Crujidos, recorte o un sonido que se rompe en los golpes de graves significa que el limitador no está haciendo su trabajo, y eso es falla aunque el producto sobreviva."}},
+           {"id":"kap_limiter_hold","code":"AUD-030",
+            "label":{"en":"It does not cut out or restart on the peaks","zh":"峰值时不断声、不重启","es":"No corta ni se reinicia en los picos"},
+            "help":{"en":"During the ten minutes it must not switch off, mute itself or restart. A product that protects itself by cutting the audio is protecting itself from a fault it should not have.",
+                    "zh":"十分钟内不得关机、静音或重启。以切断音频方式自我保护，说明存在本不应出现的故障。",
+                    "es":"Durante los diez minutos no debe apagarse, silenciarse ni reiniciarse. Un producto que se protege cortando el audio se está protegiendo de una falla que no debería tener."}},
+           {"id":"kap_rattle","code":"AUD-031",
+            "label":{"en":"No loose parts — no buzzes or rattles","zh":"无松动件 — 无嗡响或异响","es":"Sin partes sueltas — ni zumbidos ni traqueteos"},
+            "help":{"en":"With the bass at maximum, go round the cabinet with your ear close: grille, caps, corner pieces, handle, battery hatch and the back panel. Any buzz that stops when you press with your hand locates a loose part, and that is a fail. Say in the note which part it was.",
+                    "zh":"在低频最大时，贴近箱体逐处细听：网罩、端盖、护角、提手、电池仓盖与背板。凡用手按压即消失的嗡响，即可定位松动件，判不合格。请在备注中说明是哪个部位。",
+                    "es":"Con los graves al máximo, recorra el gabinete con el oído cerca: rejilla, tapas, esquineras, asa, tapa de la batería y el panel trasero. Cualquier zumbido que se detenga al presionar con la mano localiza una parte suelta, y eso es falla. Diga en la nota cuál fue."}},
+           {"section":{"en":"The temperature, after ten minutes","zh":"十分钟后的温度","es":"La temperatura, a los diez minutos"},
+            "help":{"en":"Measured with the thermal gun, without switching off and without lowering the volume: a product that is allowed to cool for two minutes gives a reading that says nothing.",
+                    "zh":"使用测温枪测量，期间不得关机、不得降低音量：若先冷却两分钟再测，读数将毫无意义。",
+                    "es":"Se mide con la pistola térmica, sin apagar y sin bajar el volumen: un producto al que se le dejan dos minutos de enfriamiento da una lectura que no dice nada."}},
+           {"id":"kap_temp_amp","code":"THR-010","photo":true,"measure":{"unit":"°C","step":"0.1"},
+            "label":{"en":"Amplifier heatsink","zh":"功放散热器","es":"Disipador del amplificador"},
+            "help":{"en":"Point at the hottest part of the heatsink through the vent. Photograph the gun reading. Record the value; there is no agreed limit yet.",
+                    "zh":"透过散热孔对准散热器最热处测量。拍摄测温枪读数。记录数值；目前尚无约定上限。",
+                    "es":"Apunte a la parte más caliente del disipador por la rejilla de ventilación. Fotografíe la lectura de la pistola. Anote el valor; todavía no hay límite acordado."}},
+           {"id":"kap_temp_mag","code":"THR-010","photo":true,"measure":{"unit":"°C","step":"0.1"},
+            "label":{"en":"Woofer magnet","zh":"低音单元磁钢","es":"Imán del woofer"},
+            "help":{"en":"From the back, on the centre of the magnet. It is the point that tells you whether the voice coil is working too hard.",
+                    "zh":"从背面对准磁钢中心测量。该点可反映音圈是否工作过载。",
+                    "es":"Por detrás, sobre el centro del imán. Es el punto que dice si la bobina está trabajando de más."}},
+           {"id":"kap_temp_bat","code":"THR-010","photo":true,"measure":{"unit":"°C","step":"0.1"},
+            "label":{"en":"Battery pack","zh":"电池组","es":"Pack de la batería"},
+            "help":{"en":"On the body of the pack, not on its cables. This is the one that matters most: a hot battery at maximum volume is a safety matter, not a performance one.",
+                    "zh":"测量电池组本体，而非其线材。此项最为关键：大音量下电池发热属安全问题，而非性能问题。",
+                    "es":"Sobre el cuerpo del pack, no sobre sus cables. Ésta es la que más importa: una batería caliente a volumen máximo es un asunto de seguridad, no de desempeño."}},
+           {"id":"kap_temp_out","code":"THR-010","photo":true,"measure":{"unit":"°C","step":"0.1"},
+            "label":{"en":"Outer surface where the hand goes","zh":"手可触及的外表面","es":"Superficie exterior donde va la mano"},
+            "help":{"en":"On the handle and on the top cap. This is the only one with a criterion today: whatever the user touches must not burn. If the hand cannot rest on it, it is a fail.",
+                    "zh":"测量提手与上端盖。此项是目前唯一有判定标准的：用户可触及部位不得烫手。若手无法停留，判不合格。",
+                    "es":"Sobre el asa y sobre la tapa superior. Ésta es la única con criterio hoy: lo que el usuario toca no puede quemar. Si la mano no puede quedarse encima, es falla."}}]},
+
+        {"id":"KAP_SIGNATURE","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"SOUND SIGNATURES",
+                  "zh":"音效风格",
+                  "es":"FIRMAS DE SONIDO"},
+         "steps":[
+           {"en":"Play the same track through every sound mode","zh":"用同一首曲目遍历所有音效模式","es":"Reproduzca la misma pista en todos los modos de sonido"},
+           {"en":"Do not change the volume between modes","zh":"切换模式时不得改变音量","es":"No cambie el volumen entre modos"},
+           {"en":"Film the run through with the display in shot","zh":"录制整个切换过程，画面中须包含显示屏","es":"Filme el recorrido con la pantalla a la vista"}],
+         "points":[
+           {"section":{"en":"How this is judged","zh":"判定方法","es":"Cómo se juzga esto"},
+            "help":{"en":"One track, one volume, all the modes in a row. What is being verified is that each signature is genuinely different from the others and that it matches its name: a bass mode that does not add bass is a fault even if it sounds fine. Two modes that sound the same are also a fault — one of them is not connected to anything.",
+                    "zh":"同一曲目、同一音量，依次切换全部模式。要确认的是各风格之间确有差异，且与其名称相符：低音模式若不增强低频，即使音质正常也属故障。两个模式听感相同同样属故障——其中一个并未实际生效。",
+                    "es":"Una pista, un volumen, todos los modos seguidos. Lo que se verifica es que cada firma sea de verdad distinta de las otras y que corresponda a su nombre: un modo de graves que no agrega graves es falla aunque suene bien. Dos modos que suenan igual también son falla — uno de los dos no está conectado a nada."}},
+           {"id":"kap_sig_diff","code":"AUD-032",
+            "label":{"en":"Every mode sounds different from the previous one","zh":"每个模式与上一模式听感不同","es":"Cada modo suena distinto del anterior"},
+            "help":{"en":"Go through them in order without stopping the track. The change must be audible at the moment of switching. If two are indistinguishable, say in the note which two.",
+                    "zh":"在不停止曲目的情况下依次切换。切换瞬间应能听出变化。若有两个无法区分，请在备注中注明是哪两个。",
+                    "es":"Recórralos en orden sin detener la pista. El cambio debe oírse en el momento de conmutar. Si dos son indistinguibles, diga en la nota cuáles dos."}},
+           {"id":"kap_sig_name","code":"AUD-032",
+            "label":{"en":"Each one does what its name says","zh":"各模式效果与名称相符","es":"Cada una hace lo que dice su nombre"},
+            "help":{"en":"The bass mode adds low end, the voice mode brings the voice forward, the flat mode adds nothing. A signature that does the opposite of its label is a fail.",
+                    "zh":"低音模式增强低频，人声模式突出人声，平坦模式不作处理。效果与标识相反的模式判不合格。",
+                    "es":"El modo de graves agrega bajos, el de voz adelanta la voz, el plano no agrega nada. Una firma que hace lo contrario de su rótulo es falla."}},
+           {"id":"kap_sig_clean","code":"AUD-032",
+            "label":{"en":"No mode distorts at three quarters of volume","zh":"四分之三音量下各模式均不失真","es":"Ningún modo distorsiona a tres cuartos de volumen"},
+            "help":{"en":"Repeat the run at three quarters. A signature that boosts bass can push the driver past what it takes: if any of them crackles and the flat one does not, the fault is in that mode, not in the speaker.",
+                    "zh":"在四分之三音量下重复该过程。增强低频的风格可能使喇叭超出承受范围：若某一模式出现爆音而平坦模式正常，则故障在该模式，而非喇叭本身。",
+                    "es":"Repita el recorrido a tres cuartos. Una firma que realza graves puede llevar al parlante más allá de lo que aguanta: si alguna cruje y la plana no, la falla está en ese modo y no en el parlante."}},
+           {"id":"kap_sig_keep","code":"AUD-032",
+            "label":{"en":"The chosen mode survives switching off","zh":"所选模式关机后仍保留","es":"El modo elegido sobrevive al apagado"},
+            "help":{"en":"Leave a mode that is not the first one selected, switch off and switch on again. It must come back on the same one.",
+                    "zh":"选择一个非首位的模式，关机后再开机，应仍处于该模式。",
+                    "es":"Deje seleccionado un modo que no sea el primero, apague y vuelva a encender. Debe volver en el mismo."}}]},
+
+        /* ------------------------------------------------------------------
+           KAP206 · tanda 3 — las pruebas de tiempo.
+           No se «hacen»: se ponen en marcha y se vuelve. Por eso van con
+           `first` justo detrás del envejecimiento y con `long`, que es lo que
+           dibuja el botón de dejar pendiente: el operario las arranca al
+           llegar y sigue con el resto del plan mientras corren. Ponerlas al
+           final del plan sería pedirle que se quede cuatro horas más.
+           ------------------------------------------------------------------ */
+
+        {"id":"KAP_CHG_CURVE","optional":false,"only_factory":["YIS"],"evidence":[],
+         "only":["HK-KAP206"],"first":2.1,
+         "long":{"t":{"en":"This test is still running","zh":"本测试仍在进行中","es":"Esta prueba sigue en curso"},
+                 "n":{"en":"Start the charge, leave it running and carry on with the rest of the plan. Come back when it reaches 100%.",
+                      "zh":"启动充电后继续进行计划中的其他测试，充至 100% 后再回来填写。",
+                      "es":"Arranque la carga, déjela corriendo y siga con el resto del plan. Vuelva cuando llegue al 100%."}},
+         "label":{"en":"CHARGE CURVE",
+                  "zh":"充电曲线",
+                  "es":"CURVA DE CARGA"},
+         "steps":[
+           {"en":"Run the battery right down and then plug in the AC","zh":"将电池放至最低后接入 AC","es":"Descargue la batería a fondo y luego conecte el AC"},
+           {"en":"Record the curve with the charging system","zh":"使用充电系统记录曲线","es":"Registre la curva con el sistema de carga"},
+           {"en":"Upload the capture when it reaches 100%","zh":"充至 100% 后上传截图","es":"Suba la captura al llegar al 100%"}],
+         "points":[
+           {"section":{"en":"What is being recorded","zh":"记录内容","es":"Qué se registra"},
+            "help":{"en":"The whole charge from empty to full, on the charging system the factory already uses. What matters is the shape and the total time, not one instant: a battery that charges in half the expected time is not charging, and one that takes twice as long has a cell holding the rest back.",
+                    "zh":"记录从空电到满电的完整充电过程，使用工厂现有的充电系统。关键在于曲线形状与总时长，而非某一瞬间：充电时间仅为预期一半说明并未真正充入，耗时加倍则说明有电芯拖累整组。",
+                    "es":"La carga entera, de vacío a lleno, en el sistema de carga que la fábrica ya usa. Lo que importa es la forma y el tiempo total, no un instante: una batería que carga en la mitad del tiempo esperado no está cargando, y una que tarda el doble tiene una celda frenando al resto."}},
+           {"id":"kap_chg_shot","code":"BAT-020","photo":true,
+            "label":{"en":"Capture of the complete charge curve","zh":"完整充电曲线截图","es":"Captura de la curva de carga completa"},
+            "help":{"en":"Upload the screenshot of the charging system with the whole curve visible, from the start to 100%. A photo of the screen is acceptable if the capture cannot be exported.",
+                    "zh":"上传充电系统的截图，须包含从起始到 100% 的完整曲线。若无法导出截图，可拍摄屏幕照片替代。",
+                    "es":"Suba la captura de pantalla del sistema de carga con toda la curva visible, del arranque al 100%. Una foto de la pantalla sirve si la captura no se puede exportar."}},
+           {"id":"kap_chg_time","code":"BAT-020","measure":{"unit":"h","step":"0.1"},
+            "label":{"en":"Total charge time","zh":"总充电时长","es":"Tiempo total de carga"},
+            "help":{"en":"From plugging in to 100% on the display. Record the value: there is no agreed figure yet, this data is compared between units and against the history.",
+                    "zh":"自接入电源至显示 100% 的时间。记录数值：目前尚无约定标准，该数据用于单位之间及历史数据的比对。",
+                    "es":"Desde que se conecta hasta el 100% en la pantalla. Anote el valor: todavía no hay cifra acordada, este dato se compara entre unidades y contra el histórico."}},
+           {"id":"kap_chg_smooth","code":"BAT-020",
+            "label":{"en":"The curve has no drops or flat stretches","zh":"曲线无跌落或长时间停滞","es":"La curva no tiene caídas ni tramos planos"},
+            "help":{"en":"It must climb steadily and taper off at the end. A step backwards, a stretch that stops for a long while or a jump of several percent at once are signs of a cell out of balance or of a percentage that is estimated rather than measured.",
+                    "zh":"曲线应稳步上升并在末段趋缓。出现回落、长时间停滞或百分比一次跳变数个点，均说明存在电芯失衡，或百分比为估算而非实测。",
+                    "es":"Debe subir de forma sostenida y aplanarse al final. Un escalón hacia atrás, un tramo que se detiene mucho rato o un salto de varios por ciento de golpe son señales de una celda desequilibrada o de un porcentaje estimado y no medido."}}]},
+
+        {"id":"KAP_DIS_CURVE","optional":false,"only_factory":["YIS"],"evidence":[],
+         "only":["HK-KAP206"],"first":2.2,
+         "long":{"t":{"en":"This test is still running","zh":"本测试仍在进行中","es":"Esta prueba sigue en curso"},
+                 "n":{"en":"Leave the discharge running and carry on with the rest of the plan. Come back when the product switches off.",
+                      "zh":"让放电继续进行，同时完成计划中的其他测试，待产品自动关机后再回来填写。",
+                      "es":"Deje la descarga corriendo y siga con el resto del plan. Vuelva cuando el producto se apague."}},
+         "label":{"en":"DISCHARGE CURVES",
+                  "zh":"放电曲线",
+                  "es":"CURVAS DE DESCARGA"},
+         "steps":[
+           {"en":"Start from a full battery, with no AC connected","zh":"以满电状态开始，且不接 AC","es":"Arranque con la batería llena y sin AC conectado"},
+           {"en":"Run one discharge at half volume and another at maximum","zh":"分别在半音量与最大音量下各放电一次","es":"Haga una descarga a medio volumen y otra al máximo"},
+           {"en":"Upload the capture of each one","zh":"分别上传各自的截图","es":"Suba la captura de cada una"}],
+         "points":[
+           {"section":{"en":"Two discharges, not one","zh":"两次放电，而非一次","es":"Dos descargas, no una"},
+            "help":{"en":"The same battery gives very different figures at half volume and at maximum, and both matter: one is the autonomy the user will see in normal use, the other is the worst case. A single figure without saying at what volume it was taken cannot be compared with anything.",
+                    "zh":"同一电池在半音量与最大音量下的数据差异很大，且两者都重要：前者是用户日常使用可见的续航，后者是最恶劣情况。若不注明音量，单一数据无法与任何数据比对。",
+                    "es":"La misma batería da cifras muy distintas a medio volumen y al máximo, y las dos importan: una es la autonomía que verá el usuario en uso normal, la otra es el peor caso. Una sola cifra sin decir a qué volumen se tomó no se puede comparar con nada."}},
+           {"id":"kap_dis_half_shot","code":"BAT-021","photo":true,
+            "label":{"en":"Capture of the discharge at half volume","zh":"半音量放电曲线截图","es":"Captura de la descarga a medio volumen"},
+            "help":{"en":"Music playing continuously at half volume until the product switches off on its own. Upload the whole curve.",
+                    "zh":"以半音量连续播放音乐，直至产品自动关机。上传完整曲线。",
+                    "es":"Música sonando de forma continua a medio volumen hasta que el producto se apague solo. Suba la curva completa."}},
+           {"id":"kap_dis_half_time","code":"BAT-021","measure":{"unit":"h","step":"0.1"},
+            "label":{"en":"Autonomy at half volume","zh":"半音量续航时长","es":"Autonomía a medio volumen"},
+            "help":{"en":"From 100% to switch-off. Record the value; there is no agreed minimum yet.",
+                    "zh":"自 100% 至关机的时长。记录数值；目前尚无约定最小值。",
+                    "es":"Del 100% hasta el apagado. Anote el valor; todavía no hay mínimo acordado."}},
+           {"id":"kap_dis_max_shot","code":"BAT-021","photo":true,
+            "label":{"en":"Capture of the discharge at maximum volume","zh":"最大音量放电曲线截图","es":"Captura de la descarga a volumen máximo"},
+            "help":{"en":"The same, at maximum. Recharge fully before starting: a discharge that begins at 80% is not comparable with the previous one.",
+                    "zh":"最大音量下同上。开始前须充满电：自 80% 开始的放电无法与前一次比对。",
+                    "es":"Lo mismo, al máximo. Recargue del todo antes de empezar: una descarga que arranca en 80% no es comparable con la anterior."}},
+           {"id":"kap_dis_max_time","code":"BAT-021","measure":{"unit":"h","step":"0.1"},
+            "label":{"en":"Autonomy at maximum volume","zh":"最大音量续航时长","es":"Autonomía a volumen máximo"},
+            "help":{"en":"From 100% to switch-off, at maximum.",
+                    "zh":"最大音量下自 100% 至关机的时长。",
+                    "es":"Del 100% hasta el apagado, al máximo."}},
+           {"id":"kap_dis_end","code":"BAT-021",
+            "label":{"en":"It switches off cleanly, it does not collapse","zh":"关机过程干净，不应突然掉电","es":"Se apaga limpio, no se desploma"},
+            "help":{"en":"At the end the product must announce low battery and switch off in an orderly way, with its melody. A product that goes out in the middle of a track, without warning, is a fail even if the autonomy was good.",
+                    "zh":"结束时产品应提示低电量并有序关机，并播放关机音乐。若在播放中途无提示突然断电，即使续航达标也判不合格。",
+                    "es":"Al final el producto debe avisar batería baja y apagarse de forma ordenada, con su melodía. Un producto que se va a mitad de una canción, sin avisar, es falla aunque la autonomía haya sido buena."}}]},
+
+        {"id":"KAP_CHG_PCT","optional":false,"only_factory":["YIS"],"evidence":[],
+         "only":["HK-KAP206"],"first":2.3,
+         "long":{"t":{"en":"This test is still running","zh":"本测试仍在进行中","es":"Esta prueba sigue en curso"},
+                 "n":{"en":"It is answered along the charge you already have running. Carry on with the rest of the plan in the meantime.",
+                      "zh":"本项在已进行的充电过程中填写。期间可继续进行计划中的其他测试。",
+                      "es":"Se responde a lo largo de la carga que ya tiene corriendo. Mientras tanto siga con el resto del plan."}},
+         "label":{"en":"CHARGE PERCENTAGE ON THE DISPLAY",
+                  "zh":"显示屏充电百分比",
+                  "es":"PORCENTAJE DE CARGA CON LA FUENTE"},
+         "steps":[
+           {"en":"Watch the display along the charge you already started","zh":"在已开始的充电过程中观察显示屏","es":"Observe la pantalla a lo largo de la carga que ya arrancó"},
+           {"en":"Note whether the number climbs and never goes back","zh":"记录数值是否只升不降","es":"Anote si el número sube y nunca retrocede"},
+           {"en":"Confirm it at 100%","zh":"充至 100% 时确认","es":"Confírmelo al 100%"}],
+         "points":[
+           {"section":{"en":"The number the user believes","zh":"用户所依据的数值","es":"El número al que el usuario le cree"},
+            "help":{"en":"The percentage on the display is the only thing the user has to decide whether to take the speaker out. If it lies, everything else about the battery stops mattering. This is answered with the charge from the previous test already running; it does not need a separate one.",
+                    "zh":"显示屏上的百分比是用户判断能否外出使用的唯一依据。若其不准，电池其余指标便失去意义。本项在上一测试已进行的充电过程中填写，无需另行充电。",
+                    "es":"El porcentaje de la pantalla es lo único que tiene el usuario para decidir si se lleva el parlante. Si miente, todo lo demás de la batería deja de importar. Esto se responde con la carga de la prueba anterior ya corriendo; no hace falta una aparte."}},
+           {"id":"kap_pct_rise","code":"BAT-022",
+            "label":{"en":"It climbs steadily and never goes backwards","zh":"数值稳步上升且不回退","es":"Sube de forma sostenida y nunca retrocede"},
+            "help":{"en":"Check it at least four times along the charge. A number that goes down while it is charging, or that jumps ten points at once, is a fail.",
+                    "zh":"充电过程中至少查看四次。若充电中数值下降，或一次跳升十个百分点，判不合格。",
+                    "es":"Mírelo al menos cuatro veces a lo largo de la carga. Un número que baja mientras carga, o que salta diez puntos de golpe, es falla."}},
+           {"id":"kap_pct_100","code":"BAT-022","photo":true,
+            "label":{"en":"It reaches 100 and stops there","zh":"到达 100 后保持不变","es":"Llega a 100 y se queda ahí"},
+            "help":{"en":"Photograph the display at 100 with the AC still connected. It must not go back down to 99 and start charging again while it is plugged in.",
+                    "zh":"在仍接入 AC 的状态下拍摄显示 100 的画面。插电期间不得回落至 99 并重新充电。",
+                    "es":"Fotografíe la pantalla en 100 con el AC todavía conectado. No debe volver a bajar a 99 y ponerse a cargar de nuevo mientras esté enchufado."}},
+           {"id":"kap_pct_unplug","code":"BAT-022",
+            "label":{"en":"On unplugging it keeps the same number","zh":"断开电源后数值保持不变","es":"Al desconectar mantiene el mismo número"},
+            "help":{"en":"Unplug the AC with the battery full. The display must go on reading 100, not drop to 90 the moment the supply is taken away. A percentage that falls on unplugging was showing the charger, not the battery.",
+                    "zh":"在满电状态下拔掉 AC。显示屏应仍显示 100，不应在断电瞬间跌至 90。若拔电后百分比下降，说明此前显示的是充电器状态而非电池状态。",
+                    "es":"Desconecte el AC con la batería llena. La pantalla debe seguir diciendo 100, no caer a 90 en cuanto se le quita la fuente. Un porcentaje que se desploma al desconectar estaba mostrando el cargador, no la batería."}}]},
+
+        {"id":"KAP_PACK_PROT","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"BATTERY PACK PROTECTIONS",
+                  "zh":"电池组保护",
+                  "es":"PROTECCIONES DEL PACK"},
+         "steps":[
+           {"en":"Take the pack out and connect the electronic load","zh":"取出电池组并接入电子负载","es":"Saque el pack y conecte la carga electrónica"},
+           {"en":"Force each protection one at a time","zh":"逐项触发各保护功能","es":"Fuerce cada protección de una en una"},
+           {"en":"Confirm that it recovers after each one","zh":"确认每次触发后均可恢复","es":"Compruebe que se recupera después de cada una"}],
+         "points":[
+           {"section":{"en":"This is a safety test, not a performance one","zh":"本项属安全测试，而非性能测试","es":"Ésta es una prueba de seguridad, no de desempeño"},
+            "help":{"en":"The protections are what stand between a manufacturing fault and a fire. A pack that fails any of these three points does not go on to any other test and the unit is not shipped, whatever the rest of the plan says.",
+                    "zh":"保护功能是制造缺陷与起火之间的唯一屏障。任一项不合格的电池组不得进入后续任何测试，该整机不得出货，无论计划中其余项目结果如何。",
+                    "es":"Las protecciones son lo que hay entre una falla de fabricación y un incendio. Un pack que falle cualquiera de estos tres puntos no sigue a ninguna otra prueba y la unidad no se despacha, diga lo que diga el resto del plan."}},
+           {"id":"kap_prot_over","code":"BAT-023","photo":true,
+            "label":{"en":"Over-current — the output cuts off","zh":"过流 — 输出切断","es":"Sobrecorriente — la salida corta"},
+            "help":{"en":"Raise the load in steps until the protection trips. The output must cut off completely, not just drop. Photograph the load reading at the moment before it cuts and write that current in the note.",
+                    "zh":"逐级增大负载直至保护动作。输出应完全切断，而非仅下降。拍摄切断前瞬间的负载读数，并在备注中记录该电流值。",
+                    "es":"Suba la carga por escalones hasta que actúe la protección. La salida debe cortarse por completo, no sólo bajar. Fotografíe la lectura de la carga en el instante anterior al corte y escriba esa corriente en la nota."}},
+           {"id":"kap_prot_short","code":"BAT-023",
+            "label":{"en":"Short circuit — it cuts off instantly and does not heat up","zh":"短路 — 瞬时切断且不发热","es":"Cortocircuito — corta al instante y no se calienta"},
+            "help":{"en":"With the load in short circuit mode. The cut must be immediate and no part of the pack may heat up, smell or swell. Any of those three is a fail with the unit set aside.",
+                    "zh":"将负载置于短路模式。应立即切断，且电池组任何部位不得发热、产生异味或鼓胀。出现上述任一情况即判不合格，并须隔离该整机。",
+                    "es":"Con la carga en modo cortocircuito. El corte debe ser inmediato y ninguna parte del pack puede calentarse, oler ni hincharse. Cualquiera de esas tres es falla con la unidad apartada."}},
+           {"id":"kap_prot_under","code":"BAT-023","photo":true,"measure":{"unit":"V","step":"0.01"},
+            "label":{"en":"Over-discharge — cut-off voltage","zh":"过放 — 切断电压","es":"Sobredescarga — tensión de corte"},
+            "help":{"en":"Discharge at constant current until it cuts. Photograph the reading at the moment of the cut and write the voltage. Record the value: there is no agreed figure yet, but a pack that goes on delivering below what its cells take is the most serious fault of the three.",
+                    "zh":"以恒流放电直至切断。拍摄切断瞬间的读数并填写电压值。记录数值：目前尚无约定标准，但若电池组在低于电芯耐受电压后仍持续输出，则为三项中最严重的故障。",
+                    "es":"Descargue a corriente constante hasta que corte. Fotografíe la lectura en el instante del corte y escriba la tensión. Anote el valor: todavía no hay cifra acordada, pero un pack que siga entregando por debajo de lo que aguantan sus celdas es la falla más grave de las tres."}},
+           {"id":"kap_prot_back","code":"BAT-023",
+            "label":{"en":"It recovers on charging, it does not stay dead","zh":"充电后可恢复，不应彻底失效","es":"Se recupera al cargar, no queda muerto"},
+            "help":{"en":"After the over-discharge cut, connect the charger. The pack must wake up and start charging. One that stays dead is protecting the cells at the cost of the product.",
+                    "zh":"过放切断后接入充电器。电池组应被唤醒并开始充电。若始终无反应，则是以牺牲整机为代价保护电芯。",
+                    "es":"Después del corte por sobredescarga, conecte el cargador. El pack debe despertar y ponerse a cargar. Uno que quede muerto está protegiendo las celdas a costa del producto."}}]},
+
+        /* ------------------------------------------------------------------
+           KAP206 · tanda 4 — lo suelto y lo que gasta el producto.
+           Primero tres pruebas que no necesitan montaje —manual, emisoras,
+           trípode— y el ruido propio, que es lo único genuinamente nuevo del
+           bloque de micrófonos. Al final las dos destructivas, y van de
+           últimas a propósito: la unidad que las pasa ya no es la que se
+           despacha, y eso el punto lo dice en voz alta.
+           ------------------------------------------------------------------ */
+
+        {"id":"KAP_MANUAL","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"MANUAL AND PRINTED MATTER",
+                  "zh":"说明书与印刷品",
+                  "es":"MANUAL Y MATERIAL IMPRESO"},
+         "steps":[
+           {"en":"Take out everything printed that comes in the box","zh":"取出包装内的全部印刷品","es":"Saque todo lo impreso que venga en la caja"},
+           {"en":"Read it against the product in front of you","zh":"对照实物阅读核对","es":"Léalo con el producto delante"},
+           {"en":"Photograph the pages where something does not match","zh":"拍摄内容不符的页面","es":"Fotografíe las páginas donde algo no corresponda"}],
+         "points":[
+           {"section":{"en":"The manual is checked against the product","zh":"说明书须与实物核对","es":"El manual se revisa contra el producto"},
+            "help":{"en":"Not against another manual and not against the file. A manual that describes a button the product does not have, or that leaves out one it does have, is a fault of this unit even if it printed beautifully.",
+                    "zh":"不与其他说明书核对，也不与源文件核对。若说明书描述了产品不存在的按键，或遗漏了实际存在的按键，即使印刷精美，也属本批次产品的缺陷。",
+                    "es":"No contra otro manual ni contra el archivo. Un manual que describe un botón que el producto no tiene, o que se salta uno que sí tiene, es falla de esta unidad aunque haya impreso precioso."}},
+           {"id":"kap_man_present","code":"DOC-010","photo":true,
+            "label":{"en":"Everything printed is there","zh":"印刷品齐全","es":"Está todo lo impreso"},
+            "help":{"en":"Photograph the printed matter laid out together: manual, warranty and any leaflet. Say in the note if anything is missing.",
+                    "zh":"将说明书、保修卡及各类插页平铺拍摄。若有缺失，请在备注中说明。",
+                    "es":"Fotografíe el material impreso extendido junto: manual, garantía y cualquier volante. Diga en la nota si falta algo."}},
+           {"id":"kap_man_lang","code":"DOC-010",
+            "label":{"en":"In the agreed languages, and legible","zh":"语种符合约定且清晰可读","es":"En los idiomas acordados, y legible"},
+            "help":{"en":"Check that the ordered languages are there. Cut-off text, blurred printing, crooked pages or pages out of order are a fail.",
+                    "zh":"核对订单要求的语种是否齐全。文字被裁切、印刷模糊、页面歪斜或顺序错乱均判不合格。",
+                    "es":"Compruebe que estén los idiomas pedidos. Texto cortado, impresión borrosa, páginas torcidas o fuera de orden son falla."}},
+           {"id":"kap_man_match","code":"DOC-010",
+            "label":{"en":"What it describes is what the product does","zh":"所述内容与产品实际功能一致","es":"Lo que describe es lo que el producto hace"},
+            "help":{"en":"Go through the buttons and the modes in the manual one by one with the product in your hand. Every one described must exist and behave as it says. Say in the note which one does not.",
+                    "zh":"手持产品，逐一核对说明书中的按键与模式。所述各项均须存在且行为一致。若有不符，请在备注中注明。",
+                    "es":"Recorra uno por uno los botones y los modos del manual con el producto en la mano. Cada uno descrito debe existir y comportarse como dice. Diga en la nota cuál no."}},
+           {"id":"kap_man_model","code":"DOC-010",
+            "label":{"en":"The model and the brand are the right ones","zh":"型号与品牌无误","es":"El modelo y la marca son los correctos"},
+            "help":{"en":"The reference printed on the manual must match the one on the product label. A manual from the neighbouring model is the commonest mistake of all.",
+                    "zh":"说明书上印刷的型号须与产品标签一致。误装相邻型号说明书是最常见的错误。",
+                    "es":"La referencia impresa en el manual debe coincidir con la de la etiqueta del producto. Un manual del modelo vecino es el error más común de todos."}}]},
+
+        {"id":"KAP_STATIONS","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"STATIONS — RECEPTION AND PRESETS",
+                  "zh":"电台 — 接收与存台",
+                  "es":"EMISORAS — RECEPCIÓN Y MEMORIAS"},
+         "steps":[
+           {"en":"Run a full automatic scan of the band","zh":"执行一次全频段自动搜台","es":"Haga un barrido automático completo de la banda"},
+           {"en":"Count how many stations it stores","zh":"统计存入的电台数量","es":"Cuente cuántas emisoras guarda"},
+           {"en":"Step through them and listen to each one","zh":"逐台切换并试听","es":"Recórralas y escuche cada una"}],
+         "points":[
+           {"section":{"en":"The whole band, not one station","zh":"全频段，而非单一电台","es":"Toda la banda, no una emisora"},
+            "help":{"en":"One station tuned proves the receiver switches on. What is being checked here is that it hears across the whole band, that it stores what it finds and that it keeps it. Do the scan in the same place every time, otherwise the count cannot be compared between units.",
+                    "zh":"仅接收到一个电台只能说明收音功能可开启。本项要确认的是全频段接收能力、能否存台以及是否保持。每次搜台须在同一位置进行，否则电台数量无法在不同整机间比对。",
+                    "es":"Una emisora sintonizada demuestra que el receptor enciende. Lo que se comprueba aquí es que oiga en toda la banda, que guarde lo que encuentra y que lo conserve. Haga el barrido siempre en el mismo sitio, si no la cuenta no se puede comparar entre unidades."}},
+           {"id":"kap_sta_count","code":"FM-020","measure":{"unit":"emisoras","step":"1"},
+            "label":{"en":"Stations found in the automatic scan","zh":"自动搜台所得电台数","es":"Emisoras encontradas en el barrido"},
+            "help":{"en":"Write the number the scan stored. Record the value: it depends on where the factory is, so it is compared against the history of the same bench and not against a fixed figure.",
+                    "zh":"填写搜台存入的电台数量。记录数值：该数量取决于工厂所在位置，故应与同一工位的历史数据比对，而非与固定值比对。",
+                    "es":"Escriba el número que guardó el barrido. Anote el valor: depende de dónde esté la fábrica, así que se compara contra el histórico del mismo puesto y no contra una cifra fija."}},
+           {"id":"kap_sta_ends","code":"FM-020",
+            "label":{"en":"It receives at both ends of the band","zh":"频段两端均可接收","es":"Recibe en los dos extremos de la banda"},
+            "help":{"en":"Tune manually near the bottom of the band and near the top. A receiver that only works in the middle has an antenna or a tuning fault.",
+                    "zh":"分别在频段低端与高端手动调台。若仅中段可用，说明天线或调谐存在故障。",
+                    "es":"Sintonice a mano cerca del extremo bajo de la banda y cerca del alto. Un receptor que sólo funciona en el medio tiene falla de antena o de sintonía."}},
+           {"id":"kap_sta_clean","code":"FM-020",
+            "label":{"en":"The stored ones are heard, they are not noise","zh":"所存电台可正常收听，非杂音","es":"Las guardadas se oyen, no son ruido"},
+            "help":{"en":"Step through the stored stations one by one. A scan that stores empty frequencies is worse than one that stores few: the user goes through stations that are not there.",
+                    "zh":"逐台试听所存电台。若搜台存入空频点，比存台数量少更糟：用户会不断切换到并不存在的电台。",
+                    "es":"Recorra una por una las guardadas. Un barrido que guarda frecuencias vacías es peor que uno que guarda pocas: el usuario recorre emisoras que no están."}},
+           {"id":"kap_sta_keep","code":"FM-020",
+            "label":{"en":"The presets survive switching off","zh":"存台在关机后仍保留","es":"Las memorias sobreviven al apagado"},
+            "help":{"en":"Switch off, switch on and go back to FM. The stations must still be there, and it must come back on the last one it was on.",
+                    "zh":"关机后重新开机并返回收音模式。所存电台应仍在，且应停留在关机前的最后一个电台。",
+                    "es":"Apague, encienda y vuelva a FM. Las emisoras deben seguir ahí, y debe volver en la última en la que estaba."}}]},
+
+        {"id":"KAP_TRIPOD","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"TRIPOD MOUNT",
+                  "zh":"三脚架安装孔",
+                  "es":"SOPORTE PARA TRÍPODE"},
+         "steps":[
+           {"en":"Look inside the socket before mounting anything","zh":"安装前先检查插孔内部","es":"Mire dentro del receptáculo antes de montar nada"},
+           {"en":"Mount the product on the tripod","zh":"将产品安装在三脚架上","es":"Monte el producto en el trípode"},
+           {"en":"Push it by hand and watch what moves","zh":"用手推动并观察晃动情况","es":"Empújelo con la mano y mire qué se mueve"}],
+         "points":[
+           {"section":{"en":"What holds the weight","zh":"承重部位","es":"Lo que sostiene el peso"},
+            "help":{"en":"This socket takes the whole weight of the product above people's heads. It is not a finish item: a socket that gives way is the only fault in the plan that can hurt somebody.",
+                    "zh":"该插孔在人员头顶承受整机重量。它并非外观件：插孔失效是本计划中唯一可能造成人身伤害的故障。",
+                    "es":"Este receptáculo carga todo el peso del producto por encima de la cabeza de la gente. No es un tema de acabado: un receptáculo que cede es la única falla del plan que puede lastimar a alguien."}},
+           {"id":"kap_tri_socket","code":"EXT-012","photo":true,
+            "label":{"en":"Socket clean, whole and well fixed","zh":"插孔洁净、完好且固定牢靠","es":"Receptáculo limpio, íntegro y bien fijado"},
+            "help":{"en":"Photograph it from below. No burrs, no paint inside, no cracks around it and no play against the cabinet.",
+                    "zh":"从底部拍摄。不得有毛刺、内壁不得有油漆、周边不得开裂，且与箱体之间不得松动。",
+                    "es":"Fotografíelo desde abajo. Sin rebabas, sin pintura dentro, sin fisuras alrededor y sin juego contra el gabinete."}},
+           {"id":"kap_tri_fit","code":"EXT-012","photo":true,
+            "label":{"en":"It goes onto the tripod all the way down","zh":"可完全插入三脚架到底","es":"Entra en el trípode hasta el fondo"},
+            "help":{"en":"Mount it and photograph it mounted. It must slide in without forcing and sit right down. One that stops half way is holding on the side wall, not on the base.",
+                    "zh":"安装后拍摄安装状态。应无需用力即可滑入并完全到底。若中途卡住，则是靠侧壁受力而非底部支撑。",
+                    "es":"Móntelo y fotografíelo montado. Debe entrar sin forzar y asentar hasta abajo. Uno que se queda a media altura está apoyando en la pared lateral y no en la base."}},
+           {"id":"kap_tri_lock","code":"EXT-012",
+            "label":{"en":"The tripod screw grips and it does not turn","zh":"三脚架螺丝可锁紧且产品不旋转","es":"El tornillo del trípode agarra y no gira"},
+            "help":{"en":"Tighten it and try to turn the product by hand. It must not rotate. If it turns with the screw tight, the socket has no flat for the screw or it is worn.",
+                    "zh":"锁紧后用手尝试旋转产品，应无法转动。若锁紧后仍可转动，说明插孔缺少螺丝止转平面或已磨损。",
+                    "es":"Apriételo e intente girar el producto con la mano. No debe rotar. Si gira con el tornillo apretado, el receptáculo no tiene plano para el tornillo o está gastado."}},
+           {"id":"kap_tri_steady","code":"EXT-012",
+            "label":{"en":"Mounted, it does not wobble or creak","zh":"安装后无晃动、无异响","es":"Montado no cabecea ni cruje"},
+            "help":{"en":"Push the top of the product with your hand. It may lean with the tripod, but the product must not move against the tripod, and nothing may creak at the joint.",
+                    "zh":"用手推动产品顶部。随三脚架整体轻微摆动可接受，但产品与三脚架之间不得相对移动，接合处不得有异响。",
+                    "es":"Empuje la parte alta del producto con la mano. Puede inclinarse con el trípode, pero el producto no debe moverse contra el trípode, y nada puede crujir en la unión."}}]},
+
+        {"id":"KAP_NOISE_FLOOR","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"OWN NOISE IN EVERY MODE",
+                  "zh":"各模式下的本底噪声",
+                  "es":"RUIDO PROPIO EN CADA MODO"},
+         "steps":[
+           {"en":"Turn the volume up with no source playing","zh":"在无音源播放的状态下调高音量","es":"Suba el volumen sin ninguna fuente reproduciendo"},
+           {"en":"Go through every mode listening close to the driver","zh":"贴近喇叭逐一切换各模式细听","es":"Recorra todos los modos oyendo cerca del parlante"},
+           {"en":"Film the run through in a quiet place","zh":"在安静环境中录制整个过程","es":"Filme el recorrido en un sitio silencioso"}],
+         "points":[
+           {"section":{"en":"Silence is also a specification","zh":"静音同样属于技术要求","es":"El silencio también es una especificación"},
+            "help":{"en":"With no signal the product must be quiet. Hiss, hum or a whistle that appears in one mode and not in the others is not a nuisance, it is a fault located in that mode. Do this before the microphones: what a microphone adds cannot be judged over a product that is already making noise on its own.",
+                    "zh":"无信号输入时产品应保持安静。若某一模式出现嘶声、交流声或啸叫而其他模式没有，这不是使用体验问题，而是可定位到该模式的故障。本项须在麦克风测试之前进行：若产品自身已有噪声，便无法判断麦克风额外引入的噪声。",
+                    "es":"Sin señal, el producto debe estar callado. Un siseo, un zumbido o un pito que aparece en un modo y no en los otros no es una molestia, es una falla localizada en ese modo. Haga esto antes que los micrófonos: lo que agrega un micrófono no se puede juzgar sobre un producto que ya hace ruido solo."}},
+           {"id":"kap_noise_bt","code":"AUD-033",
+            "label":{"en":"Bluetooth — connected and with nothing playing","zh":"蓝牙 — 已连接且无播放","es":"Bluetooth — conectado y sin reproducir"},
+            "help":{"en":"Paired to a phone, playback stopped, volume at three quarters. Put your ear close to the driver: it must be quiet.",
+                    "zh":"与手机配对、停止播放、音量置于四分之三。将耳朵贴近喇叭：应保持安静。",
+                    "es":"Emparejado a un teléfono, reproducción detenida, volumen a tres cuartos. Acerque el oído al parlante: debe estar callado."}},
+           {"id":"kap_noise_usb","code":"AUD-033",
+            "label":{"en":"USB — inserted and stopped","zh":"USB — 已插入且已停止","es":"USB — insertado y detenido"},
+            "help":{"en":"The same, with the memory in and playback paused.",
+                    "zh":"插入 U 盘并暂停播放，同上。",
+                    "es":"Lo mismo, con la memoria puesta y la reproducción pausada."}},
+           {"id":"kap_noise_aux","code":"AUD-033",
+            "label":{"en":"AUX — cable connected with no signal","zh":"AUX — 已接线但无信号","es":"AUX — cable conectado sin señal"},
+            "help":{"en":"This is the one that catches most faults: the cable acts as an antenna. A hum here that is not in the other modes points at the ground of the input.",
+                    "zh":"该项最易暴露故障：连接线会起到天线作用。若此模式出现其他模式没有的交流声，问题指向输入端接地。",
+                    "es":"Ésta es la que más falla atrapa: el cable hace de antena. Un zumbido aquí que no está en los otros modos apunta a la tierra de la entrada."}},
+           {"id":"kap_noise_mic","code":"AUD-033",
+            "label":{"en":"Microphone input — cable in, nobody speaking","zh":"麦克风输入 — 已接线但无人讲话","es":"Entrada de micrófono — cable puesto, nadie hablando"},
+            "help":{"en":"With the microphone connected and its volume at three quarters, in silence. Some hiss is normal in a microphone preamp; a whistle or a hum is not.",
+                    "zh":"接入麦克风并将其音量置于四分之三，环境保持安静。话筒前置放大存在轻微嘶声属正常；出现啸叫或交流声则不正常。",
+                    "es":"Con el micrófono conectado y su volumen a tres cuartos, en silencio. Un siseo leve es normal en un previo de micrófono; un pito o un zumbido no."}},
+           {"id":"kap_noise_charge","code":"AUD-033",
+            "label":{"en":"It does not add noise while charging","zh":"充电过程中不增加噪声","es":"No agrega ruido mientras carga"},
+            "help":{"en":"Repeat any of the above with the AC connected. If a hum appears that was not there on battery, the fault is in the power supply and not in the audio.",
+                    "zh":"在接入 AC 的状态下重复上述任一项。若出现电池供电时没有的交流声，则故障在电源而非音频部分。",
+                    "es":"Repita cualquiera de las anteriores con el AC conectado. Si aparece un zumbido que no estaba con batería, la falla está en la fuente y no en el audio."}}]},
+
+        {"id":"KAP_WEAR","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"WEAR CYCLES — SWITCH AND SOCKETS",
+                  "zh":"耐久循环 — 开关与接口",
+                  "es":"CICLOS DE DESGASTE — SWITCH Y CONECTORES"},
+         "steps":[
+           {"en":"Do this last, when everything else is answered","zh":"待其余项目全部完成后再进行本项","es":"Haga esto de último, con todo lo demás ya respondido"},
+           {"en":"Twenty full on and off cycles","zh":"完整开关机二十次","es":"Veinte ciclos completos de encendido y apagado"},
+           {"en":"Twenty insertions in each socket","zh":"各接口插拔二十次","es":"Veinte inserciones en cada conector"}],
+         "points":[
+           {"section":{"en":"This unit is not shipped","zh":"本台不得出货","es":"Esta unidad no se despacha"},
+            "help":{"en":"These two checks leave the product different from how it arrived: the switch and the sockets have used up part of their life. Do them at the end, when nothing else is left to answer, and set the unit aside. If nobody says so, it gets shipped.",
+                    "zh":"这两项会改变产品的初始状态：开关与接口已消耗部分寿命。须在所有其他项目完成后进行，并将该整机隔离。若无人说明，该机将被误发出货。",
+                    "es":"Estas dos comprobaciones dejan el producto distinto de como llegó: el switch y los conectores gastaron parte de su vida. Hágalas al final, cuando no quede nada más por responder, y aparte la unidad. Si nadie lo dice, se despacha."}},
+           {"id":"kap_wear_cycles","code":"DUR-010",
+            "label":{"en":"Twenty on and off cycles with no failure","zh":"二十次开关机循环无异常","es":"Veinte ciclos de encendido y apagado sin falla"},
+            "help":{"en":"Switch on, wait for it to finish starting up, switch off, wait for it to finish shutting down. Twenty times. All twenty must start up complete, with their display and their melody. One that skips the start-up, comes up in the wrong mode or does not respond to the switch is a fail — say at which cycle.",
+                    "zh":"开机、待启动完成、关机、待关机完成，重复二十次。二十次均须完整启动，显示与提示音正常。若出现跳过启动、进入错误模式或按键无响应，判不合格——请注明发生在第几次。",
+                    "es":"Encienda, espere a que termine de arrancar, apague, espere a que termine de apagarse. Veinte veces. Las veinte deben arrancar completas, con su pantalla y su melodía. Una que se salte el arranque, entre en el modo equivocado o no responda al switch es falla — diga en cuál ciclo."}},
+           {"id":"kap_wear_switch","code":"DUR-010","photo":true,
+            "label":{"en":"The switch is left as it was","zh":"开关状态保持如初","es":"El switch queda como estaba"},
+            "help":{"en":"After the twenty cycles, photograph it and work it again. It must keep the same travel and the same click. One that has gone soft, sticks or stays half way is a fail.",
+                    "zh":"完成二十次循环后拍摄并再次操作。行程与手感应保持一致。若变软、卡滞或停在中间位置，判不合格。",
+                    "es":"Después de los veinte ciclos, fotografíelo y acciónelo otra vez. Debe conservar el mismo recorrido y el mismo clic. Uno que quedó blando, que se traba o que se queda a medio camino es falla."}},
+           {"id":"kap_wear_sockets","code":"DUR-011",
+            "label":{"en":"Twenty insertions in each socket","zh":"各接口插拔二十次","es":"Veinte inserciones en cada conector"},
+            "help":{"en":"USB, USB-C, AUX and the two microphone inputs. Twenty in and out in each one, without forcing. On the last one the connection must work exactly as it did on the first: if the sound cuts when the cable is moved, the socket loosened up.",
+                    "zh":"USB、USB-C、AUX 及两个麦克风输入口，每个插拔二十次，不得用力硬插。第二十次的连接效果须与第一次完全一致：若晃动线材时声音中断，说明接口已松动。",
+                    "es":"USB, USB-C, AUX y las dos entradas de micrófono. Veinte entradas y salidas en cada uno, sin forzar. En la última la conexión debe funcionar igual que en la primera: si el sonido se corta al mover el cable, el conector se aflojó."}},
+           {"id":"kap_wear_hold","code":"DUR-011",
+            "label":{"en":"The sockets still hold the plug","zh":"接口仍能夹持插头","es":"Los conectores siguen reteniendo el conector"},
+            "help":{"en":"With a cable in each one, turn the product upside down. Nothing may fall out on its own. A socket that lets go of the plug after twenty insertions will let go on the first day of use.",
+                    "zh":"各接口插入线材后将产品倒置。不得有任何线材自行脱落。若接口在二十次插拔后已无法夹持插头，则在实际使用第一天就会脱落。",
+                    "es":"Con un cable en cada uno, ponga el producto boca abajo. Nada puede salirse solo. Un conector que suelta el enchufe tras veinte inserciones lo va a soltar el primer día de uso."}}]},
+
+        /* ------------------------------------------------------------------
+           KAP206 · tanda 5 — las seis que estaban esperando criterio.
+           Ninguna trae número aprobado todavía, así que están escritas como
+           registro declarado: el punto le dice al operario, en voz alta, que
+           anote y no juzgue. Es más honesto que inventar una cifra, y deja el
+           dato tomado desde la primera unidad para que el criterio se ponga
+           después con histórico y no de memoria.
+           Cuando lleguen los números, lo único que cambia es el texto de la
+           ayuda — los puntos y las casillas ya quedan hechos.
+           ------------------------------------------------------------------ */
+
+        {"id":"KAP_PSU_SWEEP","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"POWER SUPPLY — VOLTAGE SWEEP 0 TO 300 V",
+                  "zh":"电源 — 0 至 300 V 电压扫描",
+                  "es":"FUENTE — BARRIDO DE TENSIÓN 0 A 300 V"},
+         "steps":[
+           {"en":"Feed the product from the variable source, with the electronic load connected","zh":"由可调电源供电，并接入电子负载","es":"Alimente el producto desde la fuente variable, con la carga electrónica conectada"},
+           {"en":"Take the voltage up from 0 to 300 V without jumps","zh":"将电压自 0 平稳升至 300 V","es":"Suba la tensión de 0 a 300 V sin saltos"},
+           {"en":"Then bring it back down the same way","zh":"随后以同样方式降回","es":"Después bájela de la misma forma"}],
+         "points":[
+           {"section":{"en":"Read this before starting","zh":"开始前请阅读","es":"Lea esto antes de empezar"},
+            "help":{"en":"HOKLAN has not yet given the bench setup for this test — how the electronic load connects, in what mode and with what value — nor the list of what has to be watched along the sweep. Until that arrives, this test is a declared record: the operator observes, writes down what happened and does not judge. Follow the previous Excel checklist for the setup and say in the note which one you used, because two different setups give two figures that cannot be compared.",
+                    "zh":"HOKLAN 尚未提供本项的台架接线方式——电子负载如何连接、工作模式及数值——也未提供扫描过程中的观察清单。在此之前，本项作为申报记录：操作员只观察、记录实际情况，不作判定。请按此前的 Excel 检查表进行接线，并在备注中注明所采用的方式，因为不同接线方式所得数据无法比对。",
+                    "es":"HOKLAN todavía no ha entregado el montaje de banco de esta prueba —cómo se conecta la carga electrónica, en qué modo y con qué valor— ni la lista de qué hay que observar durante el barrido. Mientras eso llega, esta prueba es un registro declarado: el operario observa, anota lo que pasó y no juzga. Siga el checklist de Excel anterior para el montaje y diga en la nota cuál usó, porque dos montajes distintos dan dos cifras que no se pueden comparar."}},
+           {"id":"kap_psu_setup","code":"PWR-021","photo":true,
+            "label":{"en":"Photo of the bench setup used","zh":"所用台架接线照片","es":"Foto del montaje de banco utilizado"},
+            "help":{"en":"Photograph the whole setup before starting: source, product, load and where each thing is connected. This photo is what will let the next inspection be repeated the same way.",
+                    "zh":"开始前拍摄完整接线：电源、产品、负载及各连接点。该照片是下次检验能够以相同方式复现的依据。",
+                    "es":"Fotografíe el montaje completo antes de empezar: fuente, producto, carga y dónde se conecta cada cosa. Esta foto es la que va a permitir que la próxima inspección se repita igual."}},
+           {"id":"kap_psu_on","code":"PWR-021","measure":{"unit":"V","step":"1"},
+            "label":{"en":"Voltage at which the product comes on","zh":"产品启动电压","es":"Tensión a la que el producto enciende"},
+            "help":{"en":"Going up from 0, write the voltage at which it starts up on its own. Record the value; there is no approved figure yet.",
+                    "zh":"自 0 上升过程中，记录产品自行启动时的电压。记录数值；目前尚无批准值。",
+                    "es":"Subiendo desde 0, escriba la tensión a la que arranca por sí solo. Anote el valor; todavía no hay cifra aprobada."}},
+           {"id":"kap_psu_off","code":"PWR-021","measure":{"unit":"V","step":"1"},
+            "label":{"en":"Voltage at which it switches off coming down","zh":"下降过程中产品关机电压","es":"Tensión a la que se apaga al bajar"},
+            "help":{"en":"Coming down from 300, write the voltage at which it stops working. It should be lower than the one above: if it switches off at the same voltage it comes on, it will flicker on and off around that number.",
+                    "zh":"自 300 下降过程中，记录产品停止工作时的电压。该值应低于上述启动电压：若两者相同，产品将在该电压附近反复启停。",
+                    "es":"Bajando desde 300, escriba la tensión a la que deja de funcionar. Debería ser menor que la de arriba: si se apaga en la misma tensión en que enciende, va a entrar y salir sin parar alrededor de ese número."}},
+           {"id":"kap_psu_hold","code":"PWR-021",
+            "label":{"en":"It survives the whole sweep — no smoke, no smell, no bang","zh":"完整扫描后无冒烟、无异味、无爆响","es":"Sobrevive al barrido completo — sin humo, sin olor, sin estallido"},
+            "help":{"en":"This is the only criterion that does exist today and it is not negotiable: the product may switch off, but nothing may burn, smell, swell or make a noise at any point of the sweep, going up or coming down. If it does, stop, do not go on with the plan and set the unit aside.",
+                    "zh":"这是目前唯一已确立且不可协商的判定标准：产品可以关机，但在升压或降压的任何阶段均不得出现烧毁、异味、鼓胀或异响。若出现，立即停止，不再继续计划并隔离该整机。",
+                    "es":"Éste es el único criterio que sí existe hoy y no se negocia: el producto puede apagarse, pero nada puede quemarse, oler, hincharse ni sonar en ningún punto del barrido, ni subiendo ni bajando. Si ocurre, deténgase, no siga con el plan y aparte la unidad."}},
+           {"id":"kap_psu_back","code":"PWR-021",
+            "label":{"en":"It works normally again at nominal voltage","zh":"恢复额定电压后可正常工作","es":"Vuelve a funcionar normal en la tensión nominal"},
+            "help":{"en":"When the sweep is over, put it back on its normal voltage and play something. It must behave exactly as it did before the test.",
+                    "zh":"扫描结束后恢复正常电压并播放音频，产品行为应与测试前完全一致。",
+                    "es":"Terminado el barrido, póngalo otra vez en su tensión normal y reproduzca algo. Debe comportarse exactamente igual que antes de la prueba."}}]},
+
+        {"id":"KAP_CURVES","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"SPL AND IMPEDANCE CURVES",
+                  "zh":"声压级与阻抗曲线",
+                  "es":"CURVAS DE SPL E IMPEDANCIA"},
+         "steps":[
+           {"en":"Mount the product on the audio bench with the analyser","zh":"将产品置于音频台架并连接分析仪","es":"Monte el producto en el banco de audio con el analizador"},
+           {"en":"Run the SPL against frequency sweep","zh":"进行声压级—频率扫描","es":"Corra el barrido de SPL contra frecuencia"},
+           {"en":"Then run the impedance against frequency one","zh":"随后进行阻抗—频率扫描","es":"Después el de impedancia contra frecuencia"}],
+         "points":[
+           {"section":{"en":"Two curves, one bench","zh":"两条曲线，同一台架","es":"Dos curvas, un solo banco"},
+            "help":{"en":"A curve is not written into a box: what is uploaded is the capture the instrument produces. HOKLAN has not yet said which analyser produces them nor what the acceptance mask is, so today this is a declared record: the operator uploads the curve and does not judge it. What can be judged in the workplace is that the curve exists, that it is legible and that it belongs to this unit.",
+                    "zh":"曲线无法填入数值框：所上传的是仪器输出的图像。HOKLAN 尚未指定所用分析仪，也未给出合格模板，因此本项目前为申报记录：操作员只上传曲线，不作判定。可在现场判定的是曲线确实存在、清晰可读且确属本台产品。",
+                    "es":"Una curva no se escribe en un recuadro: lo que se sube es la captura que produce el instrumento. HOKLAN todavía no ha dicho qué analizador las produce ni cuál es la máscara de aceptación, así que hoy esto es un registro declarado: el operario sube la curva y no la juzga. Lo que sí se puede juzgar en el puesto es que la curva exista, que se lea y que sea de esta unidad."}},
+           {"id":"kap_curve_setup","code":"AUD-034","photo":true,
+            "label":{"en":"Photo of the measurement setup","zh":"测量接线照片","es":"Foto del montaje de medición"},
+            "help":{"en":"Product, microphone and analyser in one shot, with the distance between microphone and product visible. Two different setups give two different curves of the same speaker.",
+                    "zh":"一张照片中包含产品、传声器与分析仪，并可看出传声器与产品的距离。不同接线方式会使同一喇叭得出不同曲线。",
+                    "es":"Producto, micrófono y analizador en una sola foto, y que se vea la distancia entre micrófono y producto. Dos montajes distintos dan dos curvas distintas del mismo parlante."}},
+           {"id":"kap_curve_spl","code":"AUD-034","photo":true,
+            "label":{"en":"SPL against frequency curve","zh":"声压级—频率曲线","es":"Curva de SPL contra frecuencia"},
+            "help":{"en":"Upload the analyser capture with the whole sweep visible and the axes legible. A photo of the screen is acceptable if the capture cannot be exported.",
+                    "zh":"上传分析仪截图，须包含完整扫描曲线且坐标轴清晰可读。若无法导出截图，可拍摄屏幕照片替代。",
+                    "es":"Suba la captura del analizador con todo el barrido visible y los ejes legibles. Una foto de la pantalla sirve si la captura no se puede exportar."}},
+           {"id":"kap_curve_imp","code":"AUD-034","photo":true,
+            "label":{"en":"Impedance against frequency curve","zh":"阻抗—频率曲线","es":"Curva de impedancia contra frecuencia"},
+            "help":{"en":"The same, for impedance. This is the one that shows whether the box is sealed and whether the driver is the one specified.",
+                    "zh":"阻抗曲线同上。该曲线可反映箱体是否密封，以及喇叭是否为指定型号。",
+                    "es":"Lo mismo, para impedancia. Ésta es la que muestra si la caja está sellada y si el parlante es el especificado."}},
+           {"id":"kap_curve_fs","code":"AUD-034","measure":{"unit":"Hz","step":"1"},
+            "label":{"en":"Frequency of the impedance peak","zh":"阻抗峰值频率","es":"Frecuencia del pico de impedancia"},
+            "help":{"en":"Read it off the curve you just uploaded and write it here. It is one number taken from the picture, and it is what lets two units be compared without opening the captures one by one.",
+                    "zh":"自刚上传的曲线中读取并填写。该数值取自图像，可用于在不逐一打开截图的情况下比对不同整机。",
+                    "es":"Léalo de la curva que acaba de subir y escríbalo aquí. Es un número sacado de la imagen, y es lo que permite comparar dos unidades sin abrir las capturas una por una."}},
+           {"id":"kap_curve_id","code":"AUD-034",
+            "label":{"en":"The capture identifies this unit","zh":"截图可识别本台产品","es":"La captura identifica a esta unidad"},
+            "help":{"en":"The date, or the serial, or a note in the capture itself. A curve that could be from any unit does not serve as evidence of this one.",
+                    "zh":"截图中须含日期、序列号或标注。若无法确认所属整机，该曲线不能作为本台的证据。",
+                    "es":"La fecha, o el serial, o una nota en la propia captura. Una curva que podría ser de cualquier unidad no sirve como evidencia de ésta."}}]},
+
+        {"id":"KAP_SPL_FREQ","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"SPL AT SIX FREQUENCIES",
+                  "zh":"六个频点的声压级",
+                  "es":"SPL EN SEIS FRECUENCIAS"},
+         "steps":[
+           {"en":"Keep the same setup as the previous test","zh":"保持与上一测试相同的接线","es":"Mantenga el mismo montaje de la prueba anterior"},
+           {"en":"Feed one tone at a time at the same level","zh":"以相同电平逐一输入单频信号","es":"Inyecte un tono cada vez, al mismo nivel"},
+           {"en":"Write down the SPL of each one","zh":"记录每个频点的声压级","es":"Anote el SPL de cada uno"}],
+         "points":[
+           {"section":{"en":"Six readings, one measurement","zh":"六次读数，同一项测量","es":"Seis lecturas, una sola medición"},
+            "help":{"en":"These six boxes are one measurement done six times, not six questions: same setup, same distance, same input level, only the tone changes. Do it right after the curves so as not to move the microphone. The frequencies below are the ones HOKLAN has not yet confirmed — they are the usual set and the point is already built; if the list is another one, only the labels change. There is no minimum per frequency yet: record and do not judge.",
+                    "zh":"这六个数值框是同一项测量重复六次，而非六道题：接线、距离与输入电平均相同，仅频率改变。应紧接曲线测试进行，以免移动传声器。以下频点尚待 HOKLAN 确认——目前采用常规频点，点位已建好；若清单不同，仅需更改标签。各频点暂无最小值要求：只记录，不判定。",
+                    "es":"Estos seis recuadros son una sola medición hecha seis veces, no seis preguntas: mismo montaje, misma distancia, mismo nivel de entrada, sólo cambia el tono. Hágalo justo después de las curvas para no mover el micrófono. Las frecuencias de abajo son las que HOKLAN todavía no ha confirmado — son el juego habitual y el punto ya queda armado; si la lista es otra, sólo cambian los rótulos. Todavía no hay mínimo por frecuencia: anote y no juzgue."}},
+           {"id":"kap_spl_setup","code":"AUD-035","photo":true,
+            "label":{"en":"Photo of the setup and the input level used","zh":"接线及所用输入电平照片","es":"Foto del montaje y del nivel de entrada usado"},
+            "help":{"en":"One photo where the distance and the generator level can be seen. Without those two numbers the six readings cannot be compared with anything.",
+                    "zh":"一张可看出距离与信号发生器电平的照片。缺少这两项数据，六个读数将无法与任何数据比对。",
+                    "es":"Una foto donde se vea la distancia y el nivel del generador. Sin esos dos datos las seis lecturas no se comparan con nada."}},
+           {"id":"kap_spl_100","code":"AUD-035","measure":{"unit":"dB","step":"0.1"},
+            "label":{"en":"SPL at 100 Hz","zh":"100 Hz 声压级","es":"SPL a 100 Hz"},
+            "help":{"en":"Low end. Record the value.",
+                    "zh":"低频段。记录数值。",
+                    "es":"Zona grave. Anote el valor."}},
+           {"id":"kap_spl_250","code":"AUD-035","measure":{"unit":"dB","step":"0.1"},
+            "label":{"en":"SPL at 250 Hz","zh":"250 Hz 声压级","es":"SPL a 250 Hz"},
+            "help":{"en":"Record the value.","zh":"记录数值。","es":"Anote el valor."}},
+           {"id":"kap_spl_500","code":"AUD-035","measure":{"unit":"dB","step":"0.1"},
+            "label":{"en":"SPL at 500 Hz","zh":"500 Hz 声压级","es":"SPL a 500 Hz"},
+            "help":{"en":"Record the value.","zh":"记录数值。","es":"Anote el valor."}},
+           {"id":"kap_spl_1k","code":"AUD-035","measure":{"unit":"dB","step":"0.1"},
+            "label":{"en":"SPL at 1 kHz","zh":"1 kHz 声压级","es":"SPL a 1 kHz"},
+            "help":{"en":"The reference frequency. If only one of the six is going to be compared between units, it is this one.",
+                    "zh":"基准频点。若六个频点中仅取一个用于整机间比对，即为此频点。",
+                    "es":"La frecuencia de referencia. Si de las seis sólo se va a comparar una entre unidades, es ésta."}},
+           {"id":"kap_spl_4k","code":"AUD-035","measure":{"unit":"dB","step":"0.1"},
+            "label":{"en":"SPL at 4 kHz","zh":"4 kHz 声压级","es":"SPL a 4 kHz"},
+            "help":{"en":"Where the tweeter is already doing the work.",
+                    "zh":"该频点已由高音单元承担输出。",
+                    "es":"Donde el tweeter ya está haciendo el trabajo."}},
+           {"id":"kap_spl_10k","code":"AUD-035","measure":{"unit":"dB","step":"0.1"},
+            "label":{"en":"SPL at 10 kHz","zh":"10 kHz 声压级","es":"SPL a 10 kHz"},
+            "help":{"en":"Top end. A reading much lower than the rest here usually means the tweeter is not connected.",
+                    "zh":"高频端。若该点读数明显低于其他频点，通常说明高音单元未接通。",
+                    "es":"Extremo agudo. Una lectura muy por debajo del resto aquí suele significar que el tweeter no está conectado."}}]},
+
+        {"id":"KAP_BAT_CAP","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],"first":2.4,
+         "long":{"t":{"en":"This test is still running","zh":"本测试仍在进行中","es":"Esta prueba sigue en curso"},
+                 "n":{"en":"Leave the load discharging and carry on with the rest of the plan. Come back when it finishes.",
+                      "zh":"让负载继续放电，同时完成计划中的其他测试，结束后再回来填写。",
+                      "es":"Deje la carga descargando y siga con el resto del plan. Vuelva cuando termine."}},
+         "label":{"en":"BATTERY PACK CAPACITY",
+                  "zh":"电池组容量",
+                  "es":"CAPACIDAD DEL PACK"},
+         "steps":[
+           {"en":"Charge the pack fully and take it out of the product","zh":"将电池组充满后从产品中取出","es":"Cargue el pack a fondo y sáquelo del producto"},
+           {"en":"Discharge it on the electronic load at constant current","zh":"以恒流方式在电子负载上放电","es":"Descárguelo en la carga electrónica a corriente constante"},
+           {"en":"Write down the current used and the capacity obtained","zh":"记录所用电流与所得容量","es":"Anote la corriente usada y la capacidad obtenida"}],
+         "points":[
+           {"section":{"en":"The current has to be written down","zh":"必须记录放电电流","es":"La corriente hay que anotarla"},
+            "help":{"en":"HOKLAN has not yet given the discharge current nor the expected capacity, so this is a declared record. But there is one thing that is not optional: writing down the current used. A capacity measured at 1 A and another at 5 A give different figures for the same pack, so a capacity without its current cannot be compared between inspections and is worth nothing.",
+                    "zh":"HOKLAN 尚未提供放电电流与期望容量，因此本项为申报记录。但有一点不可省略：必须记录所用电流。同一电池组在 1 A 与 5 A 下测得的容量不同，因此不注明电流的容量数据无法在不同检验间比对，等于无效。",
+                    "es":"HOKLAN todavía no ha entregado la corriente de descarga ni la capacidad esperada, así que esto es un registro declarado. Pero hay algo que no es opcional: anotar la corriente usada. Una capacidad medida a 1 A y otra a 5 A dan cifras distintas del mismo pack, así que una capacidad sin su corriente no se puede comparar entre inspecciones y no vale nada."}},
+           {"id":"kap_cap_current","code":"BAT-024","measure":{"unit":"A","step":"0.1"},
+            "label":{"en":"Discharge current used","zh":"所用放电电流","es":"Corriente de descarga usada"},
+            "help":{"en":"Whatever the bench was set to. Write it before the capacity, because it is what gives the capacity its meaning.",
+                    "zh":"填写台架实际设定值。应先于容量填写，因为它决定容量数据的意义。",
+                    "es":"La que se haya puesto en el banco. Escríbala antes que la capacidad, porque es lo que le da sentido."}},
+           {"id":"kap_cap_value","code":"BAT-024","photo":true,"measure":{"unit":"mAh","step":"1"},
+            "label":{"en":"Capacity obtained","zh":"所得容量","es":"Capacidad obtenida"},
+            "help":{"en":"Photograph the load reading at the end of the discharge and write the figure. Record the value: there is no approved capacity yet.",
+                    "zh":"放电结束时拍摄负载读数并填写数值。记录数值：目前尚无批准容量。",
+                    "es":"Fotografíe la lectura de la carga al terminar la descarga y escriba la cifra. Anote el valor: todavía no hay capacidad aprobada."}},
+           {"id":"kap_cap_declared","code":"BAT-024","photo":true,
+            "label":{"en":"Capacity declared on the pack label","zh":"电池组标签标称容量","es":"Capacidad declarada en la etiqueta del pack"},
+            "help":{"en":"Photograph the label. What matters most here is not the figure obtained but that it is not far below what the pack says it is: a pack that claims more than it delivers is a supplier problem, not a bench one.",
+                    "zh":"拍摄标签。本项关键并非实测数值，而是实测值不应明显低于标称值：标称高于实际输出属供应商问题，而非台架问题。",
+                    "es":"Fotografíe la etiqueta. Lo que más importa aquí no es la cifra obtenida sino que no esté muy por debajo de lo que el pack dice ser: un pack que declara más de lo que entrega es un problema de proveedor, no de banco."}},
+           {"id":"kap_cap_temp","code":"BAT-024",
+            "label":{"en":"It does not heat up or swell during the discharge","zh":"放电过程中不发热、不鼓胀","es":"No se calienta ni se hincha durante la descarga"},
+            "help":{"en":"Check it by hand a few times along the run. This is the criterion that does exist: warmth you cannot keep your hand on, a smell or any swelling stops the test and the unit is set aside.",
+                    "zh":"放电过程中多次用手检查。此为已确立的判定标准：若发热至手无法停留、出现异味或任何鼓胀，须终止测试并隔离该整机。",
+                    "es":"Revíselo con la mano varias veces a lo largo de la corrida. Éste sí es criterio: un calor en el que no se puede dejar la mano, un olor o cualquier hinchazón detienen la prueba y la unidad se aparta."}}]},
+
+        {"id":"KAP_USB_OUT","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"USB OUTPUT FOR CHARGING A PHONE",
+                  "zh":"USB 手机充电输出",
+                  "es":"SALIDA USB PARA CARGAR CELULAR"},
+         "steps":[
+           {"en":"Measure the voltage with nothing connected","zh":"空载状态下测量电压","es":"Mida la tensión sin nada conectado"},
+           {"en":"Connect the electronic load and measure again","zh":"接入电子负载后再次测量","es":"Conecte la carga electrónica y mida otra vez"},
+           {"en":"Then try it with a real phone","zh":"随后用实际手机验证","es":"Después pruébelo con un teléfono real"}],
+         "points":[
+           {"section":{"en":"Loaded and unloaded are two different things","zh":"带载与空载是两回事","es":"En vacío y con carga son dos cosas distintas"},
+            "help":{"en":"HOKLAN has not yet given the expected voltage and current nor the tolerance, so the figures are a declared record. But the two readings are taken anyway, and they are taken separately on purpose: an output that gives 5 V with nothing connected can drop to 4.2 V with 2 A on it, and that is exactly what this test is for. A single reading in the air proves nothing.",
+                    "zh":"HOKLAN 尚未提供期望电压、电流及公差，故相关数值作为申报记录。但两次读数仍须进行，且有意分开测量：空载时输出 5 V 的接口，在 2 A 负载下可能跌至 4.2 V，而这正是本测试的目的。仅有空载读数无法说明任何问题。",
+                    "es":"HOKLAN todavía no ha entregado el voltaje y la corriente esperados ni la tolerancia, así que las cifras son un registro declarado. Pero las dos lecturas se toman igual, y se toman por separado a propósito: una salida que da 5 V sin nada conectado puede caerse a 4,2 V con 2 A encima, y eso es justo para lo que sirve esta prueba. Una sola lectura en el aire no demuestra nada."}},
+           {"id":"kap_usbo_open","code":"PWR-022","photo":true,"measure":{"unit":"V","step":"0.01"},
+            "label":{"en":"Voltage with no load","zh":"空载电压","es":"Tensión en vacío"},
+            "help":{"en":"Multimeter on the socket, nothing connected. Photograph the reading.",
+                    "zh":"万用表接于接口，不接任何负载。拍摄读数。",
+                    "es":"Multímetro en el conector, nada conectado. Fotografíe la lectura."}},
+           {"id":"kap_usbo_load","code":"PWR-022","photo":true,"measure":{"unit":"V","step":"0.01"},
+            "label":{"en":"Voltage with the load connected","zh":"带载电压","es":"Tensión con la carga conectada"},
+            "help":{"en":"With the electronic load drawing current. Photograph the reading and write in the note the current at which it was measured — without it the two figures cannot be compared with the next unit.",
+                    "zh":"在电子负载抽取电流的状态下测量。拍摄读数，并在备注中注明测量电流——缺少该数据，两个数值将无法与下一台比对。",
+                    "es":"Con la carga electrónica pidiendo corriente. Fotografíe la lectura y escriba en la nota a qué corriente se midió — sin eso las dos cifras no se comparan con la unidad siguiente."}},
+           {"id":"kap_usbo_amp","code":"PWR-022","photo":true,"measure":{"unit":"A","step":"0.01"},
+            "label":{"en":"Current it delivers before dropping out","zh":"跌落前可输出的电流","es":"Corriente que entrega antes de caerse"},
+            "help":{"en":"Raise the load until the voltage falls or the output cuts off, and write the current at that point. Record the value.",
+                    "zh":"逐步增大负载直至电压跌落或输出切断，记录该点电流。记录数值。",
+                    "es":"Suba la carga hasta que la tensión se caiga o la salida corte, y escriba la corriente en ese punto. Anote el valor."}},
+           {"id":"kap_usbo_phone","code":"PWR-022",
+            "label":{"en":"A real phone charges","zh":"实际手机可正常充电","es":"Un teléfono real carga"},
+            "help":{"en":"This is the criterion that does exist: connect a phone and it must show that it is charging, and go on charging for five minutes without cutting out. Whatever the numbers say, if the phone does not charge, the output does not work.",
+                    "zh":"此为已确立的判定标准：接入手机后应显示正在充电，并持续充电五分钟不中断。无论数值如何，若手机无法充电，则该输出功能不合格。",
+                    "es":"Éste sí es criterio: conecte un teléfono y debe indicar que está cargando, y seguir cargando cinco minutos sin cortarse. Digan lo que digan los números, si el teléfono no carga, la salida no sirve."}}]},
+
+        {"id":"KAP_DROP","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"DROP TEST IN ITS BOX",
+                  "zh":"包装跌落测试",
+                  "es":"CAÍDA DEL PRODUCTO EN SU CAJA"},
+         "steps":[
+           {"en":"Do this last of all, after every other test","zh":"本项须在所有其他测试完成后最后进行","es":"Haga esto de último de todo, después de cualquier otra prueba"},
+           {"en":"Weigh the packed product and work out the height","zh":"称量包装后总重并据此确定跌落高度","es":"Pese el producto empacado y saque la altura"},
+           {"en":"Drop it, then open it and check the product","zh":"跌落后开箱检查产品","es":"Déjelo caer, ábralo y revise el producto"}],
+         "points":[
+           {"section":{"en":"This unit is not shipped, and the height is not invented","zh":"本台不得出货，跌落高度不得自行拟定","es":"Esta unidad no se despacha, y la altura no se inventa"},
+            "help":{"en":"Two things about this test. The first: whatever happens, the unit that is dropped is set aside and does not go to the customer. If nobody says so, it gets shipped. The second: HOKLAN has not yet said which standard is followed, and the height comes from a weight-to-height table that is different in each one — ISTA, ASTM D5276, the customer's own. Until the table arrives, write down the height you used and where you got it from. A drop from an invented height neither passes nor fails anything.",
+                    "zh":"本测试有两点须注意。其一：无论结果如何，跌落测试的整机须隔离，不得交付客户。若无人说明，该机将被误发出货。其二：HOKLAN 尚未指定所遵循的标准，而跌落高度取自重量—高度对照表，各标准的表格互不相同——ISTA、ASTM D5276 或客户自有标准。在对照表提供之前，请记录所用高度及其来源。自行拟定高度的跌落测试，既不能判合格也不能判不合格。",
+                    "es":"Dos cosas de esta prueba. La primera: pase lo que pase, la unidad que se deja caer se aparta y no va al cliente. Si nadie lo dice, se despacha. La segunda: HOKLAN todavía no ha dicho qué norma se sigue, y la altura sale de una tabla de peso a altura que es distinta en cada una — ISTA, ASTM D5276, la del propio cliente. Mientras la tabla llega, anote la altura que usó y de dónde la sacó. Una caída desde una altura inventada no aprueba ni reprueba nada."}},
+           {"id":"kap_drop_weight","code":"PKG-010","measure":{"unit":"kg","step":"0.1"},
+            "label":{"en":"Weight of the packed product","zh":"包装后总重","es":"Peso del producto empacado"},
+            "help":{"en":"With everything inside and the box closed. This is the number the height comes out of.",
+                    "zh":"内含全部附件且封箱状态下称重。跌落高度由该数值确定。",
+                    "es":"Con todo dentro y la caja cerrada. Es el número del que sale la altura."}},
+           {"id":"kap_drop_height","code":"PKG-010","measure":{"unit":"cm","step":"1"},
+            "label":{"en":"Height used","zh":"所用跌落高度","es":"Altura utilizada"},
+            "help":{"en":"Write the height and say in the note which table or standard you took it from. Without that reference the figure cannot be repeated in the next inspection.",
+                    "zh":"填写高度，并在备注中注明所依据的表格或标准。缺少该依据，下次检验无法复现。",
+                    "es":"Escriba la altura y diga en la nota de qué tabla o norma la sacó. Sin esa referencia la cifra no se puede repetir en la próxima inspección."}},
+           {"id":"kap_drop_faces","code":"PKG-010","photo":true,
+            "label":{"en":"Drops done — faces and corners","zh":"已完成的跌落 — 面与角","es":"Caídas realizadas — caras y esquinas"},
+            "help":{"en":"Photograph the box before dropping it and say in the note how many drops you did and onto which faces. One flat drop is not the same as the corner, edge and face sequence, and the results are not comparable.",
+                    "zh":"跌落前拍摄外箱，并在备注中注明跌落次数及着地面。单次平面跌落与角、棱、面顺序跌落不同，结果不可比对。",
+                    "es":"Fotografíe la caja antes de dejarla caer y diga en la nota cuántas caídas hizo y sobre qué caras. Una sola caída plana no es lo mismo que la secuencia de esquina, arista y cara, y los resultados no son comparables."}},
+           {"id":"kap_drop_box","code":"PKG-010","photo":true,
+            "label":{"en":"State of the box after the drop","zh":"跌落后外箱状态","es":"Estado de la caja después de la caída"},
+            "help":{"en":"Photograph it from the face that took the blow. The box may be marked — that is its job — but it must not open, split at a seam or let the product move inside.",
+                    "zh":"从受冲击面拍摄。外箱可留有痕迹——这正是其作用——但不得开裂、接缝崩开或使产品在箱内移动。",
+                    "es":"Fotografíela por la cara que recibió el golpe. La caja puede quedar marcada — para eso está — pero no debe abrirse, reventarse por una unión ni dejar que el producto se mueva dentro."}},
+           {"id":"kap_drop_product","code":"PKG-010","photo":true,
+            "label":{"en":"The product works and has nothing loose","zh":"产品功能正常且无松动件","es":"El producto funciona y no tiene nada suelto"},
+            "help":{"en":"Open it, photograph the product and switch it on. This is the criterion that does exist: it must start up, play and have nothing rattling inside when it is shaken. Cracks, a loose grille or a driver that has moved are a fail even if it still sounds.",
+                    "zh":"开箱、拍摄产品并开机。此为已确立的判定标准：产品应能正常启动、播放，摇晃时内部无异响。若出现裂纹、网罩松动或喇叭移位，即使仍能出声也判不合格。",
+                    "es":"Ábrala, fotografíe el producto y enciéndalo. Éste sí es criterio: debe arrancar, sonar y no tener nada suelto dentro al agitarlo. Fisuras, una rejilla despegada o un parlante que se movió son falla aunque siga sonando."}}]},
+
+        /* ------------------------------------------------------------------
+           KAP206 · tanda 6 — los micrófonos.
+           Estaban propuestas para heredarse del plan de LESHENG, y al leerlo
+           de cerca no sirve: aquel plan está escrito contra un micrófono
+           concreto —cuatro botones contados de arriba abajo, CH# en pantalla,
+           enlace por IR— y `per_mic`. Traerlo aquí pondría al operario
+           instrucciones de un producto que no tiene en la mano. Van escritas
+           propias y en términos del sistema, no de sus botones.
+           ------------------------------------------------------------------ */
+
+        {"id":"KAP_MIC_LINK","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"MICROPHONES — POWER-UP AND LINK",
+                  "zh":"麦克风 — 开机与配对",
+                  "es":"MICRÓFONOS — ENCENDIDO Y ENLACE"},
+         "steps":[
+           {"en":"Switch on the speaker first, then each microphone","zh":"先开启音箱，再逐支开启麦克风","es":"Encienda primero el parlante y después cada micrófono"},
+           {"en":"Wait without touching anything and time the link","zh":"不作任何操作，等待并计时配对过程","es":"Espere sin tocar nada y cronometre el enlace"},
+           {"en":"Speak into each one to confirm it is heard","zh":"逐支说话确认可正常收音","es":"Hable por cada uno para confirmar que se oye"}],
+         "points":[
+           {"section":{"en":"It links on its own or it does not link","zh":"要么自动配对，要么视为未配对","es":"Se enlaza solo o no se enlaza"},
+            "help":{"en":"The user switches the microphone on and speaks. There is no pairing step in between, and there should not be one: a microphone that needs a button combination to find its receiver has already failed for whoever buys it. Everything here is measured with nothing else connected to the 6.3 mm inputs.",
+                    "zh":"用户开机后即可讲话，中间不应存在配对步骤：若麦克风需按键组合才能找到接收端，对购买者而言即已失败。本项全部测量须在 6.3 mm 输入口未接其他设备的状态下进行。",
+                    "es":"El usuario enciende el micrófono y habla. No hay un paso de emparejamiento en medio, y no debería haberlo: un micrófono que necesita una combinación de botones para encontrar su receptor ya falló para quien lo compra. Todo aquí se mide sin nada más conectado a las entradas de 6.3 mm."}},
+           {"id":"kap_mic_on","code":"MIC-020",
+            "label":{"en":"Each microphone switches on and shows it","zh":"各麦克风均可开机并有指示","es":"Cada micrófono enciende y lo indica"},
+            "help":{"en":"Switch each one on separately. Each must give its sign — a light, a display or a tone — and it must be the same sign on all of them. Two microphones from the same box behaving differently is a fail.",
+                    "zh":"逐支开机。每支均应给出指示——指示灯、显示或提示音——且各支指示应一致。同一包装内的两支麦克风表现不同，判不合格。",
+                    "es":"Encienda cada uno por separado. Cada uno debe dar su señal — una luz, una pantalla o un tono — y debe ser la misma señal en todos. Dos micrófonos de la misma caja comportándose distinto es falla."}},
+           {"id":"kap_mic_auto","code":"MIC-020","measure":{"unit":"s","step":"1"},
+            "label":{"en":"Time it takes to link on its own","zh":"自动配对所需时间","es":"Tiempo que tarda en enlazarse solo"},
+            "help":{"en":"From switching the microphone on until it is heard through the speaker, without touching any button. Write the seconds. Record the value: there is no agreed figure yet, but if it never links, that is a fail and not a record.",
+                    "zh":"自麦克风开机至可通过音箱听到声音的时间，期间不按任何键。填写秒数。记录数值：目前尚无约定标准；但若始终无法配对，则判不合格，而非记录。",
+                    "es":"Desde que se enciende el micrófono hasta que se oye por el parlante, sin tocar ningún botón. Escriba los segundos. Anote el valor: todavía no hay cifra acordada, pero si nunca se enlaza, eso es falla y no un registro."}},
+           {"id":"kap_mic_heard","code":"MIC-020",
+            "label":{"en":"Each one is heard clean, with no cuts","zh":"各支收音清晰、无中断","es":"Cada uno se oye limpio, sin cortes"},
+            "help":{"en":"Speak normally into each microphone for half a minute. The voice must come through without dropouts, without crackling and without changing level on its own.",
+                    "zh":"以正常音量对每支麦克风讲话半分钟。声音应无中断、无爆音，且电平不应自行变化。",
+                    "es":"Hable normal por cada micrófono durante medio minuto. La voz debe salir sin cortes, sin crujidos y sin cambiar de nivel sola."}},
+           {"id":"kap_mic_relink","code":"MIC-020",
+            "label":{"en":"It links again after switching off","zh":"关机后可重新配对","es":"Se vuelve a enlazar después de apagar"},
+            "help":{"en":"Switch the microphone off, wait ten seconds and switch it on again. It must come back on its own. And switch the speaker off and on with the microphone already on: it must find it again too.",
+                    "zh":"关闭麦克风，等待十秒后重新开机，应自动恢复连接。另在麦克风保持开启的状态下重启音箱，音箱亦应重新找到该麦克风。",
+                    "es":"Apague el micrófono, espere diez segundos y vuelva a encenderlo. Debe volver solo. Y apague y encienda el parlante con el micrófono ya encendido: también debe volver a encontrarlo."}},
+           {"id":"kap_mic_volume","code":"MIC-020",
+            "label":{"en":"Its volume control works over the whole range","zh":"音量控制在全程有效","es":"Su control de volumen funciona en todo el recorrido"},
+            "help":{"en":"Take the microphone volume from minimum to maximum. It must go up progressively, with no jumps and no dead stretch, and reach silence at the minimum.",
+                    "zh":"将麦克风音量自最小调至最大。应逐级上升，无跳变、无失效段，且最小位置应完全无声。",
+                    "es":"Recorra el volumen de micrófono de mínimo a máximo. Debe subir de forma progresiva, sin saltos ni tramo muerto, y llegar a silencio en el mínimo."}}]},
+
+        {"id":"KAP_MIC_USE","optional":false,"only_factory":["YIS"],"evidence":[],
+         "point_video":true,
+         "only":["HK-KAP206"],
+         "label":{"en":"MICROPHONES — TWO AT ONCE, RANGE AND PRIORITY",
+                  "zh":"麦克风 — 双支同时、距离与优先",
+                  "es":"MICRÓFONOS — DOS A LA VEZ, ALCANCE Y PRIORIDAD"},
+         "steps":[
+           {"en":"With both microphones on and music playing","zh":"两支麦克风均开启，同时播放音乐","es":"Con los dos micrófonos encendidos y música sonando"},
+           {"en":"Two people speak at the same time","zh":"两人同时讲话","es":"Dos personas hablan a la vez"},
+           {"en":"Then walk away and find where it drops out","zh":"随后逐步走远，找出断连位置","es":"Después aléjese y encuentre dónde se corta"}],
+         "points":[
+           {"section":{"en":"This is how it is going to be used","zh":"这才是实际使用方式","es":"Así es como se va a usar"},
+            "help":{"en":"One microphone in a quiet room proves the radio link works. What the product is actually for is two people speaking over music, from the far end of the room. That is what is tested here, and it needs two people: one holds the second microphone while the operator films.",
+                    "zh":"在安静房间中使用单支麦克风只能证明无线链路正常。产品的实际用途是两人在音乐背景下、于房间另一端讲话。本项即测试该场景，需两人配合：一人手持第二支麦克风，操作员负责录像。",
+                    "es":"Un micrófono en una sala en silencio demuestra que el enlace de radio funciona. Para lo que sirve el producto de verdad es para dos personas hablando sobre la música, desde el fondo del salón. Eso es lo que se prueba aquí, y hacen falta dos personas: una sostiene el segundo micrófono mientras el operario filma."}},
+           {"id":"kap_mic_both","code":"MIC-021",
+            "label":{"en":"Two speaking at once — both are heard","zh":"两人同时讲话 — 均可听到","es":"Dos hablando a la vez — se oyen los dos"},
+            "help":{"en":"Both must come through at the same time and at a similar level. If one cuts the other off, or one is heard much quieter, the receiver is only really handling one channel.",
+                    "zh":"两支应同时出声且电平相近。若一支压制另一支，或某支明显偏轻，说明接收端实际仅有效处理一路信号。",
+                    "es":"Los dos deben salir a la vez y a un nivel parecido. Si uno corta al otro, o uno se oye mucho más bajo, el receptor sólo está manejando de verdad un canal."}},
+           {"id":"kap_mic_nocross","code":"MIC-021",
+            "label":{"en":"They do not interfere with each other","zh":"两支之间互不干扰","es":"No se interfieren entre sí"},
+            "help":{"en":"With both on, speak into only one. Nothing may be heard through the other: no echo of the first, no whistle, no noise appearing only when both are on.",
+                    "zh":"两支均开启时，仅对其中一支讲话。另一支不得有任何声音：不得出现第一支的回声、啸叫，或仅在双支同时开启时才出现的噪声。",
+                    "es":"Con los dos encendidos, hable sólo por uno. Por el otro no debe oírse nada: ni eco del primero, ni un pito, ni un ruido que aparezca sólo cuando están los dos."}},
+           {"id":"kap_mic_priority","code":"MIC-021",
+            "label":{"en":"Priority — the music ducks when someone speaks","zh":"优先功能 — 讲话时音乐自动降低","es":"Prioridad — la música baja cuando alguien habla"},
+            "help":{"en":"With music at a normal level, speak into a microphone. The music must drop while the voice lasts and come back on its own a moment after. It must come back: music that stays low after speaking is as much a fault as music that never ducks.",
+                    "zh":"在正常音量播放音乐时对麦克风讲话。讲话期间音乐应降低，讲话结束后片刻应自动恢复。必须恢复：讲话后音乐持续偏低，与完全不降低同属故障。",
+                    "es":"Con música a nivel normal, hable por un micrófono. La música debe bajar mientras dure la voz y volver sola un momento después. Tiene que volver: una música que se queda baja después de hablar es tanta falla como una que nunca baja."}},
+           {"id":"kap_mic_prio_both","code":"MIC-021",
+            "label":{"en":"Priority works with either of the two","zh":"两支均可触发优先功能","es":"La prioridad funciona con cualquiera de los dos"},
+            "help":{"en":"Repeat it with the second microphone. A priority wired to only one channel works in the demo and fails in use.",
+                    "zh":"用第二支麦克风重复该测试。若优先功能仅接入一路通道，演示时正常，实际使用时会失效。",
+                    "es":"Repítalo con el segundo micrófono. Una prioridad conectada a un solo canal funciona en la demostración y falla en el uso."}},
+           {"section":{"en":"The range","zh":"使用距离","es":"El alcance"},
+            "help":{"en":"Measured in a straight line, with the microphone pointing at the speaker and nothing in between. Say in the note if it had to be done in a place with walls, because that halves the figure and it is not the product's fault.",
+                    "zh":"沿直线测量，麦克风正对音箱且中间无遮挡。若只能在有墙体的环境中进行，请在备注中说明，因为这会使数据减半，且并非产品缺陷。",
+                    "es":"Se mide en línea recta, con el micrófono apuntando al parlante y nada en medio. Diga en la nota si hubo que hacerlo en un sitio con paredes, porque eso reduce la cifra a la mitad y no es culpa del producto."}},
+           {"id":"kap_mic_range","code":"MIC-022","measure":{"unit":"m","step":"1"},
+            "label":{"en":"Distance at which it starts to break up","zh":"开始断续的距离","es":"Distancia a la que empieza a cortarse"},
+            "help":{"en":"Walk away speaking without stopping. Write the distance at which the first dropout is heard. Record the value; there is no agreed minimum yet.",
+                    "zh":"边讲话边持续走远，记录首次出现断续时的距离。记录数值；目前尚无约定最小值。",
+                    "es":"Aléjese hablando sin parar. Escriba la distancia a la que se oye el primer corte. Anote el valor; todavía no hay mínimo acordado."}},
+           {"id":"kap_mic_back","code":"MIC-022",
+            "label":{"en":"It recovers on coming back, it does not stay dead","zh":"返回后可恢复，不应保持断连","es":"Se recupera al volver, no queda muerto"},
+            "help":{"en":"Go past the range and come back. It must link again on its own, without switching anything off. A microphone that needs to be restarted after going out of range leaves the person on stage with no voice.",
+                    "zh":"超出有效距离后返回，应自动重新连接，无需关机重启。若超距后必须重启才能恢复，会使台上人员失去声音。",
+                    "es":"Pase el alcance y regrese. Debe enlazarse de nuevo solo, sin apagar nada. Un micrófono que hay que reiniciar después de salirse del alcance deja a la persona del escenario sin voz."}},
+           {"id":"kap_mic_rx_noise","code":"MIC-022",
+            "label":{"en":"On losing the link there is no noise burst","zh":"失去连接时不得出现爆音","es":"Al perder el enlace no suelta un ruido"},
+            "help":{"en":"This is the important one and it has a criterion: when the link is lost the receiver must go quiet, not put out a burst of noise, a bang or a whistle at full volume. That noise, over a system at maximum, is what damages a tweeter and the hearing of whoever is in front.",
+                    "zh":"此项最为关键且有明确判定标准：失去连接时接收端应静音，不得输出爆音、砰响或满音量啸叫。在系统满音量下，此类噪声会损坏高音单元及现场人员听力。",
+                    "es":"Ésta es la importante y sí tiene criterio: al perderse el enlace el receptor debe quedarse callado, no soltar un golpe de ruido, un estallido ni un pito a todo volumen. Ese ruido, sobre un sistema al máximo, es lo que daña un tweeter y el oído de quien esté enfrente."}}]},
+
         {"id":"EXTERNAL","optional":false,"type":"photos","no_na":true,
          "only_factory":["YIS","RHY","EAG"],
          /* The KAPPA plan is exactly what its function scheme covers and
@@ -4037,7 +5104,7 @@ const CONFIG = {
          /* RHYME entera pasó a SUB_EXTERNAL. Aquí quedan YISION y EAGLE, que son
             las que llevan ruedas y pantalla en esta prueba. */
          "only_factory":["YIS","EAG"],
-         "skip":["HK-KAP206","HK-KAP208"],
+         "skip":["HK-KAP208"],
          "label":{"en":"EXTERNAL PARTS","zh":"外观部件"},
          "steps":[
            {"en":"Place the speaker in good light, avoiding direct reflections","zh":"将音箱置于光线充足处，避免反光"},
@@ -4093,7 +5160,7 @@ const CONFIG = {
             pide micrófonos y trípode, que ninguna de sus referencias trae. Todas
             corren SUB_ACC, con el cable de poder y el control remoto. */
          "skip_factory":["RHY"],
-         "skip":["HK-KAP206","HK-KAP208"],   // see EXTERNAL above
+         "skip":["HK-KAP208"],   // see EXTERNAL above
          "label":{"en":"ACCESSORIES","zh":"配件"},
          "steps":[
            {"en":"Take the accessories out of the box onto a clear surface","zh":"将配件从箱中取出，放在干净台面上"},
@@ -4132,7 +5199,7 @@ const CONFIG = {
             de HOKLAN. EAGLE conserva la prohibición: no la pidió. */
          "id":"GRAPHICS","optional":false,"type":"photos","no_na":["EAG"],
          "only_factory":["YIS","EAG"],
-         "skip":["HK-KAP206","HK-KAP208"],
+         "skip":["HK-KAP208"],
          "label":{"en":"PRINTED MATERIAL","zh":"印刷品"},
          "steps":[
            {"en":"Take a photo of each item on the list","zh":"逐项拍摄下列物品"},
@@ -4238,7 +5305,7 @@ const CONFIG = {
 
         {"id":"EXT_BATTERY","optional":true,"skip_factory":["RHY"],
          "only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-KAP206","HK-KAP208"],
+         "skip":["HK-KAP208"],
          "label":{"en":"EXTERNAL BATTERY","zh":"外置电池"},
          "steps":[
            {"en":"Switch the speaker off and disconnect it from the mains","zh":"关机并断开市电"},
@@ -4292,7 +5359,7 @@ const CONFIG = {
          "only_factory":["YIS","RHY","EAG"],
          /* Los subwoofers sí corren ésta: sólo tienen versión propia de las
             tres anteriores. */
-         "skip":["HK-KAP206","HK-KAP208"],
+         "skip":["HK-KAP208"],
          "label":{"en":"INTERNAL PARTS","zh":"内部部件"},
          "steps":[
            {"en":"Remove the screws and open the speaker carefully","zh":"拆下螺丝，小心打开箱体"},
@@ -4646,7 +5713,7 @@ const CONFIG = {
            seis fotos de referencia quedan en el historial de git por si algún
            día vuelve a medirse en casa. */
         {"id":"BAT_CAPACITY","optional":true,"only_factory":["YIS"],
-         "skip":["HK-KAP206","HK-KAP208"],"evidence":[],
+         "skip":["HK-KAP208"],"evidence":[],
          /* Sin el prefijo «VERIFICACIÓN DE ESPECIFICACIONES ·» desde el plan 99:
             en la pantalla del teléfono ocupaba dos renglones antes de llegar a
             lo que la prueba es. */
@@ -4758,7 +5825,7 @@ const CONFIG = {
          /* Epsilon y los Delta corren su propia versión, RMS_SUPPLIER: en ellos
             la potencia se toma del informe del proveedor de amplificadores, por
             canal, y no del osciloscopio. */
-         "skip":["HK-KAP206","HK-KAP208","HK-BAS115A1","HK-BAS118A1",
+         "skip":["HK-KAP208","HK-BAS115A1","HK-BAS118A1",
                  "HK-EPS112A1","HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
          "evidence":[],"first":6,
@@ -4890,7 +5957,7 @@ const CONFIG = {
               mode — its signal comes in over XLR from something else. Aging one
               is a reasonable thing to want; it is just not this procedure. */
          "id":"AGING","optional":true,"only_factory":["YIS","RHY"],
-         "skip":["HK-KAP206","HK-KAP208","HK-BAS115A1","HK-BAS118A1"],
+         "skip":["HK-KAP208","HK-BAS115A1","HK-BAS118A1"],
          /* El video se sumó en el plan 105. La prueba sigue igual —ocho horas y
             su confirmación al final—, pero ahora hay que dejar constancia de que
             la unidad estuvo sonando: un clip corto, de unos diez segundos, con
@@ -7431,15 +8498,51 @@ const TEST_NO = {
   DISTORTION:66, AUTO_OFF:67, MIC_BATTERY:68,
   PHI_VISUAL:69, PHI_LINK:70, PHI_BUTTONS:71, PHI_MIC_OFF:72, PHI_CHARGE:73,
   PHI_RECONNECT:74, PHI_POWER_CUT:75, PHI_RANGE:76, PHI_INTERNAL:77,
-  PHI_BAT_VOLT:78
+  PHI_BAT_VOLT:78,
+  KAP_SHIPBOX:79, KAP_WIRING:80, KAP_DIMS:81, KAP_DRIVERS:82, KAP_CABINET:83,
+  KAP_DRAW:84, KAP_MAXVOL:85, KAP_SIGNATURE:86,
+  KAP_CHG_CURVE:87, KAP_DIS_CURVE:88, KAP_CHG_PCT:89, KAP_PACK_PROT:90,
+  KAP_MANUAL:91, KAP_STATIONS:92, KAP_TRIPOD:93, KAP_NOISE_FLOOR:94, KAP_WEAR:95,
+  KAP_PSU_SWEEP:96, KAP_CURVES:97, KAP_SPL_FREQ:98, KAP_BAT_CAP:99,
+  KAP_USB_OUT:100, KAP_DROP:101, KAP_MIC_LINK:102, KAP_MIC_USE:103
 };
 /* El siguiente número libre. Está aquí para que quien agregue una prueba no
    tenga que contar: es 79 y sube de uno en uno. */
-const NEXT_TEST_NO = 79;
+const NEXT_TEST_NO = 104;
 
-const testNo = t => (t && TEST_NO[t.id]) || null;
+/* En las referencias de desarrollo la numeración es otra, y a propósito.
+
+   Un producto en desarrollo no se compara contra el catálogo: se compara consigo
+   mismo, reunión tras reunión, mientras el esquema cambia. Ahí lo que sirve es
+   «la 3.2» —la segunda comprobación de la tercera sección de este plan— y no un
+   número del catálogo general que no le dice nada a quien tiene el esquema
+   delante. Por eso aquí el número es la posición en el plan y empieza en 1.
+
+   El precio, y hay que saberlo: al insertar una sección en medio, las de abajo
+   se corren. En un producto que todavía se está definiendo eso es aceptable —
+   el plan cambia cada semana de todos modos. En producción no lo sería, y por
+   eso allí sigue mandando la tabla. */
+const testNo = t => {
+  if(!t) return null;
+  if(isDevRef(S.model)){
+    const i = planTests().indexOf(t);
+    return i < 0 ? null : i + 1;
+  }
+  return TEST_NO[t.id] || null;
+};
 /* El número delante del nombre, donde haya sitio. Sin número, el nombre solo. */
 const testTag = t => { const n = testNo(t); return n ? "#" + n + " · " : ""; };
+
+/* El número del punto dentro de su prueba: 3.2 es la segunda comprobación de la
+   tercera sección. Sólo en desarrollo, que es donde se pide un punto por su
+   número; en producción los puntos se nombran por lo que dicen. */
+function pointNo(t, p){
+  if(!t || !p || !p.id || !isDevRef(S.model)) return "";
+  const n = testNo(t);
+  if(!n) return "";
+  const i = realPoints(t).indexOf(p);
+  return i < 0 ? "" : n + "." + (i + 1);
+}
 
 /* Foto o video punto por punto, dicho una vez en la prueba.
 
@@ -7572,7 +8675,15 @@ const realPoints = t => pointsOf(t).filter(p => p.id);
    report, spreadsheet, alerts, photo captions — it has to travel inside the
    text, or a finding filed against "pulsación corta entra en modo BT" would not
    say which of eight buttons that was. */
-const pLab = p => (p && p.tag ? p.tag + " · " : "") + L(p && p.label);
+/* El segundo argumento es la prueba a la que pertenece el punto, y sirve sólo
+   para anteponerle su número. Es opcional a propósito: `pLab` se llama desde
+   veinte sitios —pantalla, informe, CSV, avisos— y en varios de ellos la prueba
+   no está a mano. Sin ella el punto sale como siempre, con su nombre; con ella,
+   numerado. Nada se rompe por no pasarla. */
+const pLab = (p, t) => {
+  const n = t ? pointNo(t, p) : "";
+  return (n ? n + " · " : "") + (p && p.tag ? p.tag + " · " : "") + L(p && p.label);
+};
 const ANSWERED = ["PASS","FAIL","NA"];
 
 function codeText(code){
@@ -9392,7 +10503,7 @@ function pointsTable(b){
           cells += `<td class="c">${mark(r ? r.points[p.id] : "")}</td>`;
         }
       }
-      rows += `<tr><td>${esc(pLab(p))}${changeMark(b.i, p.id)}${
+      rows += `<tr><td>${esc(pLab(p, b.t))}${changeMark(b.i, p.id)}${
         changeLines(b.i, p.id)}</td>${cells}</tr>`;
     });
   });
@@ -10388,7 +11499,7 @@ function reportCsv(){
       // inside: "96.4" in a cell can be added up and charted, "96.4 dB" is text.
       rows.push(lead.concat([
         t.id, p.id, key,
-        L(t.label), section, pLab(p), result, code, desc,
+        L(t.label), section, pLab(p, t), result, code, desc,
         p.measure ? readingOf(r, p.id) : "",
         p.measure ? unitKey(p.measure) : "",
         shownNote, shownEn || "", photos
@@ -12353,7 +13464,10 @@ function pointRow(p, u, showTag){
   return `<div class="pt" id="pt_${id}">
       ${showTag?`<u>${fmt("speaker_n",{n:u+1})}</u>`:""}
       ${p.tag?`<b class="ctl">${esc(p.tag)}</b>`:""}
-      <span>${esc(L(p.label))}</span>
+      ${/* El número del punto sólo aparece en desarrollo; `pointNo` devuelve
+            vacío en producción y el renglón queda como siempre. */""}
+      <span>${(() => { const n = pointNo(enPrueba, p);
+        return n ? `<b class="ctl">${n}</b> ` : ""; })()}${esc(L(p.label))}</span>
       <button class="${v==="PASS"?"on-p":""}" onclick="setPoint(${u},'${p.id}','PASS')">✓</button>
       <button class="${v==="FAIL"?"on-f":""}" onclick="setPoint(${u},'${p.id}','FAIL')">✗</button>
       ${/* `must` retira el N/A de un punto concreto: hay comprobaciones que toda
@@ -12411,7 +13525,7 @@ function renderTest(){
       const pOpen = pointHelpOpen(p.id);
       // The question is written once; the speakers hang underneath it.
       return `<div class="q">
-        ${many?`<div class="q-h">${esc(pLab(p))}</div>`:""}
+        ${many?`<div class="q-h">${esc(pLab(p, t))}</div>`:""}
         ${allUnits().map(u => pointRow(p, u, many)).join("")}
         ${ph?`<button class="p-help ${pOpen?"on":""}"
           onclick="togglePointHelp('${p.id}')">${pOpen?"−":"+"} ${tr("how_to")}</button>`:""}
@@ -12757,7 +13871,9 @@ function renderPhotoTest(t, r, done, total){
     const done = ANSWERED.indexOf(v) >= 0 &&
       (na || p.no_photo || shots.length > 0);
     return `<div class="shot ${done?"ok":""}" id="sb_${p.id}">
-      <div class="shot-head">${p.tag?`<i class="ctl">${esc(p.tag)}</i>`:""}<b>${
+      <div class="shot-head">${p.tag?`<i class="ctl">${esc(p.tag)}</i>`:""}${
+        (() => { const n = pointNo(t, p);
+                 return n ? `<i class="ctl">${n}</i>` : ""; })()}<b>${
         esc(L(p.label))}</b>
         ${p.no_photo?"":shots.length?`<em>${shots.length}</em>`:
           na?`<em class="na">${tr("na")}</em>`:`<em class="miss">${tr("required").replace("— ","")}</em>`}

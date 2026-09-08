@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="15.8">
+<meta name="app-version" content="15.9">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -146,6 +146,16 @@ button:active{transform:scale(.99)}
 .pk-rot{font-size:11px;font-weight:700;letter-spacing:.07em;
   text-transform:uppercase;color:var(--accent);margin:14px 0 6px}
 .pk-rot:first-child{margin-top:2px}
+/* La cabecera de la subsección abierta. «Todas» y «ninguna» viven aquí, dentro
+   del bloque, y no arriba junto a los de plan completo: puestos arriba nadie
+   sabría si actúan sobre lo filtrado o sobre las cincuenta y cinco. */
+.pkg-h{display:flex;align-items:center;gap:8px;margin:0 0 10px;
+  padding-bottom:9px;border-bottom:1px solid var(--accent)}
+.pkg-h b{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase}
+.pkg-h span{font-size:11px;color:var(--muted);flex:1}
+.pkg-h button{width:auto;margin:0;padding:4px 10px;font-size:11px;
+  border-radius:6px;flex:none}
 
 .grp{background:var(--panel);border:1px solid var(--border);border-radius:12px;
   margin-bottom:10px;overflow:hidden}
@@ -8080,6 +8090,8 @@ const T = {
   na_undo_title:"The whole section is marked N/A — press to undo",
   tests_pick:"Tests to run", all_on:"Select all", all_off:"Clear all",
   pick_group_hint:"Tap a subsection to include or remove it whole.",
+  pick_group_filter_hint:"Tap a subsection to see only its tests.",
+  pick_all_groups:"All", group_all:"all", group_none:"none",
   n_selected_short:"%n of %tot selected",
   admin_refs_pick:"%n references, grouped by factory.",
   admin_start:"START SELECTED TESTS",
@@ -8315,6 +8327,8 @@ const T = {
   na_undo_title:"La sección completa está en N/A — pulse para deshacer",
   tests_pick:"Pruebas a ejecutar", all_on:"Seleccionar todas", all_off:"Quitar todas",
   pick_group_hint:"Toque una subsección para incluirla o quitarla completa.",
+  pick_group_filter_hint:"Toque una subsección para ver sólo sus pruebas.",
+  pick_all_groups:"Todas", group_all:"todas", group_none:"ninguna",
   n_selected_short:"%n de %tot seleccionadas",
   admin_refs_pick:"%n referencias, agrupadas por fábrica.",
   admin_start:"INICIAR PRUEBAS SELECCIONADAS",
@@ -8541,6 +8555,8 @@ const T = {
   na_undo_title:"整个分组已标记为不适用 — 点击可撤销",
   tests_pick:"要执行的测试", all_on:"全选", all_off:"全部取消",
   pick_group_hint:"点击子项可整体加入或移除。",
+  pick_group_filter_hint:"点击子项仅查看其测试。",
+  pick_all_groups:"全部", group_all:"全选", group_none:"取消",
   n_selected_short:"已选 %n / %tot",
   admin_refs_pick:"共 %n 个型号，按工厂分组。",
   admin_start:"开始所选测试",
@@ -12646,28 +12662,64 @@ function renderAdmin(){
     const u = tramos[tramos.length-1];
     if(!u || u.g.id !== g.id) tramos.push({g, tests:[t]}); else u.tests.push(t);
   });
+  /* En desarrollo el chip filtra en vez de seleccionar, y ésa es la diferencia
+     de fondo entre los dos casos. Un plan de fábrica tiene ocho subsecciones y
+     dieciséis pruebas: cabe entero en la pantalla y lo que hace falta es
+     encender bloques de un toque. El KAP206 tiene once y cincuenta y cinco, y
+     ahí lo que estorba es no poder mirar una subsección sola.
+
+     Un chip no puede hacer las dos cosas con un solo toque, así que en
+     desarrollo se cambia el trabajo del chip y «todas / ninguna» pasan dentro
+     del bloque filtrado, donde se ve contra qué actúan. */
+  const filtra = isDevRef(S.model) && tramos.length > 1;
+  const kFiltro = filtra
+    ? tramos.findIndex(x => x.g.id === S.pickFilter) : -1;
+  const foco = kFiltro >= 0 ? tramos[kFiltro] : null;
+
   const chips = tramos.length < 2 ? "" : `
-    <p class="hint" style="margin:8px 0 6px">${tr("pick_group_hint")}</p>
-    <div class="pkg">${tramos.map((tr_, k) => {
+    <p class="hint" style="margin:8px 0 6px">${
+      tr(filtra ? "pick_group_filter_hint" : "pick_group_hint")}</p>
+    <div class="pkg">${
+      /* Sin este chip no hay salida del filtro: una vez dentro de una
+         subsección, la lista completa quedaba fuera de alcance. */
+      filtra ? `<button class="pkg-c ${foco ? "" : "on"}"
+        onclick="setPickFilter('')">${tr("pick_all_groups")}
+        <em>${picked.length}/${all.length}</em></button>` : ""}${
+    tramos.map((tr_, k) => {
       const n = tr_.tests.filter(t => picked.indexOf(t.id) >= 0).length;
-      const cls = n === tr_.tests.length ? "on" : n ? "half" : "";
-      return `<button class="pkg-c ${cls}" onclick="pickGroup(${k})">
+      const sel = n === tr_.tests.length ? "on" : n ? "half" : "";
+      /* Filtrando, el resalte dice cuál está abierta y no cuánto lleva
+         marcado; el conteo sigue diciendo eso último. Dos informaciones
+         distintas en dos sitios distintos. */
+      const cls = filtra ? (foco && foco.g.id === tr_.g.id ? "on" : sel && "half")
+                         : sel;
+      return `<button class="pkg-c ${cls || ""}" onclick="${
+        filtra ? `setPickFilter('${tr_.g.id}')` : `pickGroup(${k})`}">
         ${esc(L(tr_.g.label))} <em>${n === tr_.tests.length ? tr_.tests.length
           : n + "/" + tr_.tests.length}</em></button>`;
-    }).join("")}</div>`;
+    }).join("")}</div>${foco ? `
+    <div class="pkg-h"><b>${esc(L(foco.g.label))}</b>
+      <span>${fmt("n_selected_short",{
+        n: foco.tests.filter(t => picked.indexOf(t.id) >= 0).length,
+        tot: foco.tests.length})}</span>
+      <button onclick="pickGroupSet(${kFiltro},true)">${tr("group_all")}</button>
+      <button onclick="pickGroupSet(${kFiltro},false)">${tr("group_none")}</button>
+    </div>` : ""}`;
   /* El índice del tramo viaja por el DOM, así que se recalcula igual en
      `pickGroup`. Guardarlo en `S` sería un segundo sitio donde el reparto
      puede quedar desfasado del plan. */
 
   let vistoG = null;
-  const rows = all.map(t => {
+  const visibles = foco ? foco.tests : all;
+  const rows = visibles.map(t => {
     const on = picked.indexOf(t.id) >= 0;
     const n = realPoints(t).length;
     /* El rótulo dentro de la lista, para que al desplazar se siga sabiendo de
-       qué subsección es la casilla que se está tocando. */
+       qué subsección es la casilla que se está tocando. Filtrando sobra: el
+       bloque de arriba ya dice de cuál son todas. */
     let cab = "";
     const g = groupOf(t) || SIN_GRUPO;
-    if(tramos.length > 1 && g.id !== vistoG){
+    if(!foco && tramos.length > 1 && g.id !== vistoG){
       vistoG = g.id;
       cab = `<div class="pk-rot">${esc(L(g.label))}</div>`;
     }
@@ -12807,6 +12859,11 @@ function adminOpen(model){
 /* Empty means "none chosen": the tests, the units and the buttons all wait for
    a reference, because none of them mean anything without one. */
 function setAdminModel(value){
+  /* El filtro de subsección se limpia al cambiar de referencia. Las
+     subsecciones son de cada plan: quedarse con «Curvas de sonido» puesto al
+     saltar a una cabina que no las tiene dejaba la lista vacía y sin decir por
+     qué. */
+  S.pickFilter = "";
   if(!value){
     S.model = ""; S.factory = ""; S.idDigits = ""; S.testId = "";
     S.pick = null; S.adminTests = false;
@@ -12894,14 +12951,38 @@ function pickAll(on){
    falta aunque sea una, el toque completa; sólo cuando están todas, quita. Al
    revés — vaciar una subsección a medias — obliga a dos toques para el caso
    más común, que es querer el bloque completo. */
-function pickGroup(k){
-  const all = planTests();
+function tramosDelPlan(){
   const tramos = [];
-  all.forEach(t => {
+  planTests().forEach(t => {
     const g = groupOf(t) || SIN_GRUPO;
     const u = tramos[tramos.length-1];
     if(!u || u.g.id !== g.id) tramos.push({g, tests:[t]}); else u.tests.push(t);
   });
+  return tramos;
+}
+/* Qué subsección se está mirando en la pantalla de selección. Vacío es la
+   lista completa. Vive en `S` y no en el DOM porque `render()` redibuja todo
+   y el filtro tiene que sobrevivir a marcar una casilla. */
+function setPickFilter(id){
+  S.pickFilter = S.pickFilter === id ? "" : id;
+  render();
+}
+/* Todas o ninguna, pero sólo de la subsección abierta. Los dos botones de
+   arriba —«Seleccionar todas» y «Quitar todas»— siguen actuando sobre el plan
+   entero: son los que ya existían y ya significaban eso, y cambiarles el
+   alcance según haya filtro o no sería la clase de ambigüedad que hace que
+   alguien publique una asignación equivocada. */
+function pickGroupSet(k, on){
+  const tr_ = tramosDelPlan()[k];
+  if(!tr_) return;
+  S.pick = S.pick || [];
+  const ids = tr_.tests.map(t => t.id);
+  if(on) ids.forEach(id => { if(S.pick.indexOf(id) < 0) S.pick.push(id); });
+  else S.pick = S.pick.filter(id => ids.indexOf(id) < 0);
+  render();
+}
+function pickGroup(k){
+  const tramos = tramosDelPlan();
   const tr_ = tramos[k];
   if(!tr_) return;
   S.pick = S.pick || [];

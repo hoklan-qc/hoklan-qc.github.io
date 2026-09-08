@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="15.6">
+<meta name="app-version" content="15.7">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -330,6 +330,37 @@ button:active{transform:scale(.99)}
 .ix em.PASS{background:rgba(46,204,113,.18);color:var(--green)}
 .ix em.FAIL{background:rgba(255,93,85,.18);color:var(--red)}
 .ix em.now{background:var(--accent);color:#04121e}
+/* La cuadrícula de subsecciones que encabeza el índice. Responde de un vistazo
+   la única pregunta que se le hace a esta pantalla a mitad de turno: cómo va
+   la inspección. El color hace el trabajo — verde terminada, rojo con una
+   falla dentro, azul donde está el operario — y el número dice cuánto falta.
+   `auto-fit` en vez de un número fijo de columnas: son siete subsecciones en
+   una referencia de fábrica y once en el KAP206, y en un teléfono angosto
+   deben reacomodarse solas en vez de encogerse hasta no leerse. */
+.gr-mapa{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));
+  gap:6px;margin:0 0 14px}
+.gr-c{background:var(--panel);border:1px solid var(--border);border-radius:9px;
+  padding:8px 4px;text-align:center;cursor:pointer}
+.gr-c b{display:block;font-size:15px;font-weight:600;color:var(--muted);
+  line-height:1.2}
+.gr-c i{display:block;font-style:normal;font-size:10px;color:var(--muted);
+  margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gr-c.va{border-color:var(--accent);background:rgba(46,163,242,.16)}
+.gr-c.va b{color:var(--accent)}
+.gr-c.ok{border-color:var(--green);background:rgba(46,204,113,.16)}
+.gr-c.ok b{color:var(--green)}
+.gr-c.mal{border-color:var(--red);background:rgba(255,93,85,.16)}
+.gr-c.mal b{color:var(--red)}
+/* El rótulo dentro de la lista. Existe aunque esté la cuadrícula: al desplazar,
+   la cuadrícula ya se fue de la pantalla y el operario necesita saber en qué
+   subsección va sin volver arriba. */
+.ix-grupo{display:flex;align-items:baseline;padding:16px 0 6px;
+  border-top:1px solid #16304d;font-size:11px;font-weight:700;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--accent)}
+.ix-grupo:first-child{border-top:none;padding-top:2px}
+.ix-grupo i{font-style:normal;font-weight:400;letter-spacing:0;
+  text-transform:none;font-size:12px;color:var(--muted);margin-left:auto}
+.ix-grupo + .ix{border-top:none}
 
 .media{display:flex;flex-wrap:wrap;margin:10px -5px 0}
 .thumb{position:relative;width:78px;height:78px;border-radius:9px;overflow:hidden;
@@ -773,7 +804,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 137,
+      "plan_version": 138,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -4075,9 +4106,9 @@ const CONFIG = {
            {"en":"Only then take the product out","zh":"之后再取出产品","es":"Sólo después saque el producto"}],
          "points":[
            {"section":{"en":"The box","zh":"外箱","es":"La caja"},
-            "help":{"en":"What protects the product in transit is inspected before it is destroyed by opening it. Once the foams are out of the box nobody can say how they were sitting.",
-                    "zh":"运输中保护产品的部分必须在拆箱破坏之前检查。泡棉一旦取出，就无法还原其原始位置。",
-                    "es":"Lo que protege al producto en el transporte se inspecciona antes de destruirlo al abrir. Una vez fuera las espumas, nadie puede decir cómo estaban puestas."}},
+            "help":{"en":"Careful with the order: these photographs are taken when the product is unpacked, at the start of the day, even though this test is answered at the end of the plan. It sits at the end because the drop test lives in this subsection and cannot be done before the cabinet has been inspected. Take the pictures on unpacking, keep them on the phone, and answer here. What protects the product in transit is inspected before it is destroyed by opening it: once the foams are out of the box nobody can say how they were sitting.",
+                    "zh":"注意顺序：这些照片应在开箱时拍摄，即当天开始时，尽管本测试在计划末尾才填写。之所以排在末尾，是因为跌落测试属于本子项，而跌落必须在箱体检查完成之后进行。请在开箱时拍照并保存在手机中，稍后在此填写。运输中保护产品的部分必须在拆箱破坏之前检查：泡棉一旦取出，就无法还原其原始位置。",
+                    "es":"Cuidado con el orden: estas fotos se toman al desempacar, al empezar el día, aunque esta prueba se responda al final del plan. Está de última porque la caída vive en esta subsección y no puede hacerse antes de revisar el gabinete. Tome las fotos al desempacar, guárdelas en el teléfono y respóndalas aquí. Lo que protege al producto en el transporte se inspecciona antes de destruirlo al abrir: una vez fuera las espumas, nadie puede decir cómo estaban puestas."}},
            {"id":"kap_box_state","code":"PKG-001","photo":true,
             "label":{"en":"Closed box — no blows, no damp, tape well applied","zh":"封箱状态 — 无撞击、无受潮、胶带粘贴良好","es":"Caja cerrada — sin golpes, sin humedad, cinta bien aplicada"},
             "help":{"en":"Photograph it closed from the printed face. Dents, crushed corners, damp marks or lifted tape are a fail.",
@@ -8790,9 +8821,149 @@ function fits(o){
 
    Sort is stable, so everything without `first` keeps the order it has in the
    file, which is the order it was written in. */
-const planTests = () => plan().tests
-  .filter(t => (t.plan || "") === planTagOf(S.model) && fits(t))
-  .sort((a, b) => (a.first || 99) - (b.first || 99));
+/* ---------- subsecciones ---------------------------------------------------
+   Una referencia puede repartir su plan en subsecciones. Hasta el plan 138 el
+   plan era una lista plana de pruebas y el operario recorría cincuenta y cinco
+   sin saber en qué parte del producto estaba; las subsecciones le dan sitio a
+   cada una.
+
+   La lista vive aquí y no dentro de cada prueba a propósito. Escribir
+   `"group":"bateria"` cincuenta y cinco veces es cincuenta y cinco sitios donde
+   equivocarse y ninguno donde ver el reparto completo; aquí se lee de un
+   vistazo, y una prueba que se olvide salta a la vista porque no está en
+   ninguna lista.
+
+   El orden de las subsecciones es el orden del plan. Y ese orden no es el que
+   pidió Producto, por una razón de puesto: sus grupos empezaban por Funcionales
+   —veintitrés pruebas— y dejaban el envejecimiento de ocho horas en el tercero.
+   El operario habría trabajado toda la mañana antes de poner a correr lo que
+   tarda toda la tarde. Las tres subsecciones que se ponen en marcha y se dejan
+   solas van primero; el resto conserva el orden que él dio.
+--------------------------------------------------------------------------- */
+const GROUPS = {
+  "HK-KAP206": [
+    {id:"env",   tests:["AGING"],
+     label:{en:"Aging","zh":"老化","es":"Envejecimiento"}},
+    {id:"bat",   tests:["KAP_CHG_CURVE","KAP_DIS_CURVE","KAP_CHG_PCT","KAP_BAT_CAP",
+                        "BRG_BATTERY","BRG_USBC","KAP_DRAW","KAP_PACK_PROT",
+                        "EXT_BATTERY","BAT_CAPACITY"],
+     label:{en:"Battery","zh":"电池","es":"Batería"}},
+    {id:"rms",   tests:["RMS_POWER"],
+     label:{en:"RMS power","zh":"额定功率","es":"Potencia RMS"}},
+    {id:"func",  tests:["USB","SD","BLUETOOTH","RX_FM_COMPAT","RADIO_FM","AUX",
+                        "DISPLAY","REMOTE","BRG_POWER","BRG_GESTURES","BRG_MODES",
+                        "BRG_BT","BRG_TWS","BRG_MIC","BRG_KNOB","BRG_LIGHT",
+                        "BRG_FM","BRG_MEMORY","KAP_SIGNATURE","KAP_STATIONS",
+                        "KAP_NOISE_FLOOR","KAP_MIC_LINK","KAP_MIC_USE",
+                        "KAP_MODULE_AUDIO","KAP_FM_MODULE","KAP_MAXVOL"],
+     label:{en:"Functional","zh":"功能","es":"Funcionales"}},
+    {id:"curv",  tests:["KAP_CURVES","KAP_SPL_FREQ"],
+     label:{en:"Sound curves","zh":"声学曲线","es":"Curvas de sonido"}},
+    {id:"psu",   tests:["KAP_PSU_SWEEP"],
+     label:{en:"Power supply","zh":"电源","es":"Fuente de alimentación"}},
+    {id:"usbout",tests:["KAP_USB_OUT"],
+     label:{en:"External USB charging","zh":"外接 USB 充电","es":"Carga USB externo"}},
+    {id:"ext",   tests:["KAP_DIMS","KAP_CABINET","KAP_TRIPOD","EXTERNAL","ACCESSORIES"],
+     label:{en:"External parts","zh":"外部部件","es":"Partes externas"}},
+    {id:"int",   tests:["KAP_WIRING","KAP_DRIVERS","INTERNAL"],
+     label:{en:"Internal parts","zh":"内部部件","es":"Partes internas"}},
+    {id:"wear",  tests:["KAP_WEAR"],
+     label:{en:"Physical aging","zh":"物理老化","es":"Envejecimiento físico"}},
+    /* Empaques va de última y no octava, como estaba en la lista de Producto,
+       porque la caída vive aquí desde el plan 138 y una caída no se puede
+       hacer antes de revisar el gabinete: cada fisura que dejara aparecería
+       después como falla de fabricación. La contrapartida es que la foto de
+       la caja cerrada se toma al desempacar, horas antes de que el operario
+       llegue a esta subsección; eso lo dice el propio punto. */
+    {id:"pack",  tests:["KAP_SHIPBOX","KAP_MANUAL","GRAPHICS","KAP_DROP"],
+     label:{en:"Packaging and printed matter","zh":"包装与印刷品",
+            "es":"Empaques y material impreso"}}
+  ]
+};
+/* El reparto por defecto: el que usa cualquier referencia que no traiga el
+   suyo. A diferencia del del KAP206, éste NO reordena nada — las fábricas
+   llevan meses recorriendo su plan en un orden y cambiárselo por un asunto de
+   pantalla sería cobrar caro una mejora barata.
+
+   Por eso las subsecciones están recortadas contra el orden que el plan ya
+   tiene, y no al revés. Es la razón de que «Batería externa» y «Capacidad de
+   batería» sean dos y no una: en el plan de YISION hay partes internas en
+   medio de las dos, y juntarlas haría que la misma tarjeta apareciera dos
+   veces en el índice. Una subsección de una sola prueba se ve pobre; una
+   tarjeta repetida se ve rota. */
+const DEFAULT_GROUPS = [
+  {id:"env",  tests:["AGING"],
+   label:{en:"Aging","zh":"老化","es":"Envejecimiento"}},
+  {id:"pot",  tests:["RMS_POWER","RMS_SUPPLIER","SUB_RMS"],
+   label:{en:"RMS power","zh":"额定功率","es":"Potencia RMS"}},
+  {id:"caja", tests:["SUB_BOX"],
+   label:{en:"Box and packing","zh":"外箱与包装","es":"Caja y empaque"}},
+  {id:"func", tests:["POWER_AC","USB","SD","BLUETOOTH","RX_FM_COMPAT","RADIO_FM",
+                     "AUX","DSP_MODES","XLR_OUT","INPUT_CHANNELS","DISPLAY",
+                     "REMOTE","SUB_IN","SUB_OUT","GPE"],
+   label:{en:"Functional","zh":"功能","es":"Funcionales"}},
+  {id:"ext",  tests:["EXTERNAL","EPS_EXTERNAL","SUB_EXTERNAL"],
+   label:{en:"External parts","zh":"外部部件","es":"Partes externas"}},
+  {id:"pack", tests:["ACCESSORIES","SUB_ACC","GRAPHICS","SUB_GRAPHICS"],
+   label:{en:"Accessories and printed matter","zh":"配件与印刷品",
+          "es":"Accesorios y material impreso"}},
+  {id:"bat",  tests:["EXT_BATTERY"],
+   label:{en:"External battery","zh":"外置电池","es":"Batería externa"}},
+  {id:"int",  tests:["INTERNAL"],
+   label:{en:"Internal parts","zh":"内部部件","es":"Partes internas"}},
+  {id:"cap",  tests:["BAT_CAPACITY"],
+   label:{en:"Battery capacity","zh":"电池容量","es":"Capacidad de batería"}},
+  /* LESHENG y PHI. Sus planes son de micrófonos y receptores y no tienen nada
+     que ver con los de cabinas, así que van con sus propias subsecciones y no
+     forzados dentro de las de arriba. */
+  {id:"ident",tests:["IDENTIFICATION"],
+   label:{en:"Identification","zh":"标识","es":"Identificación"}},
+  {id:"mic_v",tests:["MIC_ACCESSORIES","MIC_BUTTONS","MIC_VISUAL","MIC_POWER_LIGHT",
+                     "PHI_VISUAL","PHI_LINK","PHI_BUTTONS","PHI_MIC_OFF"],
+   label:{en:"Accessories, buttons and appearance","zh":"配件、按键与外观",
+          "es":"Accesorios, botones y apariencia"}},
+  {id:"mic_c",tests:["RECEIVER_CHARGE","MIC_CHARGE","PHI_CHARGE"],
+   label:{en:"Charging","zh":"充电","es":"Carga"}},
+  {id:"mic_f",tests:["RHO102_BAG","SIMULTANEOUS","CHANNELS","AUDIO_VOLUME",
+                     "WIRELESS_RANGE","DISTORTION","AUTO_OFF",
+                     "PHI_RECONNECT","PHI_POWER_CUT","PHI_RANGE"],
+   label:{en:"Wireless operation","zh":"无线使用","es":"Funcionamiento inalámbrico"}},
+  {id:"mic_i",tests:["MIC_BATTERY","PHI_INTERNAL","PHI_BAT_VOLT"],
+   label:{en:"Internal parts","zh":"内部部件","es":"Partes internas"}}
+];
+/* La subsección de una prueba, o null si esta referencia no usa subsecciones.
+   Una prueba que no esté en ninguna lista no se pierde: cae al final, bajo una
+   subsección propia, y así se ve que falta repartirla en vez de desaparecer. */
+const SIN_GRUPO = {id:"otras", label:{en:"Other tests","zh":"其他测试","es":"Otras pruebas"}};
+function groupsOf(){ return GROUPS[S.model] || DEFAULT_GROUPS; }
+/* Sólo las referencias con reparto propio se reordenan. El reparto por defecto
+   rotula, no manda: mueve la vista, nunca el plan. */
+function groupsReorder(){ return !!GROUPS[S.model]; }
+function groupOf(t){
+  const gs = groupsOf();
+  if(!gs || !t) return null;
+  for(const g of gs) if(g.tests.indexOf(t.id) >= 0) return g;
+  return SIN_GRUPO;
+}
+/* El puesto de una prueba dentro del plan cuando hay subsecciones: primero el
+   número de la subsección, después su sitio dentro de ella. Sin subsecciones
+   devuelve null y manda `first`, como siempre. */
+function groupRank(t){
+  const gs = groupsOf();
+  if(!gs) return null;
+  for(let i = 0; i < gs.length; i++){
+    const j = gs[i].tests.indexOf(t.id);
+    if(j >= 0) return i * 1000 + j;
+  }
+  return 999000;
+}
+const planTests = () => {
+  const l = plan().tests
+    .filter(t => (t.plan || "") === planTagOf(S.model) && fits(t));
+  return groupsReorder()
+    ? l.sort((a, b) => groupRank(a) - groupRank(b))
+    : l.sort((a, b) => (a.first || 99) - (b.first || 99));
+};
 /* The tests this inspection actually runs. Same thing, unless Admin picked a
    subset — then the checklist, the progress bar, the verdict and the report all
    work off the subset, which is why the filter lives here and nowhere else. */
@@ -11051,6 +11222,9 @@ ${runId()}
       <td style="background:#eef2f6" class="${
         uv==="PASS"?"p":uv==="FAIL"?"f":"na"}">${verdictText(uv)}</td></tr>`;
   }
+  /* La subsección dibujada de último en esta tabla. Se reinicia por parlante:
+     con varias unidades cada bloque vuelve a empezar por la primera. */
+  let grVisto = null;
   unitRows(u).forEach((r,i)=>{
     if(!r) return;
     // A row left behind by a plan that has since changed. Same rule as in
@@ -11058,6 +11232,15 @@ ${runId()}
     const t = tests()[i];
     if(!t) return;
     if(t.type === "photos" && u > 0) return;   // documented once for the lot
+    /* El mismo renglón de banda que separa parlantes, con otro tono, para que
+       el lector del informe encuentre las subsecciones sin contar pruebas. */
+    const gr = groupOf(t);
+    if(gr && gr.id !== grVisto){
+      grVisto = gr.id;
+      h += `<tr><td colspan="6" style="background:#f5f2ea;font-weight:700;
+        font-size:8pt;letter-spacing:.06em;text-transform:uppercase">${
+        esc(L(gr.label))}</td></tr>`;
+    }
     const defs = realPoints(t);
     let ok = 0, bad = 0, na = 0, refs = [];
 
@@ -14216,7 +14399,57 @@ function finish(){
 }
 
 function renderIndex(){
-  const list = tests().map((t,i)=>{
+  /* Con subsecciones el índice es una tarjeta por subsección; sin ellas, la
+     lista de siempre dentro de una sola tarjeta. Las dos ramas producen los
+     mismos renglones — `renderIxRow` es el mismo — así que una referencia que
+     no use subsecciones no se entera de que esto existe. */
+  const ts = tests();
+  const respondida = j =>
+    allUnits().every(u => (((S.data[u]||[])[j])||{}).verdict);
+  const fallada = j =>
+    allUnits().some(u => (((S.data[u]||[])[j])||{}).verdict === "FAIL");
+
+  /* Los tramos de subsección, en el orden en que aparecen en el plan. Se
+     recorre la lista una vez y se corta donde cambia el grupo; no se ordena
+     nada aquí, porque en las referencias de fábrica el orden del plan es el
+     que manda. Si una subsección quedara partida en dos tramos, saldrían dos
+     casillas — que es exactamente lo que el reparto por defecto está escrito
+     para evitar. */
+  const tramos = [];
+  ts.forEach((t,i) => {
+    const g = groupOf(t) || SIN_GRUPO;
+    const ult = tramos[tramos.length-1];
+    if(!ult || ult.g.id !== g.id) tramos.push({g, filas:[{t,i}]});
+    else ult.filas.push({t,i});
+  });
+
+  const mapa = tramos.length < 2 ? "" : `<div class="gr-mapa">${
+    tramos.map(tr => {
+      const hechas = tr.filas.filter(f => respondida(f.i)).length;
+      const mal = tr.filas.some(f => fallada(f.i));
+      const aqui = tr.filas.some(f => f.i === S.index);
+      /* El rojo gana al verde: una subsección terminada con una falla dentro
+         tiene que verse como lo que es. Y el azul de «aquí» gana a los dos,
+         porque es lo único de la cuadrícula que dice dónde está el dedo. */
+      const cls = aqui ? "va" : mal ? "mal"
+        : hechas === tr.filas.length ? "ok" : "";
+      /* Salta al primer pendiente de esa subsección, no a su primera prueba:
+         quien toca «Funcionales 6/8» quiere las dos que faltan. */
+      const dest = (tr.filas.find(f => !respondida(f.i)) || tr.filas[0]).i;
+      return `<div class="gr-c ${cls}" onclick="goTest(${dest})">
+        <b>${hechas}/${tr.filas.length}</b>
+        <i>${esc(L(tr.g.label))}</i></div>`;
+    }).join("")}</div>`;
+
+  const list = mapa + `<div class="card">${
+    tramos.map(tr => {
+      const hechas = tr.filas.filter(f => respondida(f.i)).length;
+      const cab = tramos.length < 2 ? "" : `<div class="ix-grupo">${
+        esc(L(tr.g.label))}<i>${hechas}/${tr.filas.length}</i></div>`;
+      return cab + tr.filas.map(f => renderIxRow(f.t, f.i)).join("");
+    }).join("")}</div>`;
+
+  function renderIxRow(t, i){
     const r = (S.data[0]||[])[i];
     // A test counts as failed if it failed on any speaker, and as answered only
     // when every speaker has been answered.
@@ -14252,7 +14485,7 @@ function renderIndex(){
         <i>${fmt("points_n",{n:total})}${files?" · "+fmt("files_n",{n:files}):""}${
           testOptional(t)?" · "+tr("is_optional"):""}</i></span>
       <em class="${cls}">${esc(status)}</em></div>`;
-  }).join("");
+  }
 
   // Where each speaker stands. Read-only: the checklist is walked once, so
   // there is nothing to navigate to here — a tap would only mislead.
@@ -14279,7 +14512,10 @@ function renderIndex(){
     ${units}
     <h2>${tr("tests_title")}</h2>
     <p class="hint" style="margin:0 0 12px">${tr("index_hint")}</p>
-    <div class="card">${list}</div>
+    ${/* `list` ya trae su propia caja — la cuadrícula por fuera y la lista
+          dentro de una tarjeta. Envolverlo otra vez metía una tarjeta en
+          otra y encerraba la cuadrícula donde no va. */""}
+    ${list}
     ${/* The index is the other place you stand inside an inspection, and the one
           you reach when looking for a way out of it. */""}
     ${abortBlock()}`;

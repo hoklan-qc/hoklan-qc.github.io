@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="16.5">
+<meta name="app-version" content="16.6">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -190,6 +190,11 @@ button:active{transform:scale(.99)}
 /* Azul para lo que está en curso o recién terminado en este teléfono: no es un
    veredicto, es dónde está el trabajo. */
 .grp.aqui{border-color:var(--accent)}
+/* La razón de una retención. Con barra al costado y no en cursiva: es una
+   instrucción de HOKLAN, no un comentario al margen. */
+.dp-nota{margin:6px 0;padding:8px 10px;border-left:3px solid var(--amber);
+  background:rgba(245,185,66,.08);font-size:12.5px;line-height:1.5;
+  color:var(--ink);border-radius:0 6px 6px 0}
 .grp-h i{font-style:normal;color:var(--muted);font-size:15px;width:18px;text-align:center}
 .grp-b{padding:0 14px 12px}
 /* El índice plegado reusa este acordeón, que ya existía para las secciones de
@@ -8362,7 +8367,10 @@ const T = {
   "dp_EN CURSO":"IN PROGRESS", dp_TERMINADA:"FINISHED",
   dp_pass_na:"Pass with remarks · %n point(s) N/A",
   dp_by:"Decided by %q · %d",
-  dp_ok:"AUTHORISE", dp_hold:"HOLD",
+  dp_cancel:"Cancel",
+  dp_ok:"AUTHORISE", dp_hold:"HOLD", dp_hold_do:"HOLD THE ORDER",
+  dp_why:"Why is it held",
+  dp_why_ph:"What the factory has to correct, or what is still missing.",
   dp_publish:"Publish the status",
   dp_unpublished:"%n decision(s) not published yet.",
   dp_all_published:"Everything is published.",
@@ -8636,7 +8644,10 @@ const T = {
   "dp_EN CURSO":"EN CURSO", dp_TERMINADA:"TERMINADA",
   dp_pass_na:"Conforme con observaciones · %n punto(s) N/A",
   dp_by:"Decidida por %q · %d",
-  dp_ok:"AUTORIZAR", dp_hold:"RETENER",
+  dp_cancel:"Cancelar",
+  dp_ok:"AUTORIZAR", dp_hold:"RETENER", dp_hold_do:"RETENER LA ORDEN",
+  dp_why:"Por qué queda retenida",
+  dp_why_ph:"Qué debe corregir la fábrica, o qué falta todavía.",
   dp_publish:"Publicar el estado",
   dp_unpublished:"%n decisión(es) sin publicar.",
   dp_all_published:"Todo está publicado.",
@@ -8900,7 +8911,10 @@ const T = {
   "dp_EN CURSO":"进行中", dp_TERMINADA:"已完成",
   dp_pass_na:"合格（有备注）· %n 个检查项不适用",
   dp_by:"由 %q 决定 · %d",
-  dp_ok:"放行", dp_hold:"扣留",
+  dp_cancel:"取消",
+  dp_ok:"放行", dp_hold:"扣留", dp_hold_do:"确认扣留",
+  dp_why:"扣留原因",
+  dp_why_ph:"工厂需要整改的内容，或仍缺少的资料。",
   dp_publish:"发布状态",
   dp_unpublished:"有 %n 项决定尚未发布。",
   dp_all_published:"全部已发布。",
@@ -13591,14 +13605,24 @@ function renderDespacho(){
           esc((o.fallidas||[]).join(" · "))}</p>` : ""}
         ${o.parcial ? `<p class="hint" style="margin:0 0 6px;color:var(--amber)">${
           tr("dp_partial")}</p>` : ""}
+        ${o.nota ? `<p class="dp-nota">${esc(o.nota)}</p>` : ""}
         ${o.decidida ? `<p class="hint" style="margin:0 0 6px">${
           fmt("dp_by",{q:o.decidida_por||"", d:fechaCorta(o.decidida)})}</p>` : ""}
+        ${S.despNota === k ? `
+          <label style="margin-top:0">${tr("dp_why")}</label>
+          <textarea id="dpnota" rows="3" placeholder="${tr("dp_why_ph")}"
+            >${esc(o.nota || "")}</textarea>
+          <div class="row" style="margin:8px 0 0">
+            <button class="primary" onclick="despRetener('${esc(k)}')">${
+              tr("dp_hold_do")}</button>
+            <button onclick="despPedirNota('${esc(k)}')">${tr("dp_cancel")}</button>
+          </div>` : `
         <div class="row" style="margin:0">
           ${o.estado !== "AUTORIZADO" ? `<button class="primary"
             onclick="despDecidir('${esc(k)}','AUTORIZADO')">${tr("dp_ok")}</button>` : ""}
           ${o.estado !== "RETENIDO" ? `<button
-            onclick="despDecidir('${esc(k)}','RETENIDO')">${tr("dp_hold")}</button>` : ""}
-        </div>
+            onclick="despPedirNota('${esc(k)}')">${tr("dp_hold")}</button>` : ""}
+        </div>`}
       </div>
     </div>`;
   };
@@ -13746,16 +13770,32 @@ function despAgregar(f){
   return k;
 }
 
-function despDecidir(k, estado){
+function despDecidir(k, estado, nota){
   const d = despCargar();
   const o = d.ordenes[k];
   if(!o) return;
   o.estado = estado;
   o.decidida = new Date().toISOString();
   o.decidida_por = ADMIN_ID.digits;
+  /* La nota se conserva si no llega una nueva. Autorizar algo que estuvo
+     retenido no borra por qué lo estuvo: esa frase es el historial de la
+     orden, y es lo que explica un despacho tardío tres meses después. */
+  if(nota !== undefined) o.nota = String(nota || "").trim() || null;
   o.sinPublicar = true;
   despGuardar(d);
+  S.despNota = "";
   render();
+}
+/* Abre el recuadro de la nota en una tarjeta. Retener sin decir por qué deja a
+   la fábrica mirando un rótulo rojo y preguntando por WeChat, que es
+   exactamente el trabajo que este panel viene a quitar. */
+function despPedirNota(k){
+  S.despNota = S.despNota === k ? "" : k;
+  render();
+}
+function despRetener(k){
+  const ta = document.getElementById("dpnota");
+  despDecidir(k, "RETENIDO", ta ? ta.value : "");
 }
 
 /* El archivo que se publica en GitHub. Es la copia durable de todo esto: si
@@ -14169,7 +14209,10 @@ function estadoFabrica(){
             fmt("fs_answered",{n:o.pruebas, tot:o.pruebas_plan})}</p>` : ""}
         ${(o.fallidas||[]).length ? `<p class="hint" style="margin:4px 0 0;color:var(--red)">${
           esc((o.fallidas||[]).join(" · "))}</p>` : ""}
-        ${o.estado === "PENDIENTE" ? `<p class="hint" style="margin:4px 0 0">${
+        ${/* La razón, en la pantalla de la fábrica. Es la mitad que hace útil
+              el «retenido»: sin ella, el operario ve un rótulo rojo y llama. */""}
+        ${o.nota ? `<p class="dp-nota">${esc(o.nota)}</p>` : ""}
+        ${o.estado === "PENDIENTE" && !o.nota ? `<p class="hint" style="margin:4px 0 0">${
           tr("fs_waiting")}</p>` : ""}
         ${o.estado === "TERMINADA" ? `<p class="hint" style="margin:4px 0 0">${
           tr("fs_sent")}</p>` : ""}

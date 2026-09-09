@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="16.6">
+<meta name="app-version" content="16.7">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -880,7 +880,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 144,
+      "plan_version": 146,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -5668,8 +5668,13 @@ const CONFIG = {
          /* N/A punto por punto habilitado para YISION en el plan 98, a petición
             de HOKLAN. EAGLE conserva la prohibición: no la pidió. */
          "id":"GRAPHICS","optional":false,"type":"photos","no_na":["EAG"],
-         "only_factory":["YIS","EAG"],
-         "skip":["HK-KAP208"],
+         /* LESHENG entró en el plan 145 sólo para el RHO101, que empaca con el
+            mismo material impreso que las cabinas de YISION. Se abre la fábrica
+            y se excluyen las otras tres referencias de LESHENG: el PHI y los dos
+            RHO102 no lo llevan, y pedirles seis fotos de un manual que no existe
+            es lo que enseña al operario a marcar N/A sin mirar. */
+         "only_factory":["YIS","EAG","LES"],
+         "skip":["HK-KAP208","HK-PHI","HK-RHO102","HK-RHO102-BAG"],
          "label":{"en":"PRINTED MATERIAL","zh":"印刷品"},
          "steps":[
            {"en":"Take a photo of each item on the list","zh":"逐项拍摄下列物品"},
@@ -9398,9 +9403,29 @@ function groupRank(t){
   }
   return 999000;
 }
+/* ---------- pruebas ocultas, no retiradas ---------------------------------
+   Una referencia puede tener pruebas escritas que hoy no se ejecutan. No es lo
+   mismo que retirarlas: retirarlas obliga a reescribirlas cuando vuelvan, y a
+   revisar `only` y `skip` de cada una para no romper de paso a las demás
+   referencias que las comparten.
+
+   Aquí se nombran y ya. Volver a habilitar una es borrar su línea de esta
+   lista — un renglón, sin tocar el plan.
+
+   RHO101, plan 145: HOKLAN inspecciona por ahora sólo la identificación y el
+   material impreso. Las once de micrófono y receptor siguen escritas, con sus
+   videos y sus criterios, esperando.
+--------------------------------------------------------------------------- */
+const OCULTAS = {
+  "HK-RHO101": ["MIC_ACCESSORIES","MIC_BUTTONS","MIC_VISUAL","MIC_POWER_LIGHT",
+                "RECEIVER_CHARGE","MIC_CHARGE","CHANNELS","AUDIO_VOLUME",
+                "WIRELESS_RANGE","DISTORTION","AUTO_OFF","MIC_BATTERY"]
+};
+const oculta = t => (OCULTAS[S.model] || []).indexOf(t && t.id) >= 0;
+
 const planTests = () => {
   const l = plan().tests
-    .filter(t => (t.plan || "") === planTagOf(S.model) && fits(t));
+    .filter(t => (t.plan || "") === planTagOf(S.model) && fits(t) && !oculta(t));
   return groupsReorder()
     ? l.sort((a, b) => groupRank(a) - groupRank(b))
     : l.sort((a, b) => (a.first || 99) - (b.first || 99));

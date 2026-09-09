@@ -1,6 +1,6 @@
 {
  "v": 1,
- "actualizado": "2026-09-09T00:00:00.000Z",
+ "actualizado": "2026-09-09T18:00:00.000Z",
  "ordenes": [
   {"po":"1638","fabrica":"RHY","modelo":"HK-BAS115A1","estado":"AUTORIZADO","decidida_por":"365","veredicto":"","unidades":0,"pruebas":0,"pruebas_plan":0,"fotos":0,"videos":0,"fallidas":[],"cerrada":"2026-09-09T00:00:00.000Z"},
   {"po":"1638","fabrica":"RHY","modelo":"HK-EPS112A1","estado":"AUTORIZADO","decidida_por":"365","veredicto":"","unidades":0,"pruebas":0,"pruebas_plan":0,"fotos":0,"videos":0,"fallidas":[],"cerrada":"2026-09-09T00:00:00.000Z"},
@@ -21,6 +21,6 @@
   {"po":"1669","fabrica":"YIS","modelo":"HK-SKA108A1","estado":"AUTORIZADO","decidida_por":"365","veredicto":"","unidades":0,"pruebas":0,"pruebas_plan":0,"fotos":0,"videos":0,"fallidas":[],"cerrada":"2026-09-09T00:00:00.000Z"},
   {"po":"1678","fabrica":"YIS","modelo":"HK-ARC101","estado":"AUTORIZADO","decidida_por":"365","veredicto":"","unidades":0,"pruebas":0,"pruebas_plan":0,"fotos":0,"videos":0,"fallidas":[],"cerrada":"2026-09-09T00:00:00.000Z"},
   {"po":"1690","fabrica":"YIS","modelo":"HK-RES101","estado":"AUTORIZADO","decidida_por":"365","veredicto":"","unidades":0,"pruebas":0,"pruebas_plan":0,"fotos":0,"videos":0,"fallidas":[],"cerrada":"2026-09-09T00:00:00.000Z"},
-  {"po":"1690","fabrica":"YIS","modelo":"HK-RES102","estado":"PENDIENTE","decidida_por":null,"veredicto":"","unidades":0,"pruebas":0,"pruebas_plan":0,"fotos":0,"videos":0,"fallidas":[],"cerrada":"2026-09-09T00:00:00.000Z"}
+  {"po":"1690","fabrica":"YIS","modelo":"HK-RES102","estado":"AUTORIZADO","decidida_por":"365","veredicto":"","unidades":0,"pruebas":0,"pruebas_plan":0,"fotos":0,"videos":0,"fallidas":[],"cerrada":"2026-09-09T00:00:00.000Z"}
  ]
 }

@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="16.1">
+<meta name="app-version" content="16.2">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -146,6 +146,23 @@ button:active{transform:scale(.99)}
 .pk-rot{font-size:11px;font-weight:700;letter-spacing:.07em;
   text-transform:uppercase;color:var(--accent);margin:14px 0 6px}
 .pk-rot:first-child{margin-top:2px}
+/* La zona donde se suelta el paquete, en el panel de despacho. Borde punteado
+   porque es un hueco que espera algo, no un botón; y sigue siendo tocable,
+   porque en el teléfono no se arrastra nada. */
+.dp-zona{border:1px dashed var(--accent);border-radius:10px;padding:20px 12px;
+  text-align:center;cursor:pointer;background:rgba(46,163,242,.06)}
+.dp-zona.on{background:rgba(46,163,242,.18)}
+.dp-zona b{display:block;color:var(--accent);font-size:13px;font-weight:700;
+  letter-spacing:.04em}
+.dp-zona i{display:block;font-style:normal;color:var(--muted);font-size:11px;
+  margin-top:5px}
+/* El campo para el lector de mano, debajo del recuadro del código de barras.
+   Ancho completo y con su explicación al pie, para que quede claro que es una
+   segunda vía y no el camino principal. */
+.scan-in{margin-top:8px;flex-basis:100%}
+.scan-in input{font-size:15px;padding:10px}
+.scan-in i{display:block;font-style:normal;color:var(--muted);font-size:11px;
+  margin-top:5px}
 /* La cabecera de la subsección abierta. «Todas» y «ninguna» viven aquí, dentro
    del bloque, y no arriba junto a los de plan completo: puestos arriba nadie
    sabría si actúan sobre lo filtrado o sobre las cincuenta y cinco. */
@@ -661,7 +678,14 @@ const CONFIG = {
        corren el esquema BRAGI, que es el que describe el panel real — gestos,
        perilla P1, memoria y salida USB-C. El esquema KAPPA describía otro panel
        y se retiró entero. */
-    "HK-KAP206":"YIS","HK-KAP208":"YIS"
+    "HK-KAP206":"YIS","HK-KAP208":"YIS",
+    /* Epsilon de 15 pulgadas, plan 140. Es de RHYME como el EPS112A1, y su plan
+       se armó con el de aquél más las pruebas de producto del KAP206 — las que
+       miran el objeto y no el panel. Las veintiséis del panel BRAGI se
+       quedaron fuera a propósito: describen gestos, perilla P1 y botones B1 a
+       B8 que en un Epsilon no existen, y traerlas habría dejado media
+       inspección en N/A. */
+    "HK-EPS115A1":"RHY"
   },
 
   "failure_codes": {
@@ -845,7 +869,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 139,
+      "plan_version": 141,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1105,7 +1129,7 @@ const CONFIG = {
                     "zh":"本节所有内容均须在开箱之前完成。",
                     "es":"Todo lo de esta sección se mide antes de abrir nada."}},
            {"section":{"en":"Woofer box","zh":"低音箱彩盒","es":"Caja del woofer"},
-            "only":["HK-EPS112A1"],
+            "only":["HK-EPS112A1","HK-EPS115A1"],
             "help":{"en":"The first of the two boxes. Everything here is measured before opening anything.",
                     "zh":"两个彩盒中的第一个。本节所有内容均须在开箱之前完成。",
                     "es":"La primera de las dos cajas. Todo lo de esta sección se mide antes de abrir nada."}},
@@ -1200,7 +1224,7 @@ const CONFIG = {
                 plan 105 en todo el archivo: en fábrica la llaman columna, y el
                 poste va en esta misma caja. */
             "section":{"en":"Column and pole box","zh":"立柱与支杆彩盒","es":"Caja de columna y poste"},
-            "only":["HK-EPS112A1"],
+            "only":["HK-EPS112A1","HK-EPS115A1"],
             "help":{"en":"The second of the two boxes, the one carrying the column and the pole. Photographed, weighed and measured the same way, also before opening.",
                     "zh":"两个彩盒中的第二个，内装立柱与支杆。同样在开箱之前拍摄、称重并测量。",
                     "es":"La segunda de las dos cajas, la que trae la columna y el poste. Se fotografía, se pesa y se mide igual, también antes de abrir."}},
@@ -1242,7 +1266,7 @@ const CONFIG = {
            {"id":"sat_box_bottom","photo":true,"only":["HK-EPS112A1"],
             "label":{"en":"Column and pole box — bottom","zh":"立柱与支杆彩盒 — 底面","es":"Caja de columna y poste — inferior"}},
            {"id":"sat_barcode","code":"PKG-001","photo":true,"scan":true,
-            "only":["HK-EPS112A1"],"measure":{"unit":"EAN","step":"1"},
+            "only":["HK-EPS112A1","HK-EPS115A1"],"measure":{"unit":"EAN","step":"1"},
             "label":{"en":"Barcode on the column and pole box","zh":"立柱与支杆彩盒条码","es":"Código de barras de la caja de columna y poste"},
             "help":{"en":"The same photograph on the second box. The app reads the number; it cannot be typed in. It must be a different code from the one on the woofer box.",
                     "zh":"对第二箱做同样的拍摄。号码由应用自动识别，不可手工输入。该号码应与低音箱彩盒上的条码不同。",
@@ -1471,7 +1495,7 @@ const CONFIG = {
            se puede editar sin mirar a nadie más. El precio es que un cambio que
            valga para todos hay que hacerlo dos veces; se paga con gusto. */
         {"id":"EPS_EXTERNAL","optional":false,"only_factory":["RHY"],
-         "only":["HK-EPS112A1"],
+         "only":["HK-EPS112A1","HK-EPS115A1"],
          "evidence":["video"],"first":3,
          "ask":{"en":"one continuous take going round the cabinet, the column and the pole, showing the panels, the grilles and the rest, no longer than a minute.",
                 "zh":"一镜到底环绕箱体、立柱与支杆拍摄，需拍到两块面板、网罩及其余部分，时长不超过一分钟。",
@@ -2788,6 +2812,41 @@ const CONFIG = {
                     "zh":"在音箱静音时于第二台设备上细听：不应有嗡嗡声或嘶声。",
                     "es":"Escuche en el segundo equipo con la cabina en silencio: no debe haber zumbido ni siseo."}}]},
 
+        {"id":"OUT_120HZ","optional":false,"only_factory":["RHY"],"evidence":[],
+         "only":["HK-EPS112A1","HK-EPS115A1","HK-BAS115A1","HK-BAS118A1"],
+         "label":{"en":"120 Hz OUTPUT AND FULL-RANGE OUTPUT",
+                  "zh":"120 Hz 输出与全频输出",
+                  "es":"SALIDA 120 Hz Y SALIDA DE RANGO COMPLETO"},
+         "steps":[
+           {"en":"Play a 40 Hz tone over Bluetooth on cabinet A","zh":"通过蓝牙在 A 箱播放 40 Hz 信号","es":"Reproduzca un tono de 40 Hz por Bluetooth en la cabina A"},
+           {"en":"Connect a second cabinet to the 120 Hz output","zh":"将第二台音箱接到 120 Hz 输出","es":"Conecte una segunda cabina a la salida de 120 Hz"},
+           {"en":"Then move it to the full-range output","zh":"随后改接到全频输出","es":"Después páselo a la salida de rango completo"}],
+         "points":[
+           {"section":{"en":"Setup","zh":"接线","es":"Montaje"},
+            "help":{"en":"Cabinet A receives a 40 Hz tone over Bluetooth, on its bass input. A second cabinet is connected first to the 120 Hz output and then to the full-range output, without changing the volume between the two.",
+                    "zh":"A 箱通过蓝牙在低音输入接收 40 Hz 信号。第二台音箱先接 120 Hz 输出，再改接全频输出，两次之间不得改变音量。",
+                    "es":"La cabina A recibe un tono de 40 Hz por Bluetooth, en su entrada de bajo. La segunda cabina se conecta primero a la salida de 120 Hz y después a la de rango completo, sin cambiar el volumen entre las dos."}},
+           {"id":"o120_tono","code":"AUD-036",
+            "label":{"en":"Cabinet A reproduces the 40 Hz tone","zh":"A 箱可重放 40 Hz 信号","es":"La cabina A reproduce el tono de 40 Hz"},
+            "help":{"en":"Before connecting anything else, confirm the tone is heard and felt on cabinet A itself. If it is not there, the rest of the test says nothing.",
+                    "zh":"在连接其他设备之前，先确认 A 箱本身可听到并感受到该信号。若 A 箱无输出，后续测试即无意义。",
+                    "es":"Antes de conectar nada más, confirme que el tono se oye y se siente en la propia cabina A. Si ahí no está, el resto de la prueba no dice nada."}},
+           {"id":"o120_sin_bajo","code":"AUD-036",
+            "label":{"en":"120 Hz output — the second cabinet does not reproduce the bass","zh":"120 Hz 输出 — 第二台音箱不出低音","es":"Salida 120 Hz — la segunda cabina no reproduce el bajo"},
+            "help":{"en":"With the 40 Hz tone playing, connect the second cabinet to the 120 Hz output. The tone must not be heard or felt on it. Put your hand on its cone: it must not be moving with the tone.",
+                    "zh":"在 40 Hz 信号播放状态下，将第二台音箱接入 120 Hz 输出。该音箱不应听到或感受到该信号。用手触摸其锥盆：不应随信号振动。",
+                    "es":"Con el tono de 40 Hz sonando, conecte la segunda cabina a la salida de 120 Hz. En ella el tono no debe oírse ni sentirse. Ponga la mano sobre su cono: no debe moverse con el tono."}},
+           {"id":"o120_viva","code":"AUD-036",
+            "label":{"en":"The 120 Hz output does carry the rest of the programme","zh":"120 Hz 输出仍可传送其余节目声","es":"La salida 120 Hz sí lleva el resto del programa"},
+            "help":{"en":"Without unplugging anything, change the source to normal music. The second cabinet must play it. This separates a working filter from a dead output.",
+                    "zh":"在不改变接线的情况下，将音源切换为正常音乐。第二台音箱应正常播放。此步用于区分滤波正常与输出失效。",
+                    "es":"Sin desconectar nada, cambie la fuente a música normal. La segunda cabina debe reproducirla. Esto separa un filtro que funciona de una salida muerta."}},
+           {"id":"o120_completo","code":"AUD-036",
+            "label":{"en":"Full-range output — the second cabinet does reproduce the bass","zh":"全频输出 — 第二台音箱可出低音","es":"Salida de rango completo — la segunda cabina sí reproduce el bajo"},
+            "help":{"en":"Move the second cabinet to the full-range output and play the 40 Hz tone again, at the same volume. Now it must be heard and felt on it.",
+                    "zh":"将第二台音箱改接至全频输出，以相同音量再次播放 40 Hz 信号。此时该音箱应能听到并感受到该信号。",
+                    "es":"Pase la segunda cabina a la salida de rango completo y reproduzca otra vez el tono de 40 Hz, al mismo volumen. Ahora sí debe oírse y sentirse en ella."}}]},
+
         {"id":"INPUT_CHANNELS","optional":false,"only_factory":["RHY"],"evidence":["video"],
          "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP206","HK-KAP208"],
          "label":{"en":"INPUT CHANNELS","zh":"输入通道","es":"CANALES DE ENTRADA"},
@@ -2832,6 +2891,112 @@ const CONFIG = {
             "help":{"en":"With both inputs connected, speak into both. Both must be heard, without one cutting the other and without feedback.",
                     "zh":"两路输入同时接入并同时讲话。两个声音都应听得到，不应互相切断，也不应啸叫。",
                     "es":"Con las dos entradas conectadas, hable por las dos. Deben oírse las dos, sin que una corte a la otra y sin acople."}}]},
+
+        {"id":"MIC_POS","optional":false,"only_factory":["RHY"],"evidence":[],
+         "only":["HK-EPS112A1","HK-EPS115A1"],
+         "label":{"en":"MICROPHONE — POSITION AND CHANNELS",
+                  "zh":"麦克风 — 档位与通道",
+                  "es":"MICRÓFONO — POSICIÓN Y CANALES"},
+         "steps":[
+           {"en":"Set the selector to the MIC position","zh":"将选择开关置于 MIC 档","es":"Ponga el selector en la posición MIC"},
+           {"en":"Test the microphone on each channel in turn","zh":"逐一在各通道上测试麦克风","es":"Pruebe el micrófono en cada canal, uno por uno"},
+           {"en":"Listen for hiss and interference in each one","zh":"逐一细听是否有嘶声与干扰","es":"Escuche siseo e interferencia en cada uno"}],
+         "points":[
+           {"section":{"en":"How it is done","zh":"操作方法","es":"Cómo se hace"},
+            "help":{"en":"The same microphone and the same cable in every channel, with the selector on MIC. Speak at a normal distance and then stay silent for a few seconds: hiss shows in the silence, not while speaking.",
+                    "zh":"各通道均使用同一支麦克风与同一根线，选择开关置于 MIC 档。以正常距离讲话，随后保持数秒静默：嘶声在静默时才显现，讲话时听不出。",
+                    "es":"El mismo micrófono y el mismo cable en cada canal, con el selector en MIC. Hable a distancia normal y después quédese callado unos segundos: el siseo se delata en el silencio, no mientras se habla."}},
+           {"id":"micpos_sel","code":"MEC-003",
+            "label":{"en":"The selector sits firmly in MIC","zh":"选择开关可稳固定位于 MIC 档","es":"El selector queda firme en MIC"},
+            "help":{"en":"Move it to MIC and let go. It must stay there, with a defined click, and not sit half way between positions.",
+                    "zh":"拨至 MIC 后松手，应稳定停留在该档位，具有清晰的定位手感，不得停在两档之间。",
+                    "es":"Páselo a MIC y suéltelo. Debe quedarse ahí, con un clic definido, y no quedar a medio camino entre dos posiciones."}},
+           {"id":"micpos_ch1","code":"MIC-008",
+            "label":{"en":"Channel 1 — clean, no hiss or interference","zh":"通道 1 — 干净，无嘶声与干扰","es":"Canal 1 — limpio, sin siseo ni interferencia"},
+            "help":{"en":"Speak, then stay silent. No hiss, no hum, no whistle and no radio picked up in the background.",
+                    "zh":"先讲话，再保持静默。不得有嘶声、交流声、啸叫，也不得有串入的广播声。",
+                    "es":"Hable y después cállese. Sin siseo, sin zumbido, sin pito y sin radio colada de fondo."}},
+           {"id":"micpos_ch2","code":"MIC-008",
+            "label":{"en":"Channel 2 — clean, no hiss or interference","zh":"通道 2 — 干净，无嘶声与干扰","es":"Canal 2 — limpio, sin siseo ni interferencia"},
+            "help":{"en":"Move the same microphone with the same cable to channel 2 and repeat. Say in the note if one channel is noisier than the other.",
+                    "zh":"将同一支麦克风与同一根线改接至通道 2 并重复测试。若某一通道噪声明显更大，请在备注中说明。",
+                    "es":"Pase el mismo micrófono con el mismo cable al canal 2 y repita. Diga en la nota si un canal es más ruidoso que el otro."}},
+           {"id":"micpos_vol","code":"MIC-008",
+            "label":{"en":"At maximum channel volume it stays clean","zh":"通道音量最大时仍保持干净","es":"A volumen máximo del canal sigue limpio"},
+            "help":{"en":"In each channel, take the channel volume to maximum with nobody speaking. Some hiss rises with the volume; a hum, a whistle or a crackle does not, and is a failure.",
+                    "zh":"在各通道上，于无人讲话时将通道音量调至最大。轻微嘶声会随音量上升属正常；出现交流声、啸叫或爆音则判不合格。",
+                    "es":"En cada canal, suba el volumen del canal al máximo sin que nadie hable. Un siseo leve sube con el volumen y es normal; un zumbido, un pito o un crujido no, y es falla."}},
+           {"id":"micpos_cable","code":"MIC-008",
+            "label":{"en":"Moving the cable does not add noise","zh":"晃动线材不产生杂音","es":"Mover el cable no mete ruido"},
+            "help":{"en":"With the microphone connected and open, move the cable and the connector in the socket. Crackles that follow the movement are a bad socket or a bad ground.",
+                    "zh":"在麦克风接入并开启的状态下，晃动线材及接口处的接头。若杂音随晃动出现，则为接口或接地不良。",
+                    "es":"Con el micrófono conectado y abierto, mueva el cable y el conector dentro del jack. Los crujidos que siguen al movimiento son conector o tierra en mal estado."}}]},
+
+        /* Preventivas del Epsilon 15, plan 140.
+
+           Salen de mirar qué se ha roto antes. El BAS115A1 y el BAS118A1
+           llevan años con puntos de partes internas que existen porque algo
+           falló: el calibre del cable del woofer, el pegante de las uniones,
+           los fusibles, los terminales, la soldadura del tinsel. El EPS112A1
+           aporta el selector de voltaje y la impedancia declarada.
+
+           No las traje punto por punto desde aquellos planes porque allí viven
+           dentro de PARTES INTERNAS, mezcladas con lo que sólo tiene un bajo.
+           Están reescritas aquí como una prueba propia, con las mismas
+           preguntas y en el orden en que se hacen con el gabinete abierto. */
+        {"id":"EPS15_PREV","optional":false,"only_factory":["RHY"],"evidence":[],
+         "point_photo":true,
+         "only":["HK-EPS115A1"],
+         "label":{"en":"PREVENTIVE CHECKS — WHAT HAS FAILED BEFORE",
+                  "zh":"预防性检查 — 既往失效项",
+                  "es":"PREVENTIVAS — LO QUE YA HA FALLADO ANTES"},
+         "steps":[
+           {"en":"With the cabinet already open from the internal parts test","zh":"在内部检查已打开箱体的状态下进行","es":"Con el gabinete ya abierto de la prueba de partes internas"},
+           {"en":"Go over the six points that have failed on other references","zh":"逐项检查在其他型号上曾失效的六个部位","es":"Recorra los seis puntos que han fallado en otras referencias"},
+           {"en":"Photograph each one","zh":"逐项拍照","es":"Fotografíe cada uno"}],
+         "points":[
+           {"section":{"en":"Where the failures came from","zh":"故障来源","es":"De dónde salen estas fallas"},
+            "help":{"en":"Each point here corresponds to a failure recorded on the BAS115A1, the BAS118A1 or the EPS112A1. They are checked on the first units of a new reference, before the same thing happens again.",
+                    "zh":"本节各项均对应 BAS115A1、BAS118A1 或 EPS112A1 上已记录的故障。在新型号的首批产品上进行检查，以避免同类问题重演。",
+                    "es":"Cada punto de aquí corresponde a una falla registrada en el BAS115A1, el BAS118A1 o el EPS112A1. Se revisan en las primeras unidades de una referencia nueva, antes de que vuelva a pasar lo mismo."}},
+           {"id":"eps15_cable_woofer","code":"INT-020","photo":true,
+            "measure":{"unit":"AWG","step":"1"},
+            "label":{"en":"Woofer cable gauge","zh":"低音单元线径","es":"Calibre del cable del woofer"},
+            "help":{"en":"Read the gauge printed on the insulation, or measure the conductor. It must be the same gauge used on the subwoofers.",
+                    "zh":"读取绝缘层上印刷的线径，或直接测量导体。应与低音炮所用线径一致。",
+                    "es":"Lea el calibre impreso en el aislante, o mida el conductor. Debe ser el mismo calibre que se usa en los bajos."}},
+           {"id":"eps15_fusibles","code":"PWR-010","photo":true,
+            "label":{"en":"Fuses — rating and holder","zh":"保险丝 — 规格与座","es":"Fusibles — valor y portafusible"},
+            "help":{"en":"Photograph the fuse with its rating readable. It must match what the board says next to the holder, and the holder must hold it without play.",
+                    "zh":"拍摄保险丝，其规格须清晰可读，应与电路板上标注一致；保险丝座应夹持牢固、无松动。",
+                    "es":"Fotografíe el fusible con su valor legible. Debe coincidir con lo que dice la tarjeta junto al portafusible, y el portafusible debe sujetarlo sin juego."}},
+           {"id":"eps15_terminales","code":"INT-020","photo":true,
+            "label":{"en":"Terminals — crimped, not just twisted","zh":"接线端子 — 压接可靠，非仅缠绕","es":"Terminales — ponchados, no sólo torcidos"},
+            "help":{"en":"Pull each terminal by hand, without forcing. None must come loose. Bare wire twisted around a screw is a failure even if it works today.",
+                    "zh":"用手适度拉拽各接线端子，均不得松脱。裸线缠绕于螺丝上即判不合格，即使当前功能正常。",
+                    "es":"Tire de cada terminal con la mano, sin forzar. Ninguno debe soltarse. Cable pelado enrollado a un tornillo es falla aunque hoy funcione."}},
+           {"id":"eps15_pegante","code":"MEC-006","photo":true,
+            "label":{"en":"Glue on the internal joints","zh":"内部接合处的胶","es":"Pegante en las uniones internas"},
+            "help":{"en":"The internal joints of the box must be sealed all the way round. Look for stretches without glue and for glue that has not set. An enclosure that leaks air loses bass and buzzes at volume.",
+                    "zh":"箱体内部接缝须全周密封。检查是否存在未上胶段落或未固化的胶。漏气的箱体会损失低频并在大音量下产生杂音。",
+                    "es":"Las uniones internas de la caja deben quedar selladas en todo el contorno. Busque tramos sin pegante y pegante sin fraguar. Una caja que fuga aire pierde graves y zumba en volumen."}},
+           {"id":"eps15_tinsel","code":"INT-021","photo":true,
+            "label":{"en":"Tinsel soldering on the woofer","zh":"低音单元弹波引线焊点","es":"Soldadura del tinsel del woofer"},
+            "help":{"en":"Photograph the two soldered joints. No cold solder, no burnt flux and no broken strands. It must not touch the cone at any point of its travel.",
+                    "zh":"拍摄两处焊点。不得有虚焊、助焊剂烧焦或断丝，且在行程任意位置均不得接触锥盆。",
+                    "es":"Fotografíe las dos soldaduras. Sin soldadura fría, sin fundente quemado y sin hilos rotos. No debe tocar el cono en ningún punto del recorrido."}},
+           {"id":"eps15_impedancia","code":"AUD-034","photo":true,
+            "measure":{"unit":"Ω","step":"0.1"},
+            "label":{"en":"Impedance measured at the terminals","zh":"端子处实测阻抗","es":"Impedancia medida en los terminales"},
+            "help":{"en":"Measure with the meter on the driver terminals, disconnected from the amplifier. Photograph the reading and write it. It must match the impedance the driver declares on its label.",
+                    "zh":"在喇叭与功放断开的状态下，用万用表在喇叭端子处测量。拍摄读数并填写，应与喇叭标签标称阻抗一致。",
+                    "es":"Mida con el multímetro en los terminales del parlante, desconectado del amplificador. Fotografíe la lectura y escríbala. Debe coincidir con la impedancia que declara la etiqueta del parlante."}},
+           {"id":"eps15_voltaje","code":"PWR-005","photo":true,
+            "measure":{"unit":"V","step":"1","as":{"en":"Selector position","zh":"选择开关位置","es":"Posición del selector"}},
+            "label":{"en":"Voltage selector in the position of the order","zh":"电压选择开关处于订单指定位置","es":"Selector de voltaje en la posición de la orden"},
+            "help":{"en":"Photograph the selector and write the position it is in. It must match the destination of the order. It is the failure that arrives most often and the one that destroys the product on first power-up.",
+                    "zh":"拍摄选择开关并填写其所处位置，须与订单目的地一致。该项是最常出现的故障，且会在首次通电时直接损坏产品。",
+                    "es":"Fotografíe el selector y escriba la posición en la que está. Debe corresponder al destino de la orden. Es la falla que más llega y la que destruye el producto en el primer encendido."}}]},
         /* El canal 3 —AUX, RCA izquierdo, RCA derecho y su perilla— se retiró en
            el plan 113: sus entradas se recorren ahora en ENTRADA AUX, en las dos
            secciones de jack 3.5 mm y RCA que el plan 112 dejó allí. */
@@ -2921,7 +3086,7 @@ const CONFIG = {
            {/* El Epsilon lleva dos receptores de infrarrojo, uno al frente y otro
                 en el panel trasero. Con una sola pasada de frente, un receptor
                 trasero muerto sale de la fábrica sin que nadie lo note. */
-            "only":["HK-EPS112A1"],
+            "only":["HK-EPS112A1","HK-EPS115A1"],
             "en":"Two receivers: run the whole list from the front, then again from the back panel",
             "zh":"两个接收头：先在正面完成全部项目，再到后面板重复一遍",
             "es":"Dos receptores: recorra toda la lista de frente y repítala apuntando al panel trasero"}],
@@ -4135,9 +4300,14 @@ const CONFIG = {
            es peor que no tenerlo.
            ------------------------------------------------------------------ */
 
-        {"id":"KAP_SHIPBOX","optional":false,"only_factory":["YIS"],"evidence":[],
+        {/* Desde el plan 140 estas pruebas también son del Epsilon 15. Se
+              abren añadiendo su fábrica a `only_factory` y su referencia a
+              `only`: como las dos condiciones se cumplen a la vez, ampliar la
+              fábrica no las derrama sobre las demás cabinas de RHYME — la
+              lista de `only` las sigue sujetando a dos referencias. */
+         "id":"KAP_SHIPBOX","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_photo":true,
-         "only":["HK-KAP206"],
+         "only":["HK-KAP206","HK-EPS115A1"],
          "label":{"en":"SHIPPING PACK — BOX AND FOAMS",
                   "zh":"运输包装 — 外箱与泡棉",
                   "es":"EMPAQUE DE ENVÍO — CAJA Y ESPUMAS"},
@@ -4180,9 +4350,9 @@ const CONFIG = {
                     "zh":"在产品与纸箱之间材料最少处测量，通常位于角部。记录数值；目前尚无约定最小值。",
                     "es":"Mida donde hay menos material entre el producto y el cartón — suele ser una esquina. Anote el valor; todavía no hay mínimo acordado."}}]},
 
-        {"id":"KAP_WIRING","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_WIRING","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_photo":true,
-         "only":["HK-KAP206"],
+         "only":["HK-KAP206","HK-EPS115A1"],
          "label":{"en":"CABLES AND GAUGES",
                   "zh":"线材与线径",
                   "es":"CABLES Y CALIBRES"},
@@ -4231,9 +4401,9 @@ const CONFIG = {
                     "zh":"任何线材不得摩擦钣金锐边、跨越螺丝或接触振动的锥盆。全部应使用线夹或扎带固定。",
                     "es":"Ningún cable puede rozar un borde de lámina, pasar sobre un tornillo ni tocar el cono en movimiento. Todos amarrados con sus grapas o bridas."}}]},
 
-        {"id":"KAP_DIMS","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_DIMS","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_photo":true,
-         "only":["HK-KAP206"],
+         "only":["HK-KAP206","HK-EPS115A1"],
          "label":{"en":"PRODUCT DIMENSIONS",
                   "zh":"产品尺寸",
                   "es":"DIMENSIONES DEL PRODUCTO"},
@@ -4262,9 +4432,9 @@ const CONFIG = {
                     "zh":"从网罩量至背面，包含任何凸出部分。",
                     "es":"De la rejilla a la parte trasera, incluyendo lo que sobresalga."}}]},
 
-        {"id":"KAP_DRIVERS","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_DRIVERS","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_photo":true,
-         "only":["HK-KAP206"],
+         "only":["HK-KAP206","HK-EPS115A1"],
          "label":{"en":"WOOFER AND TWEETER — MATERIALS",
                   "zh":"低音与高音单元 — 材料",
                   "es":"WOOFER Y TWEETER — MATERIALES"},
@@ -4302,9 +4472,9 @@ const CONFIG = {
                     "zh":"高音单元同上。",
                     "es":"Lo mismo, en el tweeter."}}]},
 
-        {"id":"KAP_CABINET","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_CABINET","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_photo":true,
-         "only":["HK-KAP206"],
+         "only":["HK-KAP206","HK-EPS115A1"],
          "label":{"en":"CABINET — JOINTS AND FIT",
                   "zh":"箱体 — 接合与配合",
                   "es":"GABINETE — UNIONES Y AJUSTES"},
@@ -4347,9 +4517,9 @@ const CONFIG = {
            tarde en el puesto.
            ------------------------------------------------------------------ */
 
-        {"id":"KAP_DRAW","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_DRAW","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_photo":true,
-         "only":["HK-KAP206"],
+         "only":["HK-KAP206","HK-EPS115A1"],
          "label":{"en":"POWER DRAW — OFF AND STANDBY",
                   "zh":"耗电 — 关机与待机",
                   "es":"CONSUMO ELÉCTRICO — APAGADO Y EN ESPERA"},
@@ -4378,9 +4548,9 @@ const CONFIG = {
                     "zh":"通电关机三十分钟后，用手触摸电源区域。明显发热判不合格，通常与上述读数超标属同一故障。",
                     "es":"Tras treinta minutos apagado y conectado, toque con la mano la zona de la fuente. Un calor perceptible es falla, y normalmente es la misma falla que una lectura fuera de rango arriba."}}]},
 
-        {"id":"KAP_MAXVOL","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_MAXVOL","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_video":true,
-         "only":["HK-KAP206"],
+         "only":["HK-KAP206","HK-EPS115A1"],
          "label":{"en":"MAXIMUM VOLUME — LIMITER, RATTLES AND TEMPERATURE",
                   "zh":"最大音量 — 限幅、异响与温度",
                   "es":"VOLUMEN MÁXIMO — LIMITADOR, PARTES SUELTAS Y TEMPERATURA"},
@@ -4707,9 +4877,9 @@ const CONFIG = {
                     "zh":"关机后重新开机并返回收音模式。所存电台应仍在，且应停留在关机前的最后一个电台。",
                     "es":"Apague, encienda y vuelva a FM. Las emisoras deben seguir ahí, y debe volver en la última en la que estaba."}}]},
 
-        {"id":"KAP_TRIPOD","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_TRIPOD","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_photo":true,
-         "only":["HK-KAP206"],
+         "only":["HK-KAP206","HK-EPS115A1"],
          "label":{"en":"TRIPOD MOUNT",
                   "zh":"三脚架安装孔",
                   "es":"SOPORTE PARA TRÍPODE"},
@@ -4743,9 +4913,9 @@ const CONFIG = {
                     "zh":"用手推动产品顶部。随三脚架整体轻微摆动可接受，但产品与三脚架之间不得相对移动，接合处不得有异响。",
                     "es":"Empuje la parte alta del producto con la mano. Puede inclinarse con el trípode, pero el producto no debe moverse contra el trípode, y nada puede crujir en la unión."}}]},
 
-        {"id":"KAP_NOISE_FLOOR","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_NOISE_FLOOR","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_video":true,
-         "only":["HK-KAP206"],
+         "only":["HK-KAP206","HK-EPS115A1"],
          "label":{"en":"OWN NOISE IN EVERY MODE",
                   "zh":"各模式下的本底噪声",
                   "es":"RUIDO PROPIO EN CADA MODO"},
@@ -4790,7 +4960,7 @@ const CONFIG = {
             declara— es lo que la empuja detrás de todas las demás. Aquí no es
             comodidad de orden: esta prueba y la de caída gastan el producto, y
             hacerlas antes contamina todo lo que venga después. */
-         "only":["HK-KAP206"],"first":100,
+         "only":["HK-KAP206","HK-EPS115A1"],"first":100,
          "label":{"en":"WEAR CYCLES — SWITCH AND SOCKETS",
                   "zh":"耐久循环 — 开关与接口",
                   "es":"CICLOS DE DESGASTE — SWITCH Y CONECTORES"},
@@ -4835,9 +5005,9 @@ const CONFIG = {
            ayuda — los puntos y las casillas ya quedan hechos.
            ------------------------------------------------------------------ */
 
-        {"id":"KAP_PSU_SWEEP","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_PSU_SWEEP","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_photo":true,
-         "only":["HK-KAP206"],
+         "only":["HK-KAP206","HK-EPS115A1"],
          "label":{"en":"POWER SUPPLY — VOLTAGE SWEEP 0 TO 300 V",
                   "zh":"电源 — 0 至 300 V 电压扫描",
                   "es":"FUENTE — BARRIDO DE TENSIÓN 0 A 300 V"},
@@ -4876,9 +5046,9 @@ const CONFIG = {
                     "zh":"扫描结束后恢复正常电压并播放音频，产品行为应与测试前完全一致。",
                     "es":"Terminado el barrido, póngalo otra vez en su tensión normal y reproduzca algo. Debe comportarse exactamente igual que antes de la prueba."}}]},
 
-        {"id":"KAP_CURVES","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_CURVES","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_photo":true,
-         "only":["HK-KAP206"],
+         "only":["HK-KAP206","HK-EPS115A1"],
          "label":{"en":"SPL AND IMPEDANCE CURVES",
                   "zh":"声压级与阻抗曲线",
                   "es":"CURVAS DE SPL E IMPEDANCIA"},
@@ -4917,9 +5087,9 @@ const CONFIG = {
                     "zh":"截图中须含日期、序列号或标注。若无法确认所属整机，该曲线不能作为本台的证据。",
                     "es":"La fecha, o el serial, o una nota en la propia captura. Una curva que podría ser de cualquier unidad no sirve como evidencia de ésta."}}]},
 
-        {"id":"KAP_SPL_FREQ","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_SPL_FREQ","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_photo":true,
-         "only":["HK-KAP206"],
+         "only":["HK-KAP206","HK-EPS115A1"],
          "label":{"en":"SPL AT SIX FREQUENCIES",
                   "zh":"六个频点的声压级",
                   "es":"SPL EN SEIS FRECUENCIAS"},
@@ -5044,7 +5214,7 @@ const CONFIG = {
          "point_photo":true,
          /* La última de todas, y por eso 101: después de dejar caer el producto
             no queda ninguna prueba que siga siendo válida. */
-         "only":["HK-KAP206"],"first":101,
+         "only":["HK-KAP206","HK-EPS115A1"],"first":101,
          "label":{"en":"DROP TEST IN ITS BOX",
                   "zh":"包装跌落测试",
                   "es":"CAÍDA DEL PRODUCTO EN SU CAJA"},
@@ -5901,7 +6071,7 @@ const CONFIG = {
                 plan los tiene. Se recorren como el woofer y el tweeter —frente,
                 reverso, peso e impedancia—, y las cuatro respuestas cubren los
                 cuatro parlantes: si uno solo falla, el punto falla. */
-            "only":["HK-EPS112A1"],
+            "only":["HK-EPS112A1","HK-EPS115A1"],
             "section":{"en":"Mid-range drivers","zh":"中音单元","es":"Medios"},
             "help":{"en":"This cabinet carries four mid-range drivers. Go over all four on each point below: one that differs from the rest fails the point.",
                     "zh":"本箱体共有四只中音单元。以下每一项都需检查全部四只：只要有一只与其余不一致，该项即判定为异常。",
@@ -8145,6 +8315,35 @@ const T = {
   na_undo_title:"The whole section is marked N/A — press to undo",
   tests_pick:"Tests to run", all_on:"Select all", all_off:"Clear all",
   pick_group_hint:"Tap a subsection to include or remove it whole.",
+  scan_gun:"Or scan it with a hand scanner connected to the phone.",
+  scan_gun_ph:"scanner or manual entry",
+  scan_clear:"Clear and read again",
+  dp_open:"SHIPPING PANEL", dp_title:"SHIPPING AUTHORISATION",
+  dp_back:"← ADMIN",
+  dp_drop_label:"Add an inspection",
+  dp_drop:"DROP THE PACKET HERE",
+  dp_drop_hint:"the factory's ZIP, or the FICHA file on its own · tap to browse",
+  dp_reading:"Reading…",
+  dp_read_done:"%n inspection(s) added.",
+  dp_read_bad:"Could not be read: %f",
+  dp_empty:"No inspections yet. Drop a factory packet above and its order appears here.",
+  dp_none_here:"Nothing in this state.",
+  dp_PENDIENTE:"PENDING", dp_AUTORIZADO:"AUTHORISED", dp_RETENIDO:"HELD",
+  dp_TODO:"All",
+  dp_units:"%n unit(s)",
+  dp_tests:"%n of %tot tests",
+  dp_files:"%f photos, %v videos",
+  dp_partial:"Partial inspection — not the whole plan was run.",
+  dp_by:"Decided by %q · %d",
+  dp_ok:"AUTHORISE", dp_hold:"HOLD",
+  dp_publish:"Publish the status",
+  dp_unpublished:"%n decision(s) not published yet.",
+  dp_all_published:"Everything is published.",
+  dp_publish_btn:"DOWNLOAD despachos.json",
+  dp_downloaded:"✓ Downloaded. It is in this device's Downloads folder.",
+  dp_publish_how:"Upload it to the repository over the despachos.json that is already there, keeping the name. The factory reads it the next time it opens the app.",
+  assign_how:"Upload it to the repository over the asignacion.json that is already there, keeping the name.",
+  assign_downloaded:"✓ Downloaded. It is in this device's Downloads folder.",
   pick_group_filter_hint:"Tap a subsection to see only its tests.",
   pick_all_groups:"All", group_all:"all", group_none:"none",
   n_selected_short:"%n of %tot selected",
@@ -8382,6 +8581,35 @@ const T = {
   na_undo_title:"La sección completa está en N/A — pulse para deshacer",
   tests_pick:"Pruebas a ejecutar", all_on:"Seleccionar todas", all_off:"Quitar todas",
   pick_group_hint:"Toque una subsección para incluirla o quitarla completa.",
+  scan_gun:"O léalo con un lector de mano conectado al teléfono.",
+  scan_gun_ph:"lector o escritura manual",
+  scan_clear:"Borrar y volver a leer",
+  dp_open:"PANEL DE DESPACHO", dp_title:"AUTORIZACIÓN DE DESPACHO",
+  dp_back:"← ADMIN",
+  dp_drop_label:"Agregar una inspección",
+  dp_drop:"SUELTE AQUÍ EL PAQUETE",
+  dp_drop_hint:"el ZIP de la fábrica, o el archivo FICHA suelto · toque para buscarlo",
+  dp_reading:"Leyendo…",
+  dp_read_done:"%n inspección(es) agregada(s).",
+  dp_read_bad:"No se pudieron leer: %f",
+  dp_empty:"Todavía no hay inspecciones. Suelte arriba un paquete de fábrica y su orden aparece aquí.",
+  dp_none_here:"Nada en este estado.",
+  dp_PENDIENTE:"PENDIENTE", dp_AUTORIZADO:"AUTORIZADO", dp_RETENIDO:"RETENIDO",
+  dp_TODO:"Todo",
+  dp_units:"%n unidad(es)",
+  dp_tests:"%n de %tot pruebas",
+  dp_files:"%f fotos, %v videos",
+  dp_partial:"Inspección parcial — no se ejecutó el plan completo.",
+  dp_by:"Decidida por %q · %d",
+  dp_ok:"AUTORIZAR", dp_hold:"RETENER",
+  dp_publish:"Publicar el estado",
+  dp_unpublished:"%n decisión(es) sin publicar.",
+  dp_all_published:"Todo está publicado.",
+  dp_publish_btn:"DESCARGAR despachos.json",
+  dp_downloaded:"✓ Descargado. Está en la carpeta de descargas de este equipo.",
+  dp_publish_how:"Súbalo al repositorio encima del despachos.json que ya está, conservando el nombre. La fábrica lo lee la próxima vez que abre la app.",
+  assign_how:"Súbalo al repositorio encima del asignacion.json que ya está, conservando el nombre.",
+  assign_downloaded:"✓ Descargado. Está en la carpeta de descargas de este equipo.",
   pick_group_filter_hint:"Toque una subsección para ver sólo sus pruebas.",
   pick_all_groups:"Todas", group_all:"todas", group_none:"ninguna",
   n_selected_short:"%n de %tot seleccionadas",
@@ -8610,6 +8838,35 @@ const T = {
   na_undo_title:"整个分组已标记为不适用 — 点击可撤销",
   tests_pick:"要执行的测试", all_on:"全选", all_off:"全部取消",
   pick_group_hint:"点击子项可整体加入或移除。",
+  scan_gun:"也可用连接到手机的手持扫码枪读取。",
+  scan_gun_ph:"扫码枪或手动输入",
+  scan_clear:"清除并重新读取",
+  dp_open:"发货面板", dp_title:"发货放行",
+  dp_back:"← 管理",
+  dp_drop_label:"添加一次检验",
+  dp_drop:"将资料包拖放到此处",
+  dp_drop_hint:"工厂的 ZIP，或单独的 FICHA 文件 · 点击可浏览选择",
+  dp_reading:"读取中…",
+  dp_read_done:"已添加 %n 次检验。",
+  dp_read_bad:"无法读取：%f",
+  dp_empty:"尚无检验记录。将工厂资料包拖入上方，对应订单即会出现。",
+  dp_none_here:"该状态下暂无记录。",
+  dp_PENDIENTE:"待放行", dp_AUTORIZADO:"已放行", dp_RETENIDO:"已扣留",
+  dp_TODO:"全部",
+  dp_units:"%n 台",
+  dp_tests:"%n / %tot 项测试",
+  dp_files:"%f 张照片，%v 段视频",
+  dp_partial:"部分检验 — 未执行完整计划。",
+  dp_by:"由 %q 决定 · %d",
+  dp_ok:"放行", dp_hold:"扣留",
+  dp_publish:"发布状态",
+  dp_unpublished:"有 %n 项决定尚未发布。",
+  dp_all_published:"全部已发布。",
+  dp_publish_btn:"下载 despachos.json",
+  dp_downloaded:"✓ 已下载。文件位于本设备的下载文件夹中。",
+  dp_publish_how:"请将其上传至仓库，覆盖现有的 despachos.json，文件名保持不变。工厂下次打开应用时即可读取。",
+  assign_how:"请将其上传至仓库，覆盖现有的 asignacion.json，文件名保持不变。",
+  assign_downloaded:"✓ 已下载。文件位于本设备的下载文件夹中。",
   pick_group_filter_hint:"点击子项仅查看其测试。",
   pick_all_groups:"全部", group_all:"全选", group_none:"取消",
   n_selected_short:"已选 %n / %tot",
@@ -8845,11 +9102,12 @@ const TEST_NO = {
   KAP_MANUAL:91, KAP_STATIONS:92, KAP_TRIPOD:93, KAP_NOISE_FLOOR:94, KAP_WEAR:95,
   KAP_PSU_SWEEP:96, KAP_CURVES:97, KAP_SPL_FREQ:98, KAP_BAT_CAP:99,
   KAP_USB_OUT:100, KAP_DROP:101, KAP_MIC_LINK:102, KAP_MIC_USE:103,
-  KAP_MODULE_AUDIO:104, KAP_FM_MODULE:105, LEAK_CURRENT:106
+  KAP_MODULE_AUDIO:104, KAP_FM_MODULE:105, LEAK_CURRENT:106,
+  OUT_120HZ:107, MIC_POS:108, EPS15_PREV:109
 };
 /* El siguiente número libre. Está aquí para que quien agregue una prueba no
    tenga que contar: es 79 y sube de uno en uno. */
-const NEXT_TEST_NO = 107;
+const NEXT_TEST_NO = 110;
 
 /* En las referencias de desarrollo la numeración es otra, y a propósito.
 
@@ -8977,6 +9235,34 @@ const GROUPS = {
     {id:"pack",  tests:["KAP_SHIPBOX","KAP_MANUAL","GRAPHICS","KAP_DROP"],
      label:{en:"Packaging and printed matter","zh":"包装与印刷品",
             "es":"Empaques y material impreso"}}
+  ],
+  /* Epsilon 15. Reparto propio y no el de fábrica, por lo mismo que el KAP206:
+     es una referencia en desarrollo, su plan mezcla dos orígenes y el orden en
+     que quedaron las pruebas en el archivo no es el orden en que se hacen. Las
+     tres de tiempo van primero; las que gastan el producto, de últimas. */
+  "HK-EPS115A1": [
+    {id:"env",  tests:["AGING"],
+     label:{en:"Aging","zh":"老化","es":"Envejecimiento"}},
+    {id:"pot",  tests:["RMS_SUPPLIER"],
+     label:{en:"RMS power","zh":"额定功率","es":"Potencia RMS"}},
+    {id:"func", tests:["POWER_AC","USB","BLUETOOTH","AUX","DSP_MODES","XLR_OUT",
+                       "OUT_120HZ","INPUT_CHANNELS","MIC_POS","DISPLAY","REMOTE",
+                       "KAP_MAXVOL","KAP_NOISE_FLOOR"],
+     label:{en:"Functional","zh":"功能","es":"Funcionales"}},
+    {id:"curv", tests:["KAP_CURVES","KAP_SPL_FREQ"],
+     label:{en:"Sound curves","zh":"声学曲线","es":"Curvas de sonido"}},
+    {id:"psu",  tests:["KAP_PSU_SWEEP","KAP_DRAW"],
+     label:{en:"Power supply","zh":"电源","es":"Fuente de alimentación"}},
+    {id:"ext",  tests:["SUB_BOX","KAP_DIMS","KAP_CABINET","KAP_TRIPOD",
+                       "EPS_EXTERNAL","SUB_ACC"],
+     label:{en:"External parts","zh":"外部部件","es":"Partes externas"}},
+    {id:"int",  tests:["INTERNAL","KAP_WIRING","KAP_DRIVERS","EPS15_PREV"],
+     label:{en:"Internal parts","zh":"内部部件","es":"Partes internas"}},
+    {id:"wear", tests:["KAP_WEAR"],
+     label:{en:"Physical aging","zh":"物理老化","es":"Envejecimiento físico"}},
+    {id:"pack", tests:["KAP_SHIPBOX","SUB_GRAPHICS","KAP_DROP"],
+     label:{en:"Packaging and printed matter","zh":"包装与印刷品",
+            "es":"Empaques y material impreso"}}
   ]
 };
 /* El reparto por defecto: el que usa cualquier referencia que no traiga el
@@ -8998,8 +9284,8 @@ const DEFAULT_GROUPS = [
   {id:"caja", tests:["SUB_BOX"],
    label:{en:"Box and packing","zh":"外箱与包装","es":"Caja y empaque"}},
   {id:"func", tests:["POWER_AC","USB","SD","BLUETOOTH","RX_FM_COMPAT","RADIO_FM",
-                     "AUX","DSP_MODES","XLR_OUT","INPUT_CHANNELS","DISPLAY",
-                     "REMOTE","SUB_IN","SUB_OUT","GPE"],
+                     "AUX","DSP_MODES","XLR_OUT","OUT_120HZ","INPUT_CHANNELS",
+                     "MIC_POS","DISPLAY","REMOTE","SUB_IN","SUB_OUT","GPE"],
    label:{en:"Functional","zh":"功能","es":"Funcionales"}},
   {id:"ext",  tests:["EXTERNAL","EPS_EXTERNAL","SUB_EXTERNAL"],
    label:{en:"External parts","zh":"外部部件","es":"Partes externas"}},
@@ -9101,7 +9387,7 @@ function partialScope(){
    would sit in the dashboard next to real ones.
 
    Taking a reference out of here is what releases it. Nothing else changes. */
-const DEV_REFS = ["HK-KAP206","HK-KAP208"];
+const DEV_REFS = ["HK-KAP206","HK-KAP208","HK-EPS115A1"];
 const isDevRef = m => DEV_REFS.indexOf(m) >= 0;
 
 /* What the factory can choose on the start screen. Development references are
@@ -12279,7 +12565,12 @@ async function buildPacket(){
      data: new Blob([inLang("es", reportCsv)], {type:"text/csv;charset=utf-8"})},
     {name: base + "/READ_ME.txt",
      data: new Blob([packetReadme(photos, videos, lost, lostVideos, docs)],
-                    {type:"text/plain;charset=utf-8"})}
+                    {type:"text/plain;charset=utf-8"})},
+    /* La ficha para el panel de despacho. Va de últimas en la lista y de
+       primeras en el nombre: FICHA_ aparece arriba al abrir el ZIP. */
+    {name: base + "/FICHA_" + (S.po || "SIN-ORDEN") + ".json",
+     data: new Blob([JSON.stringify(inspectionFicha(photos, videos, docs), null, 1)],
+                    {type:"application/json;charset=utf-8"})}
   ].concat(files);
 
   const idioma = informes[LANG] ? LANG : "es";
@@ -12290,6 +12581,64 @@ async function buildPacket(){
           reportBlob: informes[idioma],
           reportName: base + "-" + idioma.toUpperCase() + ".html",
           videos, photos, lost, lostVideos, docs};
+}
+
+/* ---------------------------------------------------------------------------
+   LA FICHA · el resumen que HOKLAN suelta en el panel de despacho.
+
+   Viaja dentro del paquete y en ningún otro sitio: sin botón nuevo, sin nada
+   que el operario tenga que hacer distinto. Él descarga el ZIP como siempre y
+   la ficha va adentro.
+
+   Es deliberadamente pequeña —menos de un kilobyte— y sólo lleva lo que el
+   panel necesita para pintar un renglón y para que alguien decida si despacha.
+   No lleva fotos, ni respuestas punto por punto, ni notas: eso ya está en el
+   informe y en el CSV, que viajan en el mismo paquete. Duplicarlo aquí sería
+   crear una segunda versión de la verdad que puede quedar desfasada.
+
+   El nombre del archivo empieza por FICHA para que se vea de primero al abrir
+   el ZIP, y lleva la orden para que dos fichas sueltas no se confundan.
+--------------------------------------------------------------------------- */
+function inspectionFicha(photos, videos, docs){
+  const v = finalVerdict();
+  /* Las pruebas que fallaron, por su nombre y en español: es lo que se lee en
+     el panel para decidir sin abrir el informe. Se cortan en diez — si fallaron
+     más de diez, el problema no es cuál. */
+  const fallidas = inLang("es", () => {
+    const out = [];
+    tests().forEach((t, i) => {
+      const malo = allUnits().some(u =>
+        (((S.data[u]||[])[i])||{}).verdict === "FAIL");
+      if(malo && out.length < 10) out.push(testTag(t) + L(t.label));
+    });
+    return out;
+  });
+  let na = 0;
+  tests().forEach((t, i) => {
+    if(allUnits().every(u => (((S.data[u]||[])[i])||{}).verdict === "NA")) na++;
+  });
+  const sc = partialScope();
+  return {
+    tipo: "hoklan-qc-ficha",
+    v: 1,
+    po: String(S.po || ""),
+    fabrica: S.factory || "",
+    codigo: S.testId || "",
+    modelo: S.model || "",
+    unidades: S.units || 1,
+    veredicto: v,
+    pruebas: tests().length,
+    pruebas_plan: planTests().length,
+    parcial: !!sc,
+    na,
+    fallidas,
+    fotos: photos, videos: videos, docs,
+    operario: S.operator || "",
+    iniciada: S.startedAt ? new Date(S.startedAt).toISOString() : null,
+    cerrada: new Date(S.finishedAt || Date.now()).toISOString(),
+    plan: plan().plan_version,
+    app: (document.querySelector('meta[name=app-version]') || {}).content || ""
+  };
 }
 
 function packetReadme(photos, videos, lost, lostVideos, docs){
@@ -12448,6 +12797,7 @@ function render(){
   else if(S.screen === "test")   renderTest();
   else if(S.screen === "index")  renderIndex();
   else if(S.screen === "report") renderReport();
+  else if(S.screen === "despacho") renderDespacho();
   else renderDone();
   updateTopBtn();
 }
@@ -12791,6 +13141,11 @@ function renderAdmin(){
     ${tabBar()}
     <div class="card">
       <div class="tag">${esc(adminCode())}</div>
+      ${/* La puerta al panel de despacho. Va arriba del todo y no al final,
+            porque quien entra al 365 por la mañana viene a decidir despachos
+            más veces que a lanzar una prueba suelta. */""}
+      <button onclick="goDespacho()" style="margin-bottom:4px">${
+        tr("dp_open")}</button>
       ${/* What this account will stamp on the next report. Shown here rather
             than on the start screen, where it belonged to nobody, and read with
             peekPo so that looking at it does not consume a number. */""}
@@ -12850,14 +13205,13 @@ function renderAdmin(){
       <label style="margin-top:0">${tr("assign_make")}</label>
       <p class="hint" style="margin:0 0 10px">${
         fmt("assign_code_is",{d: ASSIGN_ID.digits})}</p>
-      <button onclick="showAssignFile()">${tr("assign_make")}</button>
-      <div id="asgfile" class="hidden">
-        <p class="hint" style="margin:12px 0 6px">${tr("assign_file")}</p>
-        <textarea id="asgtext" readonly rows="8"
-          style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px"
-          >${esc(assignJson())}</textarea>
-        <button id="asgcopy" onclick="copyAssign()">${tr("assign_copy")}</button>
-      </div>
+      ${/* Descarga en vez de copiar y pegar, desde la v16.2. El texto en un
+            recuadro obligaba a seleccionarlo, copiarlo y pegarlo dentro de
+            GitHub sin perder un carácter; el archivo se arrastra encima del que
+            ya está y no hay nada que se pueda cortar a la mitad. */""}
+      <button onclick="bajarAsignacionSiHay()">${tr("assign_make")}</button>
+      <p class="hint" id="asgmsg" style="margin:10px 0 0"></p>
+      <p class="hint" style="margin:8px 0 0">${tr("assign_how")}</p>
     </div>` : ""}
 
     <p style="text-align:center">
@@ -13064,28 +13418,323 @@ function assignJson(){
   }, null, 1);
 }
 
-function showAssignFile(){
+/* La comprobación de que hay algo seleccionado vive aquí desde que existía el
+   recuadro de texto; se conserva porque publicar una asignación vacía deja a la
+   fábrica sin plan y sin decir por qué. */
+function bajarAsignacionSiHay(){
   if(!(S.pick || []).length){ alert(tr("a_pick_tests")); return; }
-  const box = document.getElementById("asgfile");
-  if(box){ box.classList.remove("hidden"); box.scrollIntoView({block:"center"}); }
+  bajarAsignacion();
 }
 
 /* Clipboard first, selection as the fallback: the copy API needs a secure
    context and a real tap, and when it is refused the operator still has to be
    able to get the text out. Selecting it is what a phone offers next. */
-function copyAssign(){
-  const ta = document.getElementById("asgtext");
-  if(!ta) return;
-  const done = () => {
-    const b = document.getElementById("asgcopy");
-    if(b) b.textContent = tr("assign_copied");
-  };
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(ta.value).then(done, () => { ta.select(); });
-    return;
+/* ===========================================================================
+   PANEL DE DESPACHO · admin 365
+   ===========================================================================
+
+   Cómo llega aquí la información, y por qué así. La fábrica no puede escribir
+   en GitHub y el buzón de Cloudflare no está probado desde China, así que el
+   dato viaja por el único canal que sabemos que funciona: el paquete que la
+   fábrica ya le manda a HOKLAN. Dentro va la ficha. Aquí se lee.
+
+   La decisión de despacho vuelve por el mismo camino que la asignación del
+   800: un archivo publicado en GitHub que la app lee. No hay servidor, no hay
+   claves, y nada de esto depende de que un dominio no esté bloqueado.
+   =========================================================================== */
+
+/* El ZIP se escribe sin comprimir —`makeZip` guarda con método 0—, así que
+   sacar un archivo de dentro es cortar bytes. Aun así no se lee el paquete
+   entero: un ZIP de inspección son decenas de megabytes y sólo hacen falta
+   novecientos bytes. Se lee la cola, se busca el directorio central, y de ahí
+   se corta únicamente la ficha. */
+async function fichaDeZip(file){
+  const cola = await file.slice(Math.max(0, file.size - 66000)).arrayBuffer();
+  const c = new DataView(cola);
+  let eocd = -1;
+  for(let i = c.byteLength - 22; i >= 0; i--)
+    if(c.getUint32(i, true) === 0x06054b50){ eocd = i; break; }
+  if(eocd < 0) throw new Error("no_zip");
+
+  const cdSize = c.getUint32(eocd + 12, true);
+  const cdOff  = c.getUint32(eocd + 16, true);
+  const cd = new DataView(await file.slice(cdOff, cdOff + cdSize).arrayBuffer());
+
+  const dec = new TextDecoder();
+  let p = 0, encontrado = null;
+  while(p + 46 <= cd.byteLength && cd.getUint32(p, true) === 0x02014b50){
+    const nLen = cd.getUint16(p + 28, true);
+    const eLen = cd.getUint16(p + 30, true);
+    const kLen = cd.getUint16(p + 32, true);
+    const nombre = dec.decode(new Uint8Array(cd.buffer, cd.byteOffset + p + 46, nLen));
+    if(/(^|\/)FICHA_[^/]*\.json$/i.test(nombre)){
+      encontrado = {
+        metodo: cd.getUint16(p + 10, true),
+        tam:    cd.getUint32(p + 20, true),
+        pos:    cd.getUint32(p + 42, true)
+      };
+      break;
+    }
+    p += 46 + nLen + eLen + kLen;
   }
-  ta.select();
-  try{ document.execCommand("copy"); done(); }catch(e){}
+  if(!encontrado) throw new Error("sin_ficha");
+  if(encontrado.metodo !== 0) throw new Error("comprimido");
+
+  /* La cabecera local repite el nombre y puede traer un campo extra de otro
+     largo que el del directorio, así que se lee de ahí y no se supone. */
+  const lh = new DataView(await file.slice(encontrado.pos, encontrado.pos + 30).arrayBuffer());
+  const ini = encontrado.pos + 30 + lh.getUint16(26, true) + lh.getUint16(28, true);
+  const txt = await file.slice(ini, ini + encontrado.tam).text();
+  return JSON.parse(txt);
+}
+
+/* Acepta las dos cosas que puede soltar el administrador: el ZIP completo o la
+   ficha suelta, por si alguna vez la extrae del paquete. */
+async function leerFicha(file){
+  if(/\.json$/i.test(file.name)) return JSON.parse(await file.text());
+  return fichaDeZip(file);
+}
+
+function renderDespacho(){
+  if(!ADMIN_OK){ S.screen = "setup"; renderSetup(); return; }
+  const d = despCargar();
+  const claves = Object.keys(d.ordenes);
+  const pend = claves.filter(k => d.ordenes[k].sinPublicar).length;
+
+  /* Los filtros son por estado y no por fábrica: la pregunta que trae a alguien
+     a esta pantalla es «¿qué me falta por decidir?», no «¿qué mandó YISION?». */
+  const f = S.despFiltro || "PENDIENTE";
+  const cuenta = e => claves.filter(k => d.ordenes[k].estado === e).length;
+  const lista = claves
+    .filter(k => f === "TODO" || d.ordenes[k].estado === f)
+    .sort((a,b) => String(d.ordenes[b].cerrada).localeCompare(String(d.ordenes[a].cerrada)));
+
+  const tarjeta = k => {
+    const o = d.ordenes[k];
+    const cls = o.estado === "AUTORIZADO" ? "done"
+              : o.estado === "RETENIDO" ? "bad" : "";
+    const chip = o.estado === "AUTORIZADO" ? "ok"
+               : o.estado === "RETENIDO" ? "bad" : "";
+    return `<div class="grp ${cls}" style="margin-bottom:10px">
+      <div class="grp-h" style="cursor:default">
+        <b>${esc(tr("po_prefix"))}${esc(o.po)} · ${esc(o.fabrica)}</b>
+        <em class="${chip}">${esc(tr("dp_" + o.estado))}</em></div>
+      <div class="grp-b">
+        <p class="hint" style="margin:0 0 4px">${esc(o.modelo)} · ${
+          fmt("dp_units",{n:o.unidades})} · ${esc(fechaCorta(o.cerrada))}</p>
+        <p style="margin:0 0 6px;font-size:13px;color:${
+          o.veredicto === "FAIL" ? "var(--red)" : "var(--green)"}">${
+          esc(verdictText(o.veredicto))} · ${
+          fmt("dp_tests",{n:o.pruebas, tot:o.pruebas_plan})} · ${
+          fmt("dp_files",{f:o.fotos, v:o.videos})}</p>
+        ${(o.fallidas||[]).length ? `<p class="hint" style="margin:0 0 6px;color:var(--red)">${
+          esc((o.fallidas||[]).join(" · "))}</p>` : ""}
+        ${o.parcial ? `<p class="hint" style="margin:0 0 6px;color:var(--amber)">${
+          tr("dp_partial")}</p>` : ""}
+        ${o.decidida ? `<p class="hint" style="margin:0 0 6px">${
+          fmt("dp_by",{q:o.decidida_por||"", d:fechaCorta(o.decidida)})}</p>` : ""}
+        <div class="row" style="margin:0">
+          ${o.estado !== "AUTORIZADO" ? `<button class="primary"
+            onclick="despDecidir('${esc(k)}','AUTORIZADO')">${tr("dp_ok")}</button>` : ""}
+          ${o.estado !== "RETENIDO" ? `<button
+            onclick="despDecidir('${esc(k)}','RETENIDO')">${tr("dp_hold")}</button>` : ""}
+        </div>
+      </div>
+    </div>`;
+  };
+
+  app.innerHTML = `
+    ${langBar()}
+    <h1>HOKLAN QC</h1>
+    <p class="sub">${tr("dp_title")}</p>
+    <div class="card">
+      <label style="margin-top:0">${tr("dp_drop_label")}</label>
+      <div id="dpzona" class="dp-zona" onclick="document.getElementById('dpfile').click()">
+        <b>${tr("dp_drop")}</b>
+        <i>${tr("dp_drop_hint")}</i>
+      </div>
+      <input type="file" id="dpfile" accept=".zip,.json" multiple
+             style="display:none" onchange="dpArchivos(this.files)">
+      <p class="hint" id="dpmsg" style="margin:8px 0 0"></p>
+    </div>
+
+    ${!claves.length ? `<p class="hint">${tr("dp_empty")}</p>` : `
+    <div class="pkg">
+      ${["PENDIENTE","RETENIDO","AUTORIZADO","TODO"].map(e =>
+        `<button class="pkg-c ${f === e ? "on" : ""}" onclick="dpFiltro('${e}')">
+          ${tr("dp_" + e)} <em>${e === "TODO" ? claves.length : cuenta(e)}</em>
+        </button>`).join("")}
+    </div>
+    ${lista.map(tarjeta).join("") ||
+      `<p class="hint">${tr("dp_none_here")}</p>`}
+
+    <div class="card">
+      <label style="margin-top:0">${tr("dp_publish")}</label>
+      <p class="hint" style="margin:0 0 10px">${
+        pend ? fmt("dp_unpublished",{n:pend}) : tr("dp_all_published")}</p>
+      <button class="${pend ? "primary" : ""}" onclick="dpPublicar()">${
+        tr("dp_publish_btn")}</button>
+      <p class="hint" id="dpmsg2" style="margin:10px 0 0"></p>
+      <p class="hint" style="margin:8px 0 0">${tr("dp_publish_how")}</p>
+    </div>`}`;
+
+  actions.innerHTML = `<button onclick="goAdmin()">${tr("dp_back")}</button>`;
+
+  const z = document.getElementById("dpzona");
+  if(z){
+    ["dragenter","dragover"].forEach(e => z.addEventListener(e, ev => {
+      ev.preventDefault(); z.classList.add("on"); }));
+    ["dragleave","drop"].forEach(e => z.addEventListener(e, ev => {
+      ev.preventDefault(); z.classList.remove("on"); }));
+    z.addEventListener("drop", ev => dpArchivos(ev.dataTransfer.files));
+  }
+  /* Se sincroniza al entrar, no al arrancar la app: es una petición de red que
+     sólo le sirve a quien está mirando esta pantalla. */
+  if(!S.despSync){
+    S.despSync = true;
+    despSincronizar().then(ok => { if(ok && S.screen === "despacho") render(); });
+  }
+}
+
+function dpFiltro(e){ S.despFiltro = e; render(); }
+function goAdmin(){ S.screen = "admin"; render(); }
+function goDespacho(){ S.screen = "despacho"; render(); }
+
+/* Varios archivos de una vez: una mañana de paquetes se suelta junta. Los
+   errores se cuentan y se dicen al final, sin detener a los demás. */
+async function dpArchivos(files){
+  const msg = document.getElementById("dpmsg");
+  if(msg) msg.textContent = tr("dp_reading");
+  let ok = 0; const malos = [];
+  for(const f of Array.from(files || [])){
+    try{
+      const ficha = await leerFicha(f);
+      if(!ficha || ficha.tipo !== "hoklan-qc-ficha") throw new Error("no_ficha");
+      despAgregar(ficha); ok++;
+    }catch(e){ malos.push(f.name); }
+  }
+  render();
+  const m2 = document.getElementById("dpmsg");
+  if(m2) m2.innerHTML = fmt("dp_read_done",{n:ok}) +
+    (malos.length ? "<br>" + esc(fmt("dp_read_bad",{f:malos.join(", ")})) : "");
+}
+
+/* Descarga el archivo hecho, en vez de dar un texto para pegar. El nombre es
+   exactamente `despachos.json` para que en GitHub se pueda arrastrar encima del
+   que ya está: renombrarlo a mano es el paso donde alguien acaba subiendo
+   `despachos (3).json` y la app deja de encontrarlo. */
+function dpPublicar(){
+  const txt = despachosJson();
+  saveBlob(new Blob([txt], {type:"application/json;charset=utf-8"}),
+           "despachos.json");
+  /* Descargado es lo más cerca que estamos de «publicado». Lo que pase después
+     en GitHub la app no lo puede ver, así que se marca aquí y el panel confía
+     en que el archivo se sube. */
+  const d = despCargar();
+  Object.keys(d.ordenes).forEach(k => { d.ordenes[k].sinPublicar = false; });
+  despGuardar(d);
+  render();
+  const m = document.getElementById("dpmsg2");
+  if(m) m.textContent = tr("dp_downloaded");
+}
+
+const fechaCorta = iso => {
+  if(!iso) return "";
+  const d = new Date(iso);
+  return isNaN(d) ? String(iso).slice(0,10)
+    : d.toLocaleDateString(LANG === "zh" ? "zh-CN" : LANG === "en" ? "en-GB" : "es-CO",
+        {day:"numeric", month:"short"});
+};
+
+const DESP_KEY = "hoklan_qc_despachos";
+const claveOrden = f => (f.fabrica || "?") + "/" + (f.po || "SIN-ORDEN");
+
+function despCargar(){
+  try{ return JSON.parse(localStorage.getItem(DESP_KEY)) || {ordenes:{}}; }
+  catch(e){ return {ordenes:{}}; }
+}
+function despGuardar(d){
+  try{ localStorage.setItem(DESP_KEY, JSON.stringify(d)); }
+  catch(e){ /* sin almacenamiento el panel sigue sirviendo dentro de la sesión */ }
+}
+
+/* Mete una ficha en el panel. Si la orden ya estaba, se actualizan los datos de
+   la inspección pero **no** la decisión: una fábrica que reenvía su paquete no
+   puede borrar una autorización que HOKLAN ya dio. Es la misma regla que puse
+   en el worker, por la misma razón. */
+function despAgregar(f){
+  const d = despCargar();
+  const k = claveOrden(f);
+  const antes = d.ordenes[k] || {};
+  const estado = antes.estado ||
+    (f.veredicto === "FAIL" ? "RETENIDO" : "PENDIENTE");
+  d.ordenes[k] = Object.assign({}, f, {
+    estado,
+    decidida: antes.decidida || null,
+    decidida_por: antes.decidida_por || null,
+    nota: antes.nota || null,
+    /* `sinPublicar` marca lo que todavía no ha salido a GitHub. Una ficha nueva
+       también cuenta: la fábrica tiene que poder verla aparecer. */
+    sinPublicar: true
+  });
+  despGuardar(d);
+  return k;
+}
+
+function despDecidir(k, estado){
+  const d = despCargar();
+  const o = d.ordenes[k];
+  if(!o) return;
+  o.estado = estado;
+  o.decidida = new Date().toISOString();
+  o.decidida_por = ADMIN_ID.digits;
+  o.sinPublicar = true;
+  despGuardar(d);
+  render();
+}
+
+/* El archivo que se publica en GitHub. Es la copia durable de todo esto: si
+   este teléfono se pierde o se borra el navegador, el panel lo vuelve a leer y
+   nada se pierde. Por eso lleva la inspección entera y no sólo el estado. */
+function despachosJson(){
+  const d = despCargar();
+  const ordenes = Object.keys(d.ordenes).sort().map(k => {
+    const o = Object.assign({}, d.ordenes[k]);
+    delete o.sinPublicar;
+    return o;
+  });
+  return JSON.stringify({v:1, actualizado:new Date().toISOString(), ordenes}, null, 1);
+}
+
+/* Trae lo publicado y lo mezcla con lo local. Gana lo local sólo donde hay algo
+   sin publicar; en todo lo demás manda el archivo, que es la copia buena. */
+async function despSincronizar(){
+  let pub;
+  try{
+    const r = await fetch("despachos.json?nc=" + Date.now(), {cache:"no-store"});
+    if(!r.ok) return false;
+    pub = await r.json();
+  }catch(e){ return false; }
+  if(!pub || !Array.isArray(pub.ordenes)) return false;
+
+  const d = despCargar();
+  pub.ordenes.forEach(o => {
+    const k = claveOrden(o);
+    const local = d.ordenes[k];
+    if(!local || !local.sinPublicar) d.ordenes[k] = Object.assign({}, o);
+  });
+  despGuardar(d);
+  return true;
+}
+
+/* La asignación del 800, como archivo. Mismo nombre exacto que el del
+   repositorio, por la misma razón que en despachos: un archivo renombrado por
+   el navegador es un archivo que la app no encuentra. */
+function bajarAsignacion(){
+  saveBlob(new Blob([assignJson()], {type:"application/json;charset=utf-8"}),
+           "asignacion.json");
+  const m = document.getElementById("asgmsg");
+  if(m) m.textContent = tr("assign_downloaded");
 }
 
 /* Never renders: the field would be rebuilt under the operator's fingers. */
@@ -13927,37 +14576,67 @@ function measureBox(p, u, id){
     <b>${esc(unitText(p.measure))}</b>
   </div>`;
 }
-/* El recuadro de un código de barras. No tiene teclado: el número sale del
-   lector o no sale, y en ningún caso lo escribe el operario. Tres estados, y
-   cada uno dice qué hacer a continuación:
+/* El recuadro de un código de barras. Tres estados, y cada uno dice qué hacer
+   a continuación:
 
-     en espera — todavía no hay foto. El recuadro explica que el número se
-                 obtiene al fotografiar, para que nadie lo busque en el teclado.
+     en espera — todavía no hay foto. Explica que el número sale al fotografiar,
+                 y ofrece el campo para el lector de mano.
      leído     — el número, en verde, y bloqueado.
-     no leído  — en rojo, con el motivo, y con el aviso de que la prueba
-                 continúa igual y que el informe lo va a registrar. No bloquea:
-                 detener la inspección por un código ilegible dejaría el resto
-                 del producto sin revisar, que es mucho peor que un dato menos.
-                 La foto queda guardada, así que el número se recupera de ella.
-*/
+     no leído  — en rojo, con el motivo, el aviso de que la prueba continúa
+                 igual, y el campo para el lector. No bloquea: detener la
+                 inspección por un código ilegible dejaría el resto del producto
+                 sin revisar, que es mucho peor que un dato menos.
+
+   El campo de texto entró en la v16.2. Hasta entonces el número salía de la
+   fotografía o no salía, para que nadie lo escribiera de memoria — y esa
+   preocupación sigue siendo buena. Lo que cambió es que un lector de código de
+   barras conectado al teléfono, por cable o por Bluetooth, se comporta como un
+   teclado: apunta, dispara y el número aparece escrito solo. Eso no es
+   escribirlo de memoria, es leerlo con mejor instrumento que la cámara.
+
+   El campo sigue pidiendo la foto: la evidencia de qué etiqueta se leyó es la
+   imagen, no el número. Un lector puede leer la etiqueta equivocada igual que
+   una cámara. */
 function scanBox(p, u){
   const r    = row(u);
   const val  = readingOf(r, p.id).trim();
   const why  = scanFailed(r, p.id);
   const has  = shotsFor(r, p.id).some(m => m.kind === "photo" && !m.doc);
   const lab  = p.measure && p.measure.as ? esc(L(p.measure.as)) : tr("scan_lab");
+  const id   = u + "_" + p.id;
 
   if(val) return `<div class="meas ok scan">
-    <label>${lab}</label><u>${esc(val)}</u><b>${tr("scan_auto")}</b></div>`;
+    <label>${lab}</label><u>${esc(val)}</u>
+    <b onclick="borrarLectura(${u},'${p.id}')" style="cursor:pointer"
+       title="${tr("scan_clear")}">${tr("scan_auto")}</b></div>`;
+
+  /* `enter` no envía nada: el lector termina su ráfaga con Enter y en un
+     formulario eso recargaría la página. Se traga aquí. */
+  const campo = `<div class="scan-in">
+    <input id="sc_${id}" type="text" autocomplete="off"
+      placeholder="${tr("scan_gun_ph")}"
+      onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}"
+      oninput="setValue(${u},'${p.id}',this.value)">
+    <i>${tr("scan_gun")}</i></div>`;
 
   if(has && why) return `<div class="meas bad scan">
     <label>${lab}</label>
     <div class="scan-msg"><b>${tr("scan_no")}</b>
       <i>${tr(why === "nodet" ? "scan_nodet" : "scan_unread")}</i>
-      <em>${tr("scan_goes_on")}</em></div></div>`;
+      <em>${tr("scan_goes_on")}</em></div>
+    ${campo}</div>`;
 
   return `<div class="meas scan">
-    <label>${lab}</label><u class="wait">${tr("scan_wait")}</u></div>`;
+    <label>${lab}</label><u class="wait">${tr("scan_wait")}</u>
+    ${campo}</div>`;
+}
+
+/* Deshace una lectura para poder repetirla. Existe porque el número quedaba
+   bloqueado en cuanto entraba, y un código leído de la caja de al lado no había
+   forma de corregirlo sin borrar la foto. */
+function borrarLectura(u, pid){
+  setValue(u, pid, "");
+  render();
 }
 
 /* Repaints the box in place, since `oninput` cannot render. */

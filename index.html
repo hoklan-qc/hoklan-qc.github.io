@@ -869,7 +869,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 141,
+      "plan_version": 142,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1287,7 +1287,10 @@ const CONFIG = {
             y con ella se van las ruedas, que RHYME no lleva. Conserva el id
             SUB_ para no romper inspecciones en curso. */
          "id":"SUB_EXTERNAL","optional":false,"only_factory":["RHY"],
-         "skip":["HK-EPS112A1"],
+         /* Los dos Epsilon corren EPS_EXTERNAL, que es esta misma prueba con
+            sus fotos propias. Sin el 115 en esta lista, el plan traía las dos
+            y el operario fotografiaba el mismo parlante dos veces. */
+         "skip":["HK-EPS112A1","HK-EPS115A1"],
          "evidence":["video"],"first":3,
          "ask":{"en":"one continuous take going round the speaker, showing the panel, the grille and the rest, no longer than a minute.",
                 "zh":"一镜到底环绕音箱拍摄，需拍到面板、网罩及其余部分，时长不超过一分钟。",
@@ -1719,7 +1722,7 @@ const CONFIG = {
             trípode, y llevan lo mismo que el Epsilon — cable de poder y control
             remoto. Con eso RHYME entera queda en esta prueba y `first` 5 la deja
             en todas justo detrás de MATERIAL IMPRESO. */
-         "only":["HK-BAS115A1","HK-BAS118A1","HK-EPS112A1","HK-DEC115A1",
+         "only":["HK-BAS115A1","HK-BAS118A1","HK-EPS112A1","HK-EPS115A1","HK-DEC115A1",
                  "HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
          "evidence":[],"first":5,
@@ -4954,7 +4957,7 @@ const CONFIG = {
                     "zh":"在接入 AC 的状态下重复上述任一项。若出现电池供电时没有的交流声，则故障在电源而非音频部分。",
                     "es":"Repita cualquiera de las anteriores con el AC conectado. Si aparece un zumbido que no estaba con batería, la falla está en la fuente y no en el audio."}}]},
 
-        {"id":"KAP_WEAR","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_WEAR","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_video":true,
          /* `first` por encima de 99 —el valor que toma una prueba que no lo
             declara— es lo que la empuja detrás de todas las demás. Aquí no es
@@ -5210,7 +5213,7 @@ const CONFIG = {
                     "zh":"此为已确立的判定标准：接入手机后应显示正在充电，并持续充电五分钟不中断。无论数值如何，若手机无法充电，则该输出功能不合格。",
                     "es":"Éste sí es criterio: conecte un teléfono y debe indicar que está cargando, y seguir cargando cinco minutos sin cortarse. Digan lo que digan los números, si el teléfono no carga, la salida no sirve."}}]},
 
-        {"id":"KAP_DROP","optional":false,"only_factory":["YIS"],"evidence":[],
+        {"id":"KAP_DROP","optional":false,"only_factory":["YIS","RHY"],"evidence":[],
          "point_photo":true,
          /* La última de todas, y por eso 101: después de dejar caer el producto
             no queda ninguna prueba que siga siendo válida. */
@@ -6262,7 +6265,8 @@ const CONFIG = {
               1 y no debe moverse; el cero no sirve, `planTests` ordena por
               `(a.first || 99)` y el cero es falso. */
          "id":"RMS_SUPPLIER","optional":false,"only_factory":["RHY"],"evidence":[],"first":0.5,
-         "only":["HK-EPS112A1","HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
+         "only":["HK-EPS112A1","HK-EPS115A1",
+                 "HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
          /* Sin el prefijo, igual que la capacidad de batería. Quedan tres pruebas
             con el mismo título —ésta, la de YISION y la de los BAS—, pero ningún
@@ -6321,7 +6325,8 @@ const CONFIG = {
             la potencia se toma del informe del proveedor de amplificadores, por
             canal, y no del osciloscopio. */
          "skip":["HK-KAP208","HK-BAS115A1","HK-BAS118A1",
-                 "HK-EPS112A1","HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
+                 "HK-EPS112A1","HK-EPS115A1",
+                 "HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
          "evidence":[],"first":6,
          /* Sin el prefijo, igual que la capacidad de batería. Quedan tres pruebas

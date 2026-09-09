@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="16.8">
+<meta name="app-version" content="16.9">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -880,7 +880,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 147,
+      "plan_version": 148,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -5684,16 +5684,42 @@ const CONFIG = {
            {"en":"Avoid shadows and reflections on the labels","zh":"避免标签上出现阴影和反光"},
            {"en":"Mark N/A anything this reference does not include","zh":"本型号不包含的项目请标记为 N/A"}],
          "points":[
-           {"id":"manual_front","label":{"en":"Manual — front cover","zh":"说明书 — 封面"},
+           {/* El manual del RHO102-BAG son cinco páginas y se piden una por una,
+                más abajo. Portada y contraportada sirven para un plegable de dos
+                caras; con cinco páginas, dos fotos dejan tres sin mirar. */
+            "id":"manual_front","skip":["HK-RHO102-BAG"],
+            "label":{"en":"Manual — front cover","zh":"说明书 — 封面"},
             "help":{"en":"The front cover, readable and with no glare over the text.",
                     "zh":"拍摄封面，文字清晰可读，不得有反光遮挡。"}},
-           {"id":"manual_back","label":{"en":"Manual — back cover","zh":"说明书 — 封底"},
+           {"id":"manual_back","skip":["HK-RHO102-BAG"],
+            "label":{"en":"Manual — back cover","zh":"说明书 — 封底"},
             "help":{"en":"The back cover, readable and with no glare over the text.",
                     "zh":"拍摄封底，文字清晰可读，不得有反光遮挡。"}},
-           {"id":"tag_front","label":{"en":"Tag — front","zh":"吊牌 — 正面"},
+           {"id":"manual_p1","only":["HK-RHO102-BAG"],
+            "label":{"en":"Manual — page 1","zh":"说明书 — 第 1 页","es":"Manual — página 1"},
+            "help":{"en":"One photo per page, in order. Readable and with no glare over the text.",
+                    "zh":"每页一张，按顺序拍摄。文字清晰可读，不得有反光遮挡。",
+                    "es":"Una foto por página, en orden. Legible y sin reflejos sobre el texto."}},
+           {"id":"manual_p2","only":["HK-RHO102-BAG"],
+            "label":{"en":"Manual — page 2","zh":"说明书 — 第 2 页","es":"Manual — página 2"},
+            "help":{"en":"The same, page by page.","zh":"同上，逐页拍摄。","es":"Lo mismo, página por página."}},
+           {"id":"manual_p3","only":["HK-RHO102-BAG"],
+            "label":{"en":"Manual — page 3","zh":"说明书 — 第 3 页","es":"Manual — página 3"},
+            "help":{"en":"The same, page by page.","zh":"同上，逐页拍摄。","es":"Lo mismo, página por página."}},
+           {"id":"manual_p4","only":["HK-RHO102-BAG"],
+            "label":{"en":"Manual — page 4","zh":"说明书 — 第 4 页","es":"Manual — página 4"},
+            "help":{"en":"The same, page by page.","zh":"同上，逐页拍摄。","es":"Lo mismo, página por página."}},
+           {"id":"manual_p5","only":["HK-RHO102-BAG"],
+            "label":{"en":"Manual — page 5","zh":"说明书 — 第 5 页","es":"Manual — página 5"},
+            "help":{"en":"The last one. If the manual has more than five pages, say so in the note.",
+                    "zh":"最后一页。若说明书超过五页，请在备注中说明。",
+                    "es":"La última. Si el manual trae más de cinco páginas, dígalo en la nota."}},
+           {"id":"tag_front","skip":["HK-RHO102-BAG"],
+            "label":{"en":"Tag — front","zh":"吊牌 — 正面"},
             "help":{"en":"The printed face of the tag, complete and legible.",
                     "zh":"拍摄吊牌有印刷的一面，内容完整、清晰可读。"}},
-           {"id":"tag_back","label":{"en":"Tag — back","zh":"吊牌 — 背面"},
+           {"id":"tag_back","skip":["HK-RHO102-BAG"],
+            "label":{"en":"Tag — back","zh":"吊牌 — 背面"},
             "help":{"en":"The other face, in its own frame. The barcode and the country of origin must be legible.",
                     "zh":"拍摄另一面，单独成图。条码和产地须清晰可读。",
                     "es":"La otra cara, en su propia foto. El código de barras y el país de origen deben quedar legibles."}},
@@ -5703,10 +5729,21 @@ const CONFIG = {
             "label":{"en":"Loyalty card","zh":"客户回馈卡"},
             "help":{"en":"The card inviting the customer to register the product. Photograph both faces if it is printed on both, and check the QR code or web address is legible.",
                     "zh":"拍摄邀请客户注册产品的卡片。若双面印刷则两面都要拍，并确认二维码或网址清晰可读。"}},
-           {"id":"bolsa","label":{"en":"Bag the speaker is packed in","zh":"音箱的包装袋"},
+           {"id":"bolsa","skip":["HK-RHO102-BAG"],
+            "label":{"en":"Bag the speaker is packed in","zh":"音箱的包装袋"},
             "help":{"en":"The bag the speaker itself comes wrapped in inside the box — not the small bags of the accessories. Lay it out flat and photograph it whole, with the print, the thickness and any tear visible.",
                     "zh":"拍摄彩盒内包裹音箱本体的那只袋子，不是配件的小袋。将袋子摊平整只入镜，印刷内容、厚度及任何破损均须可见。",
                     "es":"La bolsa que envuelve el parlante dentro de la caja, no las bolsitas de los accesorios. Extiéndala y fotografíela completa, con la impresión, el calibre y cualquier roto a la vista."}},
+           {/* El mismo punto, dicho para lo que el BAG trae dentro. En esa
+                referencia no hay parlante: la bolsa que importa es la que
+                envuelve los micrófonos y el receptor, y son varias. */
+            "id":"bolsa_mic","only":["HK-RHO102-BAG"],
+            "label":{"en":"Bags the microphones and the receiver come in",
+                     "zh":"麦克风与接收器的包装袋",
+                     "es":"Bolsas en las que vienen los micrófonos y el receptor"},
+            "help":{"en":"The bags each microphone and the receiver come wrapped in, not the small bags of the accessories. Lay them out flat and photograph them together, with the print, the thickness and any tear visible.",
+                    "zh":"拍摄包裹各支麦克风与接收器的袋子，不是配件小袋。将其摊平并合影拍摄，印刷内容、厚度及任何破损均须可见。",
+                    "es":"Las bolsas que envuelven cada micrófono y el receptor, no las bolsitas de los accesorios. Extiéndalas y fotografíelas juntas, con la impresión, el calibre y cualquier roto a la vista."}},
            {/* Va aquí y no en PARTES EXTERNAS porque la bolsa ya quedó extendida
                 sobre la mesa en el punto de arriba. Sólo YISION por ahora. */
             "id":"bolsa_ahogo","only_factory":["YIS"],
@@ -5719,10 +5756,12 @@ const CONFIG = {
             "help":{"en":"The seal covering a screw or a joint of the cabinet, the one that breaks if the speaker is opened. Photograph it in place and whole. A seal that arrives already broken or badly stuck is a fail.",
                     "zh":"拍摄贴在螺丝或箱体接缝处、拆机即破的封签。须拍到封签仍贴在原位且完好。封签到货时已破损或粘贴不牢，即判定为异常。",
                     "es":"El sello que cubre un tornillo o una junta del gabinete, el que se rompe si se abre el parlante. Fotografíelo en su sitio y entero. Un sello que llega roto o mal pegado es un fallo."}},
-           {"id":"sello_calidad","label":{"en":"Quality control seal","zh":"质检封签"},
+           {"id":"sello_calidad","skip":["HK-RHO102-BAG"],
+            "label":{"en":"Quality control seal","zh":"质检封签"},
             "help":{"en":"The label the factory's own inspection leaves on the unit, usually with an inspector number or a date. It is a different label from the warranty seal: this one says who passed the speaker inside the factory. Photograph it close enough to read the number.",
                     "zh":"拍摄工厂自检后贴在整机上的标签，通常带有检验员编号或日期。它与保修封签是两种不同的标签：这一枚记录的是谁在厂内判定该台合格。拍摄距离需能看清编号。"}},
-           {"id":"etiqueta_esp","label":{"en":"Technical specification label","zh":"技术规格标签"},
+           {"id":"etiqueta_esp","skip":["HK-RHO102-BAG"],
+            "label":{"en":"Technical specification label","zh":"技术规格标签"},
             "help":{"en":"Close-up of the label. Voltage, power, model and serial must all be legible in the photo.",
                     "zh":"标签特写。电压、功率、型号和序列号在照片中都必须清晰可读。"}},
            {/* The certification marks differ between RHYME panels: the EPS112A1

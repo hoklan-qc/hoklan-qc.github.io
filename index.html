@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="16.3">
+<meta name="app-version" content="16.4">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -182,6 +182,11 @@ button:active{transform:scale(.99)}
   border-radius:6px;background:#10273f;color:var(--muted);margin-right:8px}
 .grp-h em.ok{background:rgba(46,204,113,.18);color:var(--green)}
 .grp-h em.bad{background:rgba(255,93,85,.18);color:var(--red)}
+/* Ámbar: lo que espera una decisión. No es ni bueno ni malo todavía, y por eso
+   no puede llevar el verde ni el rojo — un pendiente pintado de gris se pierde
+   entre lo ya resuelto, que es justo lo contrario de lo que hace falta. */
+.grp-h em.pend{background:rgba(245,185,66,.18);color:var(--amber)}
+.grp.pend{border-color:#7a6320}
 .grp-h i{font-style:normal;color:var(--muted);font-size:15px;width:18px;text-align:center}
 .grp-b{padding:0 14px 12px}
 /* El índice plegado reusa este acordeón, que ya existía para las secciones de
@@ -867,7 +872,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 142,
+      "plan_version": 143,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1068,6 +1073,7 @@ const CONFIG = {
               un `first:0` mandaría la prueba al final. */
          "id":"SUB_RMS","optional":false,"only_factory":["RHY"],"first":0.5,
          "only":["HK-BAS115A1","HK-BAS118A1"],"evidence":[],
+         "no_na":["YIS","RHY"],
          "long":{"t":{"en":"Ask the supplier now, then carry on",
                       "zh":"先向供应商索取，然后继续",
                       "es":"Pida el dato ahora y siga adelante"},
@@ -6263,6 +6269,7 @@ const CONFIG = {
               1 y no debe moverse; el cero no sirve, `planTests` ordena por
               `(a.first || 99)` y el cero es falso. */
          "id":"RMS_SUPPLIER","optional":false,"only_factory":["RHY"],"evidence":[],"first":0.5,
+         "no_na":["YIS","RHY"],
          "only":["HK-EPS112A1","HK-EPS115A1",
                  "HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
@@ -6312,6 +6319,10 @@ const CONFIG = {
 
               Es la única medición de potencia de estas referencias. */
          "id":"RMS_POWER","optional":false,"only_factory":["YIS","RHY"],
+         /* Sin N/A en ninguna referencia de las dos fábricas, desde el plan 143.
+            Es la única medición de potencia del plan: saltársela deja el informe
+            certificando una cabina de la que no se midió lo principal. */
+         "no_na":["YIS","RHY"],
          /* Written for a full-range cabinet, and only for one: the tone goes in
             over Bluetooth and the tone controls are part of the measurement.
             The BAS subwoofers have neither. They also carry a low-pass filter
@@ -8339,6 +8350,8 @@ const T = {
   dp_partial:"Partial inspection — not the whole plan was run.",
   dp_no_packet:"Status recorded by hand — the packet has not been loaded. Drop it above and the inspection data fills in.",
   fs_title:"Your orders", fs_hint:"Shipping status decided by HOKLAN.",
+  fs_pend:"%n pending", fs_close:"Close", fs_waiting:"Waiting for HOKLAN's authorisation.",
+  dp_pass_na:"Pass with remarks · %n point(s) N/A",
   dp_by:"Decided by %q · %d",
   dp_ok:"AUTHORISE", dp_hold:"HOLD",
   dp_publish:"Publish the status",
@@ -8607,6 +8620,9 @@ const T = {
   dp_partial:"Inspección parcial — no se ejecutó el plan completo.",
   dp_no_packet:"Estado registrado a mano — el paquete no se ha cargado. Suéltelo arriba y los datos de la inspección se completan.",
   fs_title:"Sus órdenes", fs_hint:"Estado de despacho decidido por HOKLAN.",
+  fs_pend:"%n pendiente(s)", fs_close:"Cerrar",
+  fs_waiting:"Esperando autorización de HOKLAN.",
+  dp_pass_na:"Conforme con observaciones · %n punto(s) N/A",
   dp_by:"Decidida por %q · %d",
   dp_ok:"AUTORIZAR", dp_hold:"RETENER",
   dp_publish:"Publicar el estado",
@@ -8866,6 +8882,8 @@ const T = {
   dp_partial:"部分检验 — 未执行完整计划。",
   dp_no_packet:"状态为人工登记 — 尚未载入资料包。将其拖入上方，检验数据即会补全。",
   fs_title:"贵厂订单", fs_hint:"发货状态由 HOKLAN 决定。",
+  fs_pend:"%n 项待放行", fs_close:"关闭", fs_waiting:"等待 HOKLAN 放行。",
+  dp_pass_na:"合格（有备注）· %n 个检查项不适用",
   dp_by:"由 %q 决定 · %d",
   dp_ok:"放行", dp_hold:"扣留",
   dp_publish:"发布状态",
@@ -9440,8 +9458,14 @@ const noNA = t => {
 const testOptional = t => Array.isArray(t && t.optional)
   ? t.optional.indexOf(S.factory) >= 0
   : !!(t && t.optional);
-const canTestNA = t => !!t && (testOptional(t) || isDevRef(S.model) ||
-  (t.na_ok || []).indexOf(S.model) >= 0);
+/* `no_na` manda sobre todo lo demás desde el plan 143. Una prueba cuyos puntos
+   no se pueden marcar N/A tampoco puede marcarse N/A entera: si no, el permiso
+   que se cierra punto por punto se vuelve a abrir desde la cabecera, y en
+   desarrollo se abría siempre. Es la potencia RMS lo que lo destapó — HOKLAN
+   pidió que no se pudiera saltar en ninguna referencia de YISION ni RHYME. */
+const canTestNA = t => !!t && !noNA(t) &&
+  (testOptional(t) || isDevRef(S.model) ||
+   (t.na_ok || []).indexOf(S.model) >= 0);
 
 const pointsOf = t => ((t && t.points) || []).filter(fits);
 const realPoints = t => pointsOf(t).filter(p => p.id);
@@ -13521,9 +13545,9 @@ function renderDespacho(){
   const tarjeta = k => {
     const o = d.ordenes[k];
     const cls = o.estado === "AUTORIZADO" ? "done"
-              : o.estado === "RETENIDO" ? "bad" : "";
+              : o.estado === "RETENIDO" ? "bad" : "pend";
     const chip = o.estado === "AUTORIZADO" ? "ok"
-               : o.estado === "RETENIDO" ? "bad" : "";
+               : o.estado === "RETENIDO" ? "bad" : "pend";
     return `<div class="grp ${cls}" style="margin-bottom:10px">
       <div class="grp-h" style="cursor:default">
         <b>${esc(tr("po_prefix"))}${esc(o.po)} · ${esc(o.fabrica)}</b>
@@ -13537,9 +13561,15 @@ function renderDespacho(){
               una inspección que sí se hizo y de la que no tenemos la ficha. */""}
         ${!o.veredicto ? `<p class="hint" style="margin:0 0 6px">${
           tr("dp_no_packet")}</p>` : `
+        ${/* Ámbar para lo conforme con salvedades. Una inspección con puntos en
+              N/A pasó, pero no cubrió el producto entero, y verla del mismo
+              verde que una limpia es lo que hace que nadie mire el detalle. */""}
         <p style="margin:0 0 6px;font-size:13px;color:${
-          o.veredicto === "FAIL" ? "var(--red)" : "var(--green)"}">${
-          esc(verdictText(o.veredicto))} · ${
+          o.veredicto === "FAIL" ? "var(--red)"
+          : o.na ? "var(--amber)" : "var(--green)"}">${
+          o.veredicto === "PASS" && o.na
+            ? fmt("dp_pass_na",{n:o.na})
+            : esc(verdictText(o.veredicto))} · ${
           fmt("dp_tests",{n:o.pruebas, tot:o.pruebas_plan})} · ${
           fmt("dp_files",{f:o.fotos, v:o.videos})}</p>`}
         ${(o.fallidas||[]).length ? `<p class="hint" style="margin:0 0 6px;color:var(--red)">${
@@ -14023,14 +14053,41 @@ function estadoFabrica(){
     .filter(o => o.fabrica === S.factory)
     .sort((a,b) => String(b.po).localeCompare(String(a.po)));
   if(!mias.length) return "";
-  const chip = e => e === "AUTORIZADO" ? "ok" : e === "RETENIDO" ? "bad" : "";
+  /* Plegado, y no a la vista. La pantalla de inicio es donde el operario
+     escribe el código y arranca; una lista de órdenes abierta encima de eso
+     le empuja hacia abajo lo único que vino a hacer. El botón dice cuántas
+     hay, que es lo que se mira de reojo, y la lista se abre si le interesa. */
+  const pend = mias.filter(o => o.estado === "PENDIENTE").length;
+  if(!S.fsOpen) return `<div class="card">
+    <button onclick="S.fsOpen=true;render()">
+      ${tr("fs_title")} · ${mias.length}${pend ? " · " +
+        fmt("fs_pend",{n:pend}) : ""}</button></div>`;
+
+  const chip = e => e === "AUTORIZADO" ? "ok"
+    : e === "RETENIDO" ? "bad" : "pend";
+  const borde = e => e === "AUTORIZADO" ? "done"
+    : e === "RETENIDO" ? "bad" : "pend";
   return `<div class="card">
     <label style="margin-top:0">${tr("fs_title")}</label>
     <p class="hint" style="margin:0 0 10px">${tr("fs_hint")}</p>
-    ${mias.map(o => `<div class="ix" style="cursor:default">
-      <span>${esc(tr("po_prefix"))}${esc(o.po)} · ${esc(o.modelo)}</span>
-      <em class="${chip(o.estado)}">${esc(tr("dp_" + o.estado))}</em>
-    </div>`).join("")}</div>`;
+    ${mias.map(o => `<div class="grp ${borde(o.estado)}">
+      <div class="grp-h" style="cursor:default">
+        <b>${esc(tr("po_prefix"))}${esc(o.po)}</b>
+        <em class="${chip(o.estado)}">${esc(tr("dp_" + o.estado))}</em></div>
+      <div class="grp-b">
+        <p class="hint" style="margin:0">${esc(o.modelo)}${
+          o.unidades ? " · " + fmt("dp_units",{n:o.unidades}) : ""}${
+          o.cerrada ? " · " + esc(fechaCorta(o.cerrada)) : ""}</p>
+        ${o.veredicto ? `<p style="margin:4px 0 0;font-size:13px;color:${
+          o.veredicto === "FAIL" ? "var(--red)" : "var(--green)"}">${
+          esc(verdictText(o.veredicto))}${o.pruebas_plan ? " · " +
+            fmt("dp_tests",{n:o.pruebas, tot:o.pruebas_plan}) : ""}</p>` : ""}
+        ${(o.fallidas||[]).length ? `<p class="hint" style="margin:4px 0 0;color:var(--red)">${
+          esc((o.fallidas||[]).join(" · "))}</p>` : ""}
+        ${o.estado === "PENDIENTE" ? `<p class="hint" style="margin:4px 0 0">${
+          tr("fs_waiting")}</p>` : ""}
+      </div></div>`).join("")}
+    <button onclick="S.fsOpen=false;render()">${tr("fs_close")}</button></div>`;
 }
 /* Se pide una sola vez por sesión y en segundo plano: si no hay red, la
    pantalla de inicio no puede quedarse esperando a un archivo que sólo informa.

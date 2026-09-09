@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="16.0">
+<meta name="app-version" content="16.1">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -845,7 +845,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 138,
+      "plan_version": 139,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -5621,6 +5621,49 @@ const CONFIG = {
             "help":{"en":"Reconnect the internal battery, set the switch back to internal and close the speaker. Confirm it still works before finishing.",
                     "zh":"重新接上内置电池，将开关拨回内置，并装回箱体。确认恢复后仍能正常工作再结束。"}}]},
 
+        /* Corriente de fuga · YISION, plan 139.
+           Va aquí, pegada a BATERÍA EXTERNA, para caer dentro de esa subsección
+           y no abrir una nueva de una sola prueba — que es justo el ruido que
+           acabábamos de quitar del índice de fábrica.
+
+           `optional` no es una opinión sobre su importancia: es lo que habilita
+           el N/A. La prueba se pone en las treinta y ocho referencias de YISION
+           y varias no llevan batería; sin el N/A, el operario de un producto
+           sin batería se quedaría con una prueba que no puede responder ni
+           saltar. */
+        {"id":"LEAK_CURRENT","optional":true,"only_factory":["YIS"],"evidence":[],
+         "label":{"en":"LEAKAGE CURRENT","zh":"漏电流","es":"CORRIENTE DE FUGA"},
+         "steps":[
+           {"en":"Switch the product off and leave every socket empty","zh":"关机并确保各接口均未接任何设备","es":"Apague el producto y deje todos los conectores vacíos"},
+           {"en":"Open it and put the meter in series with the internal battery","zh":"打开产品，将万用表串联接入内置电池回路","es":"Ábralo y ponga el multímetro en serie con la batería interna"},
+           {"en":"Read the current and check that it holds","zh":"读取电流并确认其保持稳定","es":"Lea la corriente y compruebe que se mantiene"}],
+         "points":[
+           {"section":{"en":"Conditions of the measurement","zh":"测量条件","es":"Condiciones de la medición"},
+            "help":{"en":"Product switched off with its internal battery connected, meter in series in current mode. The current flowing from the internal battery to the switched-off product is measured.",
+                    "zh":"产品关机、内置电池保持连接、万用表串联并置于电流档。测量由内置电池流向关机产品的电流。",
+                    "es":"Producto apagado con su batería interna conectada, multímetro en serie y en modo corriente. Se mide la corriente que fluye de la batería interna al producto apagado."}},
+           {"id":"leak_off","code":"PWR-023",
+            "label":{"en":"Product off and nothing connected","zh":"产品关机且未接任何设备","es":"Producto apagado y sin nada conectado"},
+            "help":{"en":"Switch off. Disconnect the AC cable, the USB drive and any cable in the inputs. Every socket empty.",
+                    "zh":"关闭电源。拔掉 AC 线、U 盘及各输入口的所有线材，各接口均须为空。",
+                    "es":"Apague el interruptor. Desconecte el cable AC, la memoria USB y cualquier cable en las entradas. Todos los conectores vacíos."}},
+           {"id":"leak_setup","code":"PWR-023","photo":true,"sample":"fuga_montaje",
+            "label":{"en":"Setup — meter in series with the internal battery","zh":"接线 — 万用表与内置电池串联","es":"Montaje — multímetro en serie con la batería interna"},
+            "help":{"en":"Open the product and disconnect the negative of the internal battery, leaving the battery in its place. Connect the meter between that lead and the amplifier board, in current mode, in series. Do not connect it in parallel. Photograph the setup as you left it.",
+                    "zh":"打开产品，断开内置电池负极，电池保持在原位。将万用表以串联方式接于该导线与功放板之间，置于电流档。不得并联连接。拍摄实际接线状态。",
+                    "es":"Abra el producto y desconecte el negativo de la batería interna, dejando la batería en su sitio. Conecte el multímetro entre ese cable y la tarjeta amplificadora, en modo corriente y en serie. No lo conecte en paralelo. Fotografíe el montaje tal como quedó."}},
+           {"id":"leak_value","code":"PWR-023","photo":true,
+            "measure":{"unit":"mA","step":"0.01"},
+            "label":{"en":"Leakage current measured","zh":"实测漏电流","es":"Corriente de fuga medida"},
+            "help":{"en":"Start on the highest current range and come down until the reading is legible. Photograph the meter and write the value in mA. There is no approved figure yet: record the value, do not judge it.",
+                    "zh":"先置于最大电流档，逐级下调至读数清晰。拍摄表头并以 mA 填写数值。目前尚无批准值：只记录数值，不作判定。",
+                    "es":"Empiece en el rango de corriente más alto y baje hasta que la lectura se lea bien. Fotografíe el instrumento y escriba el valor en mA. Todavía no hay cifra aprobada: anote el valor, no lo juzgue."}},
+           {"id":"leak_stable","code":"PWR-023",
+            "label":{"en":"The reading is steady — it does not climb","zh":"读数稳定 — 不上升","es":"La lectura es estable — no sube"},
+            "help":{"en":"Wait two minutes with the meter in place. The reading must stay at the value written above. If it climbs, mark the point as a failure and write the final value in the note.",
+                    "zh":"保持接线等待两分钟。读数应稳定在上述数值。若持续上升，本项判不合格，并在备注中填写最终数值。",
+                    "es":"Espere dos minutos con el instrumento puesto. La lectura debe mantenerse en el valor escrito arriba. Si sube, marque el punto como NO CONFORME y escriba en la nota el valor final."}}]},
+
         /* La prueba suelta SELECTOR DE VOLTAJE se retiró en la v11.2. Al pasar
            PARTES EXTERNAS a cubrir toda RHYME, el selector quedaba comprobado
            dos veces en las cabinas activas: allí y aquí. Vive ahora sólo en
@@ -7334,7 +7377,13 @@ const REF_IMG_DIR = "img/";
    six files to satisfy a list in here. One list, used by the reference photos,
    the example photos and the panel alike, so the screen and the report never
    disagree about which file exists. */
-const IMG_EXTS = [".jpg", ".jpeg", ".png"];
+const IMG_EXTS = [".jpg", ".jpeg", ".png", ".svg"];
+/* `.svg` va de última y entró en la v16.1, para los diagramas de montaje. Una
+   foto de banco llega siempre en .jpg y ninguna referencia trae .svg, así que
+   ponerlo antes gastaría una petición por imagen para no encontrar nada. Un
+   diagrama dibujado —el multímetro en serie, por ejemplo— pesa tres kilobytes
+   en vector contra doscientos en foto, y se lee igual de nítido cuando el
+   operario amplía con dos dedos. */
 /* JPG first, PNG second. It used to be the other way round, on the theory that
    the catalogue exports PNG — and it does, at three megabytes and sometimes at
    fifteen. What actually gets published is the resized JPG, sixty kilobytes of
@@ -8796,11 +8845,11 @@ const TEST_NO = {
   KAP_MANUAL:91, KAP_STATIONS:92, KAP_TRIPOD:93, KAP_NOISE_FLOOR:94, KAP_WEAR:95,
   KAP_PSU_SWEEP:96, KAP_CURVES:97, KAP_SPL_FREQ:98, KAP_BAT_CAP:99,
   KAP_USB_OUT:100, KAP_DROP:101, KAP_MIC_LINK:102, KAP_MIC_USE:103,
-  KAP_MODULE_AUDIO:104, KAP_FM_MODULE:105
+  KAP_MODULE_AUDIO:104, KAP_FM_MODULE:105, LEAK_CURRENT:106
 };
 /* El siguiente número libre. Está aquí para que quien agregue una prueba no
    tenga que contar: es 79 y sube de uno en uno. */
-const NEXT_TEST_NO = 106;
+const NEXT_TEST_NO = 107;
 
 /* En las referencias de desarrollo la numeración es otra, y a propósito.
 
@@ -8957,8 +9006,8 @@ const DEFAULT_GROUPS = [
   {id:"pack", tests:["ACCESSORIES","SUB_ACC","GRAPHICS","SUB_GRAPHICS"],
    label:{en:"Accessories and printed matter","zh":"配件与印刷品",
           "es":"Accesorios y material impreso"}},
-  {id:"bat",  tests:["EXT_BATTERY"],
-   label:{en:"External battery","zh":"外置电池","es":"Batería externa"}},
+  {id:"bat",  tests:["EXT_BATTERY","LEAK_CURRENT"],
+   label:{en:"Battery","zh":"电池","es":"Batería"}},
   {id:"int",  tests:["INTERNAL"],
    label:{en:"Internal parts","zh":"内部部件","es":"Partes internas"}},
   {id:"cap",  tests:["BAT_CAPACITY"],

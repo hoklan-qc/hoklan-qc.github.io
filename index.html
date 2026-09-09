@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="16.2">
+<meta name="app-version" content="16.3">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -156,9 +156,7 @@ button:active{transform:scale(.99)}
   letter-spacing:.04em}
 .dp-zona i{display:block;font-style:normal;color:var(--muted);font-size:11px;
   margin-top:5px}
-/* El campo para el lector de mano, debajo del recuadro del código de barras.
-   Ancho completo y con su explicación al pie, para que quede claro que es una
-   segunda vía y no el camino principal. */
+/* El campo para el lector de mano, debajo del recuadro del código de barras. */
 .scan-in{margin-top:8px;flex-basis:100%}
 .scan-in input{font-size:15px;padding:10px}
 .scan-in i{display:block;font-style:normal;color:var(--muted);font-size:11px;
@@ -8339,6 +8337,8 @@ const T = {
   dp_tests:"%n of %tot tests",
   dp_files:"%f photos, %v videos",
   dp_partial:"Partial inspection — not the whole plan was run.",
+  dp_no_packet:"Status recorded by hand — the packet has not been loaded. Drop it above and the inspection data fills in.",
+  fs_title:"Your orders", fs_hint:"Shipping status decided by HOKLAN.",
   dp_by:"Decided by %q · %d",
   dp_ok:"AUTHORISE", dp_hold:"HOLD",
   dp_publish:"Publish the status",
@@ -8605,6 +8605,8 @@ const T = {
   dp_tests:"%n de %tot pruebas",
   dp_files:"%f fotos, %v videos",
   dp_partial:"Inspección parcial — no se ejecutó el plan completo.",
+  dp_no_packet:"Estado registrado a mano — el paquete no se ha cargado. Suéltelo arriba y los datos de la inspección se completan.",
+  fs_title:"Sus órdenes", fs_hint:"Estado de despacho decidido por HOKLAN.",
   dp_by:"Decidida por %q · %d",
   dp_ok:"AUTORIZAR", dp_hold:"RETENER",
   dp_publish:"Publicar el estado",
@@ -8862,6 +8864,8 @@ const T = {
   dp_tests:"%n / %tot 项测试",
   dp_files:"%f 张照片，%v 段视频",
   dp_partial:"部分检验 — 未执行完整计划。",
+  dp_no_packet:"状态为人工登记 — 尚未载入资料包。将其拖入上方，检验数据即会补全。",
+  fs_title:"贵厂订单", fs_hint:"发货状态由 HOKLAN 决定。",
   dp_by:"由 %q 决定 · %d",
   dp_ok:"放行", dp_hold:"扣留",
   dp_publish:"发布状态",
@@ -13527,11 +13531,17 @@ function renderDespacho(){
       <div class="grp-b">
         <p class="hint" style="margin:0 0 4px">${esc(o.modelo)} · ${
           fmt("dp_units",{n:o.unidades})} · ${esc(fechaCorta(o.cerrada))}</p>
+        ${/* Una orden puede entrar al panel sin paquete: las que ya estaban
+              decididas antes de que el panel existiera se cargaron sólo con su
+              estado. Mostrarles «0 de 0 pruebas · 0 fotos» sería mentir sobre
+              una inspección que sí se hizo y de la que no tenemos la ficha. */""}
+        ${!o.veredicto ? `<p class="hint" style="margin:0 0 6px">${
+          tr("dp_no_packet")}</p>` : `
         <p style="margin:0 0 6px;font-size:13px;color:${
           o.veredicto === "FAIL" ? "var(--red)" : "var(--green)"}">${
           esc(verdictText(o.veredicto))} · ${
           fmt("dp_tests",{n:o.pruebas, tot:o.pruebas_plan})} · ${
-          fmt("dp_files",{f:o.fotos, v:o.videos})}</p>
+          fmt("dp_files",{f:o.fotos, v:o.videos})}</p>`}
         ${(o.fallidas||[]).length ? `<p class="hint" style="margin:0 0 6px;color:var(--red)">${
           esc((o.fallidas||[]).join(" · "))}</p>` : ""}
         ${o.parcial ? `<p class="hint" style="margin:0 0 6px;color:var(--amber)">${
@@ -13652,7 +13662,12 @@ const fechaCorta = iso => {
 };
 
 const DESP_KEY = "hoklan_qc_despachos";
-const claveOrden = f => (f.fabrica || "?") + "/" + (f.po || "SIN-ORDEN");
+/* Fábrica, orden y modelo. El modelo entró en la v16.3 y no es un adorno: la
+   PO 1638 de RHYME cubre el BAS115A1, el EPS112A1 y el BAS118A1, tres
+   inspecciones distintas con tres estados distintos. Con la clave sin modelo,
+   las tres se pisaban y sólo sobrevivía la última. */
+const claveOrden = f =>
+  (f.fabrica || "?") + "/" + (f.po || "SIN-ORDEN") + "/" + (f.modelo || "?");
 
 function despCargar(){
   try{ return JSON.parse(localStorage.getItem(DESP_KEY)) || {ordenes:{}}; }
@@ -13991,7 +14006,49 @@ function setModel(value){
   render();
 }
 
+/* ---------- el estado de las órdenes, del lado de la fábrica ---------------
+   La otra mitad del panel de despacho. HOKLAN decide y publica; aquí la fábrica
+   ve en qué quedó lo suyo, sin preguntar por WeChat.
+
+   Sólo aparece con el código de fábrica ya escrito, y sólo con las órdenes de
+   esa fábrica: una fábrica no tiene por qué ver lo que despacha otra. Y sin
+   botones — la fábrica consulta, no decide. Si esa distinción se pierde, el
+   panel deja de significar algo.
+--------------------------------------------------------------------------- */
+var DESP_PUB = null, DESP_PUB_ESTADO = "";
+function estadoFabrica(){
+  if(!S.testId || !S.factory || ADMIN_OK) return "";
+  if(DESP_PUB_ESTADO !== "ok" || !DESP_PUB) return "";
+  const mias = (DESP_PUB.ordenes || [])
+    .filter(o => o.fabrica === S.factory)
+    .sort((a,b) => String(b.po).localeCompare(String(a.po)));
+  if(!mias.length) return "";
+  const chip = e => e === "AUTORIZADO" ? "ok" : e === "RETENIDO" ? "bad" : "";
+  return `<div class="card">
+    <label style="margin-top:0">${tr("fs_title")}</label>
+    <p class="hint" style="margin:0 0 10px">${tr("fs_hint")}</p>
+    ${mias.map(o => `<div class="ix" style="cursor:default">
+      <span>${esc(tr("po_prefix"))}${esc(o.po)} · ${esc(o.modelo)}</span>
+      <em class="${chip(o.estado)}">${esc(tr("dp_" + o.estado))}</em>
+    </div>`).join("")}</div>`;
+}
+/* Se pide una sola vez por sesión y en segundo plano: si no hay red, la
+   pantalla de inicio no puede quedarse esperando a un archivo que sólo informa.
+   Sin él, todo lo demás funciona igual que siempre. */
+function cargarEstadoFabrica(){
+  if(DESP_PUB_ESTADO) return;
+  DESP_PUB_ESTADO = "load";
+  fetch("despachos.json?nc=" + Date.now(), {cache:"no-store"})
+    .then(r => r.ok ? r.json() : null)
+    .then(j => {
+      DESP_PUB = j; DESP_PUB_ESTADO = j ? "ok" : "no";
+      if(S.screen === "setup") render();
+    })
+    .catch(() => { DESP_PUB_ESTADO = "no"; });
+}
+
 function renderSetup(){
+  cargarEstadoFabrica();
   /* Antes de dibujar nada. El operario pudo dejar la cuenta en 3 con otra
      fábrica y volver a ésta: sin esto, el recuadro desaparece pero el número
      viejo sigue vivo, y el resumen de abajo anunciaría tres parlantes. */
@@ -14050,6 +14107,7 @@ function renderSetup(){
           anything is typed rather than after. */""}
     <div class="brw"><b>${tr("browser_hint_t")}</b>
       <u class="no">${tr("browser_hint_no")}</u></div>
+    ${estadoFabrica()}
     <div class="card">
       <label>${tr("test_id")}</label>
       <input id="idDigits" inputmode="numeric" maxlength="3" autocomplete="off"
@@ -14596,8 +14654,12 @@ function measureBox(p, u, id){
    fotografía o no salía, para que nadie lo escribiera de memoria — y esa
    preocupación sigue siendo buena. Lo que cambió es que un lector de código de
    barras conectado al teléfono, por cable o por Bluetooth, se comporta como un
-   teclado: apunta, dispara y el número aparece escrito solo. Eso no es
-   escribirlo de memoria, es leerlo con mejor instrumento que la cámara.
+   teclado: apunta, dispara y el número aparece escrito solo.
+
+   En la primera prueba de puesto no funcionó y se estuvo a punto de retirar.
+   Queda mientras se averigua por qué: un lector que no escribe nada suele ser
+   el modo del propio lector —HID contra puerto serie— o el teléfono, que no
+   alimenta el adaptador. Ninguna de las dos se arregla en la app.
 
    El campo sigue pidiendo la foto: la evidencia de qué etiqueta se leyó es la
    imagen, no el número. Un lector puede leer la etiqueta equivocada igual que

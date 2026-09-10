@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="17.5">
+<meta name="app-version" content="17.7">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -936,7 +936,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 154,
+      "plan_version": 156,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -3431,8 +3431,13 @@ const CONFIG = {
                     "zh":"始终使用同样三首曲目——一首低频深沉、一首独唱人声、一首编配密集——在同一房间、同一音量下，由三人各自独立记录所听内容，记录完成前不得交流。判定标准：不得出现仅一人听到而他人未察觉的现象，且三人均不得认为本样机劣于此前批准的样机。工单 27——整机音量较此前批次低 15%，涉及 1,500 台——本可通过此方式在出货前发现。所需条件：三个人与一个安静从容的房间。",
                     "es":"Las mismas tres pistas siempre — una de graves profundos, una de voz sola, una cargada — en el mismo cuarto, al mismo volumen, con tres personas que anoten por separado lo que oyen antes de hablar entre ellas. Criterio: nadie puede reportar algo que los otros no oigan, y ninguno de los tres puede encontrar la muestra peor que la anterior aprobada. Es como se habría atrapado el ticket 27 — una cabina con 15% menos volumen que los lotes anteriores, 1.500 unidades — antes de embarcar. Instrumento: tres personas y un cuarto sin prisa."}}]},
 
+        /* Sin `first`, a diferencia de GS_MECH y GS_LAB. Ésta no gasta la
+           muestra —es leer papeles al lado del producto— y empujarla al final
+           la separaba de las otras cinco del bloque en las referencias que no
+           traen reparto propio, con lo cual «Muestra patrón» salía dos veces
+           en el índice. Se vio en el KAP208 al verificar el plan 154. */
         {"id":"GS_DOCS","optional":false,"golden":true,"evidence":[],
-         "point_photo":true,"first":102,
+         "point_photo":true,
          "label":{"en":"GOLDEN SAMPLE · APPROVED CHANGES AND ARTWORK",
                   "zh":"标准样机 · 已批准变更与印刷稿",
                   "es":"MUESTRA PATRÓN · MEJORAS APROBADAS Y ARTES"},
@@ -6329,22 +6334,19 @@ const CONFIG = {
             "help":{"en":"Product switched off with its internal battery connected, meter in series in current mode. The current flowing from the internal battery to the switched-off product is measured.",
                     "zh":"产品关机、内置电池保持连接、万用表串联并置于电流档。测量由内置电池流向关机产品的电流。",
                     "es":"Producto apagado con su batería interna conectada, multímetro en serie y en modo corriente. Se mide la corriente que fluye de la batería interna al producto apagado."}},
-           {"id":"leak_off","code":"PWR-023",
-            "label":{"en":"Product off and nothing connected","zh":"产品关机且未接任何设备","es":"Producto apagado y sin nada conectado"},
-            "help":{"en":"Switch off. Disconnect the AC cable, the USB drive and any cable in the inputs. Every socket empty.",
-                    "zh":"关闭电源。拔掉 AC 线、U 盘及各输入口的所有线材，各接口均须为空。",
-                    "es":"Apague el interruptor. Desconecte el cable AC, la memoria USB y cualquier cable en las entradas. Todos los conectores vacíos."}},
-           {"id":"leak_setup","code":"PWR-023","photo":true,"sample":"fuga_montaje",
-            "label":{"en":"Setup — meter in series with the internal battery","zh":"接线 — 万用表与内置电池串联","es":"Montaje — multímetro en serie con la batería interna"},
-            "help":{"en":"Open the product and disconnect the negative of the internal battery, leaving the battery in its place. Connect the meter between that lead and the amplifier board, in current mode, in series. Do not connect it in parallel. Photograph the setup as you left it.",
-                    "zh":"打开产品，断开内置电池负极，电池保持在原位。将万用表以串联方式接于该导线与功放板之间，置于电流档。不得并联连接。拍摄实际接线状态。",
-                    "es":"Abra el producto y desconecte el negativo de la batería interna, dejando la batería en su sitio. Conecte el multímetro entre ese cable y la tarjeta amplificadora, en modo corriente y en serie. No lo conecte en paralelo. Fotografíe el montaje tal como quedó."}},
-           {"id":"leak_value","code":"PWR-023","photo":true,
+           {"id":"leak_value","code":"PWR-023","photo":true,"sample":"fuga_montaje",
             "measure":{"unit":"mA","step":"0.01"},
-            "label":{"en":"Leakage current measured","zh":"实测漏电流","es":"Corriente de fuga medida"},
-            "help":{"en":"Start on the highest current range and come down until the reading is legible. Photograph the meter and write the value in mA. There is no approved figure yet: record the value, do not judge it.",
-                    "zh":"先置于最大电流档，逐级下调至读数清晰。拍摄表头并以 mA 填写数值。目前尚无批准值：只记录数值，不作判定。",
-                    "es":"Empiece en el rango de corriente más alto y baje hasta que la lectura se lea bien. Fotografíe el instrumento y escriba el valor en mA. Todavía no hay cifra aprobada: anote el valor, no lo juzgue."}}]},
+            "label":{"en":"Leakage current measured with the product switched off","zh":"关机状态下实测漏电流","es":"Corriente de fuga medida con el producto apagado"},
+            "help":{"en":"Switch the product off and disconnect the AC cable, the USB drive and any cable in the inputs: every socket empty. Open it and disconnect the negative of the internal battery, leaving the battery in its place. Connect the meter between that lead and the amplifier board, in current mode and in series — not in parallel. Start on the highest current range and come down until the reading is legible. Photograph the setup and the meter, and write the value in mA. There is no approved figure yet: record the value, do not judge it.",
+                    "zh":"关闭产品电源，拔掉 AC 线、U 盘及各输入口的所有线材，各接口均须为空。打开产品，断开内置电池负极，电池保持在原位。将万用表以串联方式接于该导线与功放板之间，置于电流档，不得并联。先置于最大电流档，逐级下调至读数清晰。拍摄接线状态与表头，并以 mA 填写数值。目前尚无批准值：只记录数值，不作判定。",
+                    "es":"Apague el producto y desconecte el cable AC, la memoria USB y cualquier cable en las entradas: todos los conectores vacíos. Ábralo y desconecte el negativo de la batería interna, dejándola en su sitio. Conecte el multímetro entre ese cable y la tarjeta amplificadora, en modo corriente y en serie — no en paralelo. Empiece en el rango de corriente más alto y baje hasta que la lectura se lea bien. Fotografíe el montaje y el instrumento, y escriba el valor en mA. Todavía no hay cifra aprobada: anote el valor, no lo juzgue."}}]},
+        /* «Producto apagado y sin nada conectado» y «Montaje — multímetro en
+           serie con la batería interna» se retiraron en el plan 156. Ninguno de
+           los dos se medía: eran la preparación de la única medición que hay,
+           y marcarlos CONFORME no agregaba nada al informe. Lo que decían —qué
+           desconectar, cómo poner el instrumento, y que va en serie y no en
+           paralelo— quedó dentro de la indicación del punto que sí se mide, y
+           la imagen de ejemplo del montaje se movió con él. */
         /* «La lectura es estable — no sube» se retiró en el plan 152. Pedía dos
            minutos de espera con el instrumento puesto por cada unidad, y era el
            único punto de la prueba que sí se podía reprobar. Al quitarlo, la
@@ -9776,7 +9778,7 @@ const GROUPS = {
      label:{en:"Aging","zh":"老化","es":"Envejecimiento"}},
     {id:"bat",   tests:["KAP_CHG_CURVE","KAP_DIS_CURVE","KAP_CHG_PCT","KAP_BAT_CAP",
                         "BRG_BATTERY","BRG_USBC","KAP_DRAW","KAP_PACK_PROT",
-                        "EXT_BATTERY","BAT_CAPACITY"],
+                        "EXT_BATTERY","BAT_CAPACITY","LEAK_CURRENT"],
      label:{en:"Battery","zh":"电池","es":"Batería"}},
     {id:"rms",   tests:["RMS_POWER"],
      label:{en:"RMS power","zh":"额定功率","es":"Potencia RMS"}},
@@ -9903,9 +9905,18 @@ const DEFAULT_GROUPS = [
    label:{en:"Wireless operation","zh":"无线使用","es":"Funcionamiento inalámbrico"}},
   {id:"mic_i",tests:["MIC_BATTERY","PHI_INTERNAL","PHI_BAT_VOLT"],
    label:{en:"Internal parts","zh":"内部部件","es":"Partes internas"}},
+  /* BRAGI. El KAP208 no trae reparto propio, así que sus doce pruebas caían
+     todas en «otras». Van en dos subsecciones y no en las de arriba porque en
+     su plan están seguidas: cortarlas contra «Funcionales» y «Batería», que
+     viven en otra parte del orden, partiría esas dos tarjetas en dos. */
+  {id:"brg_f",tests:["BRG_POWER","BRG_GESTURES","BRG_MODES","BRG_BT","BRG_TWS",
+                     "BRG_MIC","BRG_KNOB","BRG_LIGHT","BRG_FM","BRG_MEMORY"],
+   label:{en:"Functional","zh":"功能","es":"Funcionales"}},
+  {id:"brg_b",tests:["BRG_BATTERY","BRG_USBC"],
+   label:{en:"Battery and charging","zh":"电池与充电","es":"Batería y carga"}},
   /* Muestra patrón. Aquí sólo pone rótulo: este reparto no reordena. Las
-     pruebas caen donde las deje su first — GS_MECH, GS_LAB y GS_DOCS al
-     final, junto a las que gastan el producto. */
+     pruebas caen donde las deje su first — GS_MECH y GS_LAB al final, junto a
+     las que gastan el producto; las demás quedan seguidas. */
   {id:"gs",   tests:["GS_POWER","GS_DRIVERS","GS_BATTERY","GS_RF","GS_FW","GS_DOCS"],
    label:{en:"Golden sample","zh":"标准样机","es":"Muestra patrón"}},
   {id:"gslab",tests:["GS_MECH","GS_LAB"],

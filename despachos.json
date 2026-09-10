@@ -1,6 +1,6 @@
 {
  "v": 1,
- "actualizado": "2026-09-10T06:05:39.559Z",
+ "actualizado": "2026-09-10T07:36:51.975Z",
  "ordenes": [
   {
    "po": "1638",
@@ -124,8 +124,8 @@
    "po": "1640",
    "fabrica": "YIS",
    "modelo": "HK-RNW212A2",
-   "estado": "PENDIENTE",
-   "decidida_por": null,
+   "estado": "AUTORIZADO",
+   "decidida_por": "365",
    "veredicto": "",
    "unidades": 0,
    "pruebas": 0,
@@ -133,7 +133,8 @@
    "fotos": 0,
    "videos": 0,
    "fallidas": [],
-   "cerrada": "2026-09-09T00:00:00.000Z"
+   "cerrada": "2026-09-09T00:00:00.000Z",
+   "decidida": "2026-09-10T07:36:49.406Z"
   },
   {
    "po": "1653",

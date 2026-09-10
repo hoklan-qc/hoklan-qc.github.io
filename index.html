@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="17.3">
+<meta name="app-version" content="17.5">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -658,7 +658,16 @@ const CONFIG = {
     "583": {"code":"583-R7H9Y2M4E", "key":"RHY"},
     "741": {"code":"741-Y9I4S2I6N", "key":"YIS"},
     "926": {"code":"926-E4A7G2L9E", "key":"EAG"},
-    "418": {"code":"418-L3E6S5H8G", "key":"LES"}
+    "418": {"code":"418-L3E6S5H8G", "key":"LES"},
+    /* Golden samples, plan 153. No es una fábrica: es una forma de inspeccionar.
+       Sigue la misma regla de sufijo que las demás —GOLDEN da G O L D N— para
+       que un código se pueda comprobar por ojo sin tabla al lado.
+
+       Se comparte entre fábricas a propósito. Un golden sample es la muestra
+       patrón contra la que después se compara la producción, y quien la levanta
+       puede ser cualquiera de las cuatro. Por eso no lleva su propia lista de
+       referencias por fábrica sino la de `GOLDEN_REFS`, más abajo. */
+    "205": {"code":"205-G3O8L1D6N", "key":"GLD"}
   },
 
   "models": {
@@ -875,12 +884,59 @@ const CONFIG = {
     "BAG-005":{"en":"Buckle, strap or handle loose","zh":"扣具、背带或提手松动","es":"Hebilla, correa o asa floja"},
     "BAG-006":{"en":"Bag loses its shape","zh":"包体变形","es":"La bolsa pierde su forma"},
     "BAG-007":{"en":"Material or padding inconsistent","zh":"材质或衬垫不一致","es":"Material o acolchado inconsistente"},
-    "BAG-008":{"en":"Relief logo incomplete or dirty","zh":"浮雕标志不完整或有污","es":"Logo en relieve incompleto o sucio"}
+    "BAG-008":{"en":"Relief logo incomplete or dirty","zh":"浮雕标志不完整或有污","es":"Logo en relieve incompleto o sucio"},
+
+    /* Las pruebas del KAP206 y las de muestra patrón traían códigos que nunca
+       se definieron aquí. No rompían la app —`codeText` devuelve cadena vacía
+       cuando no encuentra el código— pero dejaban en blanco la columna
+       «Descripción del código» del CSV y el renglón de la falla en el informe,
+       que es justamente lo que el dashboard agrupa. Se definen todos ahora. */
+    "PWR-020":{"en":"Draw with the product off or on standby out of specification","zh":"关机或待机耗电超出规格","es":"Consumo con el producto apagado o en espera fuera de especificación"},
+    "PWR-021":{"en":"Fails on the mains sweep or does not hold its working range","zh":"电压扫描中失效或工作电压范围不足","es":"Falla en el barrido de red o no sostiene su rango de trabajo"},
+    "PWR-022":{"en":"USB output does not deliver the specified voltage or current","zh":"USB 输出电压或电流不符合规格","es":"La salida USB no entrega la tensión o la corriente especificada"},
+    "PWR-023":{"en":"Leakage current from the battery with the product off","zh":"关机状态下电池漏电流","es":"Corriente de fuga de la batería con el producto apagado"},
+    "PWR-024":{"en":"Shuts down or fails during the sustained power test","zh":"持续功率测试中关机或失效","es":"Se apaga o falla durante la prueba de potencia sostenida"},
+    "THR-010":{"en":"Temperature above the allowed limit","zh":"温度超出允许上限","es":"Temperatura por encima del límite permitido"},
+    "THR-011":{"en":"Power supply temperature above the allowed limit","zh":"电源温度超出允许上限","es":"Temperatura de la fuente por encima del límite permitido"},
+    "THR-012":{"en":"Fault after the climatic cycle","zh":"温度循环后出现异常","es":"Falla después del ciclo climático"},
+    "AUD-030":{"en":"The limiter does not act — it clips or cuts out at maximum","zh":"限幅无效 — 最大音量下削顶或断声","es":"El limitador no actúa — recorta o corta al máximo"},
+    "AUD-031":{"en":"Buzz, rattle or fault after the endurance test","zh":"耐久测试后出现嗡响、异响或失效","es":"Zumbido, traqueteo o falla tras la prueba de resistencia"},
+    "AUD-032":{"en":"Sound mode or signature does not sound as it should","zh":"音效模式或风格听感不符","es":"El modo o la firma de sonido no suena como debe"},
+    "AUD-033":{"en":"Background noise with no signal","zh":"无信号时存在底噪","es":"Ruido de fondo sin señal"},
+    "AUD-034":{"en":"Response, impedance or sensitivity out of specification","zh":"频响、阻抗或灵敏度超出规格","es":"Respuesta, impedancia o sensibilidad fuera de especificación"},
+    "AUD-035":{"en":"SPL by frequency out of specification","zh":"分频段声压级超出规格","es":"SPL por frecuencia fuera de especificación"},
+    "AUD-036":{"en":"The 120 Hz output does not separate the bass as specified","zh":"120 Hz 输出未按规格分离低音","es":"La salida de 120 Hz no separa el bajo como se especifica"},
+    "INT-020":{"en":"Internal wiring, gauge or connection not as approved","zh":"内部走线、线径或连接与承认样不符","es":"Cableado, calibre o conexión interna distintos a lo aprobado"},
+    "INT-021":{"en":"Voice coil or tinsel out of specification or badly finished","zh":"音圈或弹波引线超出规格或工艺不良","es":"Bobina o tinsel fuera de especificación o mal acabado"},
+    "MEC-006":{"en":"Glue, sealing or fixing of internal parts insufficient","zh":"内部零件的点胶、密封或固定不足","es":"Pegante, sellado o fijación de partes internas insuficiente"},
+    "MEC-007":{"en":"Something came loose or was damaged in the transport vibration","zh":"运输振动后出现松动或损坏","es":"Algo se soltó o se dañó en la vibración de transporte"},
+    "EXT-010":{"en":"External dimensions out of specification","zh":"外形尺寸超出规格","es":"Dimensiones externas fuera de especificación"},
+    "EXT-011":{"en":"Cabinet, joints, caps or corner pieces defective","zh":"箱体、接缝、端盖或护角有缺陷","es":"Gabinete, uniones, tapas o esquineras defectuosas"},
+    "EXT-012":{"en":"Tripod socket defective or unstable when mounted","zh":"三脚架插孔有缺陷或安装后不稳","es":"Receptáculo de trípode defectuoso o inestable al montar"},
+    "BAT-020":{"en":"Charge curve or charge time out of specification","zh":"充电曲线或充电时长超出规格","es":"Curva o tiempo de carga fuera de especificación"},
+    "BAT-021":{"en":"Autonomy below the declared figure","zh":"续航低于标称值","es":"Autonomía por debajo de lo declarado"},
+    "BAT-022":{"en":"Charge percentage indicator incorrect","zh":"电量百分比显示不正确","es":"Indicador de porcentaje de carga incorrecto"},
+    "BAT-023":{"en":"Battery protection does not act or the pack does not recover","zh":"电池保护未动作或电池组无法恢复","es":"La protección de la batería no actúa o el pack no se recupera"},
+    "BAT-024":{"en":"Measured capacity or weight below the declared one","zh":"实测容量或重量低于标称值","es":"Capacidad o peso medido por debajo de lo declarado"},
+    "DOC-010":{"en":"Printed matter or declared data does not match the approved one","zh":"印刷品或申报数据与批准稿不符","es":"Material impreso o dato declarado distinto al aprobado"},
+    "DOC-011":{"en":"An approved improvement is not fitted on the product","zh":"已批准的改进未在产品上落实","es":"Una mejora aprobada no está puesta en el producto"},
+    "FM-011":{"en":"Reception degrades with the wireless module fitted","zh":"装入无线模块后接收变差","es":"La recepción empeora con el módulo inalámbrico puesto"},
+    "FM-012":{"en":"Module supply or antenna distance not as approved","zh":"模块电源类型或天线距离与承认样不符","es":"Fuente del módulo o distancia de antena distintas a lo aprobado"},
+    "FM-020":{"en":"Poor automatic scan or presets not kept","zh":"自动搜台效果差或存台丢失","es":"Barrido automático pobre o memorias que no se conservan"},
+    "DUR-010":{"en":"Fault in the switching or button life cycles","zh":"开关机或按键寿命循环中失效","es":"Falla en los ciclos de encendido o de vida de los botones"},
+    "DUR-011":{"en":"Socket worn or no longer holds the plug","zh":"接口磨损或无法夹持插头","es":"Conector desgastado o que ya no retiene el enchufe"},
+    "PKG-010":{"en":"Damage to the box or the product after the drop test","zh":"跌落测试后彩盒或产品受损","es":"Daño en la caja o en el producto después de la caída"},
+    "UI-004":{"en":"The product locks up and stops responding","zh":"产品死机且无响应","es":"El producto se bloquea y deja de responder"},
+    "MIC-020":{"en":"Wireless microphone does not link or does not work with the product","zh":"无线麦克风无法配对或与产品不匹配","es":"El micrófono inalámbrico no enlaza o no funciona con el producto"},
+    "MIC-021":{"en":"The two microphones do not work together or priority does not act","zh":"两支麦克风无法同时使用或优先功能无效","es":"Los dos micrófonos no funcionan juntos o la prioridad no actúa"},
+    "MIC-022":{"en":"Wireless range or recovery not as specified","zh":"无线距离或恢复能力不符合规格","es":"Alcance inalámbrico o recuperación fuera de lo especificado"},
+    "MIC-030":{"en":"Audio from the receiver module is not clean","zh":"接收模块音频不干净","es":"El audio del módulo receptor no es limpio"},
+    "MIC-031":{"en":"The receiver module degrades one of the sources","zh":"接收模块导致某一音源劣化","es":"El módulo receptor degrada una de las fuentes"}
   },
 
   "plans": {
     "default": {
-      "plan_version": 152,
+      "plan_version": 154,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -3032,6 +3088,381 @@ const CONFIG = {
             "help":{"en":"Photograph the selector and write the position it is in. It must match the destination of the order. It is the failure that arrives most often and the one that destroys the product on first power-up.",
                     "zh":"拍摄选择开关并填写其所处位置，须与订单目的地一致。该项是最常出现的故障，且会在首次通电时直接损坏产品。",
                     "es":"Fotografíe el selector y escriba la posición en la que está. Debe corresponder al destino de la orden. Es la falla que más llega y la que destruye el producto en el primer encendido."}}]},
+
+        /* ======================================================================
+           MUESTRA PATRÓN · las pruebas del código 205
+           ======================================================================
+
+           De dónde salen. De cruzar los 92 tickets de calidad con las 151
+           mejoras de la bitácora. Ninguna es una idea suelta: cada punto nombra
+           el ticket o la mejora que lo originó, para que dentro de un año se
+           pueda preguntar si sigue haciendo falta.
+
+           Qué tienen en común. Las diez fallas más caras de HOKLAN no se
+           detectan encendiendo el producto: aparecen a las dos horas, al subir
+           el volumen al tope, tras la primera descarga profunda o semanas
+           después con una variación de red. El plan de producción responde
+           «¿enciende? ¿suena?» en dos minutos. Esto mide otra cosa: **margen**
+           —cuánto aguanta antes de romperse— y **permanencia** —si sigue igual
+           después de un rato—. Por eso vive en la muestra patrón y no en la
+           línea: cuesta horas y se hace una vez por producto, no una vez por
+           cabina.
+
+           Sobre los criterios. Los números están puestos con criterio de
+           ingeniería de producto de consumo — el que usaría un fabricante que
+           valida un prototipo antes de comprometer un molde — y **no salen de
+           mediciones de HOKLAN**. Cada punto lo dice donde aplica. Sirven para
+           que el operario pueda reprobar algo en el puesto en vez de anotar un
+           número que nadie juzga; cuando haya histórico de tres o cuatro
+           muestras, se ajustan con datos propios.
+
+           Sobre los instrumentos. Cada punto nombra el que necesita y, cuando
+           existe, la versión pobre que sirve casi igual. Una prueba que exige
+           un equipo que la fábrica no tiene es una prueba que se marca N/A.
+           ====================================================================== */
+
+        {"id":"GS_POWER","optional":false,"golden":true,"evidence":[],
+         "point_photo":true,
+         "label":{"en":"GOLDEN SAMPLE · POWER MARGIN",
+                  "zh":"标准样机 · 电源余量",
+                  "es":"MUESTRA PATRÓN · MARGEN ELÉCTRICO"},
+         "steps":[
+           {"en":"Two hours at maximum volume with real music","zh":"以真实音乐最大音量运行两小时","es":"Dos horas a volumen máximo con música real"},
+           {"en":"Then sweep the mains voltage up and down","zh":"随后对市电电压进行升降扫描","es":"Después barra la tensión de red arriba y abajo"},
+           {"en":"Then fifty power cycles under load","zh":"再进行五十次带载开关机循环","es":"Después cincuenta ciclos de encendido con carga"}],
+         "points":[
+           {"section":{"en":"Why this block exists","zh":"本组测试的由来","es":"De dónde sale este bloque"},
+            "help":{"en":"Nine tickets of burnt power-supply MOSFETs on the DEL103, four of the cabinet switching itself off at maximum volume, and one whole batch of 800 units where the DC/DC converter burned when the switch was moved. All of them passed the production inspection. None of them is visible in the first two minutes.",
+                    "zh":"DEL103 有九张电源 MOSFET 烧毁的工单，四张最大音量下自动关机，另有一整批 800 台因拨动开关导致 DC/DC 转换器烧毁。这些产品当初均通过了产线检验，且在最初两分钟内均无异常表现。",
+                    "es":"Nueve tickets de MOSFET de fuente quemados en el DEL103, cuatro de cabina que se apaga sola al máximo, y un lote entero de 800 unidades donde el conversor DC/DC se quemó al mover el interruptor. Todos pasaron la inspección de producción. Ninguno se ve en los primeros dos minutos."}},
+           {"id":"gs_pwr_2h","code":"PWR-024","point_video":true,
+            "label":{"en":"Two hours at maximum volume without shutting down","zh":"最大音量连续两小时不关机","es":"Dos horas a volumen máximo sin apagarse"},
+            "help":{"en":"Real music with bass, at maximum, without touching anything for two hours. Criterion: it must not switch off, restart, mute itself or start distorting. Any of those is a failure, and the note says at what minute it happened. Instrument: none — a clock and someone who comes back.",
+                    "zh":"播放含低频的真实音乐，最大音量，连续两小时不作任何操作。判定标准：不得关机、重启、静音或出现失真。出现任一情况即判不合格，并在备注中注明发生于第几分钟。所需仪器：无，只需计时并有人回来查看。",
+                    "es":"Música real con graves, al máximo, sin tocar nada durante dos horas. Criterio: no debe apagarse, reiniciarse, silenciarse ni empezar a distorsionar. Cualquiera de las cuatro es falla, y la nota dice en qué minuto pasó. Instrumento: ninguno — un reloj y alguien que vuelva."}},
+           {"id":"gs_pwr_temp","code":"THR-011","photo":true,
+            "measure":{"unit":"°C","step":"0.1"},
+            "label":{"en":"Power supply temperature at two hours","zh":"两小时后电源温度","es":"Temperatura de la fuente a las dos horas"},
+            "help":{"en":"Without switching off and without lowering the volume, point the thermal gun at the hottest part of the power supply — the MOSFET or the heatsink. Criterion: 85 °C. Above that the device is inside its own derating margin and its life falls fast; a semiconductor at 100 °C in a factory bench will be hotter in a warehouse in Barranquilla. Instrument: thermal gun. Poor version: a K-type thermocouple taped to the heatsink.",
+                    "zh":"在不关机、不降低音量的前提下，用测温枪对准电源最热部位——MOSFET 或散热器。判定标准：85 °C。超过该值即进入器件自身降额区间，寿命会迅速下降；在工厂台面上达 100 °C 的半导体，在巴兰基亚的仓库中只会更热。所需仪器：测温枪。简易替代：将 K 型热电偶贴于散热器。",
+                    "es":"Sin apagar y sin bajar el volumen, apunte la pistola térmica a la parte más caliente de la fuente — el MOSFET o el disipador. Criterio: 85 °C. Por encima de ahí el componente está dentro de su propio margen de degradación y su vida cae rápido; un semiconductor a 100 °C en el banco de la fábrica estará más caliente en una bodega de Barranquilla. Instrumento: pistola térmica. Versión pobre: una termocupla tipo K pegada al disipador."}},
+           {"id":"gs_pwr_amp","code":"PWR-024","photo":true,
+            "measure":{"unit":"A","step":"0.01"},
+            "label":{"en":"Mains current at maximum volume","zh":"最大音量下的市电电流","es":"Corriente de red a volumen máximo"},
+            "help":{"en":"Clamp meter on the AC line, with the product at maximum. Write the value and photograph the reading. Declared record: there is no approved figure yet, and this is the number that says whether the supply is working within what it was designed for. Instrument: clamp meter.",
+                    "zh":"将钳形表夹于 AC 线上，产品置于最大音量。填写数值并拍摄读数。申报记录：目前尚无批准值，该数据用于判断电源是否工作在设计范围内。所需仪器：钳形电流表。",
+                    "es":"Pinza amperimétrica en la línea AC, con el producto al máximo. Escriba el valor y fotografíe la lectura. Registro declarado: todavía no hay cifra aprobada, y es el número que dice si la fuente está trabajando dentro de aquello para lo que se diseñó. Instrumento: pinza amperimétrica."}},
+           {"section":{"en":"Mains voltage sweep","zh":"市电电压扫描","es":"Barrido de tensión de red"},
+            "help":{"en":"With the product playing at maximum, take the variable source from 90 V to 265 V and back, slowly. It is the test that RHY013 came from: MOSFETs in short circuit caused by voltage variations, order 1248. Instrument: variable AC source. Poor version: a variac plus a multimeter.",
+                    "zh":"在产品以最大音量播放的状态下，用可调电源将电压自 90 V 缓慢升至 265 V 再降回。本项源自 RHY013：1248 订单中因电压波动导致 MOSFET 短路。所需仪器：可调交流电源。简易替代：调压器配万用表。",
+                    "es":"Con el producto sonando al máximo, lleve la fuente variable de 90 V a 265 V y de vuelta, despacio. Es la prueba de la que salió RHY013: MOSFET en cortocircuito por variaciones de voltaje, orden 1248. Instrumento: fuente AC variable. Versión pobre: un variac y un multímetro."}},
+           {"id":"gs_pwr_sweep","code":"PWR-021","point_video":true,
+            "label":{"en":"It survives the sweep — nothing burns, smells or bangs","zh":"完成扫描无烧毁、异味或爆响","es":"Sobrevive al barrido — nada se quema, huele ni estalla"},
+            "help":{"en":"Criterion, and it is not negotiable: the product may switch off, but nothing may burn, smell, swell or make a noise at any point of the sweep, and it must work normally again when the voltage returns to nominal. If anything happens, stop and set the sample aside.",
+                    "zh":"判定标准，且不可协商：产品可以关机，但在扫描的任何阶段均不得出现烧毁、异味、鼓胀或异响，且电压恢复额定值后应能正常工作。若出现异常，立即停止并隔离该样机。",
+                    "es":"Criterio, y no se negocia: el producto puede apagarse, pero nada puede quemarse, oler, hincharse ni sonar en ningún punto del barrido, y debe volver a funcionar normal al regresar la tensión nominal. Si pasa algo, deténgase y aparte la muestra."}},
+           {"id":"gs_pwr_range","code":"PWR-021",
+            "measure":{"unit":"V","step":"1","as":{"en":"Lowest working voltage","zh":"最低可工作电压","es":"Tensión mínima de trabajo"}},
+            "label":{"en":"It keeps playing down to at least 10% below nominal","zh":"低于额定值 10% 时仍能正常播放","es":"Sigue sonando hasta 10% por debajo de lo nominal"},
+            "help":{"en":"Coming down, write the voltage at which it stops working properly. Criterion: it must hold at least down to 10% below its nominal voltage — 198 V on a 220 V product, 108 V on a 120 V one. That is the margin an ordinary mains has on a bad afternoon, and a product that fails at 205 V will fail in the field.",
+                    "zh":"在降压过程中，记录产品无法正常工作时的电压。判定标准：至少应在低于额定电压 10% 时仍可工作——220 V 产品为 198 V，120 V 产品为 108 V。这是普通电网在负荷高峰时的常见波动范围；在 205 V 就失效的产品，在实际使用中必然出问题。",
+                    "es":"Bajando, escriba la tensión a la que deja de funcionar bien. Criterio: debe aguantar al menos hasta 10% por debajo de su tensión nominal — 198 V en un producto de 220 V, 108 V en uno de 120 V. Es el margen que tiene una red corriente en una tarde mala, y un producto que falla a 205 V va a fallar en campo."}},
+           {"section":{"en":"Cycling and protections","zh":"循环与保护","es":"Ciclos y protecciones"},
+            "help":{"en":"The DC/DC converter of the VIT107 burned when the switch was moved: 800 units, 100% RMA, USD 3,900. Switching on and off is the moment of highest stress in a supply, and nobody was doing it more than twice.",
+                    "zh":"VIT107 的 DC/DC 转换器在拨动开关时烧毁：800 台，RMA 100%，损失 3,900 美元。开关机是电源承受应力最大的时刻，而此前无人重复进行超过两次。",
+                    "es":"El conversor DC/DC del VIT107 se quemó al mover el interruptor: 800 unidades, RMA 100%, USD 3.900. Encender y apagar es el momento de mayor esfuerzo de una fuente, y nadie lo estaba haciendo más de dos veces."}},
+           {"id":"gs_pwr_cycles","code":"PWR-008",
+            "label":{"en":"Fifty power cycles under load","zh":"带载开关机五十次","es":"Cincuenta ciclos de encendido con carga"},
+            "help":{"en":"With the volume high and music ready to play, switch on, let it start completely, switch off, wait five seconds. Fifty times. Criterion: all fifty must start up complete. One that skips the start-up, comes up in the wrong mode or does not respond is a failure — say at which cycle. Instrument: none.",
+                    "zh":"在音量较高且音源就绪的状态下，开机、待完全启动、关机、等待五秒，重复五十次。判定标准：五十次均须完整启动。若出现跳过启动、进入错误模式或无响应，即判不合格——请注明发生于第几次。所需仪器：无。",
+                    "es":"Con el volumen alto y música lista, encienda, deje que arranque completo, apague, espere cinco segundos. Cincuenta veces. Criterio: las cincuenta deben arrancar completas. Una que se salte el arranque, entre en el modo equivocado o no responda es falla — diga en cuál ciclo. Instrumento: ninguno."}},
+           {"id":"gs_pwr_prot","code":"PWR-010","photo":true,
+            "label":{"en":"Varistor, fuse and MOSFET fitted, with legible marking","zh":"压敏电阻、保险丝与 MOSFET 已装配且标识清晰","es":"Varistor, fusible y MOSFET puestos y con marcado legible"},
+            "help":{"en":"Photograph the three, close enough to read what they say, and write in the note what the MOSFET is rated at. Criterion: they must match what was approved for this reference. RHY013 raised the MOSFET from 20 A to 25 A, the bridge from 8 A to 10 A and added a varistor — and that improvement is still marked as not carried into the QC guide, so nobody has been checking that it arrives fitted.",
+                    "zh":"分别拍摄三者，距离需能看清标识，并在备注中填写 MOSFET 的额定值。判定标准：须与本型号批准的规格一致。RHY013 已将 MOSFET 由 20 A 提升至 25 A、整流桥由 8 A 提升至 10 A 并增加压敏电阻，但该改进至今未纳入 QC 指南，因此无人核查其是否确实装配。",
+                    "es":"Fotografíe los tres, lo bastante cerca para leer lo que dicen, y escriba en la nota a cuánto está el MOSFET. Criterio: deben corresponder a lo aprobado para esta referencia. RHY013 subió el MOSFET de 20 A a 25 A, el puente de 8 A a 10 A y agregó un varistor — y esa mejora sigue marcada como no llevada a la guía de QC, así que nadie ha estado comprobando que llegue puesta."}},
+           {"id":"gs_pwr_clip","code":"AUD-030","photo":true,
+            "label":{"en":"The limiter acts — the wave does not clip at maximum","zh":"限幅有效 — 最大音量下波形不削顶","es":"El limitador actúa — la onda no recorta al máximo"},
+            "help":{"en":"Oscilloscope on the woofer terminals, 1 kHz sine at the input, volume to maximum. Criterion: the peaks must stay rounded. A squared-off wave means there is no limiter, and that is what destroyed the tweeters and voice coils of the 15-inch Deltas at Niatec. Instrument: oscilloscope. Poor version: none that is honest — if there is no oscilloscope, mark N/A and say so, rather than judging clipping by ear.",
+                    "zh":"将示波器接于低音单元端子，输入 1 kHz 正弦信号，音量调至最大。判定标准：波峰应保持圆滑。波形出现方波化即表示无限幅电路，这正是 Niatec 15 英寸 Delta 高音单元与音圈损坏的原因。所需仪器：示波器。简易替代：无可靠替代——若无示波器，请标记 N/A 并说明，不要凭听感判断削波。",
+                    "es":"Osciloscopio en los terminales del woofer, seno de 1 kHz en la entrada, volumen al máximo. Criterio: los picos deben mantenerse redondos. Una onda cuadrada significa que no hay limitador, y eso es lo que destruyó los tweeters y las bobinas de los Delta de 15 pulgadas en Niatec. Instrumento: osciloscopio. Versión pobre: ninguna que sea honesta — si no hay osciloscopio, marque N/A y dígalo, en vez de juzgar el recorte de oído."}}]},
+
+        {"id":"GS_DRIVERS","optional":false,"golden":true,"evidence":[],
+         "point_photo":true,
+         "label":{"en":"GOLDEN SAMPLE · DRIVER ENDURANCE",
+                  "zh":"标准样机 · 喇叭耐久",
+                  "es":"MUESTRA PATRÓN · RESISTENCIA DE LOS PARLANTES"},
+         "steps":[
+           {"en":"100 Hz sine, thirty minutes, volume and EQ at maximum","zh":"100 Hz 正弦信号，三十分钟，音量与 EQ 均最大","es":"Seno de 100 Hz, treinta minutos, volumen y EQ al máximo"},
+           {"en":"Then measure impedance and pull on the drivers","zh":"随后测量阻抗并拉拽喇叭","es":"Después mida impedancia y tire de los parlantes"},
+           {"en":"Photograph every reinforced joint","zh":"拍摄各处加固connection","es":"Fotografíe cada unión reforzada"}],
+         "points":[
+           {"section":{"en":"The test Yision itself used","zh":"Yision 自己使用的测试","es":"La prueba que usó la propia Yision"},
+            "help":{"en":"YIS044 was validated exactly like this: 100 Hz sine with volume and EQ at maximum. Before the improvement the voice coil broke between five and twenty minutes; after it, 125 units with no recurrence. Thirty minutes is that test with margin. Related: six tickets of detached woofer and burnt tweeter on the DEL105, five of a burst voice coil on the ARC101.",
+                    "zh":"YIS044 正是以此方式验证：100 Hz 正弦信号，音量与 EQ 均置最大。改进前音圈在五至二十分钟内断裂；改进后 125 台无复发。三十分钟即为该测试加上余量。相关：DEL105 有六张低音单元脱胶与高音烧毁工单，ARC101 有五张音圈断裂工单。",
+                    "es":"YIS044 se validó exactamente así: seno de 100 Hz con volumen y EQ al máximo. Antes de la mejora la bobina reventaba entre cinco y veinte minutos; después, 125 unidades sin recurrencia. Treinta minutos es esa prueba con margen. Relacionado: seis tickets de woofer despegado y tweeter quemado en el DEL105, cinco de bobina reventada en el ARC101."}},
+           {"id":"gs_drv_sine","code":"AUD-031","point_video":true,
+            "label":{"en":"Thirty minutes of 100 Hz at maximum without failing","zh":"100 Hz 最大音量三十分钟无失效","es":"Treinta minutos de 100 Hz al máximo sin fallar"},
+            "help":{"en":"Signal generator app on the phone over Bluetooth or cable, 100 Hz sine, volume and EQ at maximum. Criterion: at thirty minutes the tone must sound exactly as it did at minute one. Any rubbing, buzz, drop in level or silence is a failure, and the note says at what minute. Instrument: a signal generator app. Careful: this test can destroy the sample, and that is the point — it is better here than at the customer.",
+                    "zh":"用手机信号发生器 App 经蓝牙或线缆输入 100 Hz 正弦信号，音量与 EQ 均置最大。判定标准：三十分钟时的声音应与第一分钟完全一致。出现擦圈、异响、电平下降或无声即判不合格，并在备注中注明发生于第几分钟。所需仪器：信号发生器 App。注意：本测试可能损坏样机，而这正是目的——在此损坏优于在客户处损坏。",
+                    "es":"App generadora de señal en el teléfono por Bluetooth o cable, seno de 100 Hz, volumen y EQ al máximo. Criterio: a los treinta minutos el tono debe sonar exactamente igual que en el minuto uno. Cualquier roce, zumbido, caída de nivel o silencio es falla, y la nota dice en qué minuto. Instrumento: una app generadora de señal. Cuidado: esta prueba puede destruir la muestra, y de eso se trata — mejor aquí que en el cliente."}},
+           {"id":"gs_drv_imp","code":"AUD-034","photo":true,
+            "measure":{"unit":"Ω","step":"0.1"},
+            "label":{"en":"Impedance after the half hour","zh":"半小时后的阻抗","es":"Impedancia después de la media hora"},
+            "help":{"en":"Measured at the driver terminals, disconnected from the amplifier, right after the sine test. Criterion: it must not have moved more than 15% from the cold value measured in internal parts. A coil that is opening up says so here before it breaks. Instrument: multimeter.",
+                    "zh":"正弦测试结束后立即在喇叭端子处测量，需与功放断开。判定标准：与内部检查中所测冷态值相比变化不得超过 15%。音圈若已开始开路，会在此显现，早于实际断裂。所需仪器：万用表。",
+                    "es":"Medida en los terminales del parlante, desconectado del amplificador, justo después de la prueba de seno. Criterio: no debe haberse movido más de 15% del valor en frío medido en partes internas. Una bobina que se está abriendo lo dice aquí antes de romperse. Instrumento: multímetro."}},
+           {"id":"gs_drv_pull","code":"MEC-006",
+            "label":{"en":"Tweeter and woofer do not move when pulled by hand","zh":"手拉高音与低音单元不松动","es":"Tweeter y woofer no se mueven al tirar con la mano"},
+            "help":{"en":"With the hand, without a tool, firmly. Criterion: neither may move, creak or turn. If the tweeter is held only by silicone and not by a thread, that is a failure of the sample even if it holds today: YIS036 and RHY057 both exist because tweeters were arriving loose, and the answer both times was to stop gluing and start screwing.",
+                    "zh":"用手施加适度力量拉拽，不得使用工具。判定标准：两者均不得松动、异响或转动。若高音单元仅靠硅胶固定而无螺纹，即使当前牢固也判样机不合格：YIS036 与 RHY057 均因高音单元到货松动而产生，两次的解决方案都是由粘接改为螺纹固定。",
+                    "es":"Con la mano, sin herramienta, con firmeza. Criterio: ninguno puede moverse, crujir ni girar. Si el tweeter está sujeto sólo con silicona y no con rosca, eso es falla de la muestra aunque hoy aguante: YIS036 y RHY057 existen los dos porque llegaban tweeters sueltos, y la respuesta las dos veces fue dejar de pegar y empezar a atornillar."}},
+           {"id":"gs_drv_glue","code":"INT-020","photo":true,
+            "label":{"en":"Black silicone on the PCB connectors, heat-shrink on the driver cables","zh":"PCB 连接器已上黑硅胶，喇叭线已加热缩管","es":"Silicona negra en los conectores de PCB, termoencogible en los cables"},
+            "help":{"en":"Photograph joint by joint. Criterion: every internal connector fixed with black silicone and not with the yellow elastic glue, and the woofer and tweeter cables reinforced with heat-shrink at the connector. This is YIS026 — applied to twenty references at once — plus RHY056 and RHY059. It is the most replicated design rule HOKLAN has, and it is not verified anywhere in the plan.",
+                    "zh":"逐处拍摄。判定标准：所有内部连接器均须以黑硅胶固定，不得使用黄色弹性胶；低音与高音单元线材在接头处须以热缩管加固。此为 YIS026（一次性应用于二十个型号）及 RHY056、RHY059 的要求。这是 HOKLAN 复用最广的设计规范，而现行计划中并无任何环节对其进行核查。",
+                    "es":"Fotografíe unión por unión. Criterio: todos los conectores internos fijados con silicona negra y no con el pegante amarillo elástico, y los cables de woofer y tweeter reforzados con termoencogible en el conector. Esto es YIS026 — aplicado a veinte referencias de una vez — más RHY056 y RHY059. Es la regla de diseño más replicada que tiene HOKLAN, y no se verifica en ninguna parte del plan."}},
+           {"id":"gs_drv_tinsel","code":"INT-021","photo":true,
+            "label":{"en":"Tinsel with slack and encapsulated at the coil","zh":"弹波引线留有余量且音圈处已封胶","es":"Tinsel con holgura y encapsulado en la bobina"},
+            "help":{"en":"Photograph the two joints of the tinsel, close. Criterion: it must have visible slack — it cannot be taut with the cone at rest — and the joint with the coil must be encapsulated in adhesive, not bare. That encapsulation is YIS044, and its absence is what made the coil break in five minutes.",
+                    "zh":"近距离拍摄弹波引线的两处接点。判定标准：静止状态下引线须有可见余量，不得绷紧；与音圈的接合处须有胶体包封，不得裸露。该包封即 YIS044 的要求，缺失时音圈会在五分钟内断裂。",
+                    "es":"Fotografíe las dos uniones del tinsel, de cerca. Criterio: debe tener holgura visible — no puede estar tenso con el cono en reposo — y la unión con la bobina debe estar encapsulada en adhesivo, no desnuda. Ese encapsulado es YIS044, y su ausencia es lo que hacía reventar la bobina en cinco minutos."}}]},
+
+        {"id":"GS_BATTERY","optional":true,"golden":true,"evidence":[],
+         "point_photo":true,"first":2.5,
+         "long":{"t":{"en":"This test is still running","zh":"本测试仍在进行中","es":"Esta prueba sigue en curso"},
+                 "n":{"en":"Leave the discharge running and carry on with the rest of the plan.",
+                      "zh":"让放电继续进行，同时完成计划中的其他测试。",
+                      "es":"Deje la descarga corriendo y siga con el resto del plan."}},
+         "label":{"en":"GOLDEN SAMPLE · BATTERY",
+                  "zh":"标准样机 · 电池",
+                  "es":"MUESTRA PATRÓN · BATERÍA"},
+         "steps":[
+           {"en":"Full charge, then discharge at 60% and at 100% volume","zh":"充满后分别在 60% 与 100% 音量下放电","es":"Cargue a fondo y descargue a 60% y a 100% de volumen"},
+           {"en":"Let it switch off on its own and then recharge it","zh":"待其自动关机后再充电","es":"Déjelo apagarse solo y vuelva a cargarlo"},
+           {"en":"Check the BMS and the label","zh":"检查 BMS 与标签","es":"Compruebe el BMS y la etiqueta"}],
+         "points":[
+           {"section":{"en":"What the tickets say","zh":"工单反映的问题","es":"Lo que dicen los tickets"},
+            "help":{"en":"Five tickets of autonomy that does not last — up to 1,150 units with 100% RMA — two of a battery that will not recharge after a deep discharge, one of lead-acid batteries dried out at three months, and one customer who removed the BMS and soldered the pack directly. Meanwhile YIS020, YIS043 and YIS052 changed capacities on three products, and nobody checks the figure at the bench.",
+                    "zh":"五张续航不足工单（最多涉及 1,150 台，RMA 100%），两张深度放电后无法充电，一张铅酸电池三个月即干涸，另有一名客户拆除 BMS 并直接焊接电池组。与此同时 YIS020、YIS043、YIS052 已更改三款产品的电池容量，而台面上无人核对该数据。",
+                    "es":"Cinco tickets de autonomía que no dura — hasta 1.150 unidades con RMA 100% —, dos de batería que no recarga tras descarga profunda, uno de baterías de plomo secas a los tres meses, y un cliente que quitó el BMS y soldó el pack directo. Mientras tanto YIS020, YIS043 y YIS052 cambiaron capacidades en tres productos, y nadie comprueba la cifra en el banco."}},
+           {"id":"gs_bat_60","code":"BAT-021","measure":{"unit":"h","step":"0.1"},
+            "label":{"en":"Autonomy at 60% volume","zh":"60% 音量续航","es":"Autonomía a 60% de volumen"},
+            "help":{"en":"From a full charge, music playing continuously at 60%, until it switches off on its own. Criterion: it must reach at least 90% of the figure declared in Nexus for this reference. Below that the catalogue is lying and the customer finds out on the first night. Instrument: none — a clock.",
+                    "zh":"自满电开始，以 60% 音量连续播放至自动关机。判定标准：应达到 Nexus 中该型号标称值的 90% 以上。低于该值即意味着产品资料失实，客户在首次使用当晚便会发现。所需仪器：无，只需计时。",
+                    "es":"Desde carga llena, música sonando continua al 60%, hasta que se apague solo. Criterio: debe llegar al menos al 90% de la cifra declarada en Nexus para esta referencia. Por debajo de ahí el catálogo está mintiendo y el cliente se entera la primera noche. Instrumento: ninguno — un reloj."}},
+           {"id":"gs_bat_100","code":"BAT-021","measure":{"unit":"h","step":"0.1"},
+            "label":{"en":"Autonomy at 100% volume","zh":"100% 音量续航","es":"Autonomía a 100% de volumen"},
+            "help":{"en":"The same, at maximum, after recharging fully. Declared record: there is no approved figure for this one yet, but it is the worst case and it is what a customer using it outdoors will get.",
+                    "zh":"重新充满后，在最大音量下重复上述测试。申报记录：该项目前尚无批准值，但它代表最恶劣工况，也是客户户外使用时的实际表现。",
+                    "es":"Lo mismo, al máximo, después de recargar del todo. Registro declarado: para ésta todavía no hay cifra aprobada, pero es el peor caso y es lo que va a obtener un cliente que la use en exteriores."}},
+           {"id":"gs_bat_wake","code":"BAT-023",
+            "label":{"en":"It recovers after a deep discharge","zh":"深度放电后可恢复","es":"Se recupera tras la descarga profunda"},
+            "help":{"en":"With the product switched off on its own from the previous point, connect the charger. Criterion: it must show that it is charging within one minute and be able to switch on within thirty. A pack that stays dead is protecting its cells at the cost of the product, and it is TKT-90 exactly.",
+                    "zh":"在上一项测试自动关机的状态下接入充电器。判定标准：一分钟内应显示正在充电，三十分钟内应可开机。若电池组始终无反应，即以牺牲整机为代价保护电芯，此即 TKT-90 的情形。",
+                    "es":"Con el producto apagado solo de la prueba anterior, conecte el cargador. Criterio: debe indicar que carga en un minuto y poder encenderse en treinta. Un pack que queda muerto está protegiendo sus celdas a costa del producto, y es exactamente el TKT-90."}},
+           {"id":"gs_bat_bms","code":"BAT-023","photo":true,
+            "label":{"en":"The BMS is fitted and is not easy to bypass","zh":"BMS 已装配且不易被旁路","es":"El BMS está puesto y no es fácil de puentear"},
+            "help":{"en":"Photograph the pack assembled, with the BMS board visible. Criterion: it must be there, connected in line and not reachable by simply opening the battery hatch. A customer removed it and soldered the pack directly — 1,500 units, 75% RMA — and he could because it was within reach.",
+                    "zh":"拍摄电池组装配状态，须可见 BMS 板。判定标准：BMS 须在位、串联接入，且不得仅通过打开电池仓盖即可触及。曾有客户将其拆除并直接焊接电池组——1,500 台，RMA 75%——之所以能做到，正是因为其触手可及。",
+                    "es":"Fotografíe el pack armado, con la tarjeta del BMS a la vista. Criterio: debe estar, conectado en línea y no alcanzable con sólo abrir la tapa de la batería. Un cliente lo quitó y soldó el pack directo — 1.500 unidades, RMA 75% — y pudo porque estaba a la mano."}},
+           {"id":"gs_bat_peso","code":"BAT-024","photo":true,
+            "measure":{"unit":"kg","step":"0.01"},
+            "label":{"en":"Weight of the pack, and maintenance label if lead-acid","zh":"电池组重量；铅酸电池须有维护标签","es":"Peso del pack, y etiqueta de mantenimiento si es plomo-ácido"},
+            "help":{"en":"Weigh the battery out of the product and photograph the label. Criterion: within 10% of what the supplier declares. It matters because ticket 63 — lead-acid batteries dried out at three to six months — closed with a note from the QC itself saying the battery weight was not being verified; a pack lighter than declared has less material inside than it claims. And if it is lead-acid, the product must carry the maintenance-charge-every-three-months warning that YIS049 requires. Instrument: scale.",
+                    "zh":"将电池自产品中取出称重，并拍摄标签。判定标准：与供应商标称值相差不超过 10%。此项之所以重要，是因为工单 63——铅酸电池三至六个月即干涸——结案时 QC 自身备注指出当时并未核查电池重量；重量低于标称即意味着内部材料少于声称值。若为铅酸电池，产品还须带有 YIS049 要求的每三个月维护充电警示。所需仪器：秤。",
+                    "es":"Pese la batería fuera del producto y fotografíe la etiqueta. Criterio: dentro del 10% de lo que declara el proveedor. Importa porque el ticket 63 — baterías de plomo secas a los tres a seis meses — cerró con una nota del propio QC diciendo que el peso de la batería no se estaba verificando; un pack más liviano de lo declarado tiene menos material adentro del que dice. Y si es plomo-ácido, el producto debe llevar el aviso de carga de mantenimiento cada tres meses que exige YIS049. Instrumento: balanza."}}]},
+
+        {"id":"GS_RF","optional":false,"golden":true,"evidence":[],
+         "point_photo":true,
+         "label":{"en":"GOLDEN SAMPLE · RADIO AND INTERFERENCE",
+                  "zh":"标准样机 · 收音与干扰",
+                  "es":"MUESTRA PATRÓN · RADIO E INTERFERENCIA"},
+         "steps":[
+           {"en":"Declare what kind of supply the wireless module uses","zh":"申报无线模块所用电源类型","es":"Declare qué tipo de fuente usa el módulo inalámbrico"},
+           {"en":"Measure the antenna distance to the PCB","zh":"测量天线与 PCB 的距离","es":"Mida la distancia de la antena a la PCB"},
+           {"en":"Scan the band with everything off, then with everything on","zh":"先在全部关闭状态搜台，再在全部开启状态搜台","es":"Barra la banda con todo apagado y después con todo encendido"}],
+         "points":[
+           {"section":{"en":"The PHI, and why this block exists","zh":"PHI 案例与本组测试的由来","es":"El PHI, y de dónde sale este bloque"},
+            "help":{"en":"The PHI receiver module carried a switching supply — DC/DC — instead of a linear one. A switcher makes noise across the FM band, and the product tuned badly and received badly. Nothing in a photograph shows that, and nothing in a two-minute test hears it: the module has to be there, powered, while somebody scans the band. Related: YIS054 and YIS061, both about moving the FM antenna away from the PCB because it was interfering.",
+                    "zh":"PHI 接收模块采用了开关电源（DC/DC）而非线性电源。开关电源会在整个调频频段产生噪声，导致产品搜台困难、接收不良。此问题在照片中无法察觉，在两分钟的测试中也听不出来：必须在模块已装且通电的状态下进行全频段搜台。相关：YIS054 与 YIS061，均因天线靠近 PCB 产生干扰而将其移开。",
+                    "es":"El módulo receptor del PHI llevaba fuente conmutada — DC/DC — en vez de lineal. Una conmutada mete ruido en toda la banda de FM, y el producto sintonizaba mal y recibía mal. Eso no se ve en ninguna fotografía ni se oye en una prueba de dos minutos: el módulo tiene que estar puesto y alimentado mientras alguien recorre la banda. Relacionado: YIS054 y YIS061, las dos sobre alejar la antena de FM de la PCB porque interfería."}},
+           {"id":"gs_rf_fuente","code":"FM-012","photo":true,
+            "label":{"en":"Supply of the wireless module — switching or linear","zh":"无线模块电源类型 — 开关式或线性","es":"Fuente del módulo inalámbrico — conmutada o lineal"},
+            "help":{"en":"Photograph the module board and write in the note which of the two it is. A switcher is recognised by its inductor — a coil wound on a core — and its switching controller; a linear one has a regulator with a heatsink and no coil. Criterion: if it is switching and the product has FM, the next two points stop being informative and become mandatory. It is not a failure in itself; it is the flag that says where to look.",
+                    "zh":"拍摄模块电路板，并在备注中注明属于哪一种。开关电源可通过电感识别——绕在磁芯上的线圈——以及开关控制器；线性电源则有带散热片的稳压器且无电感。判定标准：若为开关电源且产品带调频功能，则后续两项由参考项转为必检项。此项本身不判不合格，而是指示后续应重点检查之处。",
+                    "es":"Fotografíe la tarjeta del módulo y escriba en la nota cuál de las dos es. Una conmutada se reconoce por su inductor — una bobina sobre un núcleo — y su controlador de conmutación; una lineal tiene un regulador con disipador y ninguna bobina. Criterio: si es conmutada y el producto tiene FM, los dos puntos siguientes dejan de ser informativos y pasan a ser obligatorios. No es falla en sí; es la bandera que dice dónde mirar."}},
+           {"id":"gs_rf_antena","code":"FM-012","photo":true,
+            "measure":{"unit":"mm","step":"1"},
+            "label":{"en":"Distance from the FM antenna to the nearest PCB","zh":"调频天线与最近 PCB 的距离","es":"Distancia de la antena FM a la PCB más cercana"},
+            "help":{"en":"Measure at the closest point of the antenna's run, with the product closed as it ships. Criterion: 30 mm. Closer than that the board couples into the antenna and the receiver hears the product instead of the station — which is what YIS054 and YIS061 corrected on the ARC101 and the ARC108. Instrument: ruler.",
+                    "zh":"在产品按出厂状态装配完成的情况下，测量天线走线与 PCB 的最近距离。判定标准：30 mm。距离过近时电路板会耦合至天线，接收到的将是产品自身的噪声而非电台信号——YIS054 与 YIS061 在 ARC101 与 ARC108 上纠正的正是此问题。所需仪器：直尺。",
+                    "es":"Mida en el punto más cercano del recorrido de la antena, con el producto cerrado como sale. Criterio: 30 mm. Más cerca, la tarjeta se acopla a la antena y el receptor oye al producto en vez de a la emisora — que es lo que corrigieron YIS054 y YIS061 en el ARC101 y el ARC108. Instrumento: regla."}},
+           {"id":"gs_rf_limpio","code":"FM-011","measure":{"unit":"emisoras","step":"1"},
+            "label":{"en":"Stations graded 3 with everything off","zh":"全部关闭时评级为 3 的电台数","es":"Emisoras en 3 con todo apagado"},
+            "help":{"en":"Full automatic scan with the wireless module unplugged, Bluetooth off, lights off and no charger. Count how many come in clear — grade 3 of the scale: 1 only noise, 2 voices with background noise, 3 clear. This is the reference number; on its own it says nothing.",
+                    "zh":"在无线模块拔出、蓝牙关闭、灯光关闭且未接充电器的状态下执行完整自动搜台。统计清晰接收的电台数量——评级 3：1 为仅有噪声，2 为可听人声但有背景噪声，3 为清晰。此为基准数值，单独并无意义。",
+                    "es":"Barrido automático completo con el módulo inalámbrico desconectado, Bluetooth apagado, luces apagadas y sin cargador. Cuente cuántas entran nítidas — grado 3 de la escala: 1 sólo ruido, 2 voces con ruido de fondo, 3 nítida. Éste es el número de referencia; solo no dice nada."}},
+           {"id":"gs_rf_sucio","code":"FM-011","photo":true,
+            "measure":{"unit":"emisoras","step":"1"},
+            "label":{"en":"Stations graded 3 with everything on","zh":"全部开启时评级为 3 的电台数","es":"Emisoras en 3 con todo encendido"},
+            "help":{"en":"Repeat the whole scan without moving the product, now with the module fitted and powered, Bluetooth paired, lights on and the charger connected. Criterion: no more than one clear station may be lost. Losing two or more means the product is interfering with itself, and on a switching module that points straight at the supply. Photograph the grading table.",
+                    "zh":"在不移动产品的前提下重复完整搜台，此时模块已装并通电、蓝牙已连接、灯光开启且充电器已接入。判定标准：清晰电台减少不得超过一个。若减少两个及以上，说明产品自身产生干扰；若模块为开关电源，则问题直指该电源。请拍摄评级表。",
+                    "es":"Repita el barrido completo sin mover el producto, ahora con el módulo puesto y alimentado, el Bluetooth emparejado, las luces encendidas y el cargador conectado. Criterio: no puede perderse más de una emisora nítida. Perder dos o más significa que el producto se está interfiriendo a sí mismo, y en un módulo conmutado eso apunta directo a la fuente. Fotografíe la tabla de calificación."}},
+           {"id":"gs_rf_ruido","code":"AUD-033",
+            "label":{"en":"No hiss added by the charger","zh":"接入充电器不增加嘶声","es":"El cargador no agrega siseo"},
+            "help":{"en":"With no source playing and the volume at three quarters, listen close to the driver on battery, then with the charger connected. Criterion: the background must be the same. A hum that appears only with the charger is the supply getting into the audio, and it is the same family of fault as the PHI.",
+                    "zh":"在无音源播放、音量置于四分之三时，先以电池供电贴近喇叭细听，再接入充电器细听。判定标准：底噪应保持一致。若仅在接入充电器时出现交流声，说明电源已窜入音频通路，与 PHI 属同一类故障。",
+                    "es":"Sin fuente reproduciendo y con el volumen a tres cuartos, escuche cerca del parlante con batería y después con el cargador conectado. Criterio: el fondo debe ser el mismo. Un zumbido que aparece sólo con el cargador es la fuente metiéndose en el audio, y es la misma familia de falla que el PHI."}}]},
+
+        {"id":"GS_MECH","optional":false,"golden":true,"evidence":[],
+         "point_photo":true,"first":100.5,
+         "label":{"en":"GOLDEN SAMPLE · TRANSPORT AND ASSEMBLY",
+                  "zh":"标准样机 · 运输与装配",
+                  "es":"MUESTRA PATRÓN · TRANSPORTE Y ENSAMBLE"},
+         "steps":[
+           {"en":"One hour of transport vibration","zh":"一小时运输振动","es":"Una hora de vibración de transporte"},
+           {"en":"Then open it and look for what moved","zh":"随后开箱检查何处发生位移","es":"Después ábralo y busque qué se movió"},
+           {"en":"Play it again and compare with before","zh":"再次播放并与此前对比","es":"Vuelva a reproducir y compare con antes"}],
+         "points":[
+           {"section":{"en":"What arrives loose","zh":"到货后出现的松动","es":"Lo que llega suelto"},
+            "help":{"en":"Loose parts inside (Arxes), loose cables (MUT), dented grilles (ticket 11), a screw touching the power supply and bending it (ticket 22), another shorting a track on the display board (ticket 24), and a whole family of improvements — RHY054, RHY056, RHY059, YIS007 — that exist because vibration loosens things. None of that is visible on a bench that never shakes.",
+                    "zh":"内部零件松动（Arxes）、线材松脱（MUT）、网罩凹陷（工单 11）、螺丝顶到电源并使其变形（工单 22）、另一颗螺丝短接显示板走线（工单 24），以及一整组因振动导致松动而产生的改进——RHY054、RHY056、RHY059、YIS007。这些在从不振动的台面上均无法发现。",
+                    "es":"Piezas sueltas por dentro (Arxes), cables sueltos (MUT), rejillas golpeadas (ticket 11), un tornillo que toca la fuente y la dobla (ticket 22), otro que hace corto con una pista del display (ticket 24), y toda una familia de mejoras — RHY054, RHY056, RHY059, YIS007 — que existen porque la vibración afloja cosas. Nada de eso se ve en un banco que nunca se mueve."}},
+           {"id":"gs_mech_vib","code":"MEC-007","point_video":true,
+            "label":{"en":"One hour of vibration in its box","zh":"整机装箱后振动一小时","es":"Una hora de vibración dentro de su caja"},
+            "help":{"en":"Packed as it ships. Criterion: one hour on a vibration table at 5 to 200 Hz. Poor version, and it is a legitimate one: strap the box to the bed of a pickup and drive an hour on an unpaved road, or set it on a running washing machine's spin cycle for the same time. What matters is sustained shaking, not the exact spectrum. Photograph the setup used.",
+                    "zh":"按出厂状态装箱。判定标准：在振动台上以 5 至 200 Hz 振动一小时。简易替代（且为可接受方案）：将箱体固定于皮卡车厢，在土路上行驶一小时；或置于运行脱水程序的洗衣机上相同时间。关键在于持续振动，而非精确频谱。请拍摄所用方式。",
+                    "es":"Empacado como sale. Criterio: una hora en mesa vibratoria de 5 a 200 Hz. Versión pobre, y es legítima: amarre la caja al platón de una camioneta y ande una hora por destapado, o póngala sobre una lavadora en centrifugado el mismo tiempo. Lo que importa es la sacudida sostenida, no el espectro exacto. Fotografíe el montaje que usó."}},
+           {"id":"gs_mech_suelto","code":"MEC-004","photo":true,
+            "label":{"en":"Nothing came loose inside","zh":"内部无任何松动","es":"Nada quedó suelto adentro"},
+            "help":{"en":"Open it and photograph the inside. Criterion: no loose screws, no cable that came out of its connector, no component moved, nothing rattling when the cabinet is shaken by hand. And no screw touching the power supply or a track — tickets 22 and 24 were two short circuits caused by a screw.",
+                    "zh":"打开并拍摄内部。判定标准：无松动螺丝、无脱落线材、无移位元件，手摇箱体时无异响。且不得有螺丝顶到电源或走线——工单 22 与 24 即为螺丝导致的两起短路。",
+                    "es":"Ábralo y fotografíe el interior. Criterio: ningún tornillo suelto, ningún cable salido de su conector, ningún componente movido, nada que suene al agitar el gabinete con la mano. Y ningún tornillo tocando la fuente ni una pista — los tickets 22 y 24 fueron dos cortos causados por un tornillo."}},
+           {"id":"gs_mech_audio","code":"AUD-031",
+            "label":{"en":"It sounds the same as before the vibration","zh":"振动后声音与振动前一致","es":"Suena igual que antes de la vibración"},
+            "help":{"en":"Play the same music at the same volume. Criterion: no new buzz, no rattle, no intermittent channel. A tweeter that starts cutting out after an hour of shaking is RHY056 — the cable that was only pressed in and came out with vibration.",
+                    "zh":"以相同音量播放相同音乐。判定标准：不得出现新的嗡响、异响或通道断续。若高音单元在一小时振动后开始断续，即为 RHY056 所述情形——线材仅为插接，振动后脱出。",
+                    "es":"Reproduzca la misma música al mismo volumen. Criterio: ningún zumbido nuevo, ningún traqueteo, ningún canal intermitente. Un tweeter que empieza a cortarse después de una hora de sacudida es RHY056 — el cable que sólo estaba insertado a presión y se salió con la vibración."}},
+           {"id":"gs_mech_torn","code":"MEC-004","photo":true,
+            "measure":{"unit":"mm","step":"1","as":{"en":"Side screw length","zh":"侧面螺丝长度","es":"Longitud del tornillo lateral"}},
+            "label":{"en":"Length of the critical screws","zh":"关键螺丝长度","es":"Longitud de los tornillos críticos"},
+            "help":{"en":"Take out one side screw and one from the tripod mount, measure and photograph them. Criterion: they must match what was approved. RHY054 went from 35 mm to 45 mm on the DEL105 precisely because vibration loosened the short ones, and RHY058 reinforced the tripod area for the same reason. Instrument: caliper or ruler.",
+                    "zh":"取下一颗侧面螺丝与一颗三脚架支座螺丝，测量并拍摄。判定标准：须与批准规格一致。RHY054 将 DEL105 的螺丝由 35 mm 改为 45 mm，正是因为短螺丝会因振动松动；RHY058 出于同样原因加强了三脚架区域。所需仪器：卡尺或直尺。",
+                    "es":"Saque un tornillo lateral y uno del soporte del trípode, mídalos y fotografíelos. Criterio: deben corresponder a lo aprobado. RHY054 pasó de 35 mm a 45 mm en el DEL105 justamente porque la vibración aflojaba los cortos, y RHY058 reforzó la zona del trípode por lo mismo. Instrumento: calibrador o regla."}},
+           {"id":"gs_mech_humedad","code":"PKG-002","photo":true,
+            "label":{"en":"Desiccant inside the box","zh":"箱内已放置干燥剂","es":"Desecante dentro de la caja"},
+            "help":{"en":"Photograph the sachet in its place. Criterion: at least one silica gel sachet per unit box, dry and not spent. Ticket 6 closed with the diagnosis that the fungus grew during transport, on 80 units of the ARC101, and a container crossing the Pacific spends five weeks at high humidity.",
+                    "zh":"拍摄干燥剂在箱内的实际位置。判定标准：每个单品箱至少一包硅胶干燥剂，且干燥未失效。工单 6 的结论为霉变发生于运输途中，涉及 ARC101 共 80 台；集装箱横渡太平洋需在高湿度环境中经历五周。",
+                    "es":"Fotografíe la bolsita en su sitio. Criterio: al menos un sachet de sílica gel por caja unitaria, seco y no gastado. El ticket 6 cerró con el diagnóstico de que el hongo se gestó durante el transporte, en 80 unidades del ARC101, y un contenedor cruzando el Pacífico pasa cinco semanas en humedad alta."}}]},
+
+        {"id":"GS_FW","optional":false,"golden":true,"evidence":[],
+         "point_video":true,
+         "label":{"en":"GOLDEN SAMPLE · FIRMWARE UNDER STRESS",
+                  "zh":"标准样机 · 固件压力测试",
+                  "es":"MUESTRA PATRÓN · FIRMWARE BAJO PRESIÓN"},
+         "steps":[
+           {"en":"Five minutes of fast and combined key presses","zh":"五分钟快速及组合按键操作","es":"Cinco minutos de pulsaciones rápidas y combinadas"},
+           {"en":"Then lower the mains voltage slowly","zh":"随后缓慢降低市电电压","es":"Después baje la tensión de red despacio"},
+           {"en":"Then walk the whole USB structure","zh":"再完整遍历 U 盘目录结构","es":"Después recorra toda la estructura del USB"}],
+         "points":[
+           {"section":{"en":"Five tickets of a locked panel","zh":"五张面板死机工单","es":"Cinco tickets de panel bloqueado"},
+            "help":{"en":"The keyboard locks and only the remote unlocks it (NEO103, twice), the cabinet locks (NEO101), it switches on and will not switch off (NEO101), it will not switch off and the volume will not rise (NEO103), and on the ARC101 the volume control locks on stations above 100 MHz. Five faults that a two-minute test never finds because a two-minute test presses each button once.",
+                    "zh":"键盘死机且仅能用遥控器解锁（NEO103，两次）、整机死机（NEO101）、开机后无法关机（NEO101）、无法关机且音量无法调高（NEO103），以及 ARC101 在 100 MHz 以上电台时音量控制死机。这五类故障在两分钟的测试中永远发现不了，因为两分钟的测试每个按键只按一次。",
+                    "es":"Se bloquea el teclado y sólo lo desbloquea el control (NEO103, dos veces), se bloquea la cabina (NEO101), se enciende y no se deja apagar (NEO101), no apaga y no sube el volumen (NEO103), y en el ARC101 el control de volumen se bloquea en emisoras por encima de 100 MHz. Cinco fallas que una prueba de dos minutos no encuentra nunca, porque una prueba de dos minutos pulsa cada botón una vez."}},
+           {"id":"gs_fw_stress","code":"UI-004",
+            "label":{"en":"Five minutes of abuse without locking up","zh":"五分钟高强度操作不死机","es":"Cinco minutos de maltrato sin bloquearse"},
+            "help":{"en":"Press fast, press two at a time, change mode while the volume is moving, hold one key and press another, switch source with music playing. Five minutes without stopping. Criterion: nothing may lock up, and every control must still respond at the end. If something locks, write exactly what you were pressing — that is the part that lets the factory reproduce it.",
+                    "zh":"快速按键、同时按下两键、在调节音量时切换模式、长按一键的同时按下另一键、在播放中切换音源。连续操作五分钟。判定标准：不得出现死机，结束时所有控件仍应有响应。若发生死机，请准确记录当时的按键操作——这正是工厂据以复现问题的依据。",
+                    "es":"Pulse rápido, pulse de a dos, cambie de modo mientras el volumen se mueve, mantenga una tecla y pulse otra, cambie de fuente con música sonando. Cinco minutos sin parar. Criterio: no puede bloquearse nada, y al final todos los controles deben seguir respondiendo. Si algo se bloquea, escriba exactamente qué estaba pulsando — esa es la parte que le permite a la fábrica reproducirlo."}},
+           {"id":"gs_fw_brownout","code":"PWR-021",
+            "label":{"en":"A slow voltage drop does not fake a flat battery","zh":"缓慢降压不得被误判为电量耗尽","es":"Una caída lenta de tensión no simula batería agotada"},
+            "help":{"en":"With the variable source, lower the mains slowly while it plays on AC. Criterion: it may switch off from lack of voltage, but it must not announce low battery or enter the shutdown sequence as if the pack were empty. Ticket 40 on the POW103 was exactly that: the microcontroller read the voltage dips as a discharge and switched the cabinet off. Instrument: variable AC source or variac.",
+                    "zh":"使用可调电源，在产品以市电供电播放时缓慢降低电压。判定标准：可因电压不足而关机，但不得提示低电量或执行如同电池耗尽时的关机流程。POW103 的工单 40 正是此情形：单片机将电压跌落判读为电池放电并关闭了整机。所需仪器：可调交流电源或调压器。",
+                    "es":"Con la fuente variable, baje la red despacio mientras suena con AC. Criterio: puede apagarse por falta de tensión, pero no debe anunciar batería baja ni entrar en la secuencia de apagado como si el pack estuviera vacío. El ticket 40 del POW103 fue exactamente eso: el microcontrolador leía las caídas como descarga y apagaba la cabina. Instrumento: fuente AC variable o variac."}},
+           {"id":"gs_fw_usb","code":"USB-011",
+            "label":{"en":"Full USB navigation, folders included","zh":"完整 U 盘导航，含文件夹切换","es":"Navegación completa del USB, con carpetas"},
+            "help":{"en":"A drive with at least three folders and several files each. Criterion: it must move between folders, forward and back, and the volume must not move on its own while doing it. Ticket 43 on the DEL103 — 467 units, 100% RMA — was the volume going up and down instead of changing folder.",
+                    "zh":"使用至少含三个文件夹、每个文件夹内有多个文件的 U 盘。判定标准：应可在文件夹间前后切换，且操作过程中音量不得自行变化。DEL103 的工单 43——467 台，RMA 100%——即为切换文件夹时音量反而上下变化。",
+                    "es":"Una memoria con al menos tres carpetas y varios archivos cada una. Criterio: debe pasar entre carpetas, adelante y atrás, y el volumen no debe moverse solo mientras lo hace. El ticket 43 del DEL103 — 467 unidades, RMA 100% — era el volumen subiendo y bajando en vez de cambiar de carpeta."}},
+           {"id":"gs_fw_mem","code":"AUD-011",
+            "label":{"en":"Everything configurable survives switching off","zh":"所有可配置项在关机后保留","es":"Todo lo configurable sobrevive al apagado"},
+            "help":{"en":"Change the sound signature, the EQ, the volumes and the light effect; switch off; switch on. Criterion: all of it must come back as it was left. YIS047 and YIS049 added memory of the last signature used, and a product that forgets it is a product that lost an approved improvement on the way.",
+                    "zh":"更改音效风格、EQ、各路音量与灯光效果，关机后再开机。判定标准：上述设置均应保持关机前状态。YIS047 与 YIS049 已增加对最后所用音效风格的记忆功能；若产品无法保留，说明该已批准的改进在中途丢失。",
+                    "es":"Cambie la firma de sonido, el EQ, los volúmenes y el efecto de luz; apague; encienda. Criterio: todo debe volver como quedó. YIS047 y YIS049 agregaron memoria de la última firma usada, y un producto que la olvida es un producto que perdió por el camino una mejora aprobada."}}]},
+
+        {"id":"GS_LAB","optional":true,"golden":true,"evidence":[],
+         "point_photo":true,"first":101.5,
+         "label":{"en":"GOLDEN SAMPLE · PROTOTYPE LABORATORY",
+                  "zh":"标准样机 · 原型实验室测试",
+                  "es":"MUESTRA PATRÓN · LABORATORIO DE PROTOTIPO"},
+         "steps":[
+           {"en":"The tests a large brand runs before committing a mould","zh":"大品牌在开模前进行的测试","es":"Las pruebas que una marca grande hace antes de comprometer un molde"},
+           {"en":"Mark N/A what the factory cannot do, and say so","zh":"工厂无法进行的项目标记 N/A 并说明","es":"Marque N/A lo que la fábrica no pueda hacer, y dígalo"},
+           {"en":"They are not for every sample — they are for the first one","zh":"本组并非每台样机都做，仅针对首台","es":"No son para toda muestra — son para la primera"}],
+         "points":[
+           {"section":{"en":"Why these are here","zh":"本组测试的意义","es":"Por qué están aquí"},
+            "help":{"en":"Everything above comes from a failure HOKLAN already paid for. This block is the opposite: it is what a manufacturer that validates a prototype before committing a mould does, and it exists to catch the failures that have not happened yet. Marking a point N/A here is legitimate — but say in the note that the factory does not have the equipment, because that is a fact worth knowing when choosing where to build the next product.",
+                    "zh":"以上各组均源自 HOKLAN 已实际承担损失的故障。本组则相反：这是制造商在开模前验证原型时的做法，目的在于发现尚未发生的问题。此处标记 N/A 是合理的——但请在备注中说明工厂不具备相应设备，因为这一事实对决定下一个产品在何处生产具有参考价值。",
+                    "es":"Todo lo anterior sale de una falla que HOKLAN ya pagó. Este bloque es lo contrario: es lo que hace un fabricante que valida un prototipo antes de comprometer un molde, y existe para atrapar las fallas que todavía no han ocurrido. Marcar N/A aquí es legítimo — pero diga en la nota que la fábrica no tiene el equipo, porque ese dato vale la pena a la hora de decidir dónde se construye el próximo producto."}},
+           {"id":"gs_lab_clima","code":"THR-012","photo":true,
+            "label":{"en":"Climatic cycle: twelve hours between −10 °C and 50 °C","zh":"温度循环：−10 °C 至 50 °C，十二小时","es":"Ciclo climático: doce horas entre −10 °C y 50 °C"},
+            "help":{"en":"Four cycles of three hours, off, inside the chamber; then let it return to room temperature and switch it on. Criterion: it must start up and sound normal, and no glue joint, membrane or label may have lifted. It is the test that catches the adhesive that turns brittle and the capacitor that dries out — and HOKLAN's destinations, the Colombian coast and Peru, are harsher than a bench in Guangzhou. Instrument: climatic chamber. Poor version: freezer overnight and closed car in the sun the next day, photographing a thermometer at each end.",
+                    "zh":"在温箱内进行四个三小时循环，产品处于关机状态；随后恢复至室温并开机。判定标准：应能正常启动并正常出声，任何胶接部位、振膜或标签均不得起翘。该测试可发现胶体脆化与电容干涸——而 HOKLAN 的销售地哥伦比亚沿海与秘鲁，其环境比广州的实验台更为严苛。所需仪器：恒温恒湿箱。简易替代：夜间置于冷冻室，次日置于阳光下密闭车内，两端各拍摄温度计读数。",
+                    "es":"Cuatro ciclos de tres horas, apagado, dentro de la cámara; después déjelo volver a temperatura ambiente y enciéndalo. Criterio: debe arrancar y sonar normal, y ninguna unión pegada, membrana o etiqueta puede haberse levantado. Es la prueba que atrapa el adhesivo que se vuelve quebradizo y el condensador que se seca — y los destinos de HOKLAN, la costa colombiana y Perú, son más duros que un banco en Guangzhou. Instrumento: cámara climática. Versión pobre: congelador una noche y carro cerrado al sol al día siguiente, fotografiando un termómetro en cada extremo."}},
+           {"id":"gs_lab_esd","code":"UI-004",
+            "label":{"en":"Electrostatic discharge on controls and connectors","zh":"对控件与接口进行静电放电测试","es":"Descarga electrostática en controles y conectores"},
+            "help":{"en":"Criterion: 8 kV by contact on knobs, jacks, grille and screws, ten discharges each, with the product playing. It must not lock up, reset or lose the source; if it mutes for an instant and recovers, that is acceptable and should be noted. A lock-up caused by static looks exactly like our five lock-up tickets — which is why it is worth knowing whether that is what they were. Instrument: ESD gun.",
+                    "zh":"判定标准：在产品播放状态下，对旋钮、插孔、网罩与螺丝以 8 kV 接触放电，每处十次。不得死机、复位或丢失音源；若瞬时静音后自行恢复，属可接受情形，应在备注中记录。静电导致的死机与我方五张死机工单表现完全一致——因此有必要确认那些故障是否即由此引起。所需仪器：静电放电枪。",
+                    "es":"Criterio: 8 kV al contacto en perillas, jacks, rejilla y tornillos, diez descargas en cada uno, con el producto sonando. No debe bloquearse, reiniciarse ni perder la fuente; si se silencia un instante y se recupera, es aceptable y hay que anotarlo. Un bloqueo por estática se ve exactamente igual que nuestros cinco tickets de bloqueo — por eso vale la pena saber si era eso. Instrumento: pistola de ESD."}},
+           {"id":"gs_lab_botones","code":"DUR-010","measure":{"unit":"ciclos","step":"100"},
+            "label":{"en":"Button life — ten thousand presses on the most used one","zh":"按键寿命 — 最常用按键按压一万次","es":"Vida de los botones — diez mil pulsaciones en el más usado"},
+            "help":{"en":"Choose the button that gets used most — power or volume — and press it until ten thousand, in sessions. Criterion: at ten thousand it must keep the same travel and the same click, and still work. Write how many you actually did. Twenty presses, which is what the production plan asks for, only proves the button exists. Instrument: patience, or a small motorised jig.",
+                    "zh":"选择使用频率最高的按键——电源键或音量键——分多次按压至一万次。判定标准：达到一万次时，行程与手感应保持一致且功能正常。请填写实际完成次数。产线计划要求的二十次仅能证明按键存在。所需工具：耐心，或简易电动治具。",
+                    "es":"Escoja el botón que más se usa — encendido o volumen — y púlselo hasta diez mil, por sesiones. Criterio: a las diez mil debe conservar el mismo recorrido y el mismo clic, y seguir funcionando. Escriba cuántas hizo de verdad. Veinte pulsaciones, que es lo que pide el plan de producción, sólo demuestra que el botón existe. Instrumento: paciencia, o un pequeño montaje motorizado."}},
+           {"id":"gs_lab_compresion","code":"AUD-034","measure":{"unit":"dB","step":"0.1"},
+            "label":{"en":"Power compression after eight hours","zh":"八小时后的功率压缩","es":"Compresión de potencia tras ocho horas"},
+            "help":{"en":"Measure SPL at 1 kHz at one metre, run the product eight hours at about a third of volume with real music, and measure again in the same place with the same setup. Criterion: it must not drop more than 3 dB. A larger drop means the voice coil is heating past what it dissipates, and the product will sound worse after a month than the day it was bought — which is the difference between a catalogue speaker and one that lasts. Instrument: sound level meter.",
+                    "zh":"在 1 米处测量 1 kHz 声压级，随后以约三分之一音量播放真实音乐运行八小时，再以相同位置与相同接线复测。判定标准：下降不得超过 3 dB。若下降更多，说明音圈发热已超出其散热能力，产品在使用一个月后的表现将劣于购买当天——这正是普通目录产品与耐用产品的区别。所需仪器：声级计。",
+                    "es":"Mida SPL a 1 kHz a un metro, haga sonar el producto ocho horas a un tercio de volumen con música real, y vuelva a medir en el mismo sitio con el mismo montaje. Criterio: no debe caer más de 3 dB. Una caída mayor significa que la bobina se está calentando más de lo que disipa, y el producto sonará peor al mes que el día que se compró — que es la diferencia entre un parlante de catálogo y uno que dura. Instrumento: sonómetro."}},
+           {"id":"gs_lab_escucha","code":"AUD-032","point_video":true,
+            "label":{"en":"Critical listening with three people and a fixed playlist","zh":"三人固定曲目主观试听","es":"Escucha crítica con tres personas y una lista fija"},
+            "help":{"en":"The same three tracks always — one with deep bass, one with a solo voice, one busy — in the same room, at the same volume, with three people who write down separately what they hear before talking to each other. Criterion: nobody may report something the others do not hear, and none of the three may find the sample worse than the previous approved one. It is how ticket 27 would have been caught — a cabinet with 15% less volume than earlier batches, 1,500 units — before it shipped. Instrument: three people and an unhurried room.",
+                    "zh":"始终使用同样三首曲目——一首低频深沉、一首独唱人声、一首编配密集——在同一房间、同一音量下，由三人各自独立记录所听内容，记录完成前不得交流。判定标准：不得出现仅一人听到而他人未察觉的现象，且三人均不得认为本样机劣于此前批准的样机。工单 27——整机音量较此前批次低 15%，涉及 1,500 台——本可通过此方式在出货前发现。所需条件：三个人与一个安静从容的房间。",
+                    "es":"Las mismas tres pistas siempre — una de graves profundos, una de voz sola, una cargada — en el mismo cuarto, al mismo volumen, con tres personas que anoten por separado lo que oyen antes de hablar entre ellas. Criterio: nadie puede reportar algo que los otros no oigan, y ninguno de los tres puede encontrar la muestra peor que la anterior aprobada. Es como se habría atrapado el ticket 27 — una cabina con 15% menos volumen que los lotes anteriores, 1.500 unidades — antes de embarcar. Instrumento: tres personas y un cuarto sin prisa."}}]},
+
+        {"id":"GS_DOCS","optional":false,"golden":true,"evidence":[],
+         "point_photo":true,"first":102,
+         "label":{"en":"GOLDEN SAMPLE · APPROVED CHANGES AND ARTWORK",
+                  "zh":"标准样机 · 已批准变更与印刷稿",
+                  "es":"MUESTRA PATRÓN · MEJORAS APROBADAS Y ARTES"},
+         "steps":[
+           {"en":"Open the improvement log for this reference","zh":"打开本型号的改进记录","es":"Abra la bitácora de mejoras de esta referencia"},
+           {"en":"Check one by one that each change arrived","zh":"逐项核对各变更是否已落实","es":"Compruebe una por una que cada cambio llegó"},
+           {"en":"Compare the printed artwork against the approved one","zh":"将实物印刷内容与批准稿比对","es":"Compare el arte impreso contra el aprobado"}],
+         "points":[
+           {"section":{"en":"The cheapest test of all","zh":"成本最低的一项检查","es":"La prueba más barata de todas"},
+            "help":{"en":"Of the 151 improvements in the log, 106 are still marked as not carried into the QC guide. Among them is RHY013 — the MOSFET from 20 A to 25 A, the new varistor, the bridge from 8 A to 10 A — which is the most important electrical change HOKLAN has made. It was approved and lost sight of. Verifying that an approved improvement actually arrives costs one sheet of paper and prevents repeating a ticket that was already solved.",
+                    "zh":"改进记录中的 151 项，仍有 106 项标记为未纳入 QC 指南。其中包括 RHY013——MOSFET 由 20 A 提升至 25 A、新增压敏电阻、整流桥由 8 A 提升至 10 A——这是 HOKLAN 最重要的电气变更。该项已批准却被遗忘。核查已批准的改进是否确实落实，仅需一页纸，却可避免重蹈已解决的覆辙。",
+                    "es":"De las 151 mejoras de la bitácora, 106 siguen marcadas como no llevadas a la guía de QC. Entre ellas está RHY013 — el MOSFET de 20 A a 25 A, el varistor nuevo, el puente de 8 A a 10 A — que es el cambio eléctrico más importante que ha hecho HOKLAN. Se aprobó y se perdió de vista. Verificar que una mejora aprobada llegue de verdad cuesta una hoja de papel y evita repetir un ticket que ya estaba resuelto."}},
+           {"id":"gs_doc_mejoras","code":"DOC-011","photo":true,
+            "label":{"en":"Every approved improvement for this reference is fitted","zh":"本型号所有已批准改进均已落实","es":"Todas las mejoras aprobadas de esta referencia están puestas"},
+            "help":{"en":"Bring the list of change IDs of this reference from the log and go through it one by one on the sample. Photograph the list with each line ticked. Criterion: all of them. If one is missing, it is a failure of the sample and the note says which change ID.",
+                    "zh":"从改进记录中调取本型号的变更编号清单，在样机上逐项核对。拍摄已逐条勾选的清单。判定标准：须全部落实。若有缺失，即判样机不合格，并在备注中注明变更编号。",
+                    "es":"Traiga de la bitácora la lista de Change ID de esta referencia y recórrala una por una sobre la muestra. Fotografíe la lista con cada renglón marcado. Criterio: todas. Si falta una, es falla de la muestra y la nota dice cuál Change ID."}},
+           {"id":"gs_doc_arte","code":"DOC-010","photo":true,
+            "label":{"en":"Printed artwork identical to the approved one","zh":"印刷内容与批准稿完全一致","es":"Arte impreso idéntico al aprobado"},
+            "help":{"en":"Box, manual, tag and label, next to the approved artwork. Criterion: identical — brand, warranty period, logo size and position, country of origin. Ticket 48 was a box printed with one year of warranty when it should say two: 800 units, 100% RMA, because the factory did not print the artwork that was sent. Ticket 34 was a tag with another brand's name.",
+                    "zh":"将彩盒、说明书、吊牌与标签与批准稿并列比对。判定标准：完全一致——品牌、保修年限、Logo 尺寸与位置、产地。工单 48 即为彩盒印为一年保修而应为两年：800 台，RMA 100%，原因是工厂未使用所发送的印刷稿。工单 34 则为吊牌印有其他品牌名称。",
+                    "es":"Caja, manual, etiqueta colgante y etiqueta, al lado del arte aprobado. Criterio: idénticos — marca, años de garantía, tamaño y posición del logo, país de origen. El ticket 48 fue una caja impresa con un año de garantía cuando debía decir dos: 800 unidades, RMA 100%, porque la fábrica no imprimió el arte que se le envió. El ticket 34 fue un tag con el nombre de otra marca."}},
+           {"id":"gs_doc_nexus","code":"DOC-010",
+            "label":{"en":"What Nexus declares matches the sample","zh":"Nexus 申报数据与样机一致","es":"Lo que declara Nexus coincide con la muestra"},
+            "help":{"en":"Compare against Nexus: power, battery capacity, Bluetooth and remote range, box and master carton dimensions. Criterion: all of it. YIS021, YIS023 and YIS029 exist precisely to have those figures written down, and a sample that contradicts them means either the catalogue or the product is wrong — and both are expensive.",
+                    "zh":"与 Nexus 数据比对：功率、电池容量、蓝牙与遥控距离、单品箱与外箱尺寸。判定标准：须全部一致。YIS021、YIS023、YIS029 的设立正是为了记录这些数据；若样机与之矛盾，则说明产品资料或产品本身有误——两者代价都很高。",
+                    "es":"Compare contra Nexus: potencia, capacidad de batería, distancia de Bluetooth y de control remoto, medidas de caja y master carton. Criterio: todo. YIS021, YIS023 y YIS029 existen precisamente para tener esas cifras escritas, y una muestra que las contradiga significa que o el catálogo o el producto están mal — y las dos cosas cuestan caro."}}]},
+
+
+
         /* El canal 3 —AUX, RCA izquierdo, RCA derecho y su perilla— se retiró en
            el plan 113: sus entradas se recorren ahora en ENTRADA AUX, en las dos
            secciones de jack 3.5 mm y RCA que el plan 112 dejó allí. */
@@ -8235,6 +8666,8 @@ const T = {
   operator_ph:"Who is running the inspection", next_po:"Order no. %p · %o",
   acct_admin:"HOKLAN ADMIN",
   dev_group:"IN DEVELOPMENT · not in production",
+  gld_tag:"GOLDEN SAMPLE",
+  gld_note:"Reference sample. What is recorded here is what the product is, and the production of this reference is compared against it.",
   dev_tag:"IN DEVELOPMENT",
   panel_ref:"Control panel · tap to enlarge",
   conn_ref:"Connectors · tap to enlarge",
@@ -8514,6 +8947,8 @@ const T = {
   operator_ph:"Quién ejecuta la inspección", next_po:"OC %p · %o",
   acct_admin:"ADMIN HOKLAN",
   dev_group:"EN DESARROLLO · sin producción",
+  gld_tag:"GOLDEN SAMPLE",
+  gld_note:"Muestra patrón. Lo que se registre aquí es lo que el producto es, y contra esto se compara la producción de esta referencia.",
   dev_tag:"EN DESARROLLO",
   panel_ref:"Panel de mandos · toque para ampliar",
   conn_ref:"Conectores · toque para ampliar",
@@ -8788,6 +9223,8 @@ const T = {
   operator_ph:"由谁执行本次检验", next_po:"订单号 %p · %o",
   acct_admin:"HOKLAN 管理端",
   dev_group:"开发中 · 尚未量产",
+  gld_tag:"标准样机",
+  gld_note:"标准样机。此处记录的是产品的实际状态，本型号的量产将以此为比对基准。",
   dev_tag:"开发中",
   panel_ref:"控制面板 · 点击放大",
   conn_ref:"接口 · 点击放大",
@@ -9227,11 +9664,13 @@ const TEST_NO = {
   KAP_PSU_SWEEP:96, KAP_CURVES:97, KAP_SPL_FREQ:98, KAP_BAT_CAP:99,
   KAP_USB_OUT:100, KAP_DROP:101, KAP_MIC_LINK:102, KAP_MIC_USE:103,
   KAP_MODULE_AUDIO:104, KAP_FM_MODULE:105, LEAK_CURRENT:106,
-  OUT_120HZ:107, MIC_POS:108, EPS15_PREV:109
+  OUT_120HZ:107, MIC_POS:108, EPS15_PREV:109,
+  GS_POWER:110, GS_DRIVERS:111, GS_BATTERY:112, GS_RF:113, GS_MECH:114,
+  GS_FW:115, GS_LAB:116, GS_DOCS:117
 };
 /* El siguiente número libre. Está aquí para que quien agregue una prueba no
    tenga que contar: es 79 y sube de uno en uno. */
-const NEXT_TEST_NO = 110;
+const NEXT_TEST_NO = 118;
 
 /* En las referencias de desarrollo la numeración es otra, y a propósito.
 
@@ -9282,10 +9721,20 @@ const wantsPhoto = (p, t) => !!(p && (p.photo || (t && t.point_photo)));
 const wantsVideo = (p, t) => !!(p && (p.video || (t && t.point_video)));
 
 function fits(o){
+  /* `golden` marca lo que sólo existe bajo el código 205. No se resuelve por
+     fábrica porque no es de una fábrica: es de un momento — la muestra patrón,
+     antes de producir. Bajo cualquier otro código estas pruebas no existen, y
+     bajo el 205 se suman a las del producto. */
+  if(o.golden && !enGolden()) return false;
   if(o.only && o.only.indexOf(S.model) < 0) return false;
   if(o.skip && o.skip.indexOf(S.model) >= 0) return false;
-  if(o.skip_factory && o.skip_factory.indexOf(S.factory) >= 0) return false;
-  if(o.only_factory && o.only_factory.indexOf(S.factory) < 0) return false;
+  /* Bajo el código de golden samples la fábrica que filtra no es la que tecleó
+     el operario —GLD no fabrica nada— sino la dueña del producto. Sin esto, el
+     plan salía vacío: ninguna prueba nombra a GLD y ninguna lo haría, porque
+     entonces habría que repetir en cada una la lista de referencias. */
+  const f = enGolden() ? fabricaReal(S.model) : S.factory;
+  if(o.skip_factory && o.skip_factory.indexOf(f) >= 0) return false;
+  if(o.only_factory && o.only_factory.indexOf(f) < 0) return false;
   return true;
 }
 /* Every test this reference carries. This is the whole plan, and it is what
@@ -9348,6 +9797,16 @@ const GROUPS = {
      label:{en:"External parts","zh":"外部部件","es":"Partes externas"}},
     {id:"int",   tests:["KAP_WIRING","KAP_DRIVERS","INTERNAL"],
      label:{en:"Internal parts","zh":"内部部件","es":"Partes internas"}},
+    /* Muestra patrón. Estas dos subsecciones sólo aparecen con el código 205:
+       sus pruebas llevan golden:true y fits() las descarta en cualquier otra
+       entrada. Van aquí, después de partes internas, porque casi todas piden
+       el producto abierto; y antes de envejecimiento físico y empaques, que
+       son las que gastan la muestra. */
+    {id:"gs",    tests:["GS_POWER","GS_DRIVERS","GS_BATTERY","GS_RF","GS_FW","GS_DOCS"],
+     label:{en:"Golden sample","zh":"标准样机","es":"Muestra patrón"}},
+    {id:"gslab", tests:["GS_MECH","GS_LAB"],
+     label:{en:"Golden sample · laboratory","zh":"标准样机 · 实验室",
+            "es":"Muestra patrón · laboratorio"}},
     {id:"wear",  tests:["KAP_WEAR"],
      label:{en:"Physical aging","zh":"物理老化","es":"Envejecimiento físico"}},
     /* Empaques va de última y no octava, como estaba en la lista de Producto,
@@ -9382,6 +9841,11 @@ const GROUPS = {
      label:{en:"External parts","zh":"外部部件","es":"Partes externas"}},
     {id:"int",  tests:["INTERNAL","KAP_WIRING","KAP_DRIVERS","EPS15_PREV"],
      label:{en:"Internal parts","zh":"内部部件","es":"Partes internas"}},
+    {id:"gs",   tests:["GS_POWER","GS_DRIVERS","GS_BATTERY","GS_RF","GS_FW","GS_DOCS"],
+     label:{en:"Golden sample","zh":"标准样机","es":"Muestra patrón"}},
+    {id:"gslab",tests:["GS_MECH","GS_LAB"],
+     label:{en:"Golden sample · laboratory","zh":"标准样机 · 实验室",
+            "es":"Muestra patrón · laboratorio"}},
     {id:"wear", tests:["KAP_WEAR"],
      label:{en:"Physical aging","zh":"物理老化","es":"Envejecimiento físico"}},
     {id:"pack", tests:["KAP_SHIPBOX","SUB_GRAPHICS","KAP_DROP"],
@@ -9438,7 +9902,15 @@ const DEFAULT_GROUPS = [
                      "PHI_RECONNECT","PHI_POWER_CUT","PHI_RANGE"],
    label:{en:"Wireless operation","zh":"无线使用","es":"Funcionamiento inalámbrico"}},
   {id:"mic_i",tests:["MIC_BATTERY","PHI_INTERNAL","PHI_BAT_VOLT"],
-   label:{en:"Internal parts","zh":"内部部件","es":"Partes internas"}}
+   label:{en:"Internal parts","zh":"内部部件","es":"Partes internas"}},
+  /* Muestra patrón. Aquí sólo pone rótulo: este reparto no reordena. Las
+     pruebas caen donde las deje su first — GS_MECH, GS_LAB y GS_DOCS al
+     final, junto a las que gastan el producto. */
+  {id:"gs",   tests:["GS_POWER","GS_DRIVERS","GS_BATTERY","GS_RF","GS_FW","GS_DOCS"],
+   label:{en:"Golden sample","zh":"标准样机","es":"Muestra patrón"}},
+  {id:"gslab",tests:["GS_MECH","GS_LAB"],
+   label:{en:"Golden sample · laboratory","zh":"标准样机 · 实验室",
+          "es":"Muestra patrón · laboratorio"}}
 ];
 /* La subsección de una prueba, o null si esta referencia no usa subsecciones.
    Una prueba que no esté en ninguna lista no se pierde: cae al final, bajo una
@@ -9537,12 +10009,38 @@ function partialScope(){
 
    Taking a reference out of here is what releases it. Nothing else changes. */
 const DEV_REFS = ["HK-KAP206","HK-KAP208","HK-EPS115A1"];
-const isDevRef = m => DEV_REFS.indexOf(m) >= 0;
+
+/* ---------- golden samples ------------------------------------------------
+   El código 205 no pertenece a una fábrica: abre la muestra patrón, y la puede
+   levantar cualquiera de las cuatro. Dos decisiones lo definen.
+
+   Qué referencias ofrece. Sólo las de esta lista, no el catálogo entero: un
+   golden sample existe cuando alguien lo aprobó, y ofrecer las cincuenta y
+   tres invitaría a levantar una muestra patrón de un producto que no la tiene.
+   Agregar una es escribir su nombre aquí.
+
+   Con qué pruebas. Con las del propio producto, pero recorridas como se recorre
+   una referencia en desarrollo: numeración corrida de 1 en adelante y N/A
+   disponible en todo. Es lo que corresponde — en una muestra patrón se está
+   describiendo lo que el producto es, no comprobando que cumpla algo ya
+   acordado.
+--------------------------------------------------------------------------- */
+const GOLDEN = "GLD";
+const GOLDEN_REFS = ["HK-KAP206","HK-KAP208","HK-EPS115A1"];
+const enGolden = () => S.factory === GOLDEN;
+/* La fábrica dueña del producto, que es la que decide qué pruebas tiene. Bajo
+   el 205 el operario escoge la referencia y el plan sale de aquí. */
+const fabricaReal = m => CONFIG.models[m] || "";
+
+const isDevRef = m => DEV_REFS.indexOf(m) >= 0 ||
+  (enGolden() && GOLDEN_REFS.indexOf(m) >= 0);
 
 /* What the factory can choose on the start screen. Development references are
    filtered out here, which is the single place that decides it. */
-const modelsOf = f => Object.keys(CONFIG.models)
-  .filter(m => CONFIG.models[m] === f && !isDevRef(m)).sort();
+const modelsOf = f => f === GOLDEN
+  ? GOLDEN_REFS.slice().sort()
+  : Object.keys(CONFIG.models)
+      .filter(m => CONFIG.models[m] === f && !isDevRef(m)).sort();
 /* Tolerates a missing test on purpose. Half a dozen callers reach for the
    points of `current()`, and `current()` can be null on a draft whose reference
    was left without a plan; every one of them wants an empty list there, not a
@@ -13323,7 +13821,10 @@ function renderAdmin(){
       ${/* Said again once the reference is chosen, because the group label in
             the dropdown is gone from view by then and an inspection filed
             against a product that does not exist yet is worth one more line. */""}
-      ${isDevRef(S.model) ? `<div class="tag" style="background:rgba(245,185,66,.16);
+      ${enGolden() ? `<div class="tag" style="background:rgba(46,163,242,.16);
+        border-color:var(--accent);color:var(--accent)">${tr("gld_tag")}</div>
+        <p class="hint" style="margin-top:6px;color:var(--accent)">${tr("gld_note")}</p>`
+       : isDevRef(S.model) ? `<div class="tag" style="background:rgba(245,185,66,.16);
         border-color:var(--amber);color:var(--amber)">${tr("dev_tag")}</div>
         <p class="hint" style="margin-top:6px;color:var(--amber)">${tr("dev_note")}</p>` : ""}
       ${S.model ? refImageRow(S.model) : ""}
@@ -14778,7 +15279,13 @@ function header(t, done, total){
           inspector who picks up the phone mid-shift has no other way of knowing
           this is a prototype, and a report filed against a product that has not
           been released must not look like any other report six months later. */""}
-    ${isDevRef(S.model) ? `<div class="tag" style="background:rgba(245,185,66,.16);
+    ${/* Bajo el 205 el rótulo dice muestra patrón y no «en desarrollo»: son dos
+          cosas distintas y el informe tiene que distinguirlas seis meses
+          después. Un golden sample de una referencia liberada no es un
+          prototipo. */""}
+    ${enGolden() ? `<div class="tag" style="background:rgba(46,163,242,.16);
+      border-color:var(--accent);color:var(--accent)">${tr("gld_tag")}</div>`
+     : isDevRef(S.model) ? `<div class="tag" style="background:rgba(245,185,66,.16);
       border-color:var(--amber);color:var(--amber)">${tr("dev_tag")}</div>` : ""}
     <div class="tag">${esc(inspectionDate(S.startedAt))}</div>
     <div class="bar"><i style="width:${(done/total*100).toFixed(0)}%"></i></div>

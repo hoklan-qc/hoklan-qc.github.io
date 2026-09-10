@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="17.2">
+<meta name="app-version" content="17.3">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -880,7 +880,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 151,
+      "plan_version": 152,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -5892,7 +5892,7 @@ const CONFIG = {
          "steps":[
            {"en":"Switch the product off and leave every socket empty","zh":"关机并确保各接口均未接任何设备","es":"Apague el producto y deje todos los conectores vacíos"},
            {"en":"Open it and put the meter in series with the internal battery","zh":"打开产品，将万用表串联接入内置电池回路","es":"Ábralo y ponga el multímetro en serie con la batería interna"},
-           {"en":"Read the current and check that it holds","zh":"读取电流并确认其保持稳定","es":"Lea la corriente y compruebe que se mantiene"}],
+           {"en":"Read the current and write it down","zh":"读取电流并记录","es":"Lea la corriente y anótela"}],
          "points":[
            {"section":{"en":"Conditions of the measurement","zh":"测量条件","es":"Condiciones de la medición"},
             "help":{"en":"Product switched off with its internal battery connected, meter in series in current mode. The current flowing from the internal battery to the switched-off product is measured.",
@@ -5913,12 +5913,12 @@ const CONFIG = {
             "label":{"en":"Leakage current measured","zh":"实测漏电流","es":"Corriente de fuga medida"},
             "help":{"en":"Start on the highest current range and come down until the reading is legible. Photograph the meter and write the value in mA. There is no approved figure yet: record the value, do not judge it.",
                     "zh":"先置于最大电流档，逐级下调至读数清晰。拍摄表头并以 mA 填写数值。目前尚无批准值：只记录数值，不作判定。",
-                    "es":"Empiece en el rango de corriente más alto y baje hasta que la lectura se lea bien. Fotografíe el instrumento y escriba el valor en mA. Todavía no hay cifra aprobada: anote el valor, no lo juzgue."}},
-           {"id":"leak_stable","code":"PWR-023",
-            "label":{"en":"The reading is steady — it does not climb","zh":"读数稳定 — 不上升","es":"La lectura es estable — no sube"},
-            "help":{"en":"Wait two minutes with the meter in place. The reading must stay at the value written above. If it climbs, mark the point as a failure and write the final value in the note.",
-                    "zh":"保持接线等待两分钟。读数应稳定在上述数值。若持续上升，本项判不合格，并在备注中填写最终数值。",
-                    "es":"Espere dos minutos con el instrumento puesto. La lectura debe mantenerse en el valor escrito arriba. Si sube, marque el punto como NO CONFORME y escriba en la nota el valor final."}}]},
+                    "es":"Empiece en el rango de corriente más alto y baje hasta que la lectura se lea bien. Fotografíe el instrumento y escriba el valor en mA. Todavía no hay cifra aprobada: anote el valor, no lo juzgue."}}]},
+        /* «La lectura es estable — no sube» se retiró en el plan 152. Pedía dos
+           minutos de espera con el instrumento puesto por cada unidad, y era el
+           único punto de la prueba que sí se podía reprobar. Al quitarlo, la
+           corriente de fuga queda como registro declarado completo: se anota y
+           no se juzga, hasta que HOKLAN fije el máximo. */
 
         /* La prueba suelta SELECTOR DE VOLTAJE se retiró en la v11.2. Al pasar
            PARTES EXTERNAS a cubrir toda RHYME, el selector quedaba comprobado

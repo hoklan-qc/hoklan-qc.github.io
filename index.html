@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="16.9">
+<meta name="app-version" content="17.1">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -880,7 +880,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 148,
+      "plan_version": 150,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2046,7 +2046,8 @@ const CONFIG = {
             "help":{"en":"Say short words into MIC1 and turn the echo from minimum to maximum. The repetition must go from none to clearly audible, and the delay must stay within 0 to 280 ms: at maximum the echo must still follow the voice closely, not lag like a separate second voice. Anything longer than that stops sounding like reverberation and starts sounding like a fault.",
                     "zh":"对麦克风 1 说短词，并将回声从最小调到最大。重复声应从无到明显可闻，延时须在 0～280 毫秒范围内：即使调到最大，回声也应紧跟人声，而不应拖成第二个人声。超过该范围就不再像混响，而像故障。",
                     "es":"Diga palabras cortas por MIC1 y lleve el eco del mínimo al máximo. La repetición debe pasar de nula a claramente audible, y el retardo debe mantenerse entre 0 y 280 ms: incluso al máximo, el eco debe seguir de cerca a la voz, no arrastrarse como una segunda voz aparte. Más allá de ese rango deja de sonar a reverberación y empieza a sonar a defecto."}},
-           {"id":"mic1_reverb","code":"MIC-008","skip_factory":["RHY"],"label":{"en":"MIC1 reverb","zh":"麦克风 1 混响","es":"Reverberación de MIC1"},
+           {"id":"mic1_reverb","code":"MIC-008","skip_factory":["RHY"],
+            "skip":["HK-RNW212A2"],"label":{"en":"MIC1 reverb","zh":"麦克风 1 混响","es":"Reverberación de MIC1"},
             "help":{"en":"Speak into MIC1 and raise the reverb. The voice must gain body and depth, not repeat like the echo. Both controls must act independently.",
                     "zh":"对麦克风 1 说话并加大混响。人声应变得更有空间感和厚度，而不是像回声那样重复。两个旋钮应各自独立起作用。",
                     "es":"Hable por MIC1 y suba la reverberación. La voz debe ganar cuerpo y profundidad, no repetirse como el eco. Los dos controles deben actuar de forma independiente."}},
@@ -2062,11 +2063,13 @@ const CONFIG = {
             "help":{"en":"Say short words into MIC2 and turn the echo up. Same range: 0 to 280 ms.",
                     "zh":"对麦克风 2 说短词并加大回声。范围相同：0～280 毫秒。",
                     "es":"Diga palabras cortas por MIC2 y suba el eco. El mismo rango: 0 a 280 ms."}},
-           {"id":"mic2_reverb","code":"MIC-008","skip_factory":["RHY"],"label":{"en":"MIC2 reverb","zh":"麦克风 2 混响","es":"Reverberación de MIC2"},
+           {"id":"mic2_reverb","code":"MIC-008","skip_factory":["RHY"],
+            "skip":["HK-RNW212A2"],"label":{"en":"MIC2 reverb","zh":"麦克风 2 混响","es":"Reverberación de MIC2"},
             "help":{"en":"Speak into MIC2 and raise the reverb. Echo and reverb must act independently on this input too.",
                     "zh":"对麦克风 2 说话并加大混响。该接口上回声与混响也应各自独立起作用。",
                     "es":"Hable por MIC2 y suba la reverberación. En esta entrada el eco y la reverberación también deben actuar de forma independiente."}},
-           {"id":"guitar","code":"AUD-009","skip_factory":["RHY"],"label":{"en":"Guitar volume","zh":"吉他音量","es":"Volumen de guitarra"},
+           {"id":"guitar","code":"AUD-009","skip_factory":["RHY"],
+            "skip":["HK-RNW212A2"],"label":{"en":"Guitar volume","zh":"吉他音量","es":"Volumen de guitarra"},
             "help":{"en":"Plug the guitar into its input and play while moving its volume control from minimum to maximum. Mark N/A if this reference has no guitar input.",
                     "zh":"将吉他插入专用接口，一边弹奏一边把吉他音量从最小调到最大。本型号没有吉他接口时标记为“不适用”。",
                     "es":"Conecte la guitarra en su entrada y toque mientras mueve su control de volumen del mínimo al máximo. Marque N/A si esta referencia no tiene entrada de guitarra."}},
@@ -2083,7 +2086,8 @@ const CONFIG = {
             "help":{"en":"Press the light button several times. It must switch on and off cleanly every time, with no flicker and no LED left lit.",
                     "zh":"多次按下灯光键。每次都应干脆地开和关，不闪烁，也不应有个别灯珠残亮。",
                     "es":"Pulse la tecla de luz varias veces. Debe encender y apagar de forma limpia cada vez, sin parpadeos y sin que quede ningún LED prendido."}},
-           {"id":"light_pattern","code":"LED-007","skip_factory":["RHY"],"label":{"en":"Light pattern change","zh":"灯光模式切换","es":"Cambio de patrón de luz"},
+           {"id":"light_pattern","code":"LED-007","skip_factory":["RHY"],
+            "skip":["HK-RNW212A2"],"label":{"en":"Light pattern change","zh":"灯光模式切换","es":"Cambio de patrón de luz"},
             "help":{"en":"Step through every light pattern and back to the first. Each one must be visibly different, with no dead LEDs in any pattern.",
                     "zh":"逐一切换所有灯光模式并回到第一个。每种模式应有明显区别，且任何模式下都不应有不亮的灯珠。",
                     "es":"Recorra todos los patrones de luz y vuelva al primero. Cada uno debe ser visiblemente distinto, sin LED apagados en ningún patrón."}},
@@ -2222,7 +2226,8 @@ const CONFIG = {
            {"id":"light","code":"LED-006","skip_factory":["RHY"],"label":{"en":"Light on / off","zh":"灯光开关"},
             "help":{"en":"Press the light button several times. It must switch on and off cleanly every time, with no flicker and no LED left lit.",
                     "zh":"多次按下灯光键。每次都应干脆地开和关，不闪烁，也不应有个别灯珠残亮。"}},
-           {"id":"light_pattern","code":"LED-007","skip_factory":["RHY"],"label":{"en":"Light pattern change","zh":"灯光模式切换"},
+           {"id":"light_pattern","code":"LED-007","skip_factory":["RHY"],
+            "skip":["HK-RNW212A2"],"label":{"en":"Light pattern change","zh":"灯光模式切换"},
             "help":{"en":"Step through every light pattern and back to the first. Each one must be visibly different, with no dead LEDs in any pattern.",
                     "zh":"逐一切换所有灯光模式并回到第一个。每种模式应有明显区别，且任何模式下都不应有不亮的灯珠。"}},
            {"section":{"en":"Power on","zh":"开机","es":"Encendido"},
@@ -2255,7 +2260,12 @@ const CONFIG = {
            {"section":{"en":"Connection","zh":"连接"},
             "help":{"en":"Put the speaker in Bluetooth mode. Pair an iPhone and play; then disconnect and pair an Android. Finally switch the speaker off and on to see whether it reconnects by itself.",
                     "zh":"将音箱切换到蓝牙模式。先配对 iPhone 播放，断开后再配对安卓手机。最后重新开机，确认是否自动回连。"}},
-           {"id":"iphone","code":"BT-006","label":{"en":"Connection with iPhone","zh":"连接 iPhone"},
+           {/* Fuera de YISION desde el plan 150. El punto de al lado ya conecta
+                un Android y comprueba el emparejamiento; con dos teléfonos se
+                estaba probando dos veces la misma radio. Otras fábricas lo
+                conservan porque no lo pidieron. */
+            "id":"iphone","code":"BT-006","skip_factory":["YIS"],
+            "label":{"en":"Connection with iPhone","zh":"连接 iPhone"},
             "help":{"en":"Search from the iPhone. The speaker must appear in the list, pair without a PIN and connect within a few seconds.",
                     "zh":"用 iPhone 搜索。音箱应出现在列表中，无需 PIN 码即可配对，并在几秒内连接成功。"}},
            {"id":"android","code":"BT-007","label":{"en":"Connection with Android","zh":"连接安卓手机"},
@@ -2344,7 +2354,8 @@ const CONFIG = {
            {"id":"mic1_echo","code":"MIC-007","skip_factory":["RHY"],"label":{"en":"MIC1 echo","zh":"麦克风 1 回声"},
             "help":{"en":"Say short words into MIC1 and turn the echo from minimum to maximum. The repetition must go from none to clearly audible, and the delay must stay within 0 to 280 ms: at maximum the echo must still follow the voice closely, not lag like a separate second voice. Anything longer than that stops sounding like reverberation and starts sounding like a fault.",
                     "zh":"对麦克风 1 说短词，并将回声从最小调到最大。重复声应从无到明显可闻，延时须在 0～280 毫秒范围内：即使调到最大，回声也应紧跟人声，而不应拖成第二个人声。超过该范围就不再像混响，而像故障。"}},
-           {"id":"mic1_reverb","code":"MIC-008","skip_factory":["RHY"],"label":{"en":"MIC1 reverb","zh":"麦克风 1 混响"},
+           {"id":"mic1_reverb","code":"MIC-008","skip_factory":["RHY"],
+            "skip":["HK-RNW212A2"],"label":{"en":"MIC1 reverb","zh":"麦克风 1 混响"},
             "help":{"en":"Speak into MIC1 and raise the reverb. The voice must gain body and depth, not repeat like the echo. Both controls must act independently.",
                     "zh":"对麦克风 1 说话并加大混响。人声应变得更有空间感和厚度，而不是像回声那样重复。两个旋钮应各自独立起作用。"}},
            {"id":"mic2_priority","code":"MIC-005","skip_factory":["RHY"],"label":{"en":"MIC2 priority button","zh":"麦克风 2 优先键"},
@@ -2356,10 +2367,12 @@ const CONFIG = {
            {"id":"mic2_echo","code":"MIC-007","skip_factory":["RHY"],"label":{"en":"MIC2 echo","zh":"麦克风 2 回声"},
             "help":{"en":"Say short words into MIC2 and turn the echo up. Same range: 0 to 280 ms.",
                     "zh":"对麦克风 2 说短词并加大回声。范围相同：0～280 毫秒。"}},
-           {"id":"mic2_reverb","code":"MIC-008","skip_factory":["RHY"],"label":{"en":"MIC2 reverb","zh":"麦克风 2 混响"},
+           {"id":"mic2_reverb","code":"MIC-008","skip_factory":["RHY"],
+            "skip":["HK-RNW212A2"],"label":{"en":"MIC2 reverb","zh":"麦克风 2 混响"},
             "help":{"en":"Speak into MIC2 and raise the reverb. Echo and reverb must act independently on this input too.",
                     "zh":"对麦克风 2 说话并加大混响。该接口上回声与混响也应各自独立起作用。"}},
-           {"id":"guitar","code":"AUD-009","skip_factory":["RHY"],"label":{"en":"Guitar volume","zh":"吉他音量"},
+           {"id":"guitar","code":"AUD-009","skip_factory":["RHY"],
+            "skip":["HK-RNW212A2"],"label":{"en":"Guitar volume","zh":"吉他音量"},
             "help":{"en":"Plug the guitar into its input and play while moving its volume control from minimum to maximum. Mark N/A if this reference has no guitar input.",
                     "zh":"将吉他插入专用接口，一边弹奏一边把吉他音量从最小调到最大。本型号没有吉他接口时标记为“不适用”。"}},
            {"skip_factory":["RHY"],
@@ -2369,7 +2382,8 @@ const CONFIG = {
            {"id":"light","code":"LED-006","skip_factory":["RHY"],"label":{"en":"Light on / off","zh":"灯光开关"},
             "help":{"en":"Press the light button several times. It must switch on and off cleanly every time, with no flicker and no LED left lit.",
                     "zh":"多次按下灯光键。每次都应干脆地开和关，不闪烁，也不应有个别灯珠残亮。"}},
-           {"id":"light_pattern","code":"LED-007","skip_factory":["RHY"],"label":{"en":"Light pattern change","zh":"灯光模式切换"},
+           {"id":"light_pattern","code":"LED-007","skip_factory":["RHY"],
+            "skip":["HK-RNW212A2"],"label":{"en":"Light pattern change","zh":"灯光模式切换"},
             "help":{"en":"Step through every light pattern and back to the first. Each one must be visibly different, with no dead LEDs in any pattern.",
                     "zh":"逐一切换所有灯光模式并回到第一个。每种模式应有明显区别，且任何模式下都不应有不亮的灯珠。"}},
            {"skip_factory":["RHY"],
@@ -2405,7 +2419,9 @@ const CONFIG = {
            {"id":"mem_treble","code":"AUD-011","skip_factory":["RHY"],"label":{"en":"Treble level is kept after power off","zh":"关机后保留高音设置"},
             "help":{"en":"Same check on the treble. Testing one level and assuming the rest is how a speaker ships remembering the bass and forgetting everything else.",
                     "zh":"对高音做同样的检查。只测一项就推断其余，正是音箱只记住低音、其他全忘的出厂原因。"}},
-           {"id":"mem_mid","code":"AUD-011","skip_factory":["RHY"],"label":{"en":"Mid level is kept after power off","zh":"关机后保留中音设置"},
+           {"id":"mem_mid","code":"AUD-011","skip_factory":["RHY"],
+            "skip":["HK-RNW212A2"],
+            "label":{"en":"Mid level is kept after power off","zh":"关机后保留中音设置"},
             "help":{"en":"Same check on the mids. Mark N/A if this reference has no mid control.",
                     "zh":"对中音做同样的检查。本型号没有中音调节时标记为“不适用”。"}},
            {"id":"mem_echo","code":"AUD-011","skip_factory":["RHY"],"label":{"en":"Echo level is kept after power off","zh":"关机后保留回声设置"},
@@ -2703,7 +2719,8 @@ const CONFIG = {
            {"id":"light","code":"LED-006","skip_factory":["RHY"],"label":{"en":"Light on / off","zh":"灯光开关"},
             "help":{"en":"Press the light button several times. It must switch on and off cleanly every time, with no flicker and no LED left lit.",
                     "zh":"多次按下灯光键。每次都应干脆地开和关，不闪烁，也不应有个别灯珠残亮。"}},
-           {"id":"light_pattern","code":"LED-007","skip_factory":["RHY"],"label":{"en":"Light pattern change","zh":"灯光模式切换"},
+           {"id":"light_pattern","code":"LED-007","skip_factory":["RHY"],
+            "skip":["HK-RNW212A2"],"label":{"en":"Light pattern change","zh":"灯光模式切换"},
             "help":{"en":"Step through every light pattern and back to the first. Each one must be visibly different, with no dead LEDs in any pattern.",
                     "zh":"逐一切换所有灯光模式并回到第一个。每种模式应有明显区别，且任何模式下都不应有不亮的灯珠。"}},
            /* Mismo bloque que en BLUETOOTH, ahora también aquí. Sólo YISION. */
@@ -5655,10 +5672,12 @@ const CONFIG = {
            {"id":"microfonos_back","label":{"en":"Microphones — back","zh":"麦克风 — 背面"},
             "help":{"en":"The opposite side, showing the switch, the battery compartment and the connector.",
                     "zh":"拍摄另一面，需拍到开关、电池仓和接头。"}},
-           {"id":"tripode_front","label":{"en":"Tripod — front","zh":"三脚架 — 正面"},
+           {"id":"tripode_front","skip":["HK-RNW212A2"],
+            "label":{"en":"Tripod — front","zh":"三脚架 — 正面"},
             "help":{"en":"The tripod assembled, seen from the front: legs, column and mounting plate.",
                     "zh":"拍摄组装好的三脚架正面：支脚、立柱和安装盘。"}},
-           {"id":"tripode_back","label":{"en":"Tripod — back","zh":"三脚架 — 背面"},
+           {"id":"tripode_back","skip":["HK-RNW212A2"],
+            "label":{"en":"Tripod — back","zh":"三脚架 — 背面"},
             "help":{"en":"The back, showing the locking knobs and the welds.",
                     "zh":"拍摄背面，需拍到锁紧旋钮和焊接部位。"}}]},
 
@@ -5820,7 +5839,11 @@ const CONFIG = {
 
         {"id":"EXT_BATTERY","optional":true,"skip_factory":["RHY"],
          "only_factory":["YIS","RHY","EAG"],
-         "skip":["HK-KAP208"],
+         /* El RNW212A2 salió en el plan 149: no admite batería externa. Estaba
+            `optional`, así que el operario podía marcarla N/A — pero ofrecer
+            «no aplica» en algo que nunca aplica es pedirle que decida cada vez
+            lo que ya sabemos, y es como se aprende a marcar N/A sin leer. */
+         "skip":["HK-KAP208","HK-RNW212A2"],
          "label":{"en":"EXTERNAL BATTERY","zh":"外置电池"},
          "steps":[
            {"en":"Switch the speaker off and disconnect it from the mains","zh":"关机并断开市电"},

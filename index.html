@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="17.1">
+<meta name="app-version" content="17.2">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -880,7 +880,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 150,
+      "plan_version": 151,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2571,7 +2571,7 @@ const CONFIG = {
            {"id":"mic1_echo","code":"MIC-007","only_factory":["YIS"],"label":{"en":"MIC1 echo","zh":"麦克风 1 回声"},
             "help":{"en":"Say short words into MIC1 and turn the echo from minimum to maximum. The repetition must go from none to clearly audible, and the delay must stay within 0 to 280 ms: at maximum the echo must still follow the voice closely, not lag like a separate second voice. Anything longer than that stops sounding like reverberation and starts sounding like a fault.",
                     "zh":"对麦克风 1 说短词，并将回声从最小调到最大。重复声应从无到明显可闻，延时须在 0～280 毫秒范围内：即使调到最大，回声也应紧跟人声，而不应拖成第二个人声。超过该范围就不再像混响，而像故障。"}},
-           {"id":"mic1_reverb","code":"MIC-008","only_factory":["YIS"],"label":{"en":"MIC1 reverb","zh":"麦克风 1 混响"},
+           {"id":"mic1_reverb","code":"MIC-008","only_factory":["YIS"],"skip":["HK-RNW212A2"],"label":{"en":"MIC1 reverb","zh":"麦克风 1 混响"},
             "help":{"en":"Speak into MIC1 and raise the reverb. The voice must gain body and depth, not repeat like the echo. Both controls must act independently.",
                     "zh":"对麦克风 1 说话并加大混响。人声应变得更有空间感和厚度，而不是像回声那样重复。两个旋钮应各自独立起作用。"}},
            {"id":"mic2_priority","code":"MIC-005","only_factory":["YIS"],"label":{"en":"MIC2 priority button","zh":"麦克风 2 优先键"},
@@ -2583,10 +2583,10 @@ const CONFIG = {
            {"id":"mic2_echo","code":"MIC-007","only_factory":["YIS"],"label":{"en":"MIC2 echo","zh":"麦克风 2 回声"},
             "help":{"en":"Say short words into MIC2 and turn the echo up. Same range: 0 to 280 ms.",
                     "zh":"对麦克风 2 说短词并加大回声。范围相同：0～280 毫秒。"}},
-           {"id":"mic2_reverb","code":"MIC-008","only_factory":["YIS"],"label":{"en":"MIC2 reverb","zh":"麦克风 2 混响"},
+           {"id":"mic2_reverb","code":"MIC-008","only_factory":["YIS"],"skip":["HK-RNW212A2"],"label":{"en":"MIC2 reverb","zh":"麦克风 2 混响"},
             "help":{"en":"Speak into MIC2 and raise the reverb. Echo and reverb must act independently on this input too.",
                     "zh":"对麦克风 2 说话并加大混响。该接口上回声与混响也应各自独立起作用。"}},
-           {"id":"guitar","code":"AUD-009","only_factory":["YIS"],"label":{"en":"Guitar volume","zh":"吉他音量"},
+           {"id":"guitar","code":"AUD-009","only_factory":["YIS"],"skip":["HK-RNW212A2"],"label":{"en":"Guitar volume","zh":"吉他音量"},
             "help":{"en":"Plug the guitar into its input and play while moving its volume control from minimum to maximum. Mark N/A if this reference has no guitar input.",
                     "zh":"将吉他插入专用接口，一边弹奏一边把吉他音量从最小调到最大。本型号没有吉他接口时标记为“不适用”。"}}]},
 
@@ -2738,7 +2738,7 @@ const CONFIG = {
            {"id":"mic1_echo","code":"MIC-007","only_factory":["YIS"],"label":{"en":"MIC1 echo","zh":"麦克风 1 回声"},
             "help":{"en":"Say short words into MIC1 and turn the echo from minimum to maximum. The repetition must go from none to clearly audible, and the delay must stay within 0 to 280 ms: at maximum the echo must still follow the voice closely, not lag like a separate second voice. Anything longer than that stops sounding like reverberation and starts sounding like a fault.",
                     "zh":"对麦克风 1 说短词，并将回声从最小调到最大。重复声应从无到明显可闻，延时须在 0～280 毫秒范围内：即使调到最大，回声也应紧跟人声，而不应拖成第二个人声。超过该范围就不再像混响，而像故障。"}},
-           {"id":"mic1_reverb","code":"MIC-008","only_factory":["YIS"],"label":{"en":"MIC1 reverb","zh":"麦克风 1 混响"},
+           {"id":"mic1_reverb","code":"MIC-008","only_factory":["YIS"],"skip":["HK-RNW212A2"],"label":{"en":"MIC1 reverb","zh":"麦克风 1 混响"},
             "help":{"en":"Speak into MIC1 and raise the reverb. The voice must gain body and depth, not repeat like the echo. Both controls must act independently.",
                     "zh":"对麦克风 1 说话并加大混响。人声应变得更有空间感和厚度，而不是像回声那样重复。两个旋钮应各自独立起作用。"}},
            {"id":"mic2_priority","code":"MIC-005","only_factory":["YIS"],"label":{"en":"MIC2 priority button","zh":"麦克风 2 优先键"},
@@ -2750,10 +2750,10 @@ const CONFIG = {
            {"id":"mic2_echo","code":"MIC-007","only_factory":["YIS"],"label":{"en":"MIC2 echo","zh":"麦克风 2 回声"},
             "help":{"en":"Say short words into MIC2 and turn the echo up. Same range: 0 to 280 ms.",
                     "zh":"对麦克风 2 说短词并加大回声。范围相同：0～280 毫秒。"}},
-           {"id":"mic2_reverb","code":"MIC-008","only_factory":["YIS"],"label":{"en":"MIC2 reverb","zh":"麦克风 2 混响"},
+           {"id":"mic2_reverb","code":"MIC-008","only_factory":["YIS"],"skip":["HK-RNW212A2"],"label":{"en":"MIC2 reverb","zh":"麦克风 2 混响"},
             "help":{"en":"Speak into MIC2 and raise the reverb. Echo and reverb must act independently on this input too.",
                     "zh":"对麦克风 2 说话并加大混响。该接口上回声与混响也应各自独立起作用。"}},
-           {"id":"guitar","code":"AUD-009","only_factory":["YIS"],"label":{"en":"Guitar volume","zh":"吉他音量"},
+           {"id":"guitar","code":"AUD-009","only_factory":["YIS"],"skip":["HK-RNW212A2"],"label":{"en":"Guitar volume","zh":"吉他音量"},
             "help":{"en":"Plug the guitar into its input and play while moving its volume control from minimum to maximum. Mark N/A if this reference has no guitar input.",
                     "zh":"将吉他插入专用接口，一边弹奏一边把吉他音量从最小调到最大。本型号没有吉他接口时标记为“不适用”。"}}]},
 

@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="17.9">
+<meta name="app-version" content="18.0">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -936,7 +936,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 158,
+      "plan_version": 159,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1608,6 +1608,7 @@ const CONFIG = {
          "label":{"en":"EXTERNAL PARTS","zh":"外观部件","es":"PARTES EXTERNAS"},
          "steps":[
            {"en":"Put the three pieces in good light, avoiding reflections","zh":"将三个部件置于光线充足处，避免反光","es":"Ponga las tres piezas con buena luz, evitando reflejos"},
+           {"en":"Weigh and measure each of the three pieces on its own","zh":"三个部件分别单独称重与测量","es":"Pese y mida cada una de las tres piezas por separado"},
            {"en":"Six faces of the cabinet, six of the column, six of the pole","zh":"箱体六面、立柱六面、支杆六面","es":"Seis caras del gabinete, seis de la columna y seis del poste"},
            {"en":"Count the screws of the grille and of the two panels","zh":"清点网罩与两块面板的螺丝","es":"Cuente los tornillos de la parrilla y de los dos paneles"},
            {"en":"Finish with one video going round everything","zh":"最后录制一段环绕全部部件的视频","es":"Termine con un video recorriendo todo"}],
@@ -1616,9 +1617,9 @@ const CONFIG = {
                 woofer. Aquí el producto ya está desempacado y sobre la mesa,
                 que es donde se pesa. */
             "section":{"en":"The weight","zh":"重量","es":"El peso"},
-            "help":{"en":"With everything unpacked, before going round the three pieces.",
-                    "zh":"在全部拆包之后、逐一检查三个部件之前进行。",
-                    "es":"Con todo ya desempacado, antes de recorrer las tres piezas."}},
+            "help":{"en":"With everything unpacked, before going round the three pieces. Each one on the scale on its own, with its own photograph: the three figures added together must come close to the net weight declared for the set.",
+                    "zh":"在全部拆包之后、逐一检查三个部件之前进行。三个部件分别单独称重并各自拍照：三者之和应接近整套的标称净重。",
+                    "es":"Con todo ya desempacado, antes de recorrer las tres piezas. Cada una sola en la báscula y con su propia foto: las tres cifras sumadas deben acercarse al peso neto declarado del conjunto."}},
            {"id":"eps_net","code":"PKG-002","photo":true,
             "sample":"caja_peso",
             "measure":{"unit":"kg","step":"0.1"},
@@ -1627,6 +1628,20 @@ const CONFIG = {
             "help":{"en":"Put the cabinet on the scale on its own: no box, no foam, no cable, no printed matter, and without the column or the pole. Photograph the scale with the reading legible and write the figure in the box.",
                     "zh":"将音箱本体单独放在秤上：不含彩盒、泡沫、线材与印刷品，也不含立柱与支杆。拍摄秤，读数须清晰可读，并将数值填入方框。",
                     "es":"Ponga la cabina sola sobre la báscula: sin caja, sin icopores, sin cable, sin impresos, y sin la columna ni el poste. Fotografíe la báscula con la lectura legible y escriba la cifra en el recuadro."}},
+           {"id":"eps_col_peso","code":"PKG-002","photo":true,
+            "measure":{"unit":"kg","step":"0.1"},
+            "label":{"en":"Net weight — column alone","zh":"净重 — 仅立柱",
+                     "es":"Peso neto — la columna sola"},
+            "help":{"en":"The column on the scale on its own, with its grille fitted and nothing else. Photograph the scale with the reading legible and write the figure in the box.",
+                    "zh":"将立柱单独放在秤上，网罩已装好，不含其他部件。拍摄秤，读数须清晰可读，并将数值填入方框。",
+                    "es":"La columna sola sobre la báscula, con su malla puesta y nada más. Fotografíe la báscula con la lectura legible y escriba la cifra en el recuadro."}},
+           {"id":"eps_pole_peso","code":"PKG-002","photo":true,
+            "measure":{"unit":"kg","step":"0.1"},
+            "label":{"en":"Net weight — pole alone","zh":"净重 — 仅支杆",
+                     "es":"Peso neto — el poste solo"},
+            "help":{"en":"The pole on the scale on its own. Photograph the scale with the reading legible and write the figure in the box.",
+                    "zh":"将支杆单独放在秤上。拍摄秤，读数须清晰可读，并将数值填入方框。",
+                    "es":"El poste solo sobre la báscula. Fotografíe la báscula con la lectura legible y escriba la cifra en el recuadro."}},
            {"section":{"en":"The cabinet","zh":"箱体","es":"El gabinete"},
             "help":{"en":"Six faces, one photograph each, in good light and without reflections. Look for scratches, dents, stains and paint defects.",
                     "zh":"六个面各拍一张照片，光线充足且避免反光。检查刮痕、凹陷、污渍与喷涂缺陷。",
@@ -1669,6 +1684,30 @@ const CONFIG = {
             "help":{"en":"The end that goes into the pole. Look at the fit and the paint round the opening.",
                     "zh":"拍摄插入支杆的一端。检查配合处与开口周围的漆面。",
                     "es":"El extremo que entra en el poste. Mire el ajuste y la pintura alrededor de la boca."}},
+           {/* Las medidas de la columna y las del poste se agregaron en el plan
+                159. El gabinete ya se medía; estas dos piezas no, y son las que
+                deciden si el conjunto armado queda a la altura declarada y si
+                entra en el master carton. La foto va en cada punto y no una
+                sola al final: una cinta sobre la pieza, con el número legible,
+                es lo que permite auditar la cifra sin volver a la fábrica. */
+            "id":"eps_col_h","code":"EXT-010","photo":true,
+            "measure":{"unit":"mm","step":"1"},
+            "label":{"en":"Column — height","zh":"立柱 — 高","es":"Columna — alto"},
+            "help":{"en":"The longest dimension, from end to end, with the grille fitted. Tape measure on the piece and the number legible in the photograph.",
+                    "zh":"在网罩已装好的状态下测量最长方向的端到端尺寸。卷尺须贴于部件上，照片中的读数须清晰可读。",
+                    "es":"La medida más larga, de extremo a extremo, con la malla puesta. La cinta sobre la pieza y el número legible en la foto."}},
+           {"id":"eps_col_w","code":"EXT-010","photo":true,
+            "measure":{"unit":"mm","step":"1"},
+            "label":{"en":"Column — width","zh":"立柱 — 宽","es":"Columna — ancho"},
+            "help":{"en":"Across the front face, at its widest point.",
+                    "zh":"测量正面最宽处。",
+                    "es":"A lo ancho de la cara frontal, en su parte más ancha."}},
+           {"id":"eps_col_d","code":"EXT-010","photo":true,
+            "measure":{"unit":"mm","step":"1"},
+            "label":{"en":"Column — depth","zh":"立柱 — 深","es":"Columna — fondo"},
+            "help":{"en":"From the front face to the back, at its deepest point.",
+                    "zh":"从正面到背面测量最深处。",
+                    "es":"De la cara frontal a la trasera, en su parte más profunda."}},
 
            {"section":{"en":"The pole","zh":"支杆","es":"El poste"},
             "help":{"en":"The tube that joins the cabinet to the column. Six faces, one photograph each, looking at the thread, the pin and the paint.",
@@ -1692,6 +1731,22 @@ const CONFIG = {
             "help":{"en":"The end that goes into the cabinet.",
                     "zh":"拍摄插入箱体的一端。",
                     "es":"El extremo que entra en el gabinete."}},
+           {/* Dos medidas y no tres: el poste es un tubo. El largo es lo que
+                fija la altura del conjunto armado y el diámetro es lo que tiene
+                que coincidir con la boca del gabinete y con la de la columna —
+                un milímetro de más y no entra, uno de menos y cabecea. */
+            "id":"eps_pole_len","code":"EXT-010","photo":true,
+            "measure":{"unit":"mm","step":"1"},
+            "label":{"en":"Pole — length","zh":"支杆 — 长","es":"Poste — largo"},
+            "help":{"en":"End to end, including the thread or the pin. Tape measure on the piece and the number legible in the photograph.",
+                    "zh":"端到端测量，含螺纹或插销。卷尺须贴于部件上，照片中的读数须清晰可读。",
+                    "es":"De extremo a extremo, incluyendo la rosca o el pasador. La cinta sobre la pieza y el número legible en la foto."}},
+           {"id":"eps_pole_dia","code":"EXT-010","photo":true,
+            "measure":{"unit":"mm","step":"0.1"},
+            "label":{"en":"Pole — outside diameter","zh":"支杆 — 外径","es":"Poste — diámetro exterior"},
+            "help":{"en":"Measure the tube across the middle, away from the ends. Caliper if there is one; tape measure if not.",
+                    "zh":"在管身中部测量，避开两端。有卡尺用卡尺，无卡尺则用卷尺。",
+                    "es":"Mida el tubo por la mitad, lejos de los extremos. Calibrador si hay; cinta métrica si no."}},
 
            {"section":{"en":"Panels and controls","zh":"面板与控制件","es":"Paneles y controles"},
             "help":{"en":"The Epsilon carries two panels: the one with the knobs and the one with the fan. Each gets its own photograph. Read the voltage selector with the cabinet unplugged, before connecting it to anything.",
@@ -3099,7 +3154,7 @@ const CONFIG = {
                     "zh":"读取绝缘层上印刷的线径，或直接测量导体。应与低音炮所用线径一致。",
                     "es":"Lea el calibre impreso en el aislante, o mida el conductor. Debe ser el mismo calibre que se usa en los bajos."}},
            {"id":"eps15_fusibles","code":"PWR-010","photo":true,
-            "label":{"en":"Fuses — rating and holder","zh":"保险丝 — 规格与座","es":"Fusibles — valor y portafusible"},
+            "label":{"en":"Fuse — rating and holder","zh":"保险丝 — 规格与座","es":"Fusible — valor y portafusible"},
             "help":{"en":"Photograph the fuse with its rating readable. It must match what the board says next to the holder, and the holder must hold it without play.",
                     "zh":"拍摄保险丝，其规格须清晰可读，应与电路板上标注一致；保险丝座应夹持牢固、无松动。",
                     "es":"Fotografíe el fusible con su valor legible. Debe coincidir con lo que dice la tarjeta junto al portafusible, y el portafusible debe sujetarlo sin juego."}},
@@ -6516,6 +6571,7 @@ const CONFIG = {
                 habría guardado como 8250. Dos recuadros, cada uno con su unidad,
                 y el dato sale comparable de una unidad a otra. */
             "id":"fuses_ref","only_factory":["RHY"],
+            "skip":["HK-EPS112A1","HK-EPS115A1"],
             "sample":"bas_fusibles",
             "measure":{"unit":"A","step":"0.1"},
             "label":{"en":"Fuses — there are two, and the current","zh":"保险丝 — 共两只，及其电流","es":"Fusibles — son dos, y la corriente"},
@@ -6523,11 +6579,31 @@ const CONFIG = {
                     "zh":"确认共有两只保险丝，并将两只拍在同一画面内，距离足够近以便读出每只端帽上的印字。在方框中填写电流——例如 8。两只保险丝的规格须一致。",
                     "es":"Verifique que hay dos fusibles y fotografíe los dos en la misma foto, lo bastante cerca para leer lo impreso en cada casquillo. Escriba la corriente en el recuadro — por ejemplo 8. Los dos fusibles deben ser del mismo valor."}},
            {"id":"fuses_volt","only_factory":["RHY"],
+            "skip":["HK-EPS112A1","HK-EPS115A1"],
             "measure":{"unit":"V","step":"1"},
             "label":{"en":"Fuses — voltage","zh":"保险丝 — 电压","es":"Fusibles — voltaje"},
             "help":{"en":"The voltage printed on the same caps — for example 250. It is in the photograph above; no second picture is needed.",
                     "zh":"填写同一端帽上印制的电压——例如 250。上一项的照片已包含该信息，无需另行拍照。",
                     "es":"El voltaje impreso en esos mismos casquillos — por ejemplo 250. Ya está en la foto de arriba; no hace falta una segunda."}},
+           {/* El Epsilon lleva un solo fusible, no dos. Hasta el plan 159 corría
+                los dos puntos de arriba, que le pedían al operario verificar
+                que hubiera dos y fotografiarlos juntos: o reprobaba una cabina
+                correcta, o —lo más probable— marcaba CONFORME sin mirar, que es
+                peor, porque entonces el dato del amperaje deja de valer. */
+            "id":"fuse_ref_eps","only_factory":["RHY"],
+            "only":["HK-EPS112A1","HK-EPS115A1"],
+            "measure":{"unit":"A","step":"0.1"},
+            "label":{"en":"Fuse — there is one, and the current","zh":"保险丝 — 仅一只，及其电流","es":"Fusible — es uno, y la corriente"},
+            "help":{"en":"The Epsilon carries a single fuse. Photograph it close enough to read what is printed on the cap and write the current in the box — for example 8.",
+                    "zh":"Epsilon 仅配备一只保险丝。拍摄时距离足够近以便读出端帽上的印字，并在方框中填写电流——例如 8。",
+                    "es":"El Epsilon lleva un solo fusible. Fotografíelo lo bastante cerca para leer lo impreso en el casquillo y escriba la corriente en el recuadro — por ejemplo 8."}},
+           {"id":"fuse_volt_eps","only_factory":["RHY"],
+            "only":["HK-EPS112A1","HK-EPS115A1"],
+            "measure":{"unit":"V","step":"1"},
+            "label":{"en":"Fuse — voltage","zh":"保险丝 — 电压","es":"Fusible — voltaje"},
+            "help":{"en":"The voltage printed on the same cap — for example 250. It is in the photograph above; no second picture is needed.",
+                    "zh":"填写同一端帽上印制的电压——例如 250。上一项的照片已包含该信息，无需另行拍照。",
+                    "es":"El voltaje impreso en ese mismo casquillo — por ejemplo 250. Ya está en la foto de arriba; no hace falta una segunda."}},
            {"id":"volt_pins","only_factory":["RHY"],
             "sample":"bas_selector_pines",
             "label":{"en":"Voltage selector — pins soldered","zh":"电压选择开关 — 引脚已焊接","es":"Selector de voltaje — pines soldados"},

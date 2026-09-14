@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="18.0">
+<meta name="app-version" content="18.1">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -936,7 +936,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 159,
+      "plan_version": 160,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2282,7 +2282,12 @@ const CONFIG = {
         {/* RHYME's cabinets carry no SD slot, so the test is filtered out rather
               than left for the inspector to mark N/A thirty times. */
          "id":"SD","optional":true,"only_factory":["YIS","RHY","EAG"],
-         "skip_factory":["RHY"],"skip":["HK-KAP208"],
+         /* El SKA108A1 salió en el plan 160: no tiene ranura SD. Se retira la
+            prueba entera y no se deja en N/A, por lo mismo que se hizo con el
+            texto SD de la pantalla y con la tecla SD del control — abajo en
+            este mismo archivo—: una prueba que no aplica y que hay que
+            responder en cada unidad termina marcada sin mirar. */
+         "skip_factory":["RHY"],"skip":["HK-KAP208","HK-SKA108A1"],
          "label":{"en":"SD CARD","zh":"SD 卡"},
          "steps":[
            {"en":"Insert the HOKLAN test SD card into the speaker","zh":"将 HOKLAN 测试 SD 卡插入音箱"},
@@ -3631,6 +3636,7 @@ const CONFIG = {
                 the test itself rather than left as an N/A the inspector has to
                 answer on every unit. */
             "id":"word_sd","code":"DSP-007","photo":true,"skip_factory":["RHY"],
+            "skip":["HK-SKA108A1"],
             "label":{"en":"SD — text correct on the display","zh":"SD — 屏显文字正确"},
             "help":{"en":"With the card inserted, select SD mode, read the display and photograph it. Mark N/A if this reference has no SD slot.",
                     "zh":"插入 SD 卡后切换到 SD 模式，阅读显示内容并拍照。本型号没有 SD 卡槽时标记为“不适用”。"}},
@@ -3700,6 +3706,7 @@ const CONFIG = {
             "help":{"en":"Press it from another source. The speaker must switch to Bluetooth and become discoverable or reconnect to the phone.",
                     "zh":"在其他音源下按此键，音箱应切到蓝牙并可被搜索或自动回连手机。"}},
            {"id":"src_sd","code":"RMT-006","skip_factory":["RHY"],
+            "skip":["HK-SKA108A1"],
             "label":{"en":"SD","zh":"SD 卡"},
             "help":{"en":"With the card inserted, press it from another source. Mark N/A if this reference has no SD slot.",
                     "zh":"插着 SD 卡时从其他音源按此键。本型号没有 SD 卡槽时标记为“不适用”。"}},

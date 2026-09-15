@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="18.2">
+<meta name="app-version" content="18.3">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -936,7 +936,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 161,
+      "plan_version": 162,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2612,11 +2612,19 @@ const CONFIG = {
             "help":{"en":"The module fitted, and a station chosen for being weak. Do not use a strong station.",
                     "zh":"装好模块，并选择一个信号弱的电台。不要使用强台。",
                     "es":"El módulo instalado, y una emisora elegida por ser débil. No use una emisora fuerte."}},
-           {"id":"rx_fitted","code":"FM-010",
+           {/* Con fotografía desde el plan 162. El encabezado de esta prueba ya
+                decía por qué existe: lo que se aprueba es una muestra, pero el
+                proveedor del módulo cambia entre lotes y el lote es lo que se
+                embarca. Sin una foto, «instalado como sale de fábrica» es una
+                afirmación que nadie puede contrastar después; con ella queda
+                registrado qué módulo traía ese lote y cómo iba tendida la
+                antena — que es justo lo que no se pudo reconstruir cuando el
+                receptor del PHI resultó traer fuente conmutada. */
+            "id":"rx_fitted","code":"FM-010","photo":true,
             "label":{"en":"Receiver module fitted as it ships","zh":"接收模块按出厂状态装好","es":"Módulo receptor instalado como sale de fábrica"},
-            "help":{"en":"In its place inside the speaker, with its own wiring and its antenna routed as production routes it. A module held in the hand beside the cabinet is a different measurement.",
-                    "zh":"装在机内应有的位置，线束与天线走向与量产一致。用手拿在箱体旁边测得的是另一回事。",
-                    "es":"En su sitio dentro del parlante, con su cableado y su antena tendida como la tiende producción. Un módulo sostenido en la mano junto a la cabina es otra medición."}},
+            "help":{"en":"In its place inside the speaker, with its own wiring and its antenna routed as production routes it. A module held in the hand beside the cabinet is a different measurement. Photograph it where it sits, with the cabinet open: the whole module, its marking or label legible if it carries one, the connector that feeds it, and the run of the antenna. One picture; if the marking cannot be read in it, add a second one closer.",
+                    "zh":"装在机内应有的位置，线束与天线走向与量产一致。用手拿在箱体旁边测得的是另一回事。请在开箱状态下于模块所在位置拍照：需拍到整个模块、其丝印或标签（如有，须清晰可读）、供电接头以及天线走向。拍一张即可；若丝印在该照片中无法辨认，再补拍一张近照。",
+                    "es":"En su sitio dentro del parlante, con su cableado y su antena tendida como la tiende producción. Un módulo sostenido en la mano junto a la cabina es otra medición. Fotografíelo donde está, con la cabina abierta: el módulo completo, su marcación o etiqueta legible si la trae, el conector que lo alimenta y el recorrido de la antena. Una foto; si en ella no se alcanza a leer la marcación, agregue una segunda más cerca."}},
            {"id":"rx_station","code":"FM-002","measure":{"unit":"MHz","step":"0.1"},
             "label":{"en":"Weak station tuned — frequency","zh":"已调到的弱信号电台 — 频率","es":"Emisora débil sintonizada — frecuencia"},
             "help":{"en":"Tune a station that comes in weak but intelligible, and write its frequency in the box.",

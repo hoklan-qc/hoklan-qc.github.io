@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="18.1">
+<meta name="app-version" content="18.2">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -936,7 +936,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 160,
+      "plan_version": 161,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -11040,11 +11040,38 @@ const normLang = c => {
        : c.indexOf("es") === 0 ? "es"
        : c.indexOf("en") === 0 ? "en" : "";
 };
-/* Han characters are the one case that can be settled without asking. */
+/* Spanish against English, decided here and not by guessing.
+
+   Hasta el plan 161 esto no existía: cuando Google no respondía —que es lo
+   normal desde la red de las fábricas en China, como dice el comentario de
+   arriba— el idioma de la nota quedaba en blanco y el servicio de respaldo
+   recibía un par de idiomas inventado. Una nota escrita en español se le
+   mandaba a MyMemory declarada como inglés y pidiéndole español, y lo que
+   volvía era la misma frase con palabras cambiadas por su falso amigo:
+   «se escucha un golpeteo en los graves» salía impresa en el informe como
+   «se escucha un golpeteo en las tumbas». Eso es lo que Producto encontró.
+
+   Las dos listas sólo llevan palabras que existen en un idioma y no en el
+   otro: «no» y «a» están en los dos y por eso no están en ninguna. Cuando el
+   recuento empata, esta función devuelve cadena vacía y no adivina — sin
+   idioma de origen no se llama al respaldo, que es lo que evita el disparate. */
+const ES_HINT = /(^|\s)(el|la|los|las|un|una|del|que|con|se|por|para|est[áa]|est[áa]n|m[áa]s|pero|sin|como|cuando|desde|hasta|muy|esta|este|esto|hay|son|fue|tiene|debe|puede|hace|toda|bien|nada|tambi[ée]n|as[íi]|aunque|al|su|sus|lo|le|les|ya|s[íi])(?=\s|$|[.,;:!?¿¡])/gi;
+const EN_HINT = /(^|\s)(the|and|is|are|was|were|with|without|not|for|of|to|it|this|that|these|those|there|has|have|does|do|can|must|should|but|when|from|after|before|only|also|very|all|its|on|at|by|be|been|they|we|you)(?=\s|$|[.,;:!?])/gi;
+function guessLatin(t){
+  /* Una tilde, una eñe o un signo de apertura zanjan el asunto solos. */
+  if(/[áéíóúñü¿¡]/i.test(t)) return "es";
+  const es = (t.match(ES_HINT) || []).length;
+  const en = (t.match(EN_HINT) || []).length;
+  return es === en ? "" : (es > en ? "es" : "en");
+}
+/* Han characters are the one case that can be settled without asking. What the
+   translator itself reported wins over the guess; the guess only fills the hole
+   that the translator leaves when it could not be reached. */
 function srcLangOf(text){
   const t = String(text || "").trim();
   if(!t) return "";
-  return TR_SRC[t] || (hasCJK(t) ? "zh" : "");
+  if(TR_SRC[t]) return TR_SRC[t];
+  return hasCJK(t) ? "zh" : guessLatin(t);
 }
 
 async function translateTo(text, target){
@@ -11068,13 +11095,15 @@ async function translateTo(text, target){
       if(got) TR_SRC[t] = got;
     }
   }catch(e){}
-  if(!out){
+  /* This service cannot auto-detect, so it is only usable when the source
+     language is actually known. Two guards, and both matter: without a source
+     it is not called at all —better an honest «translation unavailable» than a
+     sentence nobody wrote— and it is never asked to translate a note into the
+     language it is already in, which is what produced the mangled Spanish. */
+  const from = srcLangOf(t);
+  if(!out && from && from !== target){
     try{
-      // This service cannot auto-detect, so the source is whatever we already
-      // learned, and failing that a guess: Chinese if there are Han characters,
-      // otherwise one of the two Latin ones that is not the target.
-      const src = TR_API[srcLangOf(t)] ||
-        (hasCJK(t) ? "zh-CN" : (target === "en" ? "es" : "en"));
+      const src = TR_API[from];
       const res = await fetch("https://api.mymemory.translated.net/get?langpair=" +
         src + "|" + (TR_API[target] || target) +
         "&q=" + encodeURIComponent(t.slice(0,480)));
@@ -12110,7 +12139,32 @@ function reportHtml(){
     <div class="bnr-r"><span>${tr("overall")}</span><b style="color:${colour}">${verdictText(v)}</b></div>
   </div>`;
 
-  let h = `<!DOCTYPE html><html lang="${LANG==="zh"?"zh-CN":"en"}"><head><meta charset="utf-8">
+  /* El idioma que se declara aquí es el del informe, y no siempre «en».
+
+     Hasta el plan 161 esta línea rotulaba como inglés todo lo que no fuera
+     chino, así que un informe en español salía declarado en inglés. El
+     navegador le cree al rótulo y no al texto: Chrome, configurado para
+     traducir del inglés al español como está la mayoría de los equipos aquí,
+     tomaba un documento que ya estaba en español y lo «traducía» del inglés
+     al español. Lo que llegaba al informe firmado:
+
+       SD                  ->  DAKOTA DEL SUR
+       Carpeta siguiente   ->  Alfombra siguiente
+       nivel de graves     ->  nivel de tumbas
+       VOICE OUT           ->  HABLA FUERA
+
+     Cada palabra que se parecía a una inglesa quedaba cambiada por su falso
+     amigo. Producto lo encontró en un informe de control remoto.
+
+     Dos medidas. La primera es decir la verdad: se declara el idioma en el que
+     el documento está escrito de verdad, y con eso Chrome ya no ofrece
+     traducir un informe en español al español. La segunda es translate="no"
+     más la meta de notranslate, que se lo prohíben aunque alguien se lo pida a
+     mano: este documento se firma, se emite en tres idiomas a la vez, y
+     ninguno de ellos puede quedar a merced de un traductor automático que
+     reescribe el registro de calidad. */
+  let h = `<!DOCTYPE html><html lang="${LANG==="zh"?"zh-CN":LANG}" translate="no"><head><meta charset="utf-8">
+<meta name="google" content="notranslate">
 <title>QC ${esc(S.testId)} ${esc(S.model)}</title><style>
 *{box-sizing:border-box}
 /* El fondo blanco es explícito a propósito. Sin él el lienzo queda transparente

@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="18.3">
+<meta name="app-version" content="18.4">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -222,6 +222,19 @@ button:active{transform:scale(.99)}
   padding:4px 10px;border-radius:8px;font-size:11.5px;letter-spacing:.5px;
   background:#2a2413;border:1px solid #6b5320;color:var(--amber);
   font-family:inherit;line-height:1.2}
+/* El motivo del N/A. Ámbar y no rojo: un N/A no es un defecto, es una prueba
+   que no aplica, y pintarlo del color de las fallas haría que un informe
+   correcto pareciera lleno de problemas. */
+.pna{margin:8px 0 2px;padding:10px 12px;border-left:3px solid var(--amber);
+  border-radius:0;background:rgba(245,185,66,.10)}
+.pna-h{font-size:11.5px;letter-spacing:.6px;color:var(--amber);margin-bottom:7px}
+.pna-h span{color:var(--muted);letter-spacing:0}
+.pna textarea{border-color:#6b5320}
+.pna-w{margin-top:7px;font-size:12px;color:var(--amber);line-height:1.5}
+.na-card{border-left:3px solid var(--amber)}
+.na-card label{color:var(--amber)}
+.na-card .na-req{color:var(--muted)}
+.na-card textarea{border-color:#6b5320}
 .na-test.on{background:var(--amber);border-color:var(--amber);color:#2a2413;
   font-weight:700}
 /* What the assignment code found, right under the field it was typed into. */
@@ -936,7 +949,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 162,
+      "plan_version": 163,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -8967,6 +8980,12 @@ const T = {
   fail_ready:"✓ Evidence complete. Carry on with the remaining points.",
   n_photos:"%n photo(s)", n_videos:"%n video(s)",
   a_fail_evidence:"These failed points still need a photo and a description:",
+  na_why:"WHY IT DOES NOT APPLY", na_why_req:"required",
+  na_why_ph:"What does this product not have, that makes this test impossible?",
+  na_why_required:"Write why it does not apply. You cannot continue without it.",
+  na_why_ready:"✓ Reason recorded.",
+  a_na_why:"Write why this test does not apply to this product before continuing.",
+  a_na_why_points:"These points are marked N/A and still need a reason:",
   tab_factory:"FACTORY TESTS", tab_admin:"ADMIN",
   to_start:"← START SCREEN",
   admin_refs_hint:"%n references. Tap one to choose which tests to run.",
@@ -9245,6 +9264,12 @@ const T = {
   fail_ready:"✓ Evidencia completa. Continúe con los puntos restantes.",
   n_photos:"%n foto(s)", n_videos:"%n video(s)",
   a_fail_evidence:"Estos puntos fallidos aún necesitan foto y descripción:",
+  na_why:"POR QUÉ NO APLICA", na_why_req:"obligatorio",
+  na_why_ph:"¿Qué no trae este producto, que hace imposible esta prueba?",
+  na_why_required:"Escriba por qué no aplica. No puede continuar sin eso.",
+  na_why_ready:"✓ Motivo registrado.",
+  a_na_why:"Escriba por qué esta prueba no aplica a este producto antes de continuar.",
+  a_na_why_points:"Estos puntos están en N/A y todavía les falta el motivo:",
   tab_factory:"PRUEBAS FÁBRICA", tab_admin:"ADMIN",
   to_start:"← PANTALLA INICIAL",
   admin_refs_hint:"%n referencias. Toque una para elegir qué pruebas ejecutar.",
@@ -9515,6 +9540,12 @@ const T = {
   fail_ready:"✓ 证据已完整，可继续检查其余项目。",
   n_photos:"%n 张照片", n_videos:"%n 段视频",
   a_fail_evidence:"以下异常项仍缺少照片或说明：",
+  na_why:"为何不适用", na_why_req:"必填",
+  na_why_ph:"本产品缺少什么配置，导致该测试无法进行？",
+  na_why_required:"请填写不适用的原因，未填写无法继续。",
+  na_why_ready:"✓ 原因已记录。",
+  a_na_why:"请先填写本测试对该产品不适用的原因，然后继续。",
+  a_na_why_points:"以下检查项已标记为不适用，但尚未填写原因：",
   tab_factory:"工厂测试", tab_admin:"管理",
   to_start:"← 返回首页",
   admin_refs_hint:"共 %n 个型号。点击其中一个以选择要执行的测试。",
@@ -10393,6 +10424,10 @@ function secNeedsWork(sec){
     return sec.points.some(p => {
       if(ANSWERED.indexOf(r.points[p.id]) < 0) return true;
       if(failOpen(r, p)) return true;
+      /* Antes del corte por N/A de la línea siguiente: un punto en N/A al que
+         todavía le falta el motivo sigue debiendo algo, y si la subsección se
+         plegara el operario no vería el recuadro que NEXT le va a exigir. */
+      if(naOpen(r, p)) return true;
       if(valueMissing(r, p)) return true;
       if(r.points[p.id] === "NA") return false;
       const t = current();
@@ -11209,6 +11244,9 @@ function commentTyped(text){
   const r = row(0);
   r.comment = text;
   save();
+  /* Cuando la observación es el motivo obligatorio de un N/A, el botón depende
+     de ella. Se refresca aquí y no con un render, que cerraría el teclado. */
+  syncReady();
   queueTr("comment", 0, null);
 }
 function queueTr(kind, u, pointId){
@@ -11556,6 +11594,22 @@ function nextTest(){
       goToGap(0, noNote[0].id, "photos");
       return;
     }
+    /* El motivo del N/A, igual que en las pruebas de lista. Aquí sólo hay una
+       fila —estas pruebas documentan el embarque, no cada unidad—, así que la
+       vuelta por `allUnits` no hace falta. */
+    if(naTestOpen(t)){
+      alert(tr("a_na_why"));
+      const c = document.getElementById("comment");
+      if(c){ scrollToEl(c); try{ c.focus(); }catch(e){} }
+      return;
+    }
+    const noWhy = realPoints(t).filter(p => naOpen(r, p));
+    if(noWhy.length){
+      alert(tr("a_na_why_points") + "\n\n" +
+        noWhy.slice(0,6).map(p => "· " + pLab(p)).join("\n"));
+      goToGap(0, noWhy[0].id, "photos");
+      return;
+    }
     const failed = realPoints(t).filter(p => r.points[p.id] === "FAIL");
     const cTr = row(0).commentTr, cFor = row(0).commentTrFor;
     allUnits().forEach(u => {
@@ -11604,6 +11658,29 @@ function nextTest(){
       gaps.slice(0,6).map(s => "· " + s).join("\n") +
       (gaps.length > 6 ? "\n" + fmt("a_and_more",{n:gaps.length-6}) : ""));
     goToGap(firstGap.u, firstGap.id, "fail");
+    return;
+  }
+
+  /* El motivo del N/A. Va detrás de las fallas y delante de las fotos: una
+     falla sin describir es más urgente, y un punto en N/A no debe fotos. */
+  if(naTestOpen(t)){
+    alert(tr("a_na_why"));
+    const c = document.getElementById("comment");
+    if(c){ scrollToEl(c); try{ c.focus(); }catch(e){} }
+    return;
+  }
+  const naGaps = [];
+  let firstNA = null;
+  realPoints(t).forEach(p => allUnits().forEach(u => {
+    if(!naOpen(row(u), p)) return;
+    naGaps.push((S.units>1 ? fmt("speaker_n",{n:u+1}) + " · " : "") + pLab(p));
+    if(!firstNA) firstNA = {u, id:p.id};
+  }));
+  if(naGaps.length){
+    alert(tr("a_na_why_points") + "\n\n" +
+      naGaps.slice(0,6).map(s => "· " + s).join("\n") +
+      (naGaps.length > 6 ? "\n" + fmt("a_and_more",{n:naGaps.length-6}) : ""));
+    goToGap(firstNA.u, firstNA.id, "fail");
     return;
   }
 
@@ -15814,6 +15891,23 @@ function pointRow(p, u, showTag){
         evOk?tr("fail_ready"):tr("fail_required")}</div>
     </div>` : "";
 
+  /* La misma caja que la de una falla, en ámbar y sin cámara: lo que se pide
+     aquí es una frase, no una prueba gráfica. Sólo aparece cuando el punto se
+     marcó N/A suelto; si la prueba entera está en N/A, el motivo se escribe una
+     vez en la cabecera y esta caja no sale en ninguno de sus puntos. */
+  const naYa = !!(note || "").trim();
+  const naBox = (naWhy() && v === "NA" && !allNA(enPrueba)) ? `
+    <div class="pna" id="pna_${id}">
+      <div class="pna-h">${tr("na_why")} · <span>${tr("na_why_req")}</span>${
+        showTag ? " · " + fmt("speaker_n",{n:u+1}) : ""}</div>
+      <textarea placeholder="${tr("na_why_ph")}"
+        oninput="noteTyped(${u},'${p.id}', this.value)">${esc(note)}</textarea>
+      <div id="en_na_${id}" class="en-line${noteEn?"":" hidden"}">${
+        noteEn?esc(noteEn):""}</div>
+      <div id="pnaw_${id}" class="${naYa?"pf-ok":"pna-w"}">${
+        naYa?tr("na_why_ready"):tr("na_why_required")}</div>
+    </div>` : "";
+
   return `<div class="pt" id="pt_${id}">
       ${showTag?`<u>${fmt("speaker_n",{n:u+1})}</u>`:""}
       ${p.tag?`<b class="ctl">${esc(p.tag)}</b>`:""}
@@ -15828,7 +15922,7 @@ function pointRow(p, u, showTag){
             salida que no existe. */""}
       ${p.must?"":`<button class="na-btn ${v==="NA"?"on-n":""}" onclick="setPoint(${u},'${p.id}','NA')"
         title="${tr("na_title")}">${tr("na")}</button>`}</div>
-    ${shotBox}${fail}${fold}`;
+    ${shotBox}${fail}${fold}${naBox}`;
 }
 
 function renderTest(){
@@ -15854,11 +15948,15 @@ function renderTest(){
   const needsVideo = missingEvidence(0).video;
   // A failure without its photo and its note is as blocking as an unanswered
   // point, so the Next button has to dim for it too.
-  let openFails = 0;
+  let openFails = 0, openNA = 0;
   allUnits().forEach(u => realPoints(t).forEach(p => {
     if(failOpen(row(u), p)) openFails++;
+    if(naOpen(row(u), p)) openNA++;
   }));
+  // Un N/A sin motivo apaga el botón igual que una falla sin foto: las dos son
+  // cosas que NEXT va a rechazar, y el botón tiene que decirlo antes.
   const ready = pending === 0 && !needsPhoto && !needsVideo && openFails === 0
+    && openNA === 0 && !naTestOpen(t)
     && pointShotsMissing(t) === 0 && pointValuesMissing(t) === 0;
   const many = S.units > 1;
 
@@ -15971,13 +16069,26 @@ function renderTest(){
         : needsVideo ? tr("need_video")
         : (many ? tr("need_photo_n") : tr("need_photo"))}</div>`:""}
     </div>`}
-    <div class="card">
+    ${/* La misma tarjeta con dos caras. Cuando la prueba entera está en N/A y la
+          fábrica es YISION, la observación deja de ser opcional y pasa a ser el
+          motivo: mismo campo, mismo destino en el informe, otro rótulo y otro
+          color. Un campo nuevo habría duplicado traducción, ficha y CSV. */""}
+    ${naWhy() && naTest ? `<div class="card na-card">
+      <label style="margin-top:0">${tr("na_why")}
+        <span class="na-req">· ${tr("na_why_req")}</span></label>
+      <textarea id="comment" placeholder="${tr("na_why_ph")}"
+        oninput="commentTyped(this.value)">${esc(shared.comment)}</textarea>
+      <div id="en_comment" class="en-line${sharedEn?"":" hidden"}">${
+        sharedEn?esc(sharedEn):""}</div>
+      <div class="${(shared.comment||"").trim()?"pf-ok":"pna-w"}">${
+        (shared.comment||"").trim()?tr("na_why_ready"):tr("na_why_required")}</div>
+    </div>` : `<div class="card">
       <label style="margin-top:0">${tr("notes")} ${tr("optional")}</label>
       <textarea id="comment" placeholder="${tr("notes_ph")}"
         oninput="commentTyped(this.value)">${esc(shared.comment)}</textarea>
       <div id="en_comment" class="en-line${sharedEn?"":" hidden"}">${
         sharedEn?esc(sharedEn):""}</div>
-    </div>
+    </div>`}
     ${abortBlock()}`;
 
   const pend = !!testLong(t) && pendingCount() > 0 && done + 1 < total;
@@ -16041,6 +16152,30 @@ function naSection(safe){
    that depend on that note are patched in place instead. */
 const failOpen = (r,p) => r.points[p.id] === "FAIL" &&
   (shotsFor(r,p.id).length === 0 || !((r.notes && r.notes[p.id]) || "").trim());
+
+/* El motivo del N/A · YISION, plan 163.
+
+   Un N/A mudo no es un dato: el informe dice que la prueba no se hizo y nadie
+   puede saber si fue porque el producto no trae la función o porque el equipo
+   no estaba. Producto pidió que en YISION no se pueda dejar así.
+
+   Dónde se guarda el motivo: en los campos que ya existen. El de la prueba
+   entera es la observación de la prueba, y el de un punto es la observación de
+   ese punto. Los dos ya viajan al informe, a la ficha y al CSV, y los dos ya se
+   traducen a los tres idiomas — inventar un campo nuevo habría significado
+   repetir esas cuatro cosas para ganar nada.
+
+   La regla de arriba: si la prueba entera está en N/A, el motivo de la prueba
+   cubre todos sus puntos y no se pide uno por punto. Pedir dieciocho motivos
+   idénticos es la forma más segura de que el operario escriba «no aplica»
+   dieciocho veces y el dato deje de valer. El motivo por punto sólo se exige
+   cuando el punto se marca suelto dentro de una prueba que sí se está
+   haciendo, que es cuando de verdad hay algo que explicar. */
+const naWhy = () => (enGolden() ? fabricaReal(S.model) : S.factory) === "YIS";
+const naOpen = (r,p) => naWhy() && r.points[p.id] === "NA" && !allNA(current()) &&
+  !((r.notes && r.notes[p.id]) || "").trim();
+/* La prueba entera en N/A y sin una palabra que lo explique. */
+const naTestOpen = t => naWhy() && allNA(t) && !((row(0).comment) || "").trim();
 
 /* The evidence every test has to be left with: one photo *and* one clip of it
    being run. Both are demanded because they answer different questions — the
@@ -16145,6 +16280,14 @@ function syncFail(u, pointId){
     box.className = ok ? "pf-ok" : "pf-w";
     box.textContent = ok ? tr("fail_ready") : tr("fail_required");
   }
+  /* Lo mismo para el recuadro del motivo del N/A, y por la misma razón: se
+     parchea en sitio porque un render cerraría el teclado del teléfono. */
+  const naB = document.getElementById("pnaw_" + u + "_" + pointId);
+  if(p && naB){
+    const ok = !naOpen(row(u), p);
+    naB.className = ok ? "pf-ok" : "pna-w";
+    naB.textContent = ok ? tr("na_why_ready") : tr("na_why_required");
+  }
 
   const hint = document.getElementById("hint");
   if(hint) hint.innerHTML = hintHtml(t);
@@ -16173,11 +16316,17 @@ function syncReady(){
        ((!noNA(t) || allNA(t)) && r.points[p.id] === "NA"))
       && !valueMissing(r, p)
       && ANSWERED.indexOf(r.points[p.id]) >= 0
-      && !(r.points[p.id] === "FAIL" && !((r.notes && r.notes[p.id] || "").trim())));
+      && !(r.points[p.id] === "FAIL" && !((r.notes && r.notes[p.id] || "").trim()))
+      && !naOpen(r, p));
+    ready = ready && !naTestOpen(t);
   } else {
+    let abiertos = 0;
+    allUnits().forEach(u => realPoints(t).forEach(p => {
+      if(naOpen(row(u), p)) abiertos++;
+    }));
     ready = pendingCount() === 0 && evidenceComplete() &&
       openFailCount(t) === 0 && pointShotsMissing(t) === 0 &&
-      pointValuesMissing(t) === 0;
+      pointValuesMissing(t) === 0 && abiertos === 0 && !naTestOpen(t);
   }
   btn.style.opacity = ready ? "" : ".5";
 }
@@ -16295,13 +16444,22 @@ function renderPhotoTest(t, r, done, total){
         <b>${tr("na")} · ${esc(tr("na_folded_t"))}</b>
         <span>${fmt("na_folded",{n:items.length})}</span>
       </div>` : rows}
-    <div class="card">
+    ${naWhy() && allNA(t) ? `<div class="card na-card">
+      <label style="margin-top:0">${tr("na_why")}
+        <span class="na-req">· ${tr("na_why_req")}</span></label>
+      <textarea id="comment" placeholder="${tr("na_why_ph")}"
+        oninput="commentTyped(this.value)">${esc(r.comment)}</textarea>
+      <div id="en_comment" class="en-line${rEn?"":" hidden"}">${
+        rEn?esc(rEn):""}</div>
+      <div class="${(r.comment||"").trim()?"pf-ok":"pna-w"}">${
+        (r.comment||"").trim()?tr("na_why_ready"):tr("na_why_required")}</div>
+    </div>` : `<div class="card">
       <label style="margin-top:0">${tr("notes")} ${tr("optional")}</label>
       <textarea id="comment" placeholder="${tr("notes_ph")}"
         oninput="commentTyped(this.value)">${esc(r.comment)}</textarea>
       <div id="en_comment" class="en-line${rEn?"":" hidden"}">${
         rEn?esc(rEn):""}</div>
-    </div>
+    </div>`}
     ${abortBlock()}`;
 
   actions.innerHTML = `

@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="18.5">
+<meta name="app-version" content="18.7">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -233,6 +233,15 @@ button:active{transform:scale(.99)}
 .pna-w{margin-top:7px;font-size:12px;color:var(--amber);line-height:1.5}
 /* La salida, separada por una línea del recuadro que la pide. Apagada y no
    ámbar: es la excepción, no lo que se espera que haga el operario. */
+/* El motivo ya escrito, plegado en una línea. Igual que la de una falla
+   resuelta pero en ámbar, que es el color de esta familia. */
+.pna-c{display:flex;align-items:center;gap:9px;cursor:pointer;
+  border-left:3px solid var(--amber);border-radius:0;
+  background:rgba(245,185,66,.10);padding:9px 11px;margin:8px 0 2px}
+.pna-c b{color:var(--amber);font-size:13px;flex:none;font-weight:400}
+.pna-c span{flex:1;color:var(--muted);font-size:12.5px;line-height:1.35;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pna-c i{color:var(--muted);font-style:normal;font-size:13px;flex:none}
 .pna-undo{margin-top:9px;padding-top:9px;border-top:1px solid #6b5320}
 .pna-undo button{width:auto;padding:7px 12px;font-size:12.5px;font-weight:400;
   background:#0a1523;border:1px solid var(--border);color:var(--muted)}
@@ -954,7 +963,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 164,
+      "plan_version": 166,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -10389,6 +10398,43 @@ function toggleFail(u, id, ok){
   render();
 }
 
+/* Lo mismo para el recuadro del motivo del N/A: abierto mientras falte el
+   motivo, plegado en una línea en cuanto está escrito. Se guarda la excepción
+   sólo cuando el operario la fuerza, así que el recuadro vuelve a plegarse solo
+   en cuanto sigue adelante. */
+const naKey = (u, id) => "n|" + S.index + "|" + u + "|" + id;
+const naBoxOpen = (u, id, ok) => {
+  const e = S.open[naKey(u, id)];
+  return e !== undefined ? e : !ok;
+};
+function toggleNaBox(u, id, ok){
+  S.open[naKey(u, id)] = !naBoxOpen(u, id, ok);
+  render();
+}
+/* Al salir del campo, no mientras se escribe: plegarlo tecla a tecla cerraría
+   el teclado del teléfono en cada letra. El retardo es el mismo que usa la caja
+   de las fallas, para que un toque en «me equivoqué» llegue al botón vivo y no
+   a un elemento que este render ya reemplazó. */
+function closeNaBox(u, id){
+  const t = current();
+  if(!t) return;
+  const p = realPoints(t).find(x => x.id === id);
+  if(!p || naOpen(row(u), p)) return;
+  delete S.open[naKey(u, id)];
+  render();
+}
+/* `closeFail` se devuelve en las pruebas de fotos —fue escrita para las de
+   lista, que tienen otro dibujo de tarjeta—, así que éstas necesitan la suya.
+   Misma regla: se pliega sólo cuando ya no falta ni la foto ni la descripción. */
+function closeFotoFail(u, id){
+  const t = current();
+  if(!t || t.type !== "photos") return;
+  const p = realPoints(t).find(x => x.id === id);
+  if(!p || failOpen(row(u), p)) return;
+  delete S.open[failKey(u, id)];
+  render();
+}
+
 /* Called when the operator leaves the note field — on a short delay, so that a
    tap on the camera button lands on the live button instead of on an element
    this render has already replaced. Folds only when nothing is missing. */
@@ -15931,12 +15977,18 @@ function pointRow(p, u, showTag){
      marcó N/A suelto; si la prueba entera está en N/A, el motivo se escribe una
      vez en la cabecera y esta caja no sale en ninguno de sus puntos. */
   const naYa = !!(note || "").trim();
-  const naBox = (naWhy() && v === "NA" && !allNA(enPrueba)) ? `
+  const naAplica = naWhy() && v === "NA" && !naTestMode(enPrueba);
+  const naFold = naAplica && naYa && !naBoxOpen(u, p.id, naYa) ? `
+    <div class="pna-c" onclick="toggleNaBox(${u},'${p.id}',true)">
+      <b>✓</b><span>${esc(note)}</span><i>▸</i>
+    </div>` : "";
+  const naBox = (naAplica && !naFold) ? `
     <div class="pna" id="pna_${id}">
       <div class="pna-h">${tr("na_why")} · <span>${tr("na_why_req")}</span>${
         showTag ? " · " + fmt("speaker_n",{n:u+1}) : ""}</div>
       <textarea placeholder="${tr("na_why_ph")}"
-        oninput="noteTyped(${u},'${p.id}', this.value)">${esc(note)}</textarea>
+        oninput="noteTyped(${u},'${p.id}', this.value)"
+        onblur="setTimeout(function(){closeNaBox(${u},'${p.id}')},180)">${esc(note)}</textarea>
       <div id="en_na_${id}" class="en-line${noteEn?"":" hidden"}">${
         noteEn?esc(noteEn):""}</div>
       <div id="pnaw_${id}" class="${naYa?"pf-ok":"pna-w"}">${
@@ -15959,7 +16011,7 @@ function pointRow(p, u, showTag){
             salida que no existe. */""}
       ${p.must?"":`<button class="na-btn ${v==="NA"?"on-n":""}" onclick="setPoint(${u},'${p.id}','NA')"
         title="${tr("na_title")}">${tr("na")}</button>`}</div>
-    ${shotBox}${fail}${fold}${naBox}`;
+    ${shotBox}${fail}${fold}${naBox}${naFold}`;
 }
 
 function renderTest(){
@@ -16110,7 +16162,7 @@ function renderTest(){
           fábrica es YISION, la observación deja de ser opcional y pasa a ser el
           motivo: mismo campo, mismo destino en el informe, otro rótulo y otro
           color. Un campo nuevo habría duplicado traducción, ficha y CSV. */""}
-    ${naWhy() && naTest ? `<div class="card na-card">
+    ${naTestMode(t) ? `<div class="card na-card">
       <label style="margin-top:0">${tr("na_why")}
         <span class="na-req">· ${tr("na_why_req")}</span></label>
       <textarea id="comment" placeholder="${tr("na_why_ph")}"
@@ -16211,10 +16263,27 @@ const failOpen = (r,p) => r.points[p.id] === "FAIL" &&
    cuando el punto se marca suelto dentro de una prueba que sí se está
    haciendo, que es cuando de verdad hay algo que explicar. */
 const naWhy = () => (enGolden() ? fabricaReal(S.model) : S.factory) === "YIS";
-const naOpen = (r,p) => naWhy() && r.points[p.id] === "NA" && !allNA(current()) &&
+
+/* «La prueba entera está en N/A» no basta para pedir un motivo de cabecera:
+   hace falta que ese N/A haya sido un gesto, el botón de la cabecera. En una
+   prueba que no ofrece ese botón —`canTestNA` falso— el operario sólo puede
+   llegar a N/A respondiendo punto por punto, y entonces no hay una decisión
+   única que explicar: hay tantas como puntos.
+
+   Distinguirlo importa porque sin esto quedaban dos agujeros. Uno: en esas
+   pruebas se pedía un motivo de cabecera y el botón «me equivoqué» llamaba a
+   `toggleTestNA`, que se devuelve sin hacer nada cuando `canTestNA` es falso —
+   un botón muerto delante de una exigencia obligatoria. Dos: como `naOpen` se
+   callaba al ver la prueba entera en N/A, esos puntos no pedían motivo por su
+   cuenta, así que el informe salía con todo en N/A y sin una sola palabra.
+   Se vio al verificar el plan 164 en PARTES INTERNAS. */
+const naTestMode = t => naWhy() && allNA(t) && canTestNA(t);
+const naOpen = (r,p) => naWhy() && r.points[p.id] === "NA" &&
+  !naTestMode(current()) &&
   !((r.notes && r.notes[p.id]) || "").trim();
-/* La prueba entera en N/A y sin una palabra que lo explique. */
-const naTestOpen = t => naWhy() && allNA(t) && !((row(0).comment) || "").trim();
+/* La prueba entera en N/A por el botón de la cabecera, y sin una palabra que
+   lo explique. */
+const naTestOpen = t => naTestMode(t) && !((row(0).comment) || "").trim();
 
 /* The evidence every test has to be left with: one photo *and* one clip of it
    being run. Both are demanded because they answer different questions — the
@@ -16310,7 +16379,12 @@ function hintHtml(t){
 
 function syncFail(u, pointId){
   const t = current();
-  if(!t || t.type === "photos") return;
+  /* Ya no se devuelve en las pruebas de fotos. Se devolvía porque allí estos
+     recuadros no llevaban identificador y no había nada que parchear; desde que
+     lo llevan, no hacerlo dejaba el aviso y el botón congelados mientras el
+     operario escribía. `hintHtml` sigue sin aplicar —esa pantalla dibuja su
+     propio contador, sin id— y el parche de abajo simplemente no lo encuentra. */
+  if(!t) return;
 
   const p = realPoints(t).find(x => x.id === pointId);
   const box = document.getElementById("pfw_" + u + "_" + pointId);
@@ -16450,13 +16524,23 @@ function renderPhotoTest(t, r, done, total){
         </div>`).join("")}</div>`}
       ${p.no_photo?"":sampleBox(p)}
       ${p.measure && !na ? measureBox(p, 0, "0_" + p.id) : ""}
-      ${v==="FAIL"?`<div class="pf" id="pf_0_${p.id}">
+      ${/* La caja de la falla también se pliega aquí desde el plan 166. En las
+            pruebas de lista lo hacía desde hace tiempo; en éstas no, y PARTES
+            INTERNAS con tres o cuatro fallas era una pantalla de desplazarse
+            sin fin. Mismo gesto: se pliega al soltar el campo cuando ya tiene
+            foto y descripción, y un toque la reabre. */""}
+      ${v==="FAIL" && evOk && !failBoxOpen(0, p.id, evOk) ? `
+        <div class="pf-c" onclick="toggleFail(0,'${p.id}',true)">
+          <b>✓</b><span>${esc(evSummary(shots, note))}</span><i>▸</i>
+        </div>` :
+        v==="FAIL"?`<div class="pf" id="pf_0_${p.id}">
         <div class="pf-h">${tr("fail_evidence")}</div>
         <textarea placeholder="${tr("notes_fail_ph")}"
-          oninput="noteTyped(0,'${p.id}', this.value)">${esc(note)}</textarea>
+          oninput="noteTyped(0,'${p.id}', this.value)"
+          onblur="setTimeout(function(){closeFotoFail(0,'${p.id}')},180)">${esc(note)}</textarea>
         <div id="en_0_${p.id}" class="en-line${noteEn?"":" hidden"}">${
           noteEn?esc(noteEn):""}</div>
-        <div class="${evOk?"pf-ok":"pf-w"}">${
+        <div id="pfw_0_${p.id}" class="${evOk?"pf-ok":"pf-w"}">${
           evOk?tr("fail_ready"):tr("fail_required")}</div>
       </div>`:""}
       ${/* El recuadro del motivo del N/A faltaba aquí y sólo estaba en las
@@ -16464,17 +16548,26 @@ function renderPhotoTest(t, r, done, total){
             botón SIGUIENTE rechazaba una prueba de fotos con puntos en N/A
             pidiendo un motivo, y en la pantalla no había dónde escribirlo. La
             fábrica lo reportó con un video en PARTES INTERNAS. */""}
-      ${naWhy() && na && !allNA(t) ? `<div class="pna" id="pna_0_${p.id}">
+      ${(function(){
+        if(!(naWhy() && na && !naTestMode(t))) return "";
+        const ya = !!note.trim();
+        if(ya && !naBoxOpen(0, p.id, ya))
+          return `<div class="pna-c" onclick="toggleNaBox(0,'${p.id}',true)">
+            <b>✓</b><span>${esc(note)}</span><i>▸</i>
+          </div>`;
+        return `<div class="pna" id="pna_0_${p.id}">
         <div class="pna-h">${tr("na_why")} · <span>${tr("na_why_req")}</span></div>
         <textarea placeholder="${tr("na_why_ph")}"
-          oninput="noteTyped(0,'${p.id}', this.value)">${esc(note)}</textarea>
+          oninput="noteTyped(0,'${p.id}', this.value)"
+          onblur="setTimeout(function(){closeNaBox(0,'${p.id}')},180)">${esc(note)}</textarea>
         <div id="en_na_0_${p.id}" class="en-line${noteEn?"":" hidden"}">${
           noteEn?esc(noteEn):""}</div>
-        <div id="pnaw_0_${p.id}" class="${note.trim()?"pf-ok":"pna-w"}">${
-          note.trim()?tr("na_why_ready"):tr("na_why_required")}</div>
+        <div id="pnaw_0_${p.id}" class="${ya?"pf-ok":"pna-w"}">${
+          ya?tr("na_why_ready"):tr("na_why_required")}</div>
         <div class="pna-undo"><button onclick="clearNA(0,'${p.id}')">${
           tr("na_undo_point")}</button></div>
-      </div>`:""}
+      </div>`;
+      })()}
     </div>`;
   }).join("");
 
@@ -16504,7 +16597,7 @@ function renderPhotoTest(t, r, done, total){
         <b>${tr("na")} · ${esc(tr("na_folded_t"))}</b>
         <span>${fmt("na_folded",{n:items.length})}</span>
       </div>` : rows}
-    ${naWhy() && allNA(t) ? `<div class="card na-card">
+    ${naTestMode(t) ? `<div class="card na-card">
       <label style="margin-top:0">${tr("na_why")}
         <span class="na-req">· ${tr("na_why_req")}</span></label>
       <textarea id="comment" placeholder="${tr("na_why_ph")}"

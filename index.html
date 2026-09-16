@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="18.4">
+<meta name="app-version" content="18.5">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -231,6 +231,11 @@ button:active{transform:scale(.99)}
 .pna-h span{color:var(--muted);letter-spacing:0}
 .pna textarea{border-color:#6b5320}
 .pna-w{margin-top:7px;font-size:12px;color:var(--amber);line-height:1.5}
+/* La salida, separada por una línea del recuadro que la pide. Apagada y no
+   ámbar: es la excepción, no lo que se espera que haga el operario. */
+.pna-undo{margin-top:9px;padding-top:9px;border-top:1px solid #6b5320}
+.pna-undo button{width:auto;padding:7px 12px;font-size:12.5px;font-weight:400;
+  background:#0a1523;border:1px solid var(--border);color:var(--muted)}
 .na-card{border-left:3px solid var(--amber)}
 .na-card label{color:var(--amber)}
 .na-card .na-req{color:var(--muted)}
@@ -949,7 +954,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 163,
+      "plan_version": 164,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -8986,6 +8991,8 @@ const T = {
   na_why_ready:"✓ Reason recorded.",
   a_na_why:"Write why this test does not apply to this product before continuing.",
   a_na_why_points:"These points are marked N/A and still need a reason:",
+  na_undo_point:"↺ I was wrong · clear the N/A",
+  na_undo_test:"↺ I was wrong · run the test",
   tab_factory:"FACTORY TESTS", tab_admin:"ADMIN",
   to_start:"← START SCREEN",
   admin_refs_hint:"%n references. Tap one to choose which tests to run.",
@@ -9270,6 +9277,8 @@ const T = {
   na_why_ready:"✓ Motivo registrado.",
   a_na_why:"Escriba por qué esta prueba no aplica a este producto antes de continuar.",
   a_na_why_points:"Estos puntos están en N/A y todavía les falta el motivo:",
+  na_undo_point:"↺ Me equivoqué · quitar el N/A",
+  na_undo_test:"↺ Me equivoqué · hacer la prueba",
   tab_factory:"PRUEBAS FÁBRICA", tab_admin:"ADMIN",
   to_start:"← PANTALLA INICIAL",
   admin_refs_hint:"%n referencias. Toque una para elegir qué pruebas ejecutar.",
@@ -9546,6 +9555,8 @@ const T = {
   na_why_ready:"✓ 原因已记录。",
   a_na_why:"请先填写本测试对该产品不适用的原因，然后继续。",
   a_na_why_points:"以下检查项已标记为不适用，但尚未填写原因：",
+  na_undo_point:"↺ 标记有误 · 撤销不适用",
+  na_undo_test:"↺ 标记有误 · 执行本测试",
   tab_factory:"工厂测试", tab_admin:"管理",
   to_start:"← 返回首页",
   admin_refs_hint:"共 %n 个型号。点击其中一个以选择要执行的测试。",
@@ -11482,6 +11493,24 @@ function focusNextGroup(from){
   try{ window.scrollTo({top:y, behavior:"smooth"}); }catch(e){ window.scrollTo(0, y); }
 }
 
+/* Marcó N/A por error. El botón vive dentro del recuadro que le está pidiendo
+   el motivo, que es donde el operario se encuentra atascado: los tres botones
+   del punto siguen ahí arriba, pero en el momento en que la app le exige algo
+   obligatorio, lo que tiene delante es una exigencia sin salida a la vista.
+
+   Se borra también lo que hubiera escrito. Si el punto deja de ser N/A, esa
+   frase ya no describe nada y quedaría colgada en el informe como observación
+   de un punto que sí se comprobó. Cambiar la respuesta tocando ✓ o ✗ conserva
+   el texto, porque ahí el operario lo está reaprovechando a propósito. */
+function clearNA(u, pointId){
+  const r = row(u);
+  delete r.points[pointId];
+  if(r.notes) delete r.notes[pointId];
+  if(r.notesTr) delete r.notesTr[pointId];
+  if(r.notesTrFor) delete r.notesTrFor[pointId];
+  render(); save();
+}
+
 function setNote(u, pointId, text){
   const r = row(u);
   r.notes = r.notes || {};
@@ -11827,7 +11856,13 @@ function toggleTestNA(){
     realPoints(t).forEach(p => {
       if(undo) delete r.points[p.id]; else r.points[p.id] = "NA";
     });
-    if(undo){ r.verdict = null; r.code = null; r.failedPoints = []; }
+    if(undo){
+      r.verdict = null; r.code = null; r.failedPoints = [];
+      /* El motivo se borra con el N/A, y sólo en YISION, que es donde ese campo
+         era el motivo obligatorio. En las demás fábricas la observación de la
+         prueba es lo que siempre fue y no tiene por qué perderse. */
+      if(naWhy()){ r.comment = ""; r.commentTr = {}; r.commentTrFor = {}; }
+    }
     else {
       r.verdict = "N/A";
       r.seconds = Math.round((Date.now() - r.startedAt) / 1000);
@@ -15906,6 +15941,8 @@ function pointRow(p, u, showTag){
         noteEn?esc(noteEn):""}</div>
       <div id="pnaw_${id}" class="${naYa?"pf-ok":"pna-w"}">${
         naYa?tr("na_why_ready"):tr("na_why_required")}</div>
+      <div class="pna-undo"><button onclick="clearNA(${u},'${p.id}')">${
+        tr("na_undo_point")}</button></div>
     </div>` : "";
 
   return `<div class="pt" id="pt_${id}">
@@ -16082,6 +16119,8 @@ function renderTest(){
         sharedEn?esc(sharedEn):""}</div>
       <div class="${(shared.comment||"").trim()?"pf-ok":"pna-w"}">${
         (shared.comment||"").trim()?tr("na_why_ready"):tr("na_why_required")}</div>
+      <div class="pna-undo"><button onclick="toggleTestNA()">${
+        tr("na_undo_test")}</button></div>
     </div>` : `<div class="card">
       <label style="margin-top:0">${tr("notes")} ${tr("optional")}</label>
       <textarea id="comment" placeholder="${tr("notes_ph")}"
@@ -16347,7 +16386,12 @@ function renderPhotoTest(t, r, done, total){
     // too, exactly as they do on an ordinary test.
     + items.filter(p => ANSWERED.indexOf(r.points[p.id]) < 0).length
     + items.filter(p => r.points[p.id] === "FAIL" &&
-        !((r.notes && r.notes[p.id] || "").trim())).length;
+        !((r.notes && r.notes[p.id] || "").trim())).length
+    /* Y el motivo del N/A, que también lo rechaza NEXT. Sin esta línea la
+       pantalla decía «todo listo» en verde mientras el botón se negaba a
+       avanzar — el contador y el botón contando cosas distintas. */
+    + items.filter(p => naOpen(r, p)).length
+    + (naTestOpen(t) ? 1 : 0);
 
   const allowNA = !noNA(t);
 
@@ -16415,6 +16459,22 @@ function renderPhotoTest(t, r, done, total){
         <div class="${evOk?"pf-ok":"pf-w"}">${
           evOk?tr("fail_ready"):tr("fail_required")}</div>
       </div>`:""}
+      ${/* El recuadro del motivo del N/A faltaba aquí y sólo estaba en las
+            pruebas de lista. El resultado era el peor posible: en YISION el
+            botón SIGUIENTE rechazaba una prueba de fotos con puntos en N/A
+            pidiendo un motivo, y en la pantalla no había dónde escribirlo. La
+            fábrica lo reportó con un video en PARTES INTERNAS. */""}
+      ${naWhy() && na && !allNA(t) ? `<div class="pna" id="pna_0_${p.id}">
+        <div class="pna-h">${tr("na_why")} · <span>${tr("na_why_req")}</span></div>
+        <textarea placeholder="${tr("na_why_ph")}"
+          oninput="noteTyped(0,'${p.id}', this.value)">${esc(note)}</textarea>
+        <div id="en_na_0_${p.id}" class="en-line${noteEn?"":" hidden"}">${
+          noteEn?esc(noteEn):""}</div>
+        <div id="pnaw_0_${p.id}" class="${note.trim()?"pf-ok":"pna-w"}">${
+          note.trim()?tr("na_why_ready"):tr("na_why_required")}</div>
+        <div class="pna-undo"><button onclick="clearNA(0,'${p.id}')">${
+          tr("na_undo_point")}</button></div>
+      </div>`:""}
     </div>`;
   }).join("");
 
@@ -16453,6 +16513,8 @@ function renderPhotoTest(t, r, done, total){
         rEn?esc(rEn):""}</div>
       <div class="${(r.comment||"").trim()?"pf-ok":"pna-w"}">${
         (r.comment||"").trim()?tr("na_why_ready"):tr("na_why_required")}</div>
+      <div class="pna-undo"><button onclick="toggleTestNA()">${
+        tr("na_undo_test")}</button></div>
     </div>` : `<div class="card">
       <label style="margin-top:0">${tr("notes")} ${tr("optional")}</label>
       <textarea id="comment" placeholder="${tr("notes_ph")}"

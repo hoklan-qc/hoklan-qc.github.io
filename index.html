@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="18.7">
+<meta name="app-version" content="18.9">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -963,7 +963,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 166,
+      "plan_version": 168,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2314,7 +2314,9 @@ const CONFIG = {
             texto SD de la pantalla y con la tecla SD del control — abajo en
             este mismo archivo—: una prueba que no aplica y que hay que
             responder en cada unidad termina marcada sin mirar. */
-         "skip_factory":["RHY"],"skip":["HK-KAP208","HK-SKA108A1"],
+         /* El ARC104A2 salió en el plan 167, junto con AUX, PANTALLA y BATERÍA
+            EXTERNA: no trae ninguna de las cuatro. */
+         "skip_factory":["RHY"],"skip":["HK-KAP208","HK-SKA108A1","HK-ARC104A2"],
          "label":{"en":"SD CARD","zh":"SD 卡"},
          "steps":[
            {"en":"Insert the HOKLAN test SD card into the speaker","zh":"将 HOKLAN 测试 SD 卡插入音箱"},
@@ -2780,7 +2782,7 @@ const CONFIG = {
          "id":"AUX","optional":false,"only_factory":["YIS","RHY","EAG"],
          "evidence":[{"kind":"photo","skip_factory":["RHY"]},
                      {"kind":"video","skip_factory":["RHY"]}],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP208"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP208","HK-ARC104A2"],
          "label":{"en":"AUX LINE","zh":"AUX 音频输入"},
          "steps":[
            {"en":"Select AUX mode on the speaker first","zh":"先在音箱上切换到 AUX 模式"},
@@ -3617,7 +3619,7 @@ const CONFIG = {
          "id":"DISPLAY","optional":["YIS","EAG"],"only_factory":["YIS","RHY","EAG"],
          "evidence":[{"kind":"photo","skip_factory":["RHY"]},
                      {"kind":"video","skip_factory":["RHY"]}],
-         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP208"],
+         "skip":["HK-BAS115A1","HK-BAS118A1","HK-KAP208","HK-ARC104A2"],
          "label":{"en":"DISPLAY","zh":"显示屏"},
          "steps":[
            {"only_factory":["RHY"],
@@ -3741,11 +3743,12 @@ const CONFIG = {
             "help":{"en":"Press it from another source. The speaker must switch to Bluetooth and become discoverable or reconnect to the phone.",
                     "zh":"在其他音源下按此键，音箱应切到蓝牙并可被搜索或自动回连手机。"}},
            {"id":"src_sd","code":"RMT-006","skip_factory":["RHY"],
-            "skip":["HK-SKA108A1"],
+            "skip":["HK-SKA108A1","HK-ARC104A2"],
             "label":{"en":"SD","zh":"SD 卡"},
             "help":{"en":"With the card inserted, press it from another source. Mark N/A if this reference has no SD slot.",
                     "zh":"插着 SD 卡时从其他音源按此键。本型号没有 SD 卡槽时标记为“不适用”。"}},
            {"id":"src_aux","code":"RMT-007","skip_factory":["RHY"],
+            "skip":["HK-ARC104A2"],
             "label":{"en":"AUX","zh":"AUX"},
             "help":{"en":"With the AUX cable connected, press it from another source. The speaker must switch to AUX.",
                     "zh":"连接 AUX 音频线后从其他音源按此键，音箱应切到 AUX。"}},
@@ -6187,7 +6190,8 @@ const CONFIG = {
                     "es":"La misma foto del lado opuesto, en su propio encuadre."}},
            {"id":"superior","label":{"en":"Top","zh":"顶部"}},
            {"id":"inferior","label":{"en":"Bottom","zh":"底部"}},
-           {"id":"pantalla","label":{"en":"Display","zh":"显示屏"}},
+           {"id":"pantalla","skip":["HK-ARC104A2"],
+            "label":{"en":"Display","zh":"显示屏"}},
            {"id":"panel","label":{"en":"Panel","zh":"面板"}},
            {/* Sólo RHYME: sus paneles son los que llevan selector. */
             "id":"switch_voltaje","only_factory":["RHY"],
@@ -6203,7 +6207,35 @@ const CONFIG = {
            {"id":"logo_panel","label":{"en":"Logo on the panel","zh":"面板上的标志"},
             "help":{"en":"Close-up of the logo printed or fixed on the panel. Check it matches the one on the grille in size, colour and finish.",
                     "zh":"拍摄面板上印制或固定的标志特写。确认其与网罩上的标志在尺寸、颜色和工艺上一致。"}},
-           {"id":"ruedas","label":{"en":"Wheels","zh":"轮子"}},
+           {/* Plan 168 · YISION. El logo giratorio no es adorno: la cabina se usa
+                de pie y acostada, y el logo tiene que quedar derecho en las dos.
+                Un logo que gira pero se queda torcido, o que no gira, sale en
+                todas las fotos del cliente. Se piden las dos posiciones porque
+                una sola no demuestra que gire — demuestra cómo vino montado. */
+            "section":{"en":"Rotating logo","zh":"可旋转标志","es":"Logo giratorio"},
+            "only_factory":["YIS"],
+            "help":{"en":"Stand the product upright and turn the logo until it reads level; then lay it on its side and turn it again. One photograph of each, with the whole product in frame so the position can be judged.",
+                    "zh":"先将产品立起，旋转标志至水平可读；再将产品横放，重新旋转标志。两种状态各拍一张，整机须入镜以便判断方向。",
+                    "es":"Ponga el producto de pie y gire el logo hasta que quede derecho; después acuéstelo y gírelo de nuevo. Una foto de cada una, con el producto completo en el encuadre para poder juzgar la posición."}},
+           {"id":"logo_giro_vertical","only_factory":["YIS"],
+            "sample":"logo_giratorio_vertical",
+            "label":{"en":"Product upright — logo upright","zh":"产品竖放 — 标志竖向","es":"Producto vertical — logo vertical"},
+            "help":{"en":"The product standing, the whole of it in frame, with the logo turned so it reads level. It must hold the position on its own, without being held.",
+                    "zh":"产品竖放，整机入镜，标志旋转至水平可读。松手后标志应能自行保持该方向。",
+                    "es":"El producto de pie, completo en el encuadre, con el logo girado de modo que se lea derecho. Debe quedarse solo en esa posición, sin sostenerlo."}},
+           {"id":"logo_giro_horizontal","only_factory":["YIS"],
+            "sample":"logo_giratorio_horizontal",
+            "label":{"en":"Product on its side — logo level","zh":"产品横放 — 标志水平","es":"Producto horizontal — logo horizontal"},
+            "help":{"en":"The same product laid on its side, and the logo turned again until it reads level. Check it turns smoothly, without forcing and without play, and that it does not slip back.",
+                    "zh":"同一台产品横放，再次旋转标志至水平可读。检查旋转顺畅、无需用力、无旷量，且不会自行回转。",
+                    "es":"El mismo producto acostado, y el logo girado otra vez hasta que se lea derecho. Compruebe que gira suave, sin forzar y sin juego, y que no se devuelve solo."}},
+           {/* El ARC104A2 no trae ruedas ni pantalla. Se retiran los dos puntos
+                en vez de dejarlos: el operario los estaba reprobando —salieron
+                como R1 y R2 en las no conformidades de un informe—, y una
+                falla por una pieza que el producto nunca tuvo ensucia el
+                historial de la referencia y el tablero. */
+            "id":"ruedas","skip":["HK-ARC104A2"],
+            "label":{"en":"Wheels","zh":"轮子"}},
            {"id":"num_lote","label":{"en":"Lot number","zh":"批号"},
             "help":{"en":"Close-up of the lot or batch number of the speaker: the code printed or labelled on the product itself, usually next to the specification label. Every digit must be sharp and legible in the photo, and it must match the lot recorded on the inspection paperwork. If this reference carries no lot number, photograph the serial number instead and say so in the notes.",
                     "zh":"拍摄音箱批号（生产批次号）的特写：即印制或贴在产品本体上的编号，通常在规格标签旁边。照片中每一位数字都必须清晰可读，且必须与检验单上记录的批号一致。若本型号没有批号，则改拍序列号，并在备注中说明。"}},
@@ -6418,7 +6450,7 @@ const CONFIG = {
             `optional`, así que el operario podía marcarla N/A — pero ofrecer
             «no aplica» en algo que nunca aplica es pedirle que decida cada vez
             lo que ya sabemos, y es como se aprende a marcar N/A sin leer. */
-         "skip":["HK-KAP208","HK-RNW212A2"],
+         "skip":["HK-KAP208","HK-RNW212A2","HK-ARC104A2"],
          "label":{"en":"EXTERNAL BATTERY","zh":"外置电池"},
          "steps":[
            {"en":"Switch the speaker off and disconnect it from the mains","zh":"关机并断开市电"},
@@ -6813,7 +6845,50 @@ const CONFIG = {
                     "zh":"拍摄带规格的一面：电压、容量（mAh）、电芯类型和生产厂家。四项均须在照片中清晰可读。",
                     "es":"Fotografíe la cara con las especificaciones: voltaje, capacidad en mAh, tipo de celda y fabricante. Los cuatro datos deben quedar legibles en la foto."}},
            {"id":"antena_fm","skip_factory":["RHY"],
-            "label":{"en":"FM antenna position","zh":"收音天线位置"}}]},
+            "label":{"en":"FM antenna position","zh":"收音天线位置"}},
+
+           {/* Plan 168 · YISION. La tarjeta de las luces no se fotografiaba, y
+                es la que más cambia entre lotes: el efecto de luz es lo primero
+                que el proveedor ajusta y lo último que alguien revisa. Con la
+                versión impresa en la foto se puede saber después qué tarjeta
+                traía un lote que se comportó distinto, que es el mismo
+                argumento del módulo receptor en la prueba 13. */
+            "section":{"en":"LED lighting board","zh":"灯光 PCB","es":"PCB de las luces"},
+            "only_factory":["YIS"],
+            "help":{"en":"Two photographs of the same board: one of the board itself and one of its version marking. If the product has no lighting, mark them N/A.",
+                    "zh":"同一块板拍两张：一张整板，一张版本标识。若产品无灯光功能，请标记为不适用。",
+                    "es":"Dos fotos de la misma tarjeta: una de la tarjeta y otra de su versión. Si el producto no lleva luces, márquelas N/A."}},
+           {"id":"pcb_luces","only_factory":["YIS"],
+            "label":{"en":"LED lighting board","zh":"灯光 PCB","es":"PCB de las luces LED"},
+            "help":{"en":"The whole board in one frame, fitted where it goes, with its connector and its cable visible.",
+                    "zh":"整板入镜，保持安装位置，接头与线材须可见。",
+                    "es":"La tarjeta completa en un encuadre, en su sitio, con su conector y su cable a la vista."}},
+           {"id":"pcb_luces_version","only_factory":["YIS"],
+            "label":{"en":"LED lighting board — version marking","zh":"灯光 PCB — 版本标识","es":"Versión de la PCB de luces"},
+            "help":{"en":"Close-up of the version printed on the board — the code silkscreened on the copper, usually at one edge. Every character must be legible in the photograph. If nothing is printed, photograph the area where it should be and say so in the note.",
+                    "zh":"拍摄板上印制版本号的特写——丝印于板面的编号，通常位于板边。照片中每个字符均须清晰可读。若板上无任何印字，请拍摄应有位置并在备注中说明。",
+                    "es":"Primer plano de la versión impresa en la tarjeta — el código serigrafiado sobre el cobre, normalmente en un borde. Cada carácter debe quedar legible en la foto. Si no trae nada impreso, fotografíe el sitio donde debería ir y dígalo en la nota."}},
+
+           {/* Plan 168 · YISION. La malla por las dos caras. Por delante es lo
+                que ve el cliente; por detrás es donde se ven el golpe que no
+                traspasó, la pintura saltada y la espuma despegada — y es la
+                cara que sólo se puede fotografiar con el producto abierto, que
+                es justo donde está el operario en esta prueba. */
+            "section":{"en":"The grille, both faces","zh":"网罩正反两面","es":"La malla, por las dos caras"},
+            "only_factory":["YIS"],
+            "help":{"en":"With the grille removed. The two photographs are of the same part, turned over.",
+                    "zh":"网罩拆下后拍摄。两张照片为同一部件的正反两面。",
+                    "es":"Con la malla desmontada. Las dos fotos son de la misma pieza, volteada."}},
+           {"id":"malla_frente","only_factory":["YIS"],
+            "label":{"en":"Grille — front","zh":"网罩 — 正面","es":"Malla — por delante"},
+            "help":{"en":"The face that shows on the finished product, whole and square on. Look for dents, flattened mesh and paint defects.",
+                    "zh":"拍摄成品外露的一面，整体入镜并正对拍摄。检查凹陷、网孔压扁与喷涂缺陷。",
+                    "es":"La cara que queda a la vista en el producto terminado, completa y de frente. Busque golpes, malla aplastada y defectos de pintura."}},
+           {"id":"malla_reverso","only_factory":["YIS"],
+            "label":{"en":"Grille — back","zh":"网罩 — 背面","es":"Malla — por detrás"},
+            "help":{"en":"The inner face, with its foam or fabric if it carries one. Check the foam is glued all the way round and not torn, and that the frame is not bent.",
+                    "zh":"拍摄内侧面，若带海绵或布网须一并入镜。确认海绵四周粘贴牢固、无破损，边框无变形。",
+                    "es":"La cara interior, con su espuma o su tela si la lleva. Compruebe que la espuma esté pegada en todo el contorno y sin rasgar, y que el marco no esté doblado."}}]},
 
         /* ===== GPE · Guía de pruebas especiales =============================
            Un contenedor, no una prueba. Aquí entra lo que HOKLAN pide sólo para
@@ -9912,6 +9987,11 @@ function fits(o){
      antes de producir. Bajo cualquier otro código estas pruebas no existen, y
      bajo el 205 se suman a las del producto. */
   if(o.golden && !enGolden()) return false;
+  /* Los puntos que esta referencia no tiene, declarados una sola vez en
+     `PUNTOS_FUERA` en lugar de repetidos en cada prueba donde el bloque
+     aparece. Va antes que todo lo demás: si el producto no lleva la pieza, no
+     hay fábrica ni código que la haga aparecer. */
+  if(puntoFuera(o.id)) return false;
   if(o.only && o.only.indexOf(S.model) < 0) return false;
   if(o.skip && o.skip.indexOf(S.model) >= 0) return false;
   /* Bajo el código de golden samples la fábrica que filtra no es la que tecleó
@@ -10157,6 +10237,37 @@ const OCULTAS = {
   "HK-RHO102-BAG": MIC_OCULTAS.concat(["RHO102_BAG","SIMULTANEOUS"])
 };
 const oculta = t => (OCULTAS[S.model] || []).indexOf(t && t.id) >= 0;
+
+/* ---------- puntos que una referencia no tiene ----------------------------
+   Lo mismo que `OCULTAS`, pero un piso más abajo: pruebas que la referencia sí
+   corre, con puntos sueltos que su hardware no incluye.
+
+   Existe porque el mismo bloque de puntos —los dos micrófonos, la guitarra, la
+   grabación, las luces— está repetido en USB, SD, BLUETOOTH, RADIO y AUX, y en
+   tres formatos distintos: unos con `skip_factory`, otros con `only_factory`, y
+   algunos ya con su propia lista `skip`. Retirar nueve puntos del ARC104A2 a
+   mano habría sido editar treinta y cinco renglones y confiar en no saltarse
+   ninguno. Ya pasó una vez, con el RNW212A2 en el plan 149: se editaron dos de
+   las cuatro apariciones y los puntos siguieron saliendo en RADIO y en AUX.
+
+   Aquí la referencia se declara una sola vez y `fits` la aplica en todas. Sólo
+   admite identificadores de punto, que van en minúscula; los de prueba van en
+   mayúscula y viven en `OCULTAS`, arriba.
+--------------------------------------------------------------------------- */
+const PUNTOS_FUERA = {
+  /* Un solo micrófono y sin reverberación; ni guitarra, ni grabación, ni
+     luces, ni control de medios. Plan 167, a partir de un informe donde los
+     diez salieron N/A. */
+  "HK-ARC104A2": ["mic1_reverb","mic2_priority","mic2_volume","mic2_echo",
+                  "mic2_reverb","guitar","record","light","light_pattern",
+                  "mem_mid",
+                  /* Sin luces tampoco hay tarjeta de luces que fotografiar.
+                     Se agregan aquí al crearse los dos puntos en el plan 168,
+                     para que no nazcan pidiéndole a esta referencia una pieza
+                     que ya sabemos que no trae. */
+                  "pcb_luces","pcb_luces_version"]
+};
+const puntoFuera = id => !!id && (PUNTOS_FUERA[S.model] || []).indexOf(id) >= 0;
 
 const planTests = () => {
   const l = plan().tests

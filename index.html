@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="19.0">
+<meta name="app-version" content="19.1">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -963,7 +963,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 169,
+      "plan_version": 170,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2631,16 +2631,20 @@ const CONFIG = {
          "label":{"en":"COMPATIBILITY · WIRELESS RECEIVER AND FM",
                   "zh":"兼容性 · 无线接收模块与调频",
                   "es":"COMPATIBILIDAD · RECEPTOR INALÁMBRICO Y FM"},
+         /* Los pasos se reescribieron con la prueba, en el plan 170. Los dos
+            viejos —escuchar con el receptor apagado y juzgar la diferencia— se
+            quedaron sin punto al que corresponder cuando Producto retiró la
+            referencia, y una lista de pasos que manda hacer algo que ya no se
+            responde es la forma más rápida de que el operario deje de leerla. */
          "steps":[
-           {"en":"Fit the wireless microphone receiver module as it ships","zh":"按出厂状态装入无线麦克风接收模块","es":"Instale el módulo receptor de micrófono inalámbrico tal como sale de fábrica"},
-           {"en":"Tune a weak FM station, not a strong local one","zh":"调到一个信号较弱的电台，不要用本地强台","es":"Sintonice una emisora FM débil, no una local fuerte"},
-           {"en":"Listen with the receiver off, then switch it on","zh":"先在接收模块关闭时试听，再将其开启","es":"Escuche con el receptor apagado y luego enciéndalo"},
-           {"en":"Judge the difference between the two","zh":"比较两者的差异后判定","es":"Juzgue la diferencia entre los dos"}],
+           {"en":"Fit the receiver module in the speaker","zh":"将接收模块装入音箱","es":"Instale el módulo receptor en el parlante"},
+           {"en":"Tune the same station used for the microphone test","zh":"调到麦克风测试所用的同一电台","es":"Sintonice la misma emisora con la que se hace la prueba del micrófono"},
+           {"en":"Listen with the module working","zh":"在模块工作状态下试听","es":"Escuche con el módulo funcionando"}],
          "points":[
            {"section":{"en":"Setting it up","zh":"准备","es":"Preparación"},
-            "help":{"en":"The module fitted, and a station chosen for being weak. Do not use a strong station.",
-                    "zh":"装好模块，并选择一个信号弱的电台。不要使用强台。",
-                    "es":"El módulo instalado, y una emisora elegida por ser débil. No use una emisora fuerte."}},
+            "help":{"en":"The module fitted in the speaker, and the station tuned. Use the same station the microphone test is run on, so that both tests are judged on the same signal.",
+                    "zh":"模块装入音箱，并调好电台。请使用与麦克风测试相同的电台，使两项测试基于同一信号进行判定。",
+                    "es":"El módulo instalado en el parlante, y la emisora sintonizada. Use la misma emisora con la que se hace la prueba del micrófono, para que las dos pruebas se juzguen sobre la misma señal."}},
            {/* Con fotografía desde el plan 162. El encabezado de esta prueba ya
                 decía por qué existe: lo que se aprueba es una muestra, pero el
                 proveedor del módulo cambia entre lotes y el lote es lo que se
@@ -2650,34 +2654,27 @@ const CONFIG = {
                 antena — que es justo lo que no se pudo reconstruir cuando el
                 receptor del PHI resultó traer fuente conmutada. */
             "id":"rx_fitted","code":"FM-010","photo":true,
-            "label":{"en":"Receiver module fitted as it ships","zh":"接收模块按出厂状态装好","es":"Módulo receptor instalado como sale de fábrica"},
+            "label":{"en":"Receiver module fitted in the speaker","zh":"接收模块已装入音箱","es":"Módulo receptor instalado en el parlante"},
             "help":{"en":"In its place inside the speaker, with its own wiring and its antenna routed as production routes it. A module held in the hand beside the cabinet is a different measurement. Photograph it where it sits, with the cabinet open: the whole module, its marking or label legible if it carries one, the connector that feeds it, and the run of the antenna. One picture; if the marking cannot be read in it, add a second one closer.",
                     "zh":"装在机内应有的位置，线束与天线走向与量产一致。用手拿在箱体旁边测得的是另一回事。请在开箱状态下于模块所在位置拍照：需拍到整个模块、其丝印或标签（如有，须清晰可读）、供电接头以及天线走向。拍一张即可；若丝印在该照片中无法辨认，再补拍一张近照。",
                     "es":"En su sitio dentro del parlante, con su cableado y su antena tendida como la tiende producción. Un módulo sostenido en la mano junto a la cabina es otra medición. Fotografíelo donde está, con la cabina abierta: el módulo completo, su marcación o etiqueta legible si la trae, el conector que lo alimenta y el recorrido de la antena. Una foto; si en ella no se alcanza a leer la marcación, agregue una segunda más cerca."}},
            {"id":"rx_station","code":"FM-002","measure":{"unit":"MHz","step":"0.1"},
-            "label":{"en":"Weak station tuned — frequency","zh":"已调到的弱信号电台 — 频率","es":"Emisora débil sintonizada — frecuencia"},
-            "help":{"en":"Tune a station that comes in weak but intelligible, and write its frequency in the box.",
-                    "zh":"调到一个信号较弱但仍可听清的电台，并将其频率填入方框。",
-                    "es":"Sintonice una emisora que entre débil pero se entienda, y escriba su frecuencia en el recuadro."}},
-           {"id":"rx_baseline","code":"FM-010",
-            "label":{"en":"Reference heard with the receiver off","zh":"已在接收模块关闭时听取基准","es":"Referencia escuchada con el receptor apagado"},
-            "help":{"en":"With the module unpowered, listen to that station for twenty seconds and keep in mind how it sounds. Without this the noise of a distant station and the noise of the module cannot be told apart.",
-                    "zh":"在模块未通电的状态下，试听该电台二十秒，记住其声音。缺少这一步，就无法区分远距离电台本身的噪声与模块产生的噪声。",
-                    "es":"Con el módulo sin corriente, escuche esa emisora veinte segundos y retenga cómo suena. Sin esto no se distingue el ruido de una emisora lejana del ruido del módulo."}},
-           {"section":{"en":"With the receiver on","zh":"接收模块开启后","es":"Con el receptor encendido"},
-            "help":{"en":"Switch the module on without touching the tuning or the volume. Anything that appears now comes from the module.",
-                    "zh":"在不改动调台与音量的前提下开启模块。此时出现的任何变化都来自模块。",
-                    "es":"Encienda el módulo sin tocar la sintonía ni el volumen. Lo que aparezca ahora viene del módulo."}},
+            "label":{"en":"Station tuned — frequency","zh":"已调到的电台 — 频率","es":"Emisora sintonizada — frecuencia"},
+            "help":{"en":"Use the same station the microphone test is run on, and write its frequency in the box. It has to be the same one: judging the module on one station and the microphone on another leaves two results that cannot be compared.",
+                    "zh":"请使用与麦克风测试相同的电台，并将其频率填入方框。必须为同一电台：模块与麦克风若在不同电台上判定，两个结果将无法相互比较。",
+                    "es":"Use la misma emisora con la que se hace la prueba del micrófono, y escriba su frecuencia en el recuadro. Tiene que ser la misma: juzgar el módulo en una emisora y el micrófono en otra deja dos resultados que no se pueden comparar."}},
+           /* «Referencia escuchada con el receptor apagado», el encabezado «Con
+              el receptor encendido» y «Sin silbido ni tono» se retiraron en el
+              plan 170, por decisión de Producto. Con ellos se va la comparación
+              antes/después: lo que queda es una sola escucha, con el módulo
+              puesto y funcionando. La indicación del punto que sobrevive se
+              reescribió para no mandar comparar contra un paso que ya no
+              existe — decía «debe sonar igual que con el módulo apagado». */
            {"id":"rx_no_noise","code":"FM-010",
             "label":{"en":"No added background noise","zh":"未增加背景噪声","es":"Sin ruido de fondo añadido"},
-            "help":{"en":"The station must sound the same as it did with the module off. A hiss that rises, or reception that becomes unstable, is the module.",
-                    "zh":"电台的声音应与模块关闭时一致。若嘶声变大，或接收变得不稳定，即为模块所致。",
-                    "es":"La emisora debe sonar igual que con el módulo apagado. Un siseo que sube, o una recepción que se vuelve inestable, es el módulo."}},
-           {"id":"rx_no_whistle","code":"FM-010",
-            "label":{"en":"No whistle or tone","zh":"无啸叫或单音干扰","es":"Sin silbido ni tono"},
-            "help":{"en":"Listen for a fixed tone behind the programme, of the kind that does not change with the music. It usually appears at some points of the dial and not at others, so go over the band before passing this.",
-                    "zh":"注意节目声背后是否有固定的单音，且不随音乐变化。它通常只出现在频段的某些位置，因此判定合格前应在整个频段上扫查。",
-                    "es":"Escuche si aparece un tono fijo detrás del programa, de los que no cambian con la música. Suele salir en unos puntos del dial y no en otros, así que recorra la banda antes de aprobar esto."}}]},
+            "help":{"en":"With the module fitted and powered, listen to the station for twenty seconds. It must come in clean: no hiss riding on top of the programme, no reception that drifts in and out. A station that is heard worse with the module in place than the rest of the band is the module.",
+                    "zh":"在模块已装且通电的状态下试听该电台二十秒。声音应干净：节目声上不得叠加嘶声，接收不得时有时无。若装入模块后该电台的接收明显劣于频段其余部分，即为模块所致。",
+                    "es":"Con el módulo puesto y alimentado, escuche la emisora veinte segundos. Debe entrar limpia: sin siseo montado sobre el programa y sin que la recepción se vaya y vuelva. Una emisora que con el módulo puesto se oye peor que el resto de la banda es el módulo."}}]},
 
         {/* RHYME's back panels carry no antenna, no antenna connector, no dial
               and no band markings: the four LEDs that look like a source

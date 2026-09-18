@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="19.2">
+<meta name="app-version" content="19.3">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -963,7 +963,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 171,
+      "plan_version": 172,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -6226,19 +6226,30 @@ const CONFIG = {
             "help":{"en":"The same product laid on its side, and the logo turned again until it reads level. Check it turns smoothly, without forcing and without play, and that it does not slip back.",
                     "zh":"同一台产品横放，再次旋转标志至水平可读。检查旋转顺畅、无需用力、无旷量，且不会自行回转。",
                     "es":"El mismo producto acostado, y el logo girado otra vez hasta que se lea derecho. Compruebe que gira suave, sin forzar y sin juego, y que no se devuelve solo."}},
-           {/* Ninguna referencia ARC lleva ruedas — las siete, por decisión de
-                Producto en el plan 171. Empezó siendo sólo el ARC104A2, en el
-                167: el operario estaba reprobando el punto y salió como no
-                conformidad en un informe, cuando lo que pasaba es que el
-                producto nunca tuvo ruedas.
+           {/* Quién SÍ lleva ruedas, y no quién no. Producto revisó el catálogo
+                referencia por referencia en el plan 172 y pasó la lista
+                completa: dieciocho de las cincuenta llevan ruedas. Enumerar las
+                treinta y dos que no sería una lista que hay que mantener al
+                revés — cada referencia nueva entraría con ruedas por omisión,
+                y el punto volvería a salir donde no toca.
 
-                La lista va enumerada y no por prefijo, como todo lo demás en
-                este archivo. Quien agregue un ARC nuevo tiene que añadirlo
-                aquí; a cambio, un ARC que algún día sí traiga ruedas no se
-                queda sin revisar sin que nadie se entere. */
+                Así, una referencia nueva no pide ruedas hasta que alguien diga
+                que las tiene. Es el sentido correcto del error: un punto de
+                menos se nota al revisar el plan; uno de más se reprueba en
+                producción y sale como no conformidad en un informe, que es
+                exactamente lo que pasó con el ARC104A2 en el plan 167.
+
+                El KAP206 se conserva por ser de desarrollo y no venir en la
+                lista de Producto — está pendiente de confirmar. */
             "id":"ruedas",
-            "skip":["HK-ARC101","HK-ARC104","HK-ARC104A2","HK-ARC105",
-                    "HK-ARC105PLO","HK-ARC106A2","HK-ARC108A2"],
+            "only":["HK-BRA208A1","HK-BRA208B1","HK-BRA210A1","HK-BRA210B1",
+                    "HK-BRA212B1",
+                    "HK-NOV02","HK-NOV02-ARG",
+                    "HK-POW101","HK-POW104",
+                    "HK-RES102","HK-RES103","HK-RES104","HK-RES106",
+                    "HK-RES106B1","HK-RES115B2",
+                    "HK-RNW103","HK-RNW105","HK-RNW212A2",
+                    "HK-KAP206"],
             "label":{"en":"Wheels","zh":"轮子"}},
            {"id":"num_lote","label":{"en":"Lot number","zh":"批号"},
             "help":{"en":"Close-up of the lot or batch number of the speaker: the code printed or labelled on the product itself, usually next to the specification label. Every digit must be sharp and legible in the photo, and it must match the lot recorded on the inspection paperwork. If this reference carries no lot number, photograph the serial number instead and say so in the notes.",

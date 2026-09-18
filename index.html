@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="19.3">
+<meta name="app-version" content="19.4">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -963,7 +963,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 172,
+      "plan_version": 173,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -6263,6 +6263,73 @@ const CONFIG = {
                     "zh":"正对面板拍照，距离足够近以便看清每一个印字。面板为西班牙文丝印：逐字母阅读旋钮、接口和警告的标注。拼写错误会在整批产品上完全一致，且事后无法修正。",
                     "es":"Fotografíe el panel de frente, lo bastante cerca para leer cada palabra impresa. Viene serigrafiado en español: lea letra por letra los rótulos de las perillas, las entradas y las advertencias. Una errata sale idéntica en todas las unidades de la corrida y después no se puede corregir."}}]},
 
+        /* ===== ALINEACIÓN DE PERILLAS · YISION, plan 173 ====================
+           Las perillas ya se fotografiaban y sus controles ya se probaban, pero
+           nadie juzgaba hacia dónde apuntan. Son dos cosas distintas: una
+           perilla montada en el eje con el ángulo equivocado gira suave, sube y
+           baja el nivel y pasa todas las pruebas de función — lo único que
+           miente es la posición. El usuario la pone «al medio» y está al
+           máximo, o la deja en el tope y quedan dos rayas de distancia.
+
+           Dos fotos y no ocho. Girar las cuatro a la vez y fotografiar el panel
+           entero no es sólo más rápido: es mejor prueba. Una perilla torcida
+           salta a la vista contra las de al lado en la misma imagen, y ocho
+           fotos sueltas esconden justo eso.
+
+           El criterio va contra la serigrafía del panel y no contra las otras
+           perillas. Cuatro perillas montadas todas con el mismo error se ven
+           perfectamente alineadas entre sí.
+
+           Va aquí, detrás de PARTES EXTERNAS, porque el operario acaba de
+           fotografiar ese mismo panel y lo tiene delante. */
+        {"id":"KNOB_ALIGN","optional":false,"only_factory":["YIS"],"evidence":[],
+         "skip":["HK-KAP208"],
+         "label":{"en":"KNOB ALIGNMENT","zh":"旋钮对位","es":"ALINEACIÓN DE PERILLAS"},
+         "steps":[
+           {"en":"Turn every knob to the stop, anticlockwise","zh":"将所有旋钮逆时针旋到底","es":"Gire todas las perillas al tope, hacia la izquierda"},
+           {"en":"Photograph the whole panel, square on","zh":"正对拍摄整块面板","es":"Fotografíe el panel completo, de frente"},
+           {"en":"Turn them all to the other stop and repeat the photo","zh":"再将所有旋钮旋到另一端并重复拍照","es":"Gírelas todas al tope contrario y repita la foto"},
+           {"en":"Compare each knob against its marking, in both photos","zh":"在两张照片中逐一将旋钮与其标记比对","es":"Compare cada perilla con su marca, en las dos fotos"}],
+         "points":[
+           {"section":{"en":"How this is judged","zh":"判定方法","es":"Cómo se juzga esto"},
+            "help":{"en":"A badly fitted knob turns smoothly, changes the level and passes every function test: the only thing that lies is where it points. Judge each knob against the marking silkscreened on the panel, not against the other knobs — four knobs all fitted with the same error look perfectly aligned with each other. Take the photographs square on: from an angle, a knob that is fine looks off.",
+                    "zh":"装配不当的旋钮旋转顺畅、可正常调节电平、能通过所有功能测试：唯一失真的是其指向。请将每个旋钮与面板丝印标记比对，而非与其他旋钮比对——四个旋钮若装配误差相同，彼此之间看起来完全对齐。拍照须正对面板：斜视角度下，正常的旋钮也会显得偏斜。",
+                    "es":"Una perilla mal puesta gira suave, cambia el nivel y pasa todas las pruebas de función: lo único que miente es hacia dónde apunta. Juzgue cada perilla contra la marca serigrafiada en el panel, no contra las otras perillas — cuatro perillas montadas todas con el mismo error se ven perfectamente alineadas entre sí. Las fotos van de frente: de lado, una perilla que está bien parece torcida."}},
+           {"id":"knob_min","code":"AUD-019","photo":true,"must":true,
+            "label":{"en":"Panel with every knob at minimum","zh":"所有旋钮置于最小位置的面板","es":"Panel con todas las perillas al mínimo"},
+            "help":{"en":"All of them turned to the stop, anticlockwise, and one photograph of the whole panel. Every knob and its marking must be legible in the same frame.",
+                    "zh":"将所有旋钮逆时针旋到底，拍摄整块面板一张照片。每个旋钮及其标记均须在同一画面中清晰可辨。",
+                    "es":"Todas giradas al tope hacia la izquierda, y una sola foto del panel completo. Cada perilla y su marca deben quedar legibles en el mismo encuadre."}},
+           {"id":"knob_max","code":"AUD-019","photo":true,"must":true,
+            "label":{"en":"Panel with every knob at maximum","zh":"所有旋钮置于最大位置的面板","es":"Panel con todas las perillas al máximo"},
+            "help":{"en":"The same photograph with every knob turned to the other stop. Same distance and same angle as the first one, so the two can be compared.",
+                    "zh":"将所有旋钮旋到另一端后拍摄同样的照片。距离与角度须与第一张一致，以便两张照片可相互比对。",
+                    "es":"La misma foto con todas las perillas giradas al tope contrario. A la misma distancia y con el mismo ángulo que la primera, para poder compararlas."}},
+           {"section":{"en":"Knob by knob","zh":"逐个旋钮","es":"Perilla por perilla"},
+            "help":{"en":"Mark N/A any knob this reference does not carry.",
+                    "zh":"本型号未配备的旋钮请标记为不适用。",
+                    "es":"Marque N/A la perilla que esta referencia no lleve."}},
+           {"id":"knob_volume","code":"AUD-019",
+            "label":{"en":"Volume — lines up at both stops","zh":"音量 — 两端均对位","es":"Volumen — coincide en los dos topes"},
+            "help":{"en":"At the stop it must sit on its mark, not short of it and not past it. If the panel has no mark at the ends, it must at least stop at the same place as the other knobs of the same size.",
+                    "zh":"旋到底时应正好落在标记上，不得不足或超过。若面板两端无标记，则至少应与同尺寸的其他旋钮停在相同位置。",
+                    "es":"En el tope debe quedar sobre su marca, ni antes ni pasada. Si el panel no trae marca en los extremos, al menos debe detenerse en el mismo sitio que las otras perillas del mismo tamaño."}},
+           {"id":"knob_bass","code":"AUD-019",
+            "label":{"en":"Bass — lines up at both stops","zh":"低音 — 两端均对位","es":"Graves — coincide en los dos topes"},
+            "help":{"en":"The same check on the bass knob.",
+                    "zh":"对低音旋钮做同样的检查。",
+                    "es":"La misma comprobación en la perilla de graves."}},
+           {"id":"knob_treble","code":"AUD-019",
+            "label":{"en":"Treble — lines up at both stops","zh":"高音 — 两端均对位","es":"Agudos — coincide en los dos topes"},
+            "help":{"en":"The same check on the treble knob.",
+                    "zh":"对高音旋钮做同样的检查。",
+                    "es":"La misma comprobación en la perilla de agudos."}},
+           {"id":"knob_mid","code":"AUD-019",
+            "label":{"en":"Mid — lines up at both stops","zh":"中音 — 两端均对位","es":"Medios — coincide en los dos topes"},
+            "help":{"en":"The same check on the mid knob. Mark N/A if this reference has no mid control.",
+                    "zh":"对中音旋钮做同样的检查。本型号若无中音调节，请标记为不适用。",
+                    "es":"La misma comprobación en la perilla de medios. Marque N/A si esta referencia no tiene control de medios."}}]},
+
         {"id":"ACCESSORIES","optional":false,"type":"photos",
          "only_factory":["YIS","RHY","EAG"],
          /* El Epsilon salió en el plan 105 y RHYME entera en el 119: esta prueba
@@ -9942,11 +10009,11 @@ const TEST_NO = {
   KAP_MODULE_AUDIO:104, KAP_FM_MODULE:105, LEAK_CURRENT:106,
   OUT_120HZ:107, MIC_POS:108, EPS15_PREV:109,
   GS_POWER:110, GS_DRIVERS:111, GS_BATTERY:112, GS_RF:113, GS_MECH:114,
-  GS_FW:115, GS_LAB:116, GS_DOCS:117
+  GS_FW:115, GS_LAB:116, GS_DOCS:117, KNOB_ALIGN:118
 };
 /* El siguiente número libre. Está aquí para que quien agregue una prueba no
    tenga que contar: es 79 y sube de uno en uno. */
-const NEXT_TEST_NO = 118;
+const NEXT_TEST_NO = 119;
 
 /* En las referencias de desarrollo la numeración es otra, y a propósito.
 
@@ -10074,7 +10141,8 @@ const GROUPS = {
      label:{en:"Power supply","zh":"电源","es":"Fuente de alimentación"}},
     {id:"usbout",tests:["KAP_USB_OUT"],
      label:{en:"External USB charging","zh":"外接 USB 充电","es":"Carga USB externo"}},
-    {id:"ext",   tests:["KAP_DIMS","KAP_CABINET","KAP_TRIPOD","EXTERNAL","ACCESSORIES"],
+    {id:"ext",   tests:["KAP_DIMS","KAP_CABINET","KAP_TRIPOD","EXTERNAL",
+                        "KNOB_ALIGN","ACCESSORIES"],
      label:{en:"External parts","zh":"外部部件","es":"Partes externas"}},
     {id:"int",   tests:["KAP_WIRING","KAP_DRIVERS","INTERNAL"],
      label:{en:"Internal parts","zh":"内部部件","es":"Partes internas"}},
@@ -10156,7 +10224,7 @@ const DEFAULT_GROUPS = [
                      "AUX","DSP_MODES","XLR_OUT","OUT_120HZ","INPUT_CHANNELS",
                      "MIC_POS","DISPLAY","REMOTE","SUB_IN","SUB_OUT","GPE"],
    label:{en:"Functional","zh":"功能","es":"Funcionales"}},
-  {id:"ext",  tests:["EXTERNAL","EPS_EXTERNAL","SUB_EXTERNAL"],
+  {id:"ext",  tests:["EXTERNAL","EPS_EXTERNAL","SUB_EXTERNAL","KNOB_ALIGN"],
    label:{en:"External parts","zh":"外部部件","es":"Partes externas"}},
   {id:"pack", tests:["ACCESSORIES","SUB_ACC","GRAPHICS","SUB_GRAPHICS"],
    label:{en:"Accessories and printed matter","zh":"配件与印刷品",

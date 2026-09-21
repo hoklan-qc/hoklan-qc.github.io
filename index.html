@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="19.4">
+<meta name="app-version" content="19.5">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -963,7 +963,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 173,
+      "plan_version": 174,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -6951,22 +6951,27 @@ const CONFIG = {
                     "zh":"拍摄板上印制版本号的特写——丝印于板面的编号，通常位于板边。照片中每个字符均须清晰可读。若板上无任何印字，请拍摄应有位置并在备注中说明。",
                     "es":"Primer plano de la versión impresa en la tarjeta — el código serigrafiado sobre el cobre, normalmente en un borde. Cada carácter debe quedar legible en la foto. Si no trae nada impreso, fotografíe el sitio donde debería ir y dígalo en la nota."}},
 
-           {/* Plan 168 · YISION. La malla por las dos caras. Por delante es lo
-                que ve el cliente; por detrás es donde se ven el golpe que no
-                traspasó, la pintura saltada y la espuma despegada — y es la
-                cara que sólo se puede fotografiar con el producto abierto, que
-                es justo donde está el operario en esta prueba. */
+           {/* La malla por las dos caras. Por delante es lo que ve el cliente;
+                por detrás es donde se ven el golpe que no traspasó, la pintura
+                saltada y la espuma despegada — y es la cara que sólo se puede
+                fotografiar con el producto abierto, que es justo donde está el
+                operario en esta prueba.
+
+                Nació en YISION en el plan 168 y pasó también a RHYME en el 174.
+                Es la misma pieza y el mismo defecto en las dos fábricas: las
+                cabinas de RHYME ya contaban los tornillos de la parrilla en
+                PARTES EXTERNAS, pero nadie miraba nunca su cara interior. */
             "section":{"en":"The grille, both faces","zh":"网罩正反两面","es":"La malla, por las dos caras"},
-            "only_factory":["YIS"],
+            "only_factory":["YIS","RHY"],
             "help":{"en":"With the grille removed. The two photographs are of the same part, turned over.",
                     "zh":"网罩拆下后拍摄。两张照片为同一部件的正反两面。",
                     "es":"Con la malla desmontada. Las dos fotos son de la misma pieza, volteada."}},
-           {"id":"malla_frente","only_factory":["YIS"],
+           {"id":"malla_frente","only_factory":["YIS","RHY"],
             "label":{"en":"Grille — front","zh":"网罩 — 正面","es":"Malla — por delante"},
             "help":{"en":"The face that shows on the finished product, whole and square on. Look for dents, flattened mesh and paint defects.",
                     "zh":"拍摄成品外露的一面，整体入镜并正对拍摄。检查凹陷、网孔压扁与喷涂缺陷。",
                     "es":"La cara que queda a la vista en el producto terminado, completa y de frente. Busque golpes, malla aplastada y defectos de pintura."}},
-           {"id":"malla_reverso","only_factory":["YIS"],
+           {"id":"malla_reverso","only_factory":["YIS","RHY"],
             "label":{"en":"Grille — back","zh":"网罩 — 背面","es":"Malla — por detrás"},
             "help":{"en":"The inner face, with its foam or fabric if it carries one. Check the foam is glued all the way round and not torn, and that the frame is not bent.",
                     "zh":"拍摄内侧面，若带海绵或布网须一并入镜。确认海绵四周粘贴牢固、无破损，边框无变形。",

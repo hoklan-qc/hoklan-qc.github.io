@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="19.6">
+<meta name="app-version" content="19.7">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -963,7 +963,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 175,
+      "plan_version": 176,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -6177,6 +6177,25 @@ const CONFIG = {
            {"en":"If you find a defect, take a close-up as well as the general photo","zh":"发现缺陷时，除整体照外再拍一张特写"},
            {"en":"Mark N/A anything this reference does not include","zh":"本型号不包含的项目请标记为 N/A"}],
          "points":[
+           {/* El peso neto, plan 176 · YISION. Va aquí y no en MATERIAL
+                IMPRESO, donde quedó el bruto, porque son dos momentos
+                distintos: el bruto se toma con la caja cerrada antes de
+                abrirla, y éste con el producto ya desempacado y sobre la mesa,
+                que es donde está el operario en esta prueba. Es la misma razón
+                por la que el peso neto del Epsilon salió de CAJA en el plan 118.
+
+                Los dos juntos son lo que permite auditar el empaque: bruto
+                menos neto es lo que pesan la caja, las espumas y los
+                accesorios, y esa resta tiene que dar parecido entre unidades de
+                la misma referencia. */
+            "id":"ext_neto","only_factory":["YIS"],
+            "photo":true,"measure":{"unit":"kg","step":"0.1"},
+            "sample":"caja_peso",
+            "label":{"en":"Net weight — the product alone","zh":"净重 — 仅整机",
+                     "es":"Peso neto — el producto solo"},
+            "help":{"en":"The product on its own on the scale: no box, no foam, no cable, no printed matter and no accessories. Photograph the reading and write the figure.",
+                    "zh":"将产品单独放在秤上：不含彩盒、泡棉、线材、印刷品与配件。拍摄读数并填写数值。",
+                    "es":"El producto solo sobre la báscula: sin caja, sin espumas, sin cable, sin impresos y sin accesorios. Fotografíe la lectura y escriba la cifra."}},
            {"id":"frontal","label":{"en":"Front","zh":"正面"}},
            {"id":"trasera","label":{"en":"Back","zh":"背面"}},
            {"id":"lateral_der","label":{"en":"Right side","zh":"右侧面"},
@@ -6503,6 +6522,22 @@ const CONFIG = {
            {"id":"caja_inferior","label":{"en":"Box — bottom","zh":"彩盒 — 底面"},
             "help":{"en":"The bottom, including the seal and any shipping label.",
                     "zh":"拍摄底面，需拍到封口和运输标签。"}},
+           {/* El peso bruto, plan 176. YISION medía las tres dimensiones de la
+                caja pero no la pesaba: de las cincuenta y cuatro referencias,
+                cuarenta y dos llegaban al informe sin un solo peso de embarque.
+                RHYME lo pide desde siempre en su prueba CAJA.
+
+                Va aquí, delante de las medidas, porque es el mismo gesto y el
+                mismo momento: la caja cerrada sobre la mesa, antes de abrirla.
+                Después ya no se puede — una caja abierta pesa otra cosa. */
+            "id":"caja_bruto","only_factory":["YIS"],
+            "photo":true,"measure":{"unit":"kg","step":"0.1"},
+            "sample":"caja_peso",
+            "label":{"en":"Gross weight — product in its box","zh":"毛重 — 含彩盒整机",
+                     "es":"Peso bruto — el producto en su caja"},
+            "help":{"en":"The box closed and complete, as it ships, on the scale. Photograph the reading and write the figure. It has to be before opening it: once the box is open the weight is another one, and this is the figure that has to match the packing list.",
+                    "zh":"将彩盒按出厂状态完整封好后置于秤上。拍摄读数并填写数值。须在开箱前完成：彩盒一经打开，重量即不同，而此数值须与装箱单一致。",
+                    "es":"La caja cerrada y completa, tal como se embarca, sobre la báscula. Fotografíe la lectura y escriba la cifra. Tiene que ser antes de abrirla: una vez abierta la caja el peso es otro, y ésta es la cifra que tiene que cuadrar con el packing list."}},
            {/* `photo` faltaba en las tres. La ayuda ya mandaba encuadrar los dos
                 extremos de la cinta, así que pedía una foto que la app no
                 recogía: el número entraba solo, sin nada detrás. En RHYME las

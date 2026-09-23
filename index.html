@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="19.8">
+<meta name="app-version" content="19.9">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -963,7 +963,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 177,
+      "plan_version": 178,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -6401,11 +6401,11 @@ const CONFIG = {
             "help":{"en":"The opposite side, showing the switch, the battery compartment and the connector.",
                     "zh":"拍摄另一面，需拍到开关、电池仓和接头。"}},
            {"id":"tripode_front","skip":["HK-RNW212A2","HK-SKA108A1"],
-            "label":{"en":"Tripod —front","zh":"三脚架 — 正面"},
+            "label":{"en":"Tripod — front","zh":"三脚架 — 正面"},
             "help":{"en":"The tripod assembled, seen from the front: legs, column and mounting plate.",
                     "zh":"拍摄组装好的三脚架正面：支脚、立柱和安装盘。"}},
            {"id":"tripode_back","skip":["HK-RNW212A2","HK-SKA108A1"],
-            "label":{"en":"Tripod —back","zh":"三脚架 — 背面"},
+            "label":{"en":"Tripod — back","zh":"三脚架 — 背面"},
             "help":{"en":"The back, showing the locking knobs and the welds.",
                     "zh":"拍摄背面，需拍到锁紧旋钮和焊接部位。"}}]},
 
@@ -8596,7 +8596,6 @@ const ES_PLAN = {
   "Wait until it reads the USB drive and starts playing":"Espere hasta que lea la memoria y empiece a reproducir",
   "Let the HOKLAN USB play, listening for dropouts":"Deje reproducir la USB HOKLAN, atento a cortes",
   "With the USB drive playing, check each control on the list":"Con la memoria reproduciendo, verifique cada control de la lista",
-  "Finally, switch the speaker off and on to see if it starts in USB":"Por último, apague y encienda el parlante para ver si arranca en USB",
 
   /* Steps — SD */
   "Insert the HOKLAN test SD card into the speaker":"Inserte la tarjeta SD de prueba HOKLAN en el parlante",
@@ -8690,7 +8689,6 @@ Object.assign(ES_PLAN, {
   "Plays the audio from the card":"Reproduce el audio de la tarjeta",
   "No dropouts during playback":"Sin cortes durante la reproducción",
   "No hum or interference":"Sin zumbido ni interferencia",
-  "Starts in USB automatically on power on":"Arranca en USB automáticamente al encender",
   "Starts in SD automatically on power on":"Arranca en SD automáticamente al encender",
   "Woofer sounds":"El woofer suena",
   "Tweeter sounds":"El tweeter suena",
@@ -8791,26 +8789,18 @@ Object.assign(ES_PLAN, {
   "Tag — front":"Etiqueta colgante — frente",
   "Tag — back":"Etiqueta colgante — reverso",
   "Loyalty card":"Tarjeta de fidelización",
-  "With music playing, press priority and speak into MIC1. The music must drop to about 10% of its level — a drop of roughly 90%, so the voice is heard over a background that is almost silent — and come back to full level when you stop. A drop you have to strain to notice is a fail: on a live speaker the priority is there so the voice can be understood without turning the music down by hand.":"Con música sonando, pulse prioridad y hable por MIC1. La música debe bajar a un 10% de su nivel —una caída de cerca del 90%, de modo que la voz se oiga sobre un fondo casi en silencio— y volver a su nivel completo al dejar de hablar. Una caída que haya que esforzarse en notar es un fallo: en un parlante en uso, la prioridad existe para que la voz se entienda sin bajar la música a mano.",
   "Unplug MIC1 and plug the microphone into MIC2. Same test, and the same criterion: the music must drop to about 10% of its level while you speak. Mark N/A, here and in the three points below, if this reference has only one microphone input.":"Desconecte MIC1 y conecte el micrófono en MIC2. La misma prueba y el mismo criterio: la música debe bajar a un 10% de su nivel mientras habla. Marque N/A, aquí y en los tres puntos siguientes, si esta referencia tiene una sola entrada de micrófono.",
   "With music playing, press it and speak into the microphone. The music must drop to about 10% of its level while you speak — the same 90% drop the front panel key has to give — and return afterwards.":"Con música sonando, púlsela y hable al micrófono. La música debe bajar a un 10% de su nivel mientras habla —la misma caída del 90% que debe dar la tecla del panel— y volver después.",
   "Say short words into MIC1 and turn the echo from minimum to maximum. The repetition must go from none to clearly audible, and the delay must stay within 0 to 280 ms: at maximum the echo must still follow the voice closely, not lag like a separate second voice. Anything longer than that stops sounding like reverberation and starts sounding like a fault.":"Diga palabras cortas por MIC1 y lleve el eco del mínimo al máximo. La repetición debe pasar de nula a claramente audible, y el retardo debe mantenerse entre 0 y 280 ms: incluso al máximo, el eco debe seguir de cerca a la voz, no arrastrarse como una segunda voz aparte. Más allá de ese rango deja de sonar a reverberación y empieza a sonar a defecto.",
   "Say short words into MIC2 and turn the echo up. Same range: 0 to 280 ms.":"Diga palabras cortas por MIC2 y suba el eco. El mismo rango: 0 a 280 ms.",
   "Sound pressure level at 1 kHz":"Medición de SPL a 1 kHz",
   "SPL at 1 kHz, one metre":"SPL a 1 kHz, a un metro",
-  "Everything at maximum before measuring: bass, treble, the volume on the speaker and the volume on the phone. What is being measured is what this unit can deliver, and a single control left halfway makes the reading worthless and impossible to compare with the next speaker. Then take the sound level meter and set it to PEAK and SLOW. Place it one metre from the speaker, at the same height as the woofer and pointing at it. From the phone, over Bluetooth, play a 1 kHz tone with a signal generator app. Photograph the meter with the reading visible and write the value in the box.":"Todo al máximo antes de medir: graves, agudos, el volumen de la cabina y el volumen del celular. Lo que se mide es lo que esta unidad puede entregar, y un solo control a media marcha deja la lectura sin valor e imposible de comparar con el siguiente parlante. Luego tome el sonómetro y configúrelo en PICO (PEAK) y LENTA (SLOW). Ubíquelo a un metro del parlante, a la misma altura del woofer y apuntando hacia él. Desde el celular, por Bluetooth, reproduzca un tono de 1 kHz con una aplicación generadora de señal. Fotografíe el sonómetro con la lectura visible y escriba el valor en el recuadro.",
   "Woofer — weight":"Woofer — peso",
-  "Place the woofer on the scale on its own, with no screws, gasket or cable attached. Photograph the reading and write the value in the box. Weight is what tells the magnet apart: two woofers that look identical from the front can be hundreds of grams apart, and that difference is the sound.":"Coloque el woofer solo sobre la balanza, sin tornillos, empaque ni cables. Fotografíe la medida y escriba el valor en el recuadro. El peso es lo que delata el imán: dos woofers idénticos de frente pueden diferir en cientos de gramos, y esa diferencia es el sonido.",
   "Box — width":"Caja — ancho",
-  "The horizontal side of the front face. Hook the tape on one edge and read it at the opposite edge, with both ends inside the frame: a photo that shows only the number cannot be checked by anybody afterwards. Read the centimetre scale, not the inches — the tape carries both, and 86 cm sits right next to 34 in.":"El lado horizontal de la cara frontal. Enganche la cinta en un borde y lea en el borde opuesto, con los dos extremos dentro del encuadre: una foto que solo muestra el número no la puede verificar nadie después. Lea la escala en centímetros, no las pulgadas — la cinta trae las dos, y 86 cm queda justo al lado de 34 in.",
   "Box — depth":"Caja — largo",
-  "The depth: the tape crosses the top face, from the front edge to the back edge. Same rule — both ends of the tape in the photo, and centimetres.":"El largo: la cinta cruza la tapa superior, del borde delantero al trasero. La misma regla — los dos extremos de la cinta en la foto, y en centímetros.",
   "Box — height":"Caja — alto",
-  "The vertical side, from the base to the top. Stand the box up and run the tape down one corner. This is the one where the bottom end usually falls out of the frame: step back until the base and the reading are both in the picture.":"El lado vertical, de la base al tope. Pare la caja y baje la cinta por una esquina. Esta es la que más se toma con el extremo inferior fuera de cuadro: retroceda hasta que la base y la lectura entren las dos en la foto.",
   "Bag the speaker is packed in":"Bolsa en que viene empacado el parlante",
-  "The bag the speaker itself comes wrapped in inside the box — not the small bags of the accessories. Lay it out flat and photograph it whole, so the print, the thickness and any tear can be seen.":"La bolsa que envuelve el parlante dentro de la caja, no las bolsitas de los accesorios. Extiéndala y fotografíela completa, de modo que se vean la impresión, el calibre y cualquier roto.",
   "Warranty seal":"Sello de garantía",
-  "The seal covering a screw or a joint of the cabinet, the one that breaks if the speaker is opened. Photograph it in place and whole: a seal that arrives already broken or badly stuck means the unit cannot be claimed under warranty later.":"El sello que cubre un tornillo o una junta del gabinete, el que se rompe si se abre el parlante. Fotografíelo en su sitio y entero: un sello que llega roto o mal pegado deja esa unidad sin posibilidad de reclamar la garantía después.",
   "Quality control seal":"Sello de control de calidad",
   "The label the factory's own inspection leaves on the unit, usually with an inspector number or a date. It is a different label from the warranty seal: this one says who passed the speaker inside the factory. Photograph it close enough to read the number.":"La etiqueta que deja la inspección propia de la fábrica, normalmente con un número de inspector o una fecha. Es una etiqueta distinta del sello de garantía: esta dice quién aprobó el parlante dentro de la fábrica. Fotografíela lo bastante cerca como para leer el número.",
   "Technical specification label":"Etiqueta de especificaciones técnicas",
@@ -8844,7 +8834,6 @@ Object.assign(ES_PLAN, {
   "Let one full track play without touching anything. Listen for cuts, stutters or channels dropping out.":"Deje sonar una pista completa sin tocar nada. Escuche si hay cortes, saltos o si se cae algún canal.",
   "Listen close to the grille at medium volume. Behind the music there must be no hum, hiss or crackle.":"Escuche cerca de la malla a volumen medio. Detrás de la música no debe haber zumbido, siseo ni crujidos.",
   "Listen close to the grille at medium volume. Behind the music there must be no hum, hiss or digital crackle.":"Escuche cerca de la malla a volumen medio. Detrás de la música no debe haber zumbido, siseo ni crujidos digitales.",
-  "With the USB drive still inserted, switch the speaker off and on. It must return to USB mode and start playing without pressing anything.":"Con la memoria aún insertada, apague y encienda el parlante. Debe volver al modo USB y empezar a reproducir sin pulsar nada.",
   "With the card still inserted, switch the speaker off and on. It must return to SD mode and start playing without pressing anything.":"Con la tarjeta aún insertada, apague y encienda el parlante. Debe volver al modo SD y empezar a reproducir sin pulsar nada.",
   "Play a track with bass. Hold your hand in front of the woofer and feel it move. The low end must be present and clean, not weak or muffled.":"Reproduzca una pista con graves. Ponga la mano frente al woofer y sienta el movimiento. El bajo debe estar presente y limpio, no débil ni apagado.",
   "Listen for cymbals and high detail. Cover the woofer with your hand: the treble must still be clearly audible.":"Escuche los platillos y el detalle agudo. Tape el woofer con la mano: los agudos deben seguir oyéndose con claridad.",
@@ -8873,7 +8862,6 @@ Object.assign(ES_PLAN, {
   "Playing over Bluetooth, switch X-BASS on and off several times. The low end must jump noticeably when it is on and go back when it is off, and the display must show the change. Then raise the volume to maximum with X-BASS on: the bass must stay clean, with no distortion and no rattle from the woofer.":"Reproduciendo por Bluetooth, active y desactive X-BASS varias veces. El bajo debe aumentar notoriamente al activarlo y volver a su estado al desactivarlo, y la pantalla debe mostrar el cambio. Luego suba el volumen al máximo con X-BASS activo: el bajo debe mantenerse limpio, sin distorsión y sin traqueteo del woofer.",
   "Plug a microphone into MIC1 and speak while you adjust volume, echo and priority. Repeat with MIC2, then connect the guitar. Mark N/A for whatever this reference does not have.":"Conecte un micrófono en MIC1 y hable mientras ajusta volumen, eco y prioridad. Repita con MIC2 y luego conecte la guitarra. Marque N/A lo que esta referencia no tenga.",
   "Speak continuously into MIC2 while turning its volume from minimum to maximum.":"Hable de forma continua por MIC2 mientras gira su volumen del mínimo al máximo.",
-  "Say short words into MIC2 and turn the echo up.":"Diga palabras cortas por MIC2 y suba el eco.",
   "Speak into MIC2 and raise the reverb. Echo and reverb must act independently on this input too.":"Hable por MIC2 y suba la reverberación. En esta entrada el eco y la reverberación también deben actuar de forma independiente.",
   "Speak continuously into MIC1 while turning its volume from minimum to maximum. The level must rise smoothly, without cutting out or crackling.":"Hable de forma continua por MIC1 mientras gira su volumen del mínimo al máximo. El nivel debe subir de forma suave, sin cortes ni crujidos.",
   "Speak into MIC1 and raise the reverb. The voice must gain body and depth, not repeat like the echo. Both controls must act independently.":"Hable por MIC1 y suba la reverberación. La voz debe ganar cuerpo y profundidad, no repetirse como el eco. Los dos controles deben actuar de forma independiente.",
@@ -8892,7 +8880,6 @@ Object.assign(ES_PLAN, {
   "Same check on the microphone bass. Mark N/A if this reference has no separate microphone tone controls.":"La misma verificación en los graves del micrófono. Marque N/A si esta referencia no tiene controles de tono independientes para micrófono.",
   "Same check on the microphone treble. Mark N/A if this reference has no separate microphone tone controls.":"La misma verificación en los agudos del micrófono. Marque N/A si esta referencia no tiene controles de tono independientes para micrófono.",
 
-  "The display is what the customer reads to know what the speaker is doing, and a misspelled mode is a defect that ships on every unit of the batch. Photograph each mode: the photo is what lets the office check the spelling without the speaker in front of them.":"La pantalla es lo que el cliente lee para saber qué está haciendo el parlante, y un modo mal escrito es un defecto que sale en todas las unidades del lote. Fotografíe cada modo: esa foto es lo que permite a la oficina revisar la escritura sin tener el parlante delante.",
   "Look at the display straight on, in shade. Every character must be white, all of them the same white. A segment that reads bluish or yellowish next to the others is a fault even when the word is legible.":"Mire la pantalla de frente y a la sombra. Todos los caracteres deben ser blancos, y del mismo blanco. Un segmento que se vea azulado o amarillento junto a los demás es un defecto aunque la palabra se lea bien.",
   "Select USB mode and read what the display shows, letter by letter. Photograph it. Compare against the specification: USB, not U5B or U58.":"Cambie a modo USB y lea lo que muestra la pantalla, letra por letra. Fotografíelo. Compare contra la especificación: USB, no U5B ni U58.",
   "Select Bluetooth mode and read what the display shows, letter by letter. Photograph it. Whether it says BLUETOOTH, BT or BLUE, it must be spelled the way the specification requires.":"Cambie a modo Bluetooth y lea lo que muestra la pantalla, letra por letra. Fotografíelo. Diga BLUETOOTH, BT o BLUE, debe estar escrito como lo exige la especificación.",
@@ -8909,12 +8896,10 @@ Object.assign(ES_PLAN, {
   "With the phone paired and nearby, switch the speaker off and on. It must reconnect by itself, without pairing again.":"Con el teléfono emparejado y cerca, apague y encienda el parlante. Debe reconectarse solo, sin volver a emparejar.",
   "Play for at least 30 seconds with the phone about 3 metres away. There must be no dropouts or disconnections.":"Reproduzca al menos 30 segundos con el teléfono a unos 3 metros. No debe haber cortes ni desconexiones.",
   "Play the test track from the phone and listen for at least 30 seconds, checking for dropouts and hum.":"Reproduzca la pista de prueba desde el teléfono y escuche al menos 30 segundos, atento a cortes y zumbidos.",
-  "A connected phone does not prove sound. Play music and confirm it really comes out of this speaker, not the phone or a nearby speaker.":"Que el teléfono esté conectado no prueba que haya sonido. Reproduzca música y confirme que sale realmente de este parlante, no del teléfono ni de otro parlante cercano.",
   "Press it on the speaker, not on the phone. The music must pause and the phone must show it paused too.":"Púlsela en el parlante, no en el teléfono. La música debe pausarse y el teléfono también debe mostrarla en pausa.",
   "Enable TWS mode and link the speaker to a second speaker. Confirm both play together. Mark N/A if this reference has no TWS.":"Active el modo TWS y enlace el parlante con un segundo parlante. Confirme que ambos suenan juntos. Marque N/A si esta referencia no tiene TWS.",
   "Enable TWS on both speakers and wait for them to pair with each other. Play music: both must sound together and in sync. Mark N/A if this reference has no TWS.":"Active TWS en los dos parlantes y espere a que se emparejen entre sí. Reproduzca música: ambos deben sonar juntos y sincronizados. Marque N/A si esta referencia no tiene TWS.",
   "Select radio mode and run the auto search to store stations. Step through them with next and back. Then switch the speaker off and on to check it keeps the last station.":"Seleccione el modo radio y ejecute la búsqueda automática para guardar emisoras. Recórralas con siguiente y anterior. Luego apague y encienda el parlante para comprobar que conserva la última emisora.",
-  "Run the auto search and let it finish. It must find several stations and store them; a speaker that finds one or none has an antenna problem.":"Ejecute la búsqueda automática y déjela terminar. Debe encontrar varias emisoras y guardarlas; un parlante que encuentra una o ninguna tiene problema de antena.",
   "Press it several times. The frequency must move to the next stored station each time, not scan endlessly.":"Púlsela varias veces. La frecuencia debe pasar a la siguiente emisora guardada cada vez, sin quedarse buscando sin fin.",
   "Press it several times. It must go back through the stored stations one at a time.":"Púlsela varias veces. Debe retroceder por las emisoras guardadas de una en una.",
   "Select the station stored in preset 2 and write down its frequency. Switch the speaker off, wait a few seconds and switch it on again. It must come back on preset 2, on the same frequency — not on preset 1 and not scanning.":"Seleccione la emisora guardada en la memoria 2 y anote su frecuencia. Apague el parlante, espere unos segundos y vuelva a encenderlo. Debe volver en la memoria 2, en la misma frecuencia — no en la memoria 1 ni buscando.",
@@ -8956,20 +8941,16 @@ Object.assign(ES_PLAN, {
   "Press it and confirm the recording you just made plays back clearly through the speaker.":"Púlsela y confirme que la grabación que acaba de hacer se reproduce con claridad por el parlante.",
   "Press it while speaking into the microphone and listen for the change in the voice effect. Mark N/A if this reference has no VOICE OUT.":"Púlsela mientras habla al micrófono y escuche el cambio en el efecto de voz. Marque N/A si esta referencia no tiene VOICE OUT.",
   "With the speaker off and unplugged from the mains, open it and unplug the internal battery connector. Leave it disconnected for the whole test.":"Con el parlante apagado y desconectado de la red, ábralo y desconecte el conector de la batería interna. Déjela desconectada durante toda la prueba.",
-  "Connect the external battery and set the switch to the external position. The speaker must recognise it as its power source. Photograph the battery connected, with its label readable: the picture is what says which battery was used and how it was wired, and no other point in the plan records that.":"Conecte la batería externa y ponga el switch en la posición externa. El parlante debe reconocerla como su fuente de energía. Fotografíe la batería conectada, con su etiqueta legible: la foto es lo que dice qué batería se usó y cómo quedó conectada, y ningún otro punto del plan registra eso.",
-  "Connect the external battery and set the switch to the external position. The speaker must recognise it as its power source.":"Conecte la batería externa y ponga el selector en la posición externa. El parlante debe reconocerla como su fuente de alimentación.",
   "Move the switch between internal and external. The speaker must respond to the change, not stay dead in one of the positions.":"Mueva el selector entre interna y externa. El parlante debe responder al cambio, no quedar muerto en una de las posiciones.",
   "Switch the speaker on with the mains cable unplugged. It must start up fully on the external battery alone.":"Encienda el parlante con el cable de red desconectado. Debe arrancar por completo solo con la batería externa.",
   "Insert the USB drive and take the volume to maximum. Hold it there for at least a minute. The sound must not cut out or distort, the speaker must not switch off or restart, and the external battery must not shut down under the load.":"Inserte la memoria USB y suba el volumen al máximo. Manténgalo así al menos un minuto. El sonido no debe cortarse ni distorsionar, el parlante no debe apagarse ni reiniciarse, y la batería externa no debe protegerse por la carga.",
   "With the external battery still powering the speaker and music playing, plug in the AC power cable and take the volume to maximum. The speaker must keep playing without cutting out, resetting or losing the source; the charging indicator must appear; and neither the battery nor the AC input must trip. Check the connector and the battery for heat after a minute.":"Con la batería externa alimentando el parlante y música sonando, conecte el cable AC y suba el volumen al máximo. El parlante debe seguir reproduciendo sin cortes, sin reiniciarse y sin perder la fuente; el indicador de carga debe aparecer; y ni la batería ni la entrada AC deben protegerse. Al minuto, revise si el conector y la batería se calientan.",
   "Reconnect the internal battery, set the switch back to internal and close the speaker. Confirm it still works before finishing.":"Reconecte la batería interna, vuelva a poner el selector en interna y cierre el parlante. Confirme que sigue funcionando antes de terminar.",
   "Stand at the right of the speaker, looking at it from the front. Photograph the whole side, including the handle and the joint with the front and back panels.":"Párese al lado derecho del parlante, mirándolo de frente. Fotografíe todo el costado, incluyendo el asa y la unión con los paneles frontal y trasero.",
-  "Same photo on the opposite side. Both sides are asked for separately because a scratch on only one of them is easy to miss in a single picture.":"La misma foto del lado opuesto. Se piden los dos costados por separado porque un rayón que está en uno solo se pasa por alto fácilmente en una sola foto.",
   "Close-up of the logo on the grille. It must be straight, complete, well fixed and with no scratched or faded lettering.":"Primer plano del logo en la malla. Debe estar derecho, completo, bien fijado y sin letras rayadas ni desvanecidas.",
   "Close-up of the logo printed or fixed on the panel. Check it matches the one on the grille in size, colour and finish.":"Primer plano del logo impreso o fijado en el panel. Verifique que coincida con el de la malla en tamaño, color y acabado.",
   "Close-up of the lot or batch number of the speaker: the code printed or labelled on the product itself, usually next to the specification label. Every digit must be sharp and legible in the photo, and it must match the lot recorded on the inspection paperwork. If this reference carries no lot number, photograph the serial number instead and say so in the notes.":"Primer plano del número de lote del parlante: el código impreso o en etiqueta sobre el producto, normalmente junto a la etiqueta de especificaciones. Cada dígito debe verse nítido y legible en la foto, y debe coincidir con el lote registrado en el documento de inspección. Si esta referencia no tiene número de lote, fotografíe el número de serie y anótelo en las observaciones.",
   "The face with the buttons, with the printing legible and the battery cover in place.":"La cara de las teclas, con la impresión legible y la tapa de la batería puesta.",
-  "The back, showing the battery cover and any label. Front and back are asked for separately because a cracked cover only shows from behind.":"El reverso, mostrando la tapa de la batería y cualquier etiqueta. Se piden frente y reverso por separado porque una tapa agrietada solo se ve por detrás.",
   "One photo of the whole cable with both plugs visible. There is no second side to check on a cable.":"Una foto de todo el cable con los dos conectores visibles. En un cable no hay un segundo lado que revisar.",
   "The head and body of each microphone, with the grille and the brand visible.":"La cabeza y el cuerpo de cada micrófono, con la rejilla y la marca visibles.",
   "The opposite side, showing the switch, the battery compartment and the connector.":"El lado opuesto, mostrando el interruptor, el compartimiento de la batería y el conector.",
@@ -8978,7 +8959,6 @@ Object.assign(ES_PLAN, {
   "The front cover, readable and with no glare over the text.":"La portada, legible y sin brillos sobre el texto.",
   "The back cover, readable and with no glare over the text.":"La contraportada, legible y sin brillos sobre el texto.",
   "The printed face of the tag, complete and legible.":"La cara impresa de la etiqueta colgante, completa y legible.",
-  "The other face. Both are asked for separately because the barcode and the country of origin are usually printed only on the back.":"La otra cara. Se piden las dos por separado porque el código de barras y el país de origen normalmente solo se imprimen en el reverso.",
   "The card inviting the customer to register the product. Photograph both faces if it is printed on both, and check the QR code or web address is legible.":"La tarjeta que invita al cliente a registrar el producto. Fotografíe ambas caras si está impresa por los dos lados, y verifique que el código QR o la dirección web sean legibles.",
   "Close-up of the label. Voltage, power, model and serial must all be legible in the photo.":"Primer plano de la etiqueta. Voltaje, potencia, modelo y serie deben quedar legibles en la foto.",
   "The main printed face of the box, the one facing the buyer on the shelf.":"La cara impresa principal de la caja, la que mira al comprador en el estante.",
@@ -8988,13 +8968,9 @@ Object.assign(ES_PLAN, {
   "The top, including the closing flaps and the tape.":"La parte superior, incluyendo las aletas de cierre y la cinta.",
   "The bottom, including the seal and any shipping label.":"La parte inferior, incluyendo el sello y cualquier etiqueta de envío.",
   "The cone and surround, seen from the front. Look for tears, glue marks or a misaligned dust cap.":"El cono y la suspensión, vistos de frente. Busque roturas, marcas de pegante o guardapolvo descentrado.",
-  "The magnet, with its label readable: brand, size and impedance. This is what proves the specified woofer was used.":"El imán, con su etiqueta legible: marca, tamaño e impedancia. Es lo que prueba que se usó el woofer especificado.",
   "The diaphragm and horn seen from the front. Look for a dented dome, glue marks, or a horn that is not properly seated.":"El diafragma y la corneta vistos de frente. Busque cúpula abollada, marcas de pegante o corneta mal asentada.",
-  "The magnet and the terminals, with the label readable: brand, model and impedance. Front and back are asked for separately because the label that proves which tweeter was fitted is only visible from behind.":"El imán y los terminales, con la etiqueta legible: marca, modelo e impedancia. Se piden frente y reverso por separado porque la etiqueta que prueba qué tweeter se montó solo se ve por detrás.",
   "The side carrying the chips. The board reference and the main IC markings must be readable.":"La cara donde están los chips. La referencia de la placa y las marcas del circuito integrado principal deben ser legibles.",
-  "The solder side. Look for cold joints, flux residue, bridges or reworked areas.":"La cara de soldadura. Busque soldaduras frías, residuos de fundente, puentes o zonas retrabajadas.",
-  "Photograph the face that carries the specifications: voltage, capacity in mAh, chemistry and manufacturer. A photo of the wrapped battery without the label proves nothing.":"Fotografíe la cara con las especificaciones: voltaje, capacidad en mAh, tipo de celda y fabricante. Una foto de la batería envuelta sin la etiqueta no prueba nada."
-});
+  "The solder side. Look for cold joints, flux residue, bridges or reworked areas.":"La cara de soldadura. Busque soldaduras frías, residuos de fundente, puentes o zonas retrabajadas."});
 
 /* ---------- interface strings --------------------------------------------- */
 const T = {
@@ -10282,8 +10258,17 @@ const DEFAULT_GROUPS = [
    label:{en:"Box and packing","zh":"外箱与包装","es":"Caja y empaque"}},
   {id:"func", tests:["POWER_AC","USB","SD","BLUETOOTH","RX_FM_COMPAT","RADIO_FM",
                      "AUX","DSP_MODES","XLR_OUT","OUT_120HZ","INPUT_CHANNELS",
-                     "MIC_POS","DISPLAY","REMOTE","SUB_IN","SUB_OUT","GPE"],
+                     "MIC_POS","DISPLAY","REMOTE","SUB_IN","SUB_OUT"],
    label:{en:"Functional","zh":"功能","es":"Funcionales"}},
+  /* GPE tiene subsección propia desde el plan 178, y no por gusto: estaba
+     dentro de «Funcionales», pero en el plan va de últimas —después de PARTES
+     INTERNAS, porque su primera prueba mira dentro de la fuente y ahí la cabina
+     ya está abierta—. Como este reparto no reordena nada, el índice del POW102
+     mostraba «Funcionales» dos veces: una arriba con USB, Bluetooth y radio, y
+     otra abajo con GPE sola. Es el mismo defecto contra el que advierte el
+     comentario de esta tabla, y llevaba ahí desde que se creó la prueba. */
+  {id:"gpe",  tests:["GPE"],
+   label:{en:"Special tests","zh":"专项检验","es":"Pruebas especiales"}},
   {id:"ext",  tests:["EXTERNAL","EPS_EXTERNAL","SUB_EXTERNAL","KNOB_ALIGN"],
    label:{en:"External parts","zh":"外部部件","es":"Partes externas"}},
   {id:"pack", tests:["ACCESSORIES","SUB_ACC","GRAPHICS","SUB_GRAPHICS"],

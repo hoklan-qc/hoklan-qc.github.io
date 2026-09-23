@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="19.7">
+<meta name="app-version" content="19.8">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -963,7 +963,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 176,
+      "plan_version": 177,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2627,7 +2627,26 @@ const CONFIG = {
            es lo que se aprueba, pero el proveedor del módulo cambia entre lotes
            y el lote es lo que se embarca. */
         {"id":"RX_FM_COMPAT","optional":false,"only_factory":["YIS"],
-         "skip":["HK-KAP208"],"evidence":[],
+         "skip":["HK-KAP208"],
+         /* El video, plan 177. Los tres puntos de arriba se responden mirando y
+            escuchando, y el informe sale con tres CONFORME que nadie puede
+            contrastar después. El clip es lo que deja constancia.
+
+            Va con la emisora sonando, y eso es lo que se pide comprobar: un
+            micrófono que suena limpio en silencio no demuestra nada sobre la
+            compatibilidad. Lo que esta prueba busca es qué le pasa a la radio
+            cuando el módulo trabaja, y eso sólo se ve con las dos cosas a la
+            vez.
+
+            «Cada micrófono PHI, uno después del otro» y no «los dos»: no toda
+            referencia trae dos, y así el texto sirve igual con uno.
+
+            El minuto es instrucción escrita, no comprobación: la app pide el
+            archivo, no mide su duración. */
+         "evidence":["video"],
+         "ask":{"en":"one minute: speak into each PHI microphone, one after the other, with the station playing in the background.",
+                "zh":"一分钟：对每支 PHI 麦克风依次讲话，同时保持电台播放。",
+                "es":"un minuto: hable por cada micrófono PHI, uno después del otro, con la emisora sonando de fondo."},
          "label":{"en":"COMPATIBILITY · WIRELESS RECEIVER AND FM",
                   "zh":"兼容性 · 无线接收模块与调频",
                   "es":"COMPATIBILIDAD · RECEPTOR INALÁMBRICO Y FM"},

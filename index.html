@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="19.9">
+<meta name="app-version" content="20.0">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -373,6 +373,13 @@ button:active{transform:scale(.99)}
 .pf-c span{flex:1;color:#b6f0cd;font-size:12.5px;line-height:1.35;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pf-c i{color:var(--green);font-style:normal;font-size:13px;flex:none}
+/* El sonido de referencia. Borde azul como la ayuda del punto, no ámbar: no es
+   algo que falte, es algo que está ahí para consultarse. */
+.aud{margin:6px 0 9px;padding:8px 10px;border-left:2px solid var(--accent);
+  background:rgba(46,163,242,.07);border-radius:0 6px 6px 0}
+.aud b{display:block;font-size:11px;letter-spacing:.7px;color:var(--accent);
+  font-weight:600;margin-bottom:6px}
+.aud audio{width:100%;height:34px;display:block}
 .p-help{width:auto;padding:4px 0 9px;background:none;border:none;
   color:var(--accent);font-size:12.5px;font-weight:600;text-align:left;
   letter-spacing:.3px}
@@ -963,7 +970,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 178,
+      "plan_version": 179,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -4400,10 +4407,11 @@ const CONFIG = {
                     "zh":"关机状态下长按 B1 两秒，应能自行启动。",
                     "es":"Desde apagado, mantenga B1 dos segundos. Debe arrancar sola."}},
            {"id":"brg_hola","code":"PWR-010","tag":"B1",
+            "audio":"kap_melodia_inicio",
             "label":{"en":"HOLA on the display for 2 s, with the start-up melody","zh":"显示 HOLA 两秒，并播放开机音乐","es":"HOLA en pantalla 2 s, con la melodía de arranque"},
-            "help":{"en":"The display must read HOLA for two seconds and the start-up melody must play. Both, together.",
-                    "zh":"显示屏应显示 HOLA 两秒，同时播放开机音乐。两者缺一不可。",
-                    "es":"La pantalla debe decir HOLA durante dos segundos y sonar la melodía de arranque. Las dos cosas, juntas."}},
+            "help":{"en":"The display must read HOLA for two seconds and the start-up melody must play. Both, together. Play the reference here and compare: it has to be this melody, not just any melody — a cabinet with the wrong firmware also starts with one.",
+                    "zh":"显示屏应显示 HOLA 两秒，同时播放开机音乐。两者缺一不可。请播放此处的参考声音进行比对：必须是这段旋律，而非任意旋律——固件错误的音箱同样会有开机音。",
+                    "es":"La pantalla debe decir HOLA durante dos segundos y sonar la melodía de arranque. Las dos cosas, juntas. Reproduzca aquí la referencia y compare: tiene que ser esta melodía, no una melodía cualquiera — una cabina con el firmware equivocado también arranca con una."}},
            {"id":"brg_leds_init","code":"UI-002",
             "label":{"en":"Every button LED at its initial state","zh":"各按键指示灯处于初始状态",
                      "es":"Todos los LED translúcidos de los botones en su estado inicial"},
@@ -4429,10 +4437,11 @@ const CONFIG = {
                     "zh":"同样的长按操作，以及对应的两个反向提示。",
                     "es":"La misma pulsación larga, y el mismo par de señales al revés."}},
            {"id":"brg_off","code":"PWR-001","tag":"B1",
+            "audio":"kap_melodia_apagado",
             "label":{"en":"CHAO for 2 s and the shutdown melody","zh":"显示 CHAO 两秒并播放关机音乐","es":"CHAO 2 s y melodía de apagado"},
-            "help":{"en":"Hold B1. The display must read CHAO for two seconds, the shutdown melody must play and every LED must go out.",
-                    "zh":"长按 B1。显示屏应显示 CHAO 两秒，播放关机音乐，所有指示灯熄灭。",
-                    "es":"Mantenga B1. La pantalla debe decir CHAO dos segundos, sonar la melodía de apagado y apagarse todos los LED."}}]},
+            "help":{"en":"Hold B1. The display must read CHAO for two seconds, the shutdown melody must play and every LED must go out. Play the reference here and compare: it is shorter than the start-up one and it is not the same melody.",
+                    "zh":"长按 B1。显示屏应显示 CHAO 两秒，播放关机音乐，所有指示灯熄灭。请播放此处的参考声音进行比对：关机音比开机音短，且并非同一段旋律。",
+                    "es":"Mantenga B1. La pantalla debe decir CHAO dos segundos, sonar la melodía de apagado y apagarse todos los LED. Reproduzca aquí la referencia y compare: es más corta que la de arranque y no es la misma melodía."}}]},
 
         {/* La única sección que pide las dos cosas en cada punto: el gesto se ve
               en el clip y el botón que no responde se documenta en la foto. */
@@ -8444,6 +8453,20 @@ expandPerMic();
    to be a quiet blank rather than a broken page.
 ------------------------------------------------------------------------- */
 const REF_IMG_DIR = "img/";
+/* El sonido de referencia, plan 179. Hay puntos que piden juzgar un sonido —la
+   melodía de arranque, la de apagado— y hasta ahora el criterio era la memoria
+   del operario: «debe sonar el tono de marca». Dos personas distintas aprueban
+   cosas distintas con esa instrucción, y una cabina con el firmware equivocado
+   arranca con *una* melodía, que es lo que la hace pasar.
+
+   Funciona como `sample` para las imágenes: el punto declara el nombre del
+   archivo y aquí sale un reproductor al lado de la pregunta. El operario oye la
+   referencia y el producto, uno detrás del otro, sin salir de la app.
+
+   `preload="metadata"` y no `auto`: son dos archivos en una prueba que se abre
+   en cada inspección, y bajarlos enteros cuando nadie los ha pedido es gastar
+   la red de la fábrica. El navegador los cachea en cuanto suenan una vez. */
+const REF_AUDIO_DIR = "audio/";
 /* The extensions a photograph can arrive as, tried in the order they actually
    turn up. .jpeg was missing and it cost a round of uploads: a phone that
    writes .jpeg is not doing anything wrong, and nobody should have to rename
@@ -9193,6 +9216,7 @@ const T = {
   na_why_ready:"✓ Reason recorded.",
   a_na_why:"Write why this test does not apply to this product before continuing.",
   a_na_why_points:"These points are marked N/A and still need a reason:",
+  audio_ref:"REFERENCE SOUND · play it and compare",
   na_undo_point:"↺ I was wrong · clear the N/A",
   na_undo_test:"↺ I was wrong · run the test",
   tab_factory:"FACTORY TESTS", tab_admin:"ADMIN",
@@ -9479,6 +9503,7 @@ const T = {
   na_why_ready:"✓ Motivo registrado.",
   a_na_why:"Escriba por qué esta prueba no aplica a este producto antes de continuar.",
   a_na_why_points:"Estos puntos están en N/A y todavía les falta el motivo:",
+  audio_ref:"SONIDO DE REFERENCIA · reprodúzcalo y compare",
   na_undo_point:"↺ Me equivoqué · quitar el N/A",
   na_undo_test:"↺ Me equivoqué · hacer la prueba",
   tab_factory:"PRUEBAS FÁBRICA", tab_admin:"ADMIN",
@@ -9757,6 +9782,7 @@ const T = {
   na_why_ready:"✓ 原因已记录。",
   a_na_why:"请先填写本测试对该产品不适用的原因，然后继续。",
   a_na_why_points:"以下检查项已标记为不适用，但尚未填写原因：",
+  audio_ref:"参考声音 · 请播放并比对",
   na_undo_point:"↺ 标记有误 · 撤销不适用",
   na_undo_test:"↺ 标记有误 · 执行本测试",
   tab_factory:"工厂测试", tab_admin:"管理",
@@ -15990,6 +16016,19 @@ function mediaBlock(r){
    Missing on purpose is a fallback: if the file is not there the block simply
    does not appear, exactly like a reference photo that has not been uploaded
    yet. A point can be added today and its example the week after. */
+/* El reproductor del sonido de referencia. Sin JavaScript propio: `controls` le
+   da al operario reproducir, pausar y volver atrás, y funciona igual en el
+   Android de la fábrica que en el escritorio de la oficina. Si el archivo no
+   está, el navegador deja el control muerto en vez de romper nada — pero eso no
+   debería pasar: los nombres se comprueban en la auditoría, como las imágenes. */
+function audioBox(p){
+  if(!p.audio) return "";
+  return `<div class="aud">
+    <b>${tr("audio_ref")}</b>
+    <audio controls preload="metadata"
+      src="${REF_AUDIO_DIR}${encodeURIComponent(p.audio)}.mp3"></audio>
+  </div>`;
+}
 function sampleBox(p){
   if(!p.sample) return "";
   const base = REF_IMG_DIR + encodeURIComponent(p.sample);
@@ -16196,6 +16235,7 @@ function pointRow(p, u, showTag){
           <span onclick="event.stopPropagation();dropMedia('${m.uid}')">×</span>
         </div>`).join("")}</div>`:""}
       ${sampleBox(p)}
+      ${audioBox(p)}
       ${wantValue?measureBox(p, u, id):""}
       ${shotMissing?`<em>${tr("need_point_photo")}</em>`:""}
       ${clipMissing?`<em>${tr("need_point_video")}</em>`:""}
@@ -16795,6 +16835,7 @@ function renderPhotoTest(t, r, done, total){
           <span onclick="event.stopPropagation();dropMedia('${m.uid}')">×</span>
         </div>`).join("")}</div>`}
       ${p.no_photo?"":sampleBox(p)}
+      ${audioBox(p)}
       ${p.measure && !na ? measureBox(p, 0, "0_" + p.id) : ""}
       ${/* La caja de la falla también se pliega aquí desde el plan 166. En las
             pruebas de lista lo hacía desde hace tiempo; en éstas no, y PARTES

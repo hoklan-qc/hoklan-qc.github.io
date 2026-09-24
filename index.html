@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="20.0">
+<meta name="app-version" content="20.1">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -970,7 +970,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 179,
+      "plan_version": 180,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -10486,6 +10486,10 @@ const DEV_REFS = ["HK-KAP206","HK-KAP208","HK-EPS115A1"];
    acordado.
 --------------------------------------------------------------------------- */
 const GOLDEN = "GLD";
+/* Lo que se imprime donde iría la orden de compra. No se traduce: es el nombre
+   del tipo de inspección y tiene que decir lo mismo en los tres informes, que
+   además se leen juntos. */
+const GOLDEN_PO = "Golden Sample";
 const GOLDEN_REFS = ["HK-KAP206","HK-KAP208","HK-EPS115A1"];
 const enGolden = () => S.factory === GOLDEN;
 /* La fábrica dueña del producto, que es la que decide qué pruebas tiene. Bajo
@@ -12865,8 +12869,11 @@ ${banner}
   <tr><td class="k">${tr("duration")}</td><td class="v"><b>${
         esc(durationText(S.startedAt, finishedAt()))}</b></td>
       <td class="k">${tr("units_report")}</td><td class="v">${S.units}</td></tr>
-  <tr><td class="k">${tr("operator")}</td><td class="v" colspan="3">${
-        esc(S.operator)}</td></tr>
+  ${/* El renglón entero se va cuando no hay inspector, en vez de imprimirse
+        vacío. Un campo rotulado y en blanco en un documento que se firma
+        parece un dato que se olvidó, no uno que no aplica. */""}
+  ${S.operator ? `<tr><td class="k">${tr("operator")}</td><td class="v" colspan="3">${
+        esc(S.operator)}</td></tr>` : ""}
   ${/* The paired fields first, the full-width ones after. The result by speaker
         is the only field here that grows — with five speakers it prints five
         verdicts side by side — so it is the one given the whole row. */""}
@@ -13386,7 +13393,7 @@ ${runId()}
     <div class="concl">
       <b>${verdictText(v)}</b>
       <div class="cx">
-        <span>${tr("operator")}: ${esc(S.operator)} · ${
+        <span>${S.operator ? tr("operator") + ": " + esc(S.operator) + " · " : ""}${
           esc(inspectionDate(S.startedAt))}</span>
         <span>${findings.length ? fmt("concl_fail",{n:findings.length})
                                 : tr("concl_pass")}</span>
@@ -13951,7 +13958,7 @@ function inspectionFicha(photos, videos, docs){
 function packetReadme(photos, videos, lost, lostVideos, docs){
   const out = [];   // not `L`: that is the localisation helper
   out.push("HOKLAN QC — " + S.testId + " — " + S.model);
-  out.push(inspectionDate(S.startedAt) + "  ·  " + S.operator);
+  out.push(inspectionDate(S.startedAt) + (S.operator ? "  ·  " + S.operator : ""));
   out.push(S.units > 1 ? S.units + " speakers" : "1 speaker");
   const sc = partialScope();
   if(sc) out.push("!! " + fmt("scope_part",{n:sc.n, tot:sc.tot}));
@@ -15562,18 +15569,29 @@ function renderSetup(){
       <label>${tr("inspection")}</label>
       <input value="${esc(inspectionDate())}" readonly
              style="color:var(--muted);background:#0a1523">
+      ${/* La muestra patrón no pertenece a ninguna orden de compra ni la firma
+            un inspector de fábrica: es una pieza de referencia contra la que se
+            compara la producción. Así que bajo el código 205 la orden queda
+            fija en «Golden Sample» y el inspector no se pide.
+
+            Fija y no rellenada: este campo sólo admite dígitos y exige un
+            mínimo, de modo que un valor por defecto con letras lo rechazaría al
+            pulsar EMPEZAR. Y ofrecer un campo editable que no debe cambiarse es
+            lo mismo que ofrecer un N/A donde nunca aplica. */""}
       <label>${tr("po")}</label>
-      <input id="po" value="${esc(S.po)}" placeholder="${tr("po_ph")}"
+      ${enGolden() ? `<input id="po" value="${esc(GOLDEN_PO)}" readonly
+        style="color:var(--muted);background:#0a1523">`
+      : `<input id="po" value="${esc(S.po)}" placeholder="${tr("po_ph")}"
         inputmode="numeric" maxlength="12" minlength="${PO_MIN}" autocomplete="off"
         oninput="onlyDigits(this)">
       ${/* Said before the operator types, not only after pressing START. An
             alert that explains a rule nobody was told is a rule discovered by
             being stopped. */""}
-      <p class="hint" style="margin-top:6px">${fmt("po_min_hint",{n:PO_MIN})}</p>
-      <label>${tr("operator")}</label>
+      <p class="hint" style="margin-top:6px">${fmt("po_min_hint",{n:PO_MIN})}</p>`}
+      ${enGolden() ? "" : `<label>${tr("operator")}</label>
       <input id="operator" value="${esc(S.operator)}" maxlength="40"
         placeholder="${tr("operator_ph")}"
-        autocomplete="off" oninput="onlyLetters(this)">
+        autocomplete="off" oninput="onlyLetters(this)">`}
       ${/* Ni el rótulo ni los botones donde la fábrica inspecciona de a una: no
             hay nada que elegir y el recuadro sólo invitaba a equivocarse. El
             campo oculto se queda, en 1, porque es lo que lee `start()`. */""}
@@ -15739,9 +15757,18 @@ function start(){
   // model and stop the inspection with "select the reference".
   if(sel) S.model = sel.value;
   else if(!S.assigned) S.model = "";
-  S.po = document.getElementById("po").value.replace(/[^0-9]/g,"").trim();
-  S.operator = document.getElementById("operator").value
-    .replace(/[^\p{L}\p{M} .'’-]/gu,"").replace(/\s+/g," ").trim();
+  /* Bajo el código 205 los dos campos no se leen de la pantalla: la orden es
+     fija y el inspector no se pide. Leerlos igual habría dejado la orden vacía
+     —el filtro de dígitos se come «Golden Sample» entero— y habría buscado un
+     campo que ya no se dibuja. */
+  if(enGolden()){
+    S.po = GOLDEN_PO;
+    S.operator = "";
+  } else {
+    S.po = document.getElementById("po").value.replace(/[^0-9]/g,"").trim();
+    S.operator = document.getElementById("operator").value
+      .replace(/[^\p{L}\p{M} .'’-]/gu,"").replace(/\s+/g," ").trim();
+  }
   if(!S.testId){ alert(tr("a_select_factory")); return; }
   if(!S.model){ alert(tr("a_select_model")); return; }
   // A reference whose plan has not been written yet. Stopped here rather than
@@ -15754,13 +15781,18 @@ function start(){
      dashboard. Checked before the operator name on purpose — the fields are
      read top to bottom, and being sent back up is worse than being stopped at
      the first gap. */
-  if(S.po.length < PO_MIN){
-    alert(fmt("a_po_min",{n:PO_MIN}));
-    const box = document.getElementById("po");
-    if(box){ box.focus(); box.scrollIntoView({block:"center"}); }
-    return;
+  /* Las dos comprobaciones se saltan en la muestra patrón, y tienen que
+     saltarse: la orden no es un número y el inspector no se pide. Sin esto el
+     código 205 quedaba imposible de arrancar. */
+  if(!enGolden()){
+    if(S.po.length < PO_MIN){
+      alert(fmt("a_po_min",{n:PO_MIN}));
+      const box = document.getElementById("po");
+      if(box){ box.focus(); box.scrollIntoView({block:"center"}); }
+      return;
+    }
+    if(!S.operator){ alert(tr("a_operator")); return; }
   }
-  if(!S.operator){ alert(tr("a_operator")); return; }
   const un = document.getElementById("units");
   S.units = un ? Math.min(MAX_UNITS, Math.max(1, parseInt(un.value,10)||1)) : 1;
   // La última palabra, pase lo que pase con el campo oculto o con una asignación
@@ -17219,7 +17251,7 @@ function renderDone(){
     <div class="card">
       <div class="tag">${esc(S.testId)}</div><div class="tag">${esc(S.model)}</div>
       <div class="tag">${esc(inspectionDate(S.startedAt))}</div>
-      <div class="tag">${esc(S.operator)}</div>
+      ${S.operator?`<div class="tag">${esc(S.operator)}</div>`:""}
       ${S.units>1?`<div class="tag">${fmt("units_tag",{n:S.units})}</div>`:""}
       <p class="hint">${fmt("evidence_total",{n:files,s:humanSize(evidenceBytes())})}</p>
       ${/* El aviso rojo por paquete grande se retiró en la v12.2, junto con el

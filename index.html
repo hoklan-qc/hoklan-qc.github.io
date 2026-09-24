@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="20.1">
+<meta name="app-version" content="20.2">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -970,7 +970,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 180,
+      "plan_version": 181,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -8535,7 +8535,24 @@ function shrinkToDataUrl(blob){
 
 async function ensureRefImg(){
   const m = String(S.model || "");
-  if(!m || REF_IMG_DATA.model === m) return;
+  if(!m) return;
+  /* Se reintenta mientras no haya foto. Antes bastaba con que el modelo fuera
+     el mismo para darse por hecho, y eso confundía dos cosas distintas: «ya la
+     busqué y aquí está» con «ya la busqué y no la encontré».
+
+     La consecuencia se veía en el informe y no en la app. Esta función se llama
+     tres veces —al abrir el informe, al guardarlo y al armar el paquete— pero
+     la primera decidía por las otras dos: si el teléfono estaba sin señal en
+     ese momento, cosa normal en una fábrica, la foto quedaba descartada para
+     toda la sesión aunque la conexión volviera antes de generar el paquete. El
+     informe salía sin la foto de la referencia y nadie se enteraba.
+
+     Se reportó en un informe del BRA210A1, cuya foto existe y pesa 63 KB.
+
+     Reintentar sale gratis: en cuanto hay foto, este `return` la conserva y no
+     se vuelve a pedir; cuando no la hay, son tres peticiones que el navegador
+     además resuelve desde su caché. */
+  if(REF_IMG_DATA.model === m && REF_IMG_DATA.url) return;
   REF_IMG_DATA = {model:m, url:""};
   // Same three extensions, same order, as everywhere else that looks for a
   // photograph. Kept as one list so the report and the screen never disagree

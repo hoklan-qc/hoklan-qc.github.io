@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="20.2">
+<meta name="app-version" content="20.3">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -970,7 +970,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 181,
+      "plan_version": 182,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -7156,10 +7156,15 @@ const CONFIG = {
            packed. Sampling, like the battery test, and last in the plan with
            it. */
         /* La potencia RMS de Epsilon y de los Delta la certifica el proveedor de
-           amplificadores, canal por canal. Aquí no se mide con osciloscopio: se
-           adjunta lo que el proveedor entrega y se anota la cifra de cada canal,
-           que es lo que después se compara contra la caja y la ficha. Los BAS
-           quedan fuera: llevan un solo canal y su propia prueba. */
+           amplificadores. Aquí no se mide con osciloscopio: se adjunta lo que el
+           proveedor entrega y se anota la cifra, que es lo que después se
+           compara contra la caja y la ficha.
+
+           Los BAS siguen con su propia prueba, la 4, y no porque el
+           procedimiento difiera —desde el plan 182 es el mismo— sino porque un
+           número de prueba no se cambia: es lo que permite buscar el informe de
+           hace seis meses. Dos pruebas distintas con el mismo contenido y siete
+           modelos de un lado y dos del otro. */
         {/* Primera del plan desde el plan 105, igual que en los BAS, y por lo
               mismo: la cifra la manda el proveedor del amplificador por correo,
               y entre que se pide y llega pueden pasar horas. Puesta al final, la
@@ -7177,36 +7182,42 @@ const CONFIG = {
          "label":{"en":"RMS POWER",
                   "zh":"RMS 功率",
                   "es":"POTENCIA RMS"},
+         /* El aviso de prueba larga, igual que en los BAS y por lo mismo: la
+            cifra la manda el proveedor por correo y puede tardar horas. Sin él,
+            una prueba sin responder bloqueaba el avance y la inspección entera
+            se quedaba esperando un correo. */
+         "long":{"t":{"en":"Ask the supplier now, then carry on",
+                      "zh":"先向供应商索取，然后继续",
+                      "es":"Pida el dato ahora y siga adelante"},
+                 "n":{"en":"Ask the amplifier supplier for the photograph or the PDF of the RMS power and carry on with the rest of the plan. When it arrives, come back to this test and finish it. Nothing else is waiting on it.",
+                      "zh":"先向功放供应商索取 RMS 功率的照片或 PDF，然后继续进行计划中的其他测试。收到后再回到本项完成填写。其余测试不受影响。",
+                      "es":"Solicite al proveedor del amplificador la foto o el PDF de la potencia RMS y continúe con el resto de las pruebas. Cuando llegue, regrese a esta prueba y termínela. Nada más queda esperando por ella."}},
          "steps":[
-           {"en":"Ask the amplifier supplier for the power report of each channel","zh":"向功放供应商索取每个通道的功率报告","es":"Pida al proveedor de amplificadores el informe de potencia de cada canal"},
-           {"en":"Attach the report once, in the first point","zh":"在第一项上传报告，只需一次","es":"Adjunte el informe una sola vez, en el primer punto"},
-           {"en":"Write the power of each channel in its box","zh":"将各通道的功率填入对应方框","es":"Escriba la potencia de cada canal en su recuadro"}],
+           {"en":"Ask the supplier for the RMS power of the amplifier","zh":"向供应商索取功放的 RMS 功率","es":"Pida al proveedor la potencia RMS del amplificador"},
+           {"en":"Carry on with the rest of the plan while you wait","zh":"等待期间继续进行其他测试","es":"Siga con el resto del plan mientras espera"},
+           {"en":"Come back and attach the photo or the PDF","zh":"收到后回到本项，上传照片或 PDF","es":"Vuelva y adjunte la foto o el PDF"},
+           {"en":"Write the figure in the box","zh":"将数值填入方框","es":"Escriba la cifra en el recuadro"}],
          "points":[
-           {"section":{"en":"Supplier report","zh":"供应商报告","es":"Informe del proveedor"},
-            "help":{"en":"The supplier's report, attached once, and the power of each channel in its own box. The example beside the first point shows what the report looks like.",
-                    "zh":"供应商报告只需上传一次，各通道的功率分别填入各自的方框。第一项旁边的示例展示了该报告的样式。",
-                    "es":"El informe del proveedor, adjuntado una sola vez, y la potencia de cada canal en su propio recuadro. El ejemplo al lado del primer punto muestra cómo se ve el informe."}},
-           {/* Un solo recuadro de imagen para los dos canales desde el plan 121.
-                Los dos números salen del mismo documento del proveedor, así que
-                pedirlo dos veces era adjuntar dos veces el mismo archivo. El
-                recuadro admite varias imágenes: si el proveedor manda una hoja
-                por canal, las dos van aquí. */
-            "id":"rms_sup_woofer","code":"AUD-020","photo":true,"gallery":true,
+           {/* Un solo punto desde el plan 182, por decisión de Producto: el
+                mismo esquema que los BAS en toda RHYME. Antes eran dos —la
+                potencia del woofer y la del tweeter, cada una con su recuadro y
+                una sola imagen compartida—, y ahora es una cifra para la cabina
+                entera.
+
+                Identificador nuevo y no el del woofer, que habría sido más
+                cómodo: lo que se mide cambió de significado. Una columna que
+                dice «potencia del canal del woofer» durante seis meses y
+                «potencia de la cabina» a partir de hoy, bajo el mismo nombre,
+                es la clase de serie que nadie puede interpretar después. El
+                número de la prueba sí se conserva: sigue siendo la 51, y es lo
+                que permite encontrar el informe de hace seis meses. */
+            "id":"rms_sup_total","code":"AUD-020","photo":true,"gallery":true,
             "sample":"rms_ejemplo","must":true,
-            "measure":{"unit":"W","step":"0.1",
-                       "as":{"en":"Woofer power","zh":"低音功率","es":"Potencia woofer"}},
-            "label":{"en":"Power photos — woofer and tweeter","zh":"功率照片 — 低音与高音",
-                     "es":"Fotos de la potencia — woofer y tweeter"},
-            "help":{"en":"Attach the supplier's report here and write the power of the woofer channel in the box. If the supplier sends one sheet per channel, attach both here.",
-                    "zh":"在此上传供应商报告，并将低音通道的功率填入方框。若供应商按通道分别提供，两张都上传到此处。",
-                    "es":"Adjunte aquí el informe del proveedor y escriba en el recuadro la potencia del canal del woofer. Si el proveedor manda una hoja por canal, adjunte las dos aquí."}},
-           {"id":"rms_sup_tweeter","code":"AUD-020","no_photo":true,"must":true,
-            "measure":{"unit":"W","step":"0.1",
-                       "as":{"en":"Tweeter power","zh":"高音功率","es":"Potencia tweeter"}},
-            "label":{"en":"Tweeter channel — power","zh":"高音通道 — 功率","es":"Canal del tweeter — potencia"},
-            "help":{"en":"The power of the tweeter channel, read from that same report. Only the figure: the image is attached in the point above.",
-                    "zh":"从同一份报告中读取高音通道的功率。仅填写数值：图片已在上一项上传。",
-                    "es":"La potencia del canal del tweeter, leída de ese mismo informe. Sólo la cifra: la imagen se adjunta en el punto de arriba."}}]},
+            "measure":{"unit":"W","step":"0.1"},
+            "label":{"en":"RMS power","zh":"RMS 功率","es":"Potencia RMS"},
+            "help":{"en":"Ask the amplifier supplier for the RMS power of this model and attach what they send, a photograph or a PDF, with the figure legible in it. Write the figure in the box. If it has not arrived yet, leave the test open and carry on with the rest of the plan.",
+                    "zh":"向功放供应商索取本型号的 RMS 功率，并上传其发来的照片或 PDF，数值须清晰可读。将数值填入方框。若尚未收到，可先保留本项未完成，继续进行其他测试。",
+                    "es":"Pida al proveedor del amplificador la potencia RMS de este modelo y adjunte lo que le envíe, foto o PDF, con la cifra legible. Escriba la cifra en el recuadro. Si todavía no ha llegado, deje la prueba abierta y siga con el resto del plan."}}]},
 
         {/* Obligatoria desde el plan 123. Venía siendo opcional, y a la vez su
               punto de los vatios llevaba `must` — es decir, prohibido marcarlo

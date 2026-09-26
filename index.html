@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="20.3">
+<meta name="app-version" content="20.4">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -970,7 +970,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 182,
+      "plan_version": 183,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -7173,7 +7173,14 @@ const CONFIG = {
               `(a.first || 99)` y el cero es falso. */
          "id":"RMS_SUPPLIER","optional":false,"only_factory":["RHY"],"evidence":[],"first":0.5,
          "no_na":["YIS","RHY"],
-         "only":["HK-EPS112A1","HK-EPS115A1",
+         /* El DEC115A1 entró en el plan 183. No estaba en ninguna de las dos
+            listas de RHYME —ni en ésta ni en la de los BAS—, así que caía por
+            descarte en la prueba 52, la de YISION: sacar el woofer, montar una
+            carga, osciloscopio y tono de 1 kHz. Doce puntos de banco para la
+            única referencia de RHYME a la que nadie le pidió medirlo en casa.
+            Se vio al comprobar las once referencias una por una. */
+         "only":["HK-DEC115A1",
+                 "HK-EPS112A1","HK-EPS115A1",
                  "HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],
          /* Sin el prefijo, igual que la capacidad de batería. Quedan tres pruebas
@@ -7242,7 +7249,13 @@ const CONFIG = {
          /* Epsilon y los Delta corren su propia versión, RMS_SUPPLIER: en ellos
             la potencia se toma del informe del proveedor de amplificadores, por
             canal, y no del osciloscopio. */
+         /* Las dos listas son complementarias y hay que tocarlas juntas: ésta
+            excluye y la de RMS_SUPPLIER incluye. El DEC115A1 entró allá en el
+            plan 183 y sale aquí en el mismo movimiento — dejarlo sólo en una de
+            las dos le habría puesto las dos pruebas de potencia a la vez.
+            Con él, RHYME entera queda cubierta: 2 en los BAS y 9 aquí. */
          "skip":["HK-KAP208","HK-BAS115A1","HK-BAS118A1",
+                 "HK-DEC115A1",
                  "HK-EPS112A1","HK-EPS115A1",
                  "HK-DEL101","HK-DEL103P","HK-DEL105","HK-DEL110B1",
                  "HK-DEL115B1","HK-DEL210A1"],

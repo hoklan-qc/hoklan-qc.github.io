@@ -9116,7 +9116,7 @@ const T = {
   ref_img_off:"the photo did not load — check the connection",
   inspection:"Inspection date", po:"Purchase order (PO)", operator:"Operator",
   select:"— select —",
-  start:"START INSPECTION", plan_info:"%n tests.",
+  start:"START INSPECTION", plan_info:"%n tests.", plan_info_1:"1 test.",
   units:"Speakers for simultaneous inspection",
   units_report:"Speakers inspected",
   plan_info_n:"%n tests × %u speakers = %tot checks.",
@@ -9416,7 +9416,7 @@ const T = {
   ref_img_off:"la imagen no cargó — revise la conexión",
   inspection:"Fecha de inspección", po:"Orden de compra (OC)", operator:"Inspector",
   select:"— seleccione —",
-  start:"INICIAR INSPECCIÓN", plan_info:"%n pruebas.",
+  start:"INICIAR INSPECCIÓN", plan_info:"%n pruebas.", plan_info_1:"1 prueba.",
   units:"Parlantes a inspeccionar simultáneamente",
   units_report:"Parlantes inspeccionados",
   plan_info_n:"%n pruebas × %u parlantes = %tot verificaciones.",
@@ -9705,7 +9705,7 @@ const T = {
   ref_img_off:"图片加载失败 — 请检查网络连接",
   inspection:"检验日期", po:"订单号 (PO)", operator:"检验员",
   select:"— 请选择 —",
-  start:"开始检验", plan_info:"共 %n 项测试。",
+  start:"开始检验", plan_info:"共 %n 项测试。", plan_info_1:"共 1 项测试。",
   units:"同时检验的音箱数量",
   units_report:"已检验音箱数量",
   plan_info_n:"%n 项测试 × %u 台音箱 = 共 %tot 项。",
@@ -15795,7 +15795,11 @@ function renderSetup(){
         `<button class="${S.units===i+1?"on":""}"
           onclick="setUnits(${i+1})">${i+1}</button>`).join("")}</div>`}`}
       <input id="units" class="hidden" value="${unitsLocked() ? 1 : S.units}">
-      <p class="hint">${fmt(S.units>1?"plan_info_n":"plan_info",
+      ${/* «1 pruebas» se leía mal. Con una sola unidad y una sola prueba —hoy
+            sólo el código 123, pero mañana cualquier plan que quede en una— el
+            texto va en singular. */""}
+      <p class="hint">${fmt(S.units>1 ? "plan_info_n"
+        : tests().length === 1 ? "plan_info_1" : "plan_info",
         {n:tests().length, u:S.units, tot:tests().length*S.units})}<br>
       ${tr("report_note")}</p>
     </div>

@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="20.4">
+<meta name="app-version" content="20.5">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -701,7 +701,16 @@ const CONFIG = {
        patrón contra la que después se compara la producción, y quien la levanta
        puede ser cualquiera de las cuatro. Por eso no lleva su propia lista de
        referencias por fábrica sino la de `GOLDEN_REFS`, más abajo. */
-    "205": {"code":"205-G3O8L1D6N", "key":"GLD"}
+    "205": {"code":"205-G3O8L1D6N", "key":"GLD"},
+    /* Prueba del teléfono, plan 184. Tampoco es una fábrica: es un ensayo para
+       saber si un teléfono concreto sirve para inspeccionar antes de ponerlo a
+       trabajar. Toma una foto, graba un video, escribe un número y una
+       observación, y termina descargando el paquete — que es exactamente la
+       secuencia que falla cuando falla.
+
+       Misma regla de sufijo que los demás, para poder verificar el código de
+       ojo: PHONE da P H O N E. */
+    "123": {"code":"123-P4H7O2N9E", "key":"TST"}
   },
 
   "models": {
@@ -723,6 +732,11 @@ const CONFIG = {
     "HK-RNW102":"YIS","HK-RNW103":"YIS","HK-RNW105":"YIS",
     "HK-RNW212A2":"YIS","HK-SKA108A1":"YIS","HK-SKA108B1":"YIS",
     "HK-STB103":"EAG",
+    /* La referencia de la prueba del teléfono. No existe: es el percharo del
+       que cuelga el plan del código 123. Lleva su propia clave, así que no
+       aparece en la lista de ninguna fábrica —`modelsOf` filtra por clave— ni
+       en el catálogo del admin, donde se excluye a mano en `refList`. */
+    "HK-PRUEBA":"TST",
     /* En desarrollo, no en producción. Son de YISION y `DEV_REFS` las mantiene
        fuera de la lista de la fábrica — ver más abajo.
 
@@ -970,7 +984,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 183,
+      "plan_version": 184,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -6378,6 +6392,61 @@ const CONFIG = {
                     "zh":"对中音旋钮做同样的检查。本型号若无中音调节，请标记为不适用。",
                     "es":"La misma comprobación en la perilla de medios. Marque N/A si esta referencia no tiene control de medios."}}]},
 
+        /* ===== PRUEBA DEL TELÉFONO · código 123, plan 184 ===================
+           No comprueba un producto: comprueba un teléfono. Antes de poner un
+           equipo nuevo a inspeccionar conviene saber si de verdad puede hacer
+           las cinco cosas de las que depende todo lo demás, y la única forma de
+           saberlo es haciéndolas.
+
+           Cada punto ejerce una capacidad distinta, y en el orden en que fallan:
+           la cámara y el guardado de la foto; el video, que es lo que más se
+           pierde en el navegador interno de WeChat; el teclado decimal, que en
+           algunos Android no ofrece el punto; y la observación, que dispara la
+           traducción automática y por tanto la red. Después, FINALIZAR arma el
+           informe y el botón de descarga arma el ZIP: las dos últimas cosas que
+           pueden fallar, y las que dejan a una inspección real sin entregar.
+
+           Un solo punto habría bastado para «probar que la app abre». Estos
+           cuatro están para que, cuando la fábrica diga «no me deja», se sepa
+           en cuál de los cinco pasos se cayó. */
+        {"id":"PHONE_TEST","optional":false,"only_factory":["TST"],
+         "evidence":[],
+         "label":{"en":"PHONE CHECK","zh":"手机自检","es":"PRUEBA DEL TELÉFONO"},
+         "steps":[
+           {"en":"Answer the four points below","zh":"完成下方四个检查项","es":"Responda los cuatro puntos de abajo"},
+           {"en":"Press FINISH and then download the packet","zh":"点击“完成”，然后下载压缩包","es":"Pulse FINALIZAR y después descargue el paquete"},
+           {"en":"Open the ZIP and check the photo and the video are inside","zh":"打开压缩包，确认照片和视频都在其中","es":"Abra el ZIP y compruebe que la foto y el video están adentro"}],
+         "points":[
+           {/* Los cuatro puntos y el encabezado llevan el rótulo `TST` uno por
+                uno. No es repetición ociosa: `fits()` trata el 123 como lista
+                blanca, de modo que lo que no se nombre no aparece. */
+            "section":{"en":"What this checks","zh":"本测试的用途","es":"Qué comprueba esto"},
+            "only_factory":["TST"],
+            "help":{"en":"This is not an inspection. It checks whether this phone can do the five things a real inspection depends on: take a photograph, record a video, type a number, write a note, and build and download the packet. Anything may be photographed — a hand, the table, the wall. What matters is that the file arrives.",
+                    "zh":"本项并非产品检验，而是检查本手机能否完成真实检验所依赖的五件事：拍照、录像、输入数字、填写备注，以及生成并下载压缩包。拍摄对象不限——手、桌面、墙面均可，关键在于文件能否成功保存。",
+                    "es":"Esto no es una inspección. Comprueba si este teléfono puede hacer las cinco cosas de las que depende una inspección real: tomar una foto, grabar un video, escribir un número, escribir una observación, y armar y descargar el paquete. Se puede fotografiar cualquier cosa — una mano, la mesa, la pared. Lo que importa es que el archivo llegue."}},
+           {"id":"tp_foto","photo":true,"must":true,"only_factory":["TST"],
+            "label":{"en":"Take a photo","zh":"拍一张照片","es":"Tome una foto"},
+            "help":{"en":"Press the camera button and take any photograph. It must appear below as a thumbnail. If the camera does not open, or the picture does not appear, this phone cannot be used to inspect.",
+                    "zh":"点击相机按钮，任意拍摄一张照片。照片应以缩略图形式显示在下方。若相机无法打开，或照片不显示，则本手机不可用于检验。",
+                    "es":"Pulse el botón de la cámara y tome cualquier foto. Debe aparecer abajo como miniatura. Si la cámara no abre, o la foto no aparece, este teléfono no sirve para inspeccionar."}},
+           {"id":"tp_video","video":true,"must":true,"only_factory":["TST"],
+            "label":{"en":"Record a short video","zh":"录制一段短视频","es":"Grabe un video corto"},
+            "help":{"en":"Five seconds is enough. This is the one that fails most often: in WeChat's in-app browser the clip is sometimes lost. If it does not appear below, open the page in Chrome or Safari and try again before giving up on the phone.",
+                    "zh":"五秒即可。本项最容易出问题：在微信内置浏览器中，视频有时会丢失。若视频未显示在下方，请改用 Chrome 或 Safari 打开本页面后重试，再判断手机是否可用。",
+                    "es":"Con cinco segundos basta. Éste es el que más falla: en el navegador interno de WeChat el clip a veces se pierde. Si no aparece abajo, abra la página en Chrome o Safari y vuelva a intentarlo antes de descartar el teléfono."}},
+           {"id":"tp_numero","must":true,"only_factory":["TST"],
+            "measure":{"unit":"kg","step":"0.1"},
+            "label":{"en":"Type a number with a decimal","zh":"输入一个带小数的数字","es":"Escriba un número con decimal"},
+            "help":{"en":"Write something like 12.5. Some Android keyboards do not offer the dot in the numeric layout; if you cannot type it, say so in the note below — the app accepts a comma too.",
+                    "zh":"例如填写 12.5。部分安卓键盘的数字布局中没有小数点；若无法输入，请在下方备注中说明——本应用同样接受逗号。",
+                    "es":"Escriba algo como 12,5. Algunos teclados de Android no ofrecen el punto en el teclado numérico; si no lo puede escribir, dígalo en la observación de abajo — la app también acepta la coma."}},
+           {"id":"tp_nota","must":true,"only_factory":["TST"],
+            "label":{"en":"Write something in the note","zh":"在备注中写点内容","es":"Escriba algo en la observación"},
+            "help":{"en":"Any sentence, in the box at the bottom of this test. Write it in your own language: the app translates it on its own and the translation is what travels in the report. If no translated line appears underneath, this phone has no connection — which does not stop the inspection, but it is worth knowing.",
+                    "zh":"在本测试底部的方框中写下任意一句话。用您自己的语言书写即可：应用会自动翻译，报告中呈现的是译文。若下方未出现译文，说明本手机无网络连接——这不影响检验进行，但值得知悉。",
+                    "es":"Cualquier frase, en el recuadro del final de esta prueba. Escríbala en su idioma: la app la traduce sola y la traducción es la que viaja en el informe. Si no aparece la línea traducida debajo, este teléfono no tiene conexión — lo cual no impide inspeccionar, pero conviene saberlo."}}]},
+
         {"id":"ACCESSORIES","optional":false,"type":"photos",
          "only_factory":["YIS","RHY","EAG"],
          /* El Epsilon salió en el plan 105 y RHYME entera en el 119: esta prueba
@@ -9228,6 +9297,8 @@ const T = {
   assign_tests:"The assignment names no test this reference carries. Ask HOKLAN to publish it again.",
   assign_gone:"%n test(s) in the assignment no longer exist in the plan and were left out.",
   assign_cached:"Read from this phone's memory, not from the network: it may not be the latest one.",
+  tst_banner:"TEST DOCUMENT · NOT AN INSPECTION",
+  tst_banner_sub:"This run only checks whether this phone can take a photo, record a video, finish a report and download the packet. It inspects no product, it belongs to no purchase order, and it must not be filed as a quality record.",
   assign_must:"This inspection is required. The reference, the tests and the number of units come fixed by HOKLAN.",
   origin_assigned:"INSPECTION REQUESTED BY HOKLAN",
   assign_make:"CREATE ASSIGNMENT",
@@ -9515,6 +9586,8 @@ const T = {
   assign_tests:"La asignación no nombra ninguna prueba que esta referencia lleve. Pida a HOKLAN que la publique de nuevo.",
   assign_gone:"%n prueba(s) de la asignación ya no existen en el plan y quedaron fuera.",
   assign_cached:"Leída de la memoria de este teléfono, no de la red: puede no ser la última.",
+  tst_banner:"DOCUMENTO DE PRUEBA · NO ES UNA INSPECCIÓN",
+  tst_banner_sub:"Esta corrida sólo comprueba si este teléfono puede tomar una foto, grabar un video, finalizar un informe y descargar el paquete. No inspecciona ningún producto, no pertenece a ninguna orden de compra y no debe archivarse como registro de calidad.",
   assign_must:"Esta inspección es obligatoria. La referencia, las pruebas y la cantidad de unidades vienen fijadas por HOKLAN.",
   origin_assigned:"INSPECCIÓN SOLICITADA POR HOKLAN",
   assign_make:"CREAR ASIGNACIÓN",
@@ -9794,6 +9867,8 @@ const T = {
   assign_tests:"指派中没有本型号具备的测试项目。请联系 HOKLAN 重新发布。",
   assign_gone:"指派中有 %n 项测试在当前方案中已不存在，已略去。",
   assign_cached:"读取自本机存储而非网络：可能不是最新的指派。",
+  tst_banner:"测试文件 · 非检验报告",
+  tst_banner_sub:"本次运行仅用于检查本手机能否拍照、录像、完成报告并下载压缩包。未检验任何产品，不属于任何采购订单，不得作为质量记录归档。",
   assign_must:"本次检验为强制项。型号、测试项目和检验数量均由 HOKLAN 指定。",
   origin_assigned:"HOKLAN 委托检验",
   assign_make:"生成指派",
@@ -10112,11 +10187,11 @@ const TEST_NO = {
   KAP_MODULE_AUDIO:104, KAP_FM_MODULE:105, LEAK_CURRENT:106,
   OUT_120HZ:107, MIC_POS:108, EPS15_PREV:109,
   GS_POWER:110, GS_DRIVERS:111, GS_BATTERY:112, GS_RF:113, GS_MECH:114,
-  GS_FW:115, GS_LAB:116, GS_DOCS:117, KNOB_ALIGN:118
+  GS_FW:115, GS_LAB:116, GS_DOCS:117, KNOB_ALIGN:118, PHONE_TEST:119
 };
 /* El siguiente número libre. Está aquí para que quien agregue una prueba no
    tenga que contar: es 79 y sube de uno en uno. */
-const NEXT_TEST_NO = 119;
+const NEXT_TEST_NO = 120;
 
 /* En las referencias de desarrollo la numeración es otra, y a propósito.
 
@@ -10172,6 +10247,18 @@ function fits(o){
      antes de producir. Bajo cualquier otro código estas pruebas no existen, y
      bajo el 205 se suman a las del producto. */
   if(o.golden && !enGolden()) return false;
+  /* El código 123 es una lista blanca, y no al revés. Bajo `TST` sólo existe lo
+     que se nombra a sí mismo como de `TST` — la prueba del teléfono y sus cuatro
+     puntos.
+
+     Escrito así y no confiando en los filtros de abajo porque la mayoría de las
+     pruebas no nombra fábrica: sin esta línea, el banco de pruebas del teléfono
+     heredaba medio catálogo, y cada prueba que alguien agregue mañana sin
+     `only_factory` volvería a caer dentro. La lista blanca falla del lado
+     correcto: si se olvida el rótulo, la prueba no aparece y se nota al primer
+     intento, en vez de aparecer una inspección de cuarenta puntos donde debía
+     haber cuatro. */
+  if(enTest()) return !!(o.only_factory && o.only_factory.indexOf(TEST_FAB) >= 0);
   /* Los puntos que esta referencia no tiene, declarados una sola vez en
      `PUNTOS_FUERA` en lugar de repetidos en cada prueba donde el bloque
      aparece. Va antes que todo lo demás: si el producto no lleva la pieza, no
@@ -10317,6 +10404,10 @@ const GROUPS = {
    veces en el índice. Una subsección de una sola prueba se ve pobre; una
    tarjeta repetida se ve rota. */
 const DEFAULT_GROUPS = [
+  /* El banco de pruebas del teléfono. Subsección propia porque no es ninguna de
+     las de abajo: no comprueba un producto. Sin esto caía en «otras». */
+  {id:"tst",  tests:["PHONE_TEST"],
+   label:{en:"Phone check","zh":"手机自检","es":"Prueba del teléfono"}},
   {id:"env",  tests:["AGING"],
    label:{en:"Aging","zh":"老化","es":"Envejecimiento"}},
   {id:"pot",  tests:["RMS_POWER","RMS_SUPPLIER","SUB_RMS"],
@@ -10536,6 +10627,34 @@ const enGolden = () => S.factory === GOLDEN;
 /* La fábrica dueña del producto, que es la que decide qué pruebas tiene. Bajo
    el 205 el operario escoge la referencia y el plan sale de aquí. */
 const fabricaReal = m => CONFIG.models[m] || "";
+
+/* ---------- prueba del teléfono · código 123 -------------------------------
+   No es una fábrica ni un producto: es un banco de pruebas para el teléfono.
+
+   Antes de que una fábrica nueva —o un inspector con un equipo nuevo— empiece a
+   levantar inspecciones de verdad, hace falta saber si ese teléfono puede hacer
+   las cinco cosas de las que depende todo: foto, video, teclado decimal,
+   observación traducida, y armar y descargar el paquete. Averiguarlo con una
+   inspección real tiene un costo: si el teléfono no sirve, lo que queda en el
+   tablero es una orden a medias que alguien tiene que ir a borrar.
+
+   De ahí las tres decisiones:
+
+     · fábrica propia `TST`, que no es ninguna de las cuatro, para que el 123
+       sirva a todas sin tocar sus catálogos;
+     · referencia única `HK-PRUEBA`, que no existe en el mundo y que por eso
+       queda fuera del catálogo de administración (ver `refList`);
+     · nada de lo que se haga aquí se guarda en «Sus órdenes» ni en el tablero,
+       y el informe sale marcado en rojo como documento de prueba.
+
+   Un informe de prueba que se pudiera confundir con una inspección sería peor
+   que no tener la sección. */
+const TEST_FAB = "TST";
+const TEST_REF = "HK-PRUEBA";
+/* Lo que se imprime donde iría la orden de compra. Sin traducir, por lo mismo
+   que `GOLDEN_PO`. */
+const TEST_PO = "PRUEBA";
+const enTest = () => S.factory === TEST_FAB;
 
 const isDevRef = m => DEV_REFS.indexOf(m) >= 0 ||
   (enGolden() && GOLDEN_REFS.indexOf(m) >= 0);
@@ -12646,7 +12765,15 @@ function reportHtml(){
       <span>${tr("test_id")}: ${esc(S.testId)} &nbsp;|&nbsp; ${
         esc(poPrinted() || "—")}</span></div>
     <div class="bnr-r"><span>${tr("overall")}</span><b style="color:${colour}">${verdictText(v)}</b></div>
-  </div>`;
+  </div>
+  ${/* El informe del código 123 sale marcado, y arriba de todo. Un documento con
+        el membrete de HOKLAN, su número de orden y su veredicto es exactamente
+        lo que alguien archiva sin leerlo entero; si éste se confundiera con una
+        inspección, el expediente de un producto quedaría con una revisión que
+        nunca se hizo. La franja va antes de cualquier dato, en rojo, y dice qué
+        es y qué no es. */""}
+  ${enTest() ? `<div class="tstbnr"><b>${tr("tst_banner")}</b>
+    <p>${tr("tst_banner_sub")}</p></div>` : ""}`;
 
   /* El idioma que se declara aquí es el del informe, y no siempre «en».
 
@@ -12706,6 +12833,12 @@ body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;
 .bnr-r{padding:8px 14px;text-align:center;min-width:130px}
 .bnr-r span{display:block;font-size:8pt;color:#5a6b7d}
 .bnr-r b{font-size:12pt}
+/* La franja del documento de prueba (código 123). Roja, con relleno, y no una
+   línea de texto más: tiene que leerse antes que el membrete. */
+.tstbnr{border:2pt solid #c0392b;background:#fdf3f1;padding:9px 13px;
+  margin:0 0 14px;page-break-inside:avoid}
+.tstbnr>b{display:block;font-size:12pt;color:#a3271b;letter-spacing:.6px}
+.tstbnr>p{margin:4px 0 0;font-size:8.5pt;color:#7a5a52;line-height:1.45}
 .sec{display:flex;align-items:center;background:#eef2f6;border:1px solid #b9c6d4;
   margin:16px 0 0}
 .sec i{font-style:normal;background:#0f3f6b;color:#fff;font-weight:700;
@@ -14587,7 +14720,11 @@ function renderAdmin(){
    autoinspección, retiradas en la v14.0: sólo entra el administrador de HOKLAN,
    y HOKLAN ve todas las referencias, las de desarrollo incluidas. */
 function refList(){
-  return Object.keys(CONFIG.models).sort();
+  /* `HK-PRUEBA` queda fuera. No es un producto: es el banco de pruebas del
+     código 123, y una referencia inventada en el catálogo de administración es
+     una invitación a inspeccionarla desde aquí — con su informe, su fila en el
+     tablero y nada que la distinga de las cincuenta y tres reales. */
+  return Object.keys(CONFIG.models).filter(m => m !== TEST_REF).sort();
 }
 /* The search box and the list of buttons are gone with the second screen. The
    dropdown holds all fifty-three grouped by factory, and a native picker on a
@@ -15416,6 +15553,11 @@ function misOrdenes(){
 }
 function anotarMia(estado){
   if(!S.po || !S.model || !S.factory) return;
+  /* La prueba del teléfono no es una orden y no se anota. Si se anotara, en
+     «Sus órdenes» quedaría una fila `PRUEBA · HK-PRUEBA` que el operario tendría
+     que aprender a ignorar, y que a la primera duda alguien va a preguntar si
+     hay que despachar. */
+  if(enTest()) return;
   const m = misOrdenes();
   m[claveOrden({fabrica:S.factory, po:String(S.po), modelo:S.model})] = {
     po:String(S.po), fabrica:S.factory, modelo:S.model,
@@ -15603,7 +15745,13 @@ function renderSetup(){
             choosing another one is exactly what the assignment exists to
             prevent. Dropping the assignment is one tap away, and then the
             normal flow comes back. */""}
-      ${S.assigned ? refImageRow(S.model) : valid?`
+      ${/* Bajo el 123 no hay nada que escoger: la referencia es la única del
+            banco de pruebas y no es un producto. Tampoco se muestra su foto,
+            porque no hay producto que fotografiar. En su lugar va una línea que
+            dice qué es esto, antes de empezar y no después. */""}
+      ${enTest() ? `<div class="brw" style="border-color:var(--red);color:var(--red)">
+        <b>${tr("tst_banner")}</b> ${tr("tst_banner_sub")}</div>`
+      : S.assigned ? refImageRow(S.model) : valid?`
       <label>${tr("reference")}</label>
       <select id="model" onchange="setModel(this.value)">${models}</select>
       ${refImageRow(S.model)}`:""}
@@ -15620,7 +15768,7 @@ function renderSetup(){
             pulsar EMPEZAR. Y ofrecer un campo editable que no debe cambiarse es
             lo mismo que ofrecer un N/A donde nunca aplica. */""}
       <label>${tr("po")}</label>
-      ${enGolden() ? `<input id="po" value="${esc(GOLDEN_PO)}" readonly
+      ${enGolden() || enTest() ? `<input id="po" value="${esc(enTest()?TEST_PO:GOLDEN_PO)}" readonly
         style="color:var(--muted);background:#0a1523">`
       : `<input id="po" value="${esc(S.po)}" placeholder="${tr("po_ph")}"
         inputmode="numeric" maxlength="12" minlength="${PO_MIN}" autocomplete="off"
@@ -15629,7 +15777,7 @@ function renderSetup(){
             alert that explains a rule nobody was told is a rule discovered by
             being stopped. */""}
       <p class="hint" style="margin-top:6px">${fmt("po_min_hint",{n:PO_MIN})}</p>`}
-      ${enGolden() ? "" : `<label>${tr("operator")}</label>
+      ${enGolden() || enTest() ? "" : `<label>${tr("operator")}</label>
       <input id="operator" value="${esc(S.operator)}" maxlength="40"
         placeholder="${tr("operator_ph")}"
         autocomplete="off" oninput="onlyLetters(this)">`}
@@ -15672,7 +15820,7 @@ function renderSetup(){
 
    Es una lista y no una comparación suelta porque la próxima fábrica que trabaje
    así se agrega escribiendo su código aquí. */
-const ONE_UNIT = ["RHY"];
+const ONE_UNIT = ["RHY", TEST_FAB];
 const unitsLocked = () => ONE_UNIT.indexOf(S.factory) >= 0;
 
 /* How many speakers this inspection covers. Kept on the setup screen only —
@@ -15778,7 +15926,10 @@ function setTestId(value){
   // every keystroke would fight the operator typing.
   if(newKey !== S.factory || isBad !== wasBad){
     S.factory = newKey;
-    S.model = "";
+    /* El 123 no ofrece selector, así que si la referencia no se fija aquí la
+       pantalla queda sin una y EMPEZAR responde «escoja la referencia» sin que
+       haya nada que escoger. */
+    S.model = newKey === TEST_FAB ? TEST_REF : "";
     S.po = (document.getElementById("po")||{}).value || S.po;
     S.operator = (document.getElementById("operator")||{}).value || S.operator;
     render();
@@ -15796,14 +15947,17 @@ function start(){
   // reference arrived fixed, and reaching it from here is what the assignment
   // exists to prevent. Reading a select that is not there used to blank the
   // model and stop the inspection with "select the reference".
-  if(sel) S.model = sel.value;
+  /* Bajo el 123 tampoco se dibuja el selector, y por el mismo motivo: la
+     referencia es una sola y fijarla es parte del mecanismo. */
+  if(enTest()) S.model = TEST_REF;
+  else if(sel) S.model = sel.value;
   else if(!S.assigned) S.model = "";
   /* Bajo el código 205 los dos campos no se leen de la pantalla: la orden es
      fija y el inspector no se pide. Leerlos igual habría dejado la orden vacía
      —el filtro de dígitos se come «Golden Sample» entero— y habría buscado un
      campo que ya no se dibuja. */
-  if(enGolden()){
-    S.po = GOLDEN_PO;
+  if(enGolden() || enTest()){
+    S.po = enTest() ? TEST_PO : GOLDEN_PO;
     S.operator = "";
   } else {
     S.po = document.getElementById("po").value.replace(/[^0-9]/g,"").trim();
@@ -15825,7 +15979,7 @@ function start(){
   /* Las dos comprobaciones se saltan en la muestra patrón, y tienen que
      saltarse: la orden no es un número y el inspector no se pide. Sin esto el
      código 205 quedaba imposible de arrancar. */
-  if(!enGolden()){
+  if(!enGolden() && !enTest()){
     if(S.po.length < PO_MIN){
       alert(fmt("a_po_min",{n:PO_MIN}));
       const box = document.getElementById("po");
@@ -15849,7 +16003,9 @@ function start(){
      que se rotula OC o PO según el idioma del informe, igual que el que genera
      la app. Lo que no lleva prefijo es el número que una fábrica copia de la
      orden de su cliente, que ya viene rotulado de origen. */
-  S.poAuto = true;
+  /* Menos bajo el 123, donde «PRUEBA» no es un número de orden y rotularlo
+     «OC PRUEBA» inventaría una orden que no existe. */
+  S.poAuto = !enTest();
   S.index = 0; S.open = {};
   S.data = Array.from({length:S.units}, () => []);
   S.startedAt = Date.now(); S.finishedAt = null; S.screen = "test";

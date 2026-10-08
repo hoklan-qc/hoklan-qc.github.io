@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="20.5">
+<meta name="app-version" content="20.6">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -958,6 +958,23 @@ const CONFIG = {
     "INT-021":{"en":"Voice coil or tinsel out of specification or badly finished","zh":"音圈或弹波引线超出规格或工艺不良","es":"Bobina o tinsel fuera de especificación o mal acabado"},
     "MEC-006":{"en":"Glue, sealing or fixing of internal parts insufficient","zh":"内部零件的点胶、密封或固定不足","es":"Pegante, sellado o fijación de partes internas insuficiente"},
     "MEC-007":{"en":"Something came loose or was damaged in the transport vibration","zh":"运输振动后出现松动或损坏","es":"Algo se soltó o se dañó en la vibración de transporte"},
+    /* Plan 185, para los cambios RHY062–065 y RHY066–068. No alcanzaba con
+       MEC-004: ése dice que faltan tornillos o están flojos, y aquí el defecto
+       es otro —los cuatro tornillos pueden estar perfectos y el pie ser el
+       viejo—. Un código propio es lo que permite contar después cuántas
+       unidades salieron con la pieza anterior. */
+    "MEC-008":{"en":"Rubber foot is not the approved one","zh":"脚垫与承认样不符","es":"La pata de goma no es la aprobada"},
+    /* Plan 185 · RHY063 y RHY067. Lo que se retiró fue un empalme de cable a
+       cable; un conector que entra a una tarjeta no es esto y no debe marcarse
+       con este código — la cabina lleva varios, legítimos, y el punto del
+       pegante amarillo existe justamente para revisarlos. */
+    "MEC-009":{"en":"Cable spliced with a plastic connector instead of running continuous","zh":"线材以塑料接插件对接，而非整段连续","es":"Cable empalmado con conector plástico en vez de ser continuo"},
+    /* Plan 185 · RHY064. Distinto de MEC-004: allí falta un tornillo, aquí
+       falta el estaño. */
+    "MEC-010":{"en":"Terminals pushed on but not soldered","zh":"端子仅插接未焊接","es":"Terminales insertados pero sin soldar"},
+    /* Plan 185 · RHY065 y RHY068. El defecto no es que el cable esté mal
+       conectado sino que esté corto: trabaja tenso y se desprende solo. */
+    "MEC-011":{"en":"Cable has no slack and works under tension","zh":"线材无余量，处于张紧状态","es":"El cable no tiene holgura y trabaja en tensión"},
     "EXT-010":{"en":"External dimensions out of specification","zh":"外形尺寸超出规格","es":"Dimensiones externas fuera de especificación"},
     "EXT-011":{"en":"Cabinet, joints, caps or corner pieces defective","zh":"箱体、接缝、端盖或护角有缺陷","es":"Gabinete, uniones, tapas o esquineras defectuosas"},
     "EXT-012":{"en":"Tripod socket defective or unstable when mounted","zh":"三脚架插孔有缺陷或安装后不稳","es":"Receptáculo de trípode defectuoso o inestable al montar"},
@@ -970,6 +987,11 @@ const CONFIG = {
     "DOC-011":{"en":"An approved improvement is not fitted on the product","zh":"已批准的改进未在产品上落实","es":"Una mejora aprobada no está puesta en el producto"},
     "FM-011":{"en":"Reception degrades with the wireless module fitted","zh":"装入无线模块后接收变差","es":"La recepción empeora con el módulo inalámbrico puesto"},
     "FM-012":{"en":"Module supply or antenna distance not as approved","zh":"模块电源类型或天线距离与承认样不符","es":"Fuente del módulo o distancia de antena distintas a lo aprobado"},
+    /* Plan 185, para YIS064. FM-012 es de la muestra patrón y habla de una
+       distancia medida; éste es de producción y habla de una posición que se
+       compara con una foto. Son dos preguntas distintas sobre la misma pieza, y
+       con un solo código el tablero no podría separarlas. */
+    "FM-013":{"en":"FM antenna not in the approved position","zh":"调频天线位置与承认样不符","es":"La antena FM no está en la posición aprobada"},
     "FM-020":{"en":"Poor automatic scan or presets not kept","zh":"自动搜台效果差或存台丢失","es":"Barrido automático pobre o memorias que no se conservan"},
     "DUR-010":{"en":"Fault in the switching or button life cycles","zh":"开关机或按键寿命循环中失效","es":"Falla en los ciclos de encendido o de vida de los botones"},
     "DUR-011":{"en":"Socket worn or no longer holds the plug","zh":"接口磨损或无法夹持插头","es":"Conector desgastado o que ya no retiene el enchufe"},
@@ -984,7 +1006,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 184,
+      "plan_version": 185,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -1576,7 +1598,16 @@ const CONFIG = {
                     "zh":"将箱体翻转，清点三脚架支座的螺丝，应为五颗，全部拧紧且无滑牙。",
                     "es":"Voltee la cabina y cuente los tornillos del soporte del trípode. Deben ser cinco, todos apretados y ninguno barrido."}},
            {/* La cabina ya está volteada del punto anterior, así que las patas se
-                cuentan aquí y no en otra parte. */
+                cuentan aquí y no en otra parte.
+
+                Se quedan aquí las nueve cabinas, los dos subwoofers incluidos.
+                En el plan 185 este punto se movió a GPE para los BAS por los
+                cambios RHY066–068, y se devolvió en el mismo plan: aquellos
+                cambios son de la pata de goma y de dos cables, y ninguno dice
+                nada de tornillos. Contar los cuatro tornillos es una
+                comprobación general de la cabina y no la verificación de una
+                mejora — mezclarlas dejaba el conteo colgando de un cambio que
+                algún día se retira. */
             "id":"sub_ext_feet_screws","code":"MEC-004",
             "label":{"en":"The rubber feet have their 4 screws","zh":"橡胶脚垫螺丝齐全，共 4 颗",
                      "es":"Los pies de goma tienen sus 4 tornillos"},
@@ -7059,8 +7090,20 @@ const CONFIG = {
             "help":{"en":"Photograph the face that carries the specifications: voltage, capacity in mAh, chemistry and manufacturer. All four must be legible in the photograph.",
                     "zh":"拍摄带规格的一面：电压、容量（mAh）、电芯类型和生产厂家。四项均须在照片中清晰可读。",
                     "es":"Fotografíe la cara con las especificaciones: voltaje, capacidad en mAh, tipo de celda y fabricante. Los cuatro datos deben quedar legibles en la foto."}},
-           {"id":"antena_fm","skip_factory":["RHY"],
-            "label":{"en":"FM antenna position","zh":"收音天线位置"}},
+           {/* Este punto lleva desde siempre sólo una etiqueta: ni español, ni
+                ayuda, ni código de falla, ni imagen contra la cual comparar. Es
+                una foto que se pide y que nadie puede juzgar — «posición de la
+                antena» no dice cuál es la posición buena.
+
+                Para la ARC104A2 y la ARC106A2 sale de aquí y pasa a GPE, donde
+                YIS064 le pone lo que le falta: la foto del ruteo aprobado al
+                lado, el texto en los tres idiomas y el código FM-013. Para las
+                demás referencias de YISION y EAGLE se queda, tal como está:
+                flaco, pero es la única foto de la antena que tienen. */
+            "id":"antena_fm","skip_factory":["RHY"],
+            "skip":["HK-ARC104A2","HK-ARC106A2"],
+            "label":{"en":"FM antenna position","zh":"收音天线位置",
+                     "es":"Posición de la antena FM"}},
 
            {/* Plan 168 · YISION. La tarjeta de las luces no se fotografiaba, y
                 es la que más cambia entre lotes: el efecto de luz es lo primero
@@ -7129,7 +7172,40 @@ const CONFIG = {
            día entra una que se hace con el producto cerrado, habrá que revisar
            esta posición. */
         {"id":"GPE","optional":false,"type":"photos",
-         "only":["HK-POW102"],
+         /* Plan 185 · tres cambios entran aquí a la vez, y con ellos la prueba
+            deja de tener una sola referencia:
+
+              RHY062–065  pies de goma   HK-EPS112A1
+              RHY066–068  pies de goma   HK-BAS115A1, HK-BAS118A1
+              YIS064      antena FM      HK-ARC104A2, HK-ARC106A2
+
+            Los tres se comprueban por comparación con una foto y no por
+            medición, que es lo que pidió HOKLAN: en los tres la pregunta es «¿la
+            pieza que trae esta unidad es la aprobada?», y a eso se responde
+            mirando, no midiendo.
+
+            Ocho puntos, uno por mejora. No se agrupan aunque las mejoras viajen
+            juntas: el tablero tiene que poder decir cuál de las ocho falló, y un
+            punto que responda por cuatro cosas sólo puede decir que algo falló.
+
+            Uno solo se trajo de otra parte, la foto de la antena, que estaba en
+            PARTES INTERNAS sin ayuda ni criterio. Salió de allí sólo para las
+            dos referencias del cambio: las demás de YISION y EAGLE la conservan,
+            porque quitársela habría sido perder una comprobación a cambio de
+            nada.
+
+            El conteo de los cuatro tornillos de las patas se quedó donde
+            siempre, en PARTES EXTERNAS. Estuvo aquí un rato por error: ninguna
+            de las ocho mejoras habla de tornillos, y colgar una comprobación
+            general de un cambio que algún día se retira la habría arrastrado con
+            él.
+
+            La imagen de referencia es el criterio. Mientras no esté subida, el
+            punto se responde igual pero sin nada contra qué comparar: los
+            nombres de los archivos están en cada `sample` de abajo. */
+         "only":["HK-POW102",
+                 "HK-EPS112A1","HK-BAS115A1","HK-BAS118A1",
+                 "HK-ARC104A2","HK-ARC106A2"],
          "label":{"en":"SPECIAL TEST GUIDE (GPE)",
                   "zh":"专项检验指引（GPE）",
                   "es":"GUÍA DE PRUEBAS ESPECIALES (GPE)"},
@@ -7156,7 +7232,130 @@ const CONFIG = {
                      "es":"Soporte en los pines GND y 9V/15V"},
             "help":{"en":"Photograph the four pins marked GND and 9V/15V close up, with the gap between the two rows visible. A black support must run across the middle of the pins, as in the reference picture. A power supply without it is a fail.",
                     "zh":"近距离拍摄标注 GND 与 9V/15V 的四个引脚，两排之间的间隙须清晰可见。引脚中间应横贯一条黑色支架，与参考图片一致。缺少该支架的电源板判定为异常。",
-                    "es":"Fotografíe de cerca los cuatro pines marcados GND y 9V/15V, con el espacio entre las dos filas a la vista. Por la mitad de los pines debe cruzar un soporte negro, como en la imagen de referencia. Una fuente que no lo lleve es un fallo."}}]},
+                    "es":"Fotografíe de cerca los cuatro pines marcados GND y 9V/15V, con el espacio entre las dos filas a la vista. Por la mitad de los pines debe cruzar un soporte negro, como en la imagen de referencia. Una fuente que no lo lleve es un fallo."}},
+
+           /* ---- RHY062–065 · HK-EPS112A1 ----------------------------------
+              Cuatro mejoras de un mismo lote, cada una con su punto. No se
+              agrupan en uno solo aunque viajen juntas: lo que el tablero tiene
+              que poder decir es cuál de las cuatro falló, y un punto que
+              responda por cuatro cosas sólo puede decir que algo falló.
+
+              De las cuatro, una se ve con la cabina cerrada —las patas— y tres
+              con la cabina abierta. Van en ese orden, que es el orden en que se
+              pueden mirar sin volver a cerrar nada.
+
+              RHY063 nombra el cable: el de la tarjeta amplificadora al woofer.
+              La descripción del cambio decía sólo «el cableado interno», y así
+              el punto habría mandado al inspector a seguir quince cables con el
+              dedo sin saber cuál. Producto lo precisó. */
+           {"section":{"en":"EPS112A1 · Improvements RHY062–065",
+                       "zh":"EPS112A1 · 改善项 RHY062–065",
+                       "es":"EPS112A1 · Mejoras RHY062–065"},
+            "only":["HK-EPS112A1"],
+            "help":{"en":"Four changes from the same batch. Each one has its own reference picture: compare before deciding. The first is checked with the cabinet closed, the rest with it open.",
+                    "zh":"同一批次的四项变更，每项均配有参考图片，判定前请逐一核对。第一项在整机闭合状态下检查，其余三项需开箱检查。",
+                    "es":"Cuatro cambios del mismo lote. Cada uno tiene su imagen de referencia: compare antes de decidir. El primero se mira con la cabina cerrada, los demás con la cabina abierta."}},
+           {"id":"gpe_eps112_patas","code":"MEC-008","only":["HK-EPS112A1"],
+            "sample":"eps112_patas_gpe",
+            "label":{"en":"RHY062 · The rubber feet are the high-grip ones",
+                     "zh":"RHY062 · 脚垫为高摩擦版本",
+                     "es":"RHY062 · Las patas de goma son las de mayor agarre"},
+            "help":{"en":"Turn the cabinet over. The old feet let the cabinet walk across the floor at full volume; the new ones grip. Photograph the underside with the four feet in it, and add a close-up of one. The reference picture shows the old foot and the new one side by side: shape, height, colour and the way it is fixed must match the new one. A cabinet still carrying the old foot is a fail even if the foot is in perfect condition — what changed is the part, not its state.",
+                    "zh":"将箱体翻转。旧版脚垫在最大音量下无法固定箱体，整机会移位；新版脚垫可牢固抓地。拍摄底面全景，四个脚垫均须入镜，另补拍单个脚垫近照。参考图片中并列展示旧版与新版脚垫：形状、高度、颜色及固定方式均须与新版一致。仍装有旧版脚垫的产品判定为异常，即使脚垫本身完好——本项检查的是零件是否更换，而非其状态。",
+                    "es":"Voltee la cabina. Las patas viejas dejaban que la cabina se desplazara en el piso a volumen máximo; las nuevas agarran. Fotografíe el fondo con las cuatro patas dentro, y agregue una de cerca sobre una sola. La imagen de referencia muestra la pata vieja y la nueva lado a lado: forma, altura, color y la manera en que va sujeta deben coincidir con la nueva. Una cabina que todavía traiga la pata vieja es un fallo aunque la pata esté perfecta — lo que cambió es la pieza, no su estado."}},
+           {/* El calibre de este mismo cable ya se mide en PARTES INTERNAS
+                —`woofer_cable_gauge`, 16 AWG—, y ahí se queda: aquello es una
+                especificación permanente del cable y esto es la verificación de
+                un cambio. Se nombra en la ayuda para que el inspector sepa que
+                es el cable que ya tuvo en la mano dos puntos atrás. */
+            "id":"gpe_eps112_cable_woofer","code":"MEC-009","only":["HK-EPS112A1"],
+            "sample":"eps112_cable_woofer_gpe",
+            "label":{"en":"RHY063 · The amplifier-to-woofer cable is continuous",
+                     "zh":"RHY063 · 功放板至低音单元的连接线为整段连续",
+                     "es":"RHY063 · El cable de la tarjeta amplificadora al woofer es continuo"},
+            "help":{"en":"The same cable whose gauge is measured in INTERNAL PARTS. It used to be two cables joined mid-run by a plastic connector, and that joint could work loose with vibration or handling and leave the speaker with intermittent audio or no sound at all. Follow it with your finger from the amplifier board to the woofer terminals and photograph the whole run: there must be no joint anywhere along it. The connectors at each end, where the cable meets the board and the driver, are not this — those stay. The reference picture shows the old splice and the new continuous cable side by side.",
+                    "zh":"即“内部部件”中测量线径的同一条线。此前该线由两段线材通过塑料接插件对接而成，该接点在振动或装配操作中可能松脱，导致音频断续或完全无声。请用手指从功放板沿线摸至低音单元接线端子，并拍摄完整走向：全程不得有任何对接点。两端与电路板、喇叭连接的接头不属于本项，应予保留。参考图片中并列展示旧版对接点与新版整段线材。",
+                    "es":"El mismo cable al que se le mide el calibre en PARTES INTERNAS. Antes eran dos cables unidos en mitad del recorrido por un conector plástico, y esa unión podía aflojarse con la vibración o la manipulación y dejar el parlante con audio intermitente o sin sonido. Sígalo con el dedo desde la tarjeta amplificadora hasta los terminales del woofer y fotografíe el recorrido completo: no debe haber ninguna unión en todo el trayecto. Los conectores de los extremos, donde el cable llega a la tarjeta y al parlante, no son esto — ésos se quedan. La imagen de referencia muestra el empalme viejo y el cable continuo nuevo lado a lado."}},
+           {"id":"gpe_eps112_medios_sold","code":"MEC-010","only":["HK-EPS112A1"],
+            "sample":"eps112_medios_sold_gpe",
+            "label":{"en":"RHY064 · The mid terminals in the column are soldered",
+                     "zh":"RHY064 · 柱体内中音端子已焊接",
+                     "es":"RHY064 · Los terminales de los medios en la columna están soldados"},
+            "help":{"en":"In the column, not in the cabinet. Each mid driver has two terminals: before this change they were only pushed on, and vibration in use or in transport could work them loose. Photograph the terminals of each mid close enough to see solder covering the joint. A terminal that is only pushed on is a fail, even if it is tight today.",
+                    "zh":"检查部位为柱体，而非箱体。每只中音单元有两个端子：本次变更前仅为插接，使用或运输中的振动可能使其松脱。近距离拍摄每只中音单元的端子，须能看清焊锡覆盖焊点。仅插接而未焊接的端子判定为异常，即使当前接触良好。",
+                    "es":"En la columna, no en la cabina. Cada medio tiene dos terminales: antes de este cambio quedaban sólo insertados, y la vibración en uso o en transporte podía aflojarlos. Fotografíe los terminales de cada medio lo bastante cerca para ver el estaño cubriendo la unión. Un terminal que sólo esté insertado es un fallo, aunque hoy esté firme."}},
+           {"id":"gpe_eps112_cable_switch","code":"MEC-011","only":["HK-EPS112A1"],
+            "sample":"eps112_cable_switch_gpe",
+            "label":{"en":"RHY065 · The amplifier-to-switch cable has slack",
+                     "zh":"RHY065 · 功放至开关的连接线有余量",
+                     "es":"RHY065 · El cable del amplificador al switch tiene holgura"},
+            "help":{"en":"The cable that joins the amplifier to the switch was 5 cm longer in this change. Before, it worked under permanent tension and could pull itself off in normal use or when the amplifier was taken out for service. Photograph the whole run, from one end to the other, without touching it. It must hang loose, with no end pulling straight. A cable that is taut is a fail even if both ends are still connected — the tension is the defect.",
+                    "zh":"本次变更将功放至开关的连接线加长 5 cm。此前该线处于持续张紧状态，正常使用或拆装功放时可能自行脱落。在不触碰线材的情况下拍摄其完整走向，两端均须入镜。线材应呈自然松弛状态，两端均不得绷直。线材张紧即判定为异常，即使两端仍连接牢固——张紧本身就是缺陷。",
+                    "es":"El cable que une el amplificador con el switch quedó 5 cm más largo en este cambio. Antes trabajaba en tensión permanente y podía desprenderse solo en uso normal o al sacar el amplificador para mantenimiento. Fotografíe el recorrido completo, de un extremo al otro, sin tocarlo. Debe colgar flojo, sin que ninguno de los dos extremos quede halando. Un cable tenso es un fallo aunque los dos extremos sigan conectados — la tensión es el defecto."}},
+
+           /* ---- RHY066–068 · HK-BAS115A1, HK-BAS118A1 ---------------------
+              Las mismas mejoras que en el Epsilon menos una: los bajos no
+              llevan columna, así que no hay medios que soldar y RHY064 no
+              existe aquí. El cable del switch creció 4 cm y no 5. */
+           {"section":{"en":"BAS115A1 / BAS118A1 · Improvements RHY066–068",
+                       "zh":"BAS115A1 / BAS118A1 · 改善项 RHY066–068",
+                       "es":"BAS115A1 / BAS118A1 · Mejoras RHY066–068"},
+            "only":["HK-BAS115A1","HK-BAS118A1"],
+            "help":{"en":"Three changes from the same batch, with their reference pictures. The first is checked with the cabinet closed, the rest with it open.",
+                    "zh":"同一批次的三项变更，均配有参考图片。第一项在整机闭合状态下检查，其余需开箱检查。",
+                    "es":"Tres cambios del mismo lote, con sus imágenes de referencia. El primero se mira con la cabina cerrada, los demás con la cabina abierta."}},
+           {"id":"gpe_bas_patas","code":"MEC-008",
+            "only":["HK-BAS115A1","HK-BAS118A1"],
+            "sample":"bas_patas_gpe",
+            "label":{"en":"RHY066 · The rubber feet are the high-grip ones",
+                     "zh":"RHY066 · 脚垫为高摩擦版本",
+                     "es":"RHY066 · Las patas de goma son las de mayor agarre"},
+            "help":{"en":"Turn the cabinet over. The old feet let the bass cabinet walk across the floor at full volume; the new ones grip. Photograph the underside with the four feet in it, and add a close-up of one. The reference picture shows the old foot and the new one side by side: shape, height, colour and the way it is fixed must match the new one. A cabinet still carrying the old foot is a fail even if the foot is in perfect condition.",
+                    "zh":"将箱体翻转。旧版脚垫在最大音量下无法固定低音箱，整机会移位；新版脚垫可牢固抓地。拍摄底面全景，四个脚垫均须入镜，另补拍单个脚垫近照。参考图片中并列展示旧版与新版脚垫：形状、高度、颜色及固定方式均须与新版一致。仍装有旧版脚垫的产品判定为异常，即使脚垫本身完好。",
+                    "es":"Voltee la cabina. Las patas viejas dejaban que el bajo se desplazara en el piso a volumen máximo; las nuevas agarran. Fotografíe el fondo con las cuatro patas dentro, y agregue una de cerca sobre una sola. La imagen de referencia muestra la pata vieja y la nueva lado a lado: forma, altura, color y la manera en que va sujeta deben coincidir con la nueva. Una cabina que todavía traiga la pata vieja es un fallo aunque la pata esté perfecta."}},
+           {"id":"gpe_bas_cable_woofer","code":"MEC-009",
+            "only":["HK-BAS115A1","HK-BAS118A1"],
+            "sample":"bas_cable_woofer_gpe",
+            "label":{"en":"RHY067 · The amplifier-to-woofer cable is continuous",
+                     "zh":"RHY067 · 功放板至低音单元的连接线为整段连续",
+                     "es":"RHY067 · El cable de la tarjeta amplificadora al woofer es continuo"},
+            "help":{"en":"The same cable whose gauge is measured in INTERNAL PARTS. It used to be two cables joined mid-run by a plastic connector, and that joint could work loose with vibration or handling and leave the speaker with intermittent audio or no sound at all. Follow it with your finger from the amplifier board to the woofer terminals and photograph the whole run: there must be no joint anywhere along it. The connectors at each end, where the cable meets the board and the driver, are not this — those stay. The reference picture shows the old splice and the new continuous cable side by side.",
+                    "zh":"即“内部部件”中测量线径的同一条线。此前该线由两段线材通过塑料接插件对接而成，该接点在振动或装配操作中可能松脱，导致音频断续或完全无声。请用手指从功放板沿线摸至低音单元接线端子，并拍摄完整走向：全程不得有任何对接点。两端与电路板、喇叭连接的接头不属于本项，应予保留。参考图片中并列展示旧版对接点与新版整段线材。",
+                    "es":"El mismo cable al que se le mide el calibre en PARTES INTERNAS. Antes eran dos cables unidos en mitad del recorrido por un conector plástico, y esa unión podía aflojarse con la vibración o la manipulación y dejar el parlante con audio intermitente o sin sonido. Sígalo con el dedo desde la tarjeta amplificadora hasta los terminales del woofer y fotografíe el recorrido completo: no debe haber ninguna unión en todo el trayecto. Los conectores de los extremos, donde el cable llega a la tarjeta y al parlante, no son esto — ésos se quedan. La imagen de referencia muestra el empalme viejo y el cable continuo nuevo lado a lado."}},
+           {"id":"gpe_bas_cable_switch","code":"MEC-011",
+            "only":["HK-BAS115A1","HK-BAS118A1"],
+            "sample":"bas_cable_switch_gpe",
+            "label":{"en":"RHY068 · The amplifier-to-switch cable has slack",
+                     "zh":"RHY068 · 功放至开关的连接线有余量",
+                     "es":"RHY068 · El cable del amplificador al switch tiene holgura"},
+            "help":{"en":"The cable that joins the amplifier to the switch was 4 cm longer in this change. Before, it worked under permanent tension and could pull itself off in normal use or when the amplifier was taken out for service. Photograph the whole run, from one end to the other, without touching it. It must hang loose, with no end pulling straight. A cable that is taut is a fail even if both ends are still connected.",
+                    "zh":"本次变更将功放至开关的连接线加长 4 cm。此前该线处于持续张紧状态，正常使用或拆装功放时可能自行脱落。在不触碰线材的情况下拍摄其完整走向，两端均须入镜。线材应呈自然松弛状态，两端均不得绷直。线材张紧即判定为异常，即使两端仍连接牢固。",
+                    "es":"El cable que une el amplificador con el switch quedó 4 cm más largo en este cambio. Antes trabajaba en tensión permanente y podía desprenderse solo en uso normal o al sacar el amplificador para mantenimiento. Fotografíe el recorrido completo, de un extremo al otro, sin tocarlo. Debe colgar flojo, sin que ninguno de los dos extremos quede halando. Un cable tenso es un fallo aunque los dos extremos sigan conectados."}},
+
+           /* ---- YIS064 · posición de la antena FM · ARC104A2, ARC106A2 ----
+              Viene de `antena_fm`, en PARTES INTERNAS, donde era una etiqueta
+              suelta sin ayuda ni criterio. Lo que YIS064 agrega no es la foto
+              —ésa ya se pedía— sino con qué compararla.
+
+              Relacionado: YIS054 y YIS061 hicieron este mismo movimiento de
+              antena en la ARC101 y la ARC108, y ninguno de los dos dejó una
+              comprobación en línea. Éste es el tercero. */
+           {"section":{"en":"ARC104A2 / ARC106A2 · FM antenna position",
+                       "zh":"ARC104A2 / ARC106A2 · 调频天线位置",
+                       "es":"ARC104A2 / ARC106A2 · Posición de la antena FM"},
+            "only":["HK-ARC104A2","HK-ARC106A2"],
+            "help":{"en":"With the cabinet open. The antenna must run where the reference picture shows it, away from the boards. This is what the change moved it for: too close, the board couples into the antenna and the receiver hears the product instead of the station.",
+                    "zh":"在开箱状态下检查。天线走向须与参考图片一致，并远离电路板。本次变更的目的正在于此：距离过近时电路板会耦合至天线，接收到的将是产品自身的噪声而非电台信号。",
+                    "es":"Con la cabina abierta. La antena debe ir tendida donde muestra la imagen de referencia, lejos de las tarjetas. Para eso la movió el cambio: demasiado cerca, la tarjeta se acopla a la antena y el receptor oye al producto en vez de a la emisora."}},
+           {"id":"gpe_arc_antena","code":"FM-013",
+            "only":["HK-ARC104A2","HK-ARC106A2"],
+            "sample":"arc_antena_gpe",
+            "label":{"en":"The FM antenna is in the approved position",
+                     "zh":"调频天线位于承认的位置",
+                     "es":"La antena FM está en la posición aprobada"},
+            "help":{"en":"Photograph the whole run of the antenna, from where it leaves the board to where it ends, with the cabinet open and the antenna where production left it — not held or moved aside for the picture. Compare with the reference picture: the path, the point where it is fixed and how far it stays from the boards must match. If it is loose inside the cabinet instead of fixed along its path, that is a fail.",
+                    "zh":"在开箱状态下拍摄天线的完整走向，从出板处到末端，天线须保持量产装配状态——不得为拍照而用手提起或拨开。与参考图片核对：走线路径、固定点位置以及与电路板的距离均须一致。若天线在箱内处于游离状态而未沿走线固定，判定为异常。",
+                    "es":"Fotografíe el recorrido completo de la antena, desde donde sale de la tarjeta hasta donde termina, con la cabina abierta y la antena como la dejó producción — sin sostenerla ni apartarla para la foto. Compare con la imagen de referencia: el camino, el punto donde va fijada y qué tan lejos se mantiene de las tarjetas deben coincidir. Si va suelta dentro de la cabina en vez de fijada a lo largo de su recorrido, es un fallo."}}]},
 
         /* ===== Real battery capacity ========================================
            Last in the plan, and it has to be: a 3600 mAh pack at a quarter of

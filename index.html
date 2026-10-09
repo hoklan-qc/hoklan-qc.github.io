@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="20.7">
+<meta name="app-version" content="20.8">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -1006,7 +1006,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 186,
+      "plan_version": 187,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -2398,7 +2398,14 @@ const CONFIG = {
             responder en cada unidad termina marcada sin mirar. */
          /* El ARC104A2 salió en el plan 167, junto con AUX, PANTALLA y BATERÍA
             EXTERNA: no trae ninguna de las cuatro. */
-         "skip_factory":["RHY"],"skip":["HK-KAP208","HK-SKA108A1","HK-ARC104A2"],
+         /* La ARC106A2 y la ARC108A2 salieron en el plan 187. Las dos venían
+            marcando en N/A las dieciocho comprobaciones de esta prueba, orden
+            tras orden, con el motivo escrito: «该产品未配置SD卡功能» — el
+            producto no tiene función de tarjeta SD. Dieciocho N/A que alguien
+            tiene que responder y que nadie puede leer como información. */
+         "skip_factory":["RHY"],
+         "skip":["HK-KAP208","HK-SKA108A1","HK-ARC104A2",
+                 "HK-ARC106A2","HK-ARC108A2"],
          "label":{"en":"SD CARD","zh":"SD 卡"},
          "steps":[
            {"en":"Insert the HOKLAN test SD card into the speaker","zh":"将 HOKLAN 测试 SD 卡插入音箱"},
@@ -10792,7 +10799,43 @@ const PUNTOS_FUERA = {
                      Se agregan aquí al crearse los dos puntos en el plan 168,
                      para que no nazcan pidiéndole a esta referencia una pieza
                      que ya sabemos que no trae. */
-                  "pcb_luces","pcb_luces_version"]
+                  "pcb_luces","pcb_luces_version",
+                  /* Plan 187: tampoco trae trípode. La fábrica lo marcó N/A con
+                     su motivo escrito en la orden 1653. */
+                  "tripode_front","tripode_back"],
+
+  /* ---- Plan 187 · cinco referencias de YISION -------------------------------
+     De un archivo de Producto con todos los N/A de cinco órdenes entre el 25 y
+     el 30 de septiembre. Lo que la fábrica marcó «no aplica» inspección tras
+     inspección es lo que el producto no tiene, y pedirlo otra vez el mes que
+     viene sólo enseña a marcar N/A sin mirar.
+
+     Los puntos de micrófono y guitarra se retiran una sola vez aquí y
+     desaparecen de las cuatro fuentes a la vez —USB, BLUETOOTH, RADIO FM y
+     AUX—, que es donde está repetido el bloque. En el archivo cada uno figura
+     cuatro veces por esa razón. */
+
+  /* Sin eco en el micrófono 1 y con un solo micrófono; sin pantalla de SD y sin
+     selector de batería. La prueba de TARJETA SD entera sale por `skip`, abajo
+     en la propia prueba: el producto no lleva lector.
+
+     `src_sd` —la tecla SD del control remoto— sale también, aunque el archivo
+     de Producto no la listaba para esta referencia y sí para la 108A2. Sin
+     lector, esa tecla no selecciona nada: que no apareciera en el archivo dice
+     que la fábrica no llegó a marcarla, no que aplique. */
+  "HK-ARC106A2": ["mic1_echo","mic2_priority","mic2_volume","mic2_echo",
+                  "mic2_reverb","word_sd","src_sd","switch"],
+
+  /* Igual que la 106A2. */
+  "HK-ARC108A2": ["mic1_echo","mic2_priority","mic2_volume","mic2_echo",
+                  "mic2_reverb","word_sd","src_sd","switch"],
+
+  /* Los Brava llevan los dos micrófonos pero ninguno con reverberación, y no
+     tienen selector de batería. */
+  "HK-BRA208B1": ["mic1_reverb","mic2_reverb","guitar",
+                  "tripode_front","tripode_back","switch"],
+  "HK-BRA210A1": ["mic1_reverb","mic2_reverb","switch"],
+  "HK-BRA212B1": ["mic1_reverb","mic2_reverb","switch"]
 };
 const puntoFuera = id => !!id && (PUNTOS_FUERA[S.model] || []).indexOf(id) >= 0;
 
@@ -12935,6 +12978,49 @@ function pointsTable(b){
     return `<span class="na">—</span>`;
   };
 
+  /* Lo que el inspector escribió, debajo del punto: el motivo de un N/A y la
+     descripción de una falla.
+
+     Hasta el plan 187 la tabla de puntos imprimía la etiqueta y la marca y nada
+     más. La descripción de una falla sí salía, pero sólo en la sección de
+     hallazgos, al final; y el motivo de un N/A no salía en ninguna parte —ni en
+     la tabla ni en los hallazgos, que sólo recorren los puntos en FAIL—. Así
+     que ese motivo, que la app exige y que bloquea el botón SIGUIENTE hasta que
+     esté escrito, se quedaba dentro del teléfono. Quien abría el informe veía
+     «N/A» a secas y tenía que llamar a preguntar, que es justamente lo que el
+     campo existe para evitar.
+
+     Las dos van juntas porque la pregunta de quien lee es la misma —«¿y esto
+     por qué?»— y la respuesta tiene que estar donde está la marca, no treinta
+     renglones más abajo. La falla queda dicha dos veces, aquí en corto y en los
+     hallazgos con su código y su foto; es el precio de que se lea al pasar.
+
+     Se agrupa por texto y no por unidad: cuando tres parlantes comparten el
+     mismo motivo —y lo normal es que lo compartan, porque la razón suele ser
+     que el producto no trae la función— imprimirlo tres veces alarga la tabla
+     sin decir nada nuevo. Si dos unidades dijeron cosas distintas, salen las
+     dos. */
+  function razonLines(bi, pointId){
+    const vistos = [], out = [];
+    let hayFail = false;
+    allUnits().forEach(u => {
+      const r = (S.data[u] || [])[bi];
+      if(!r) return;
+      const v = r.points[pointId];
+      if(v !== "NA" && v !== "FAIL") return;
+      const n = ((r.notes && r.notes[pointId]) || "").trim();
+      if(!n) return;
+      const clave = v + "|" + n;
+      if(vistos.indexOf(clave) >= 0) return;
+      vistos.push(clave);
+      if(v === "FAIL") hayFail = true;
+      out.push(`<b>${esc(v === "FAIL" ? tr("fail") : tr("na_why"))}:</b> ` +
+               esc(n) + trSpans(r, "note", pointId));
+    });
+    if(!out.length) return "";
+    return `<div class="na-l${hayFail ? " f" : ""}">${out.join("<br>")}</div>`;
+  }
+
   let rows = "";
   secs.forEach(sec => {
     if(sec.name)
@@ -12958,7 +13044,7 @@ function pointsTable(b){
         }
       }
       rows += `<tr><td>${esc(pLab(p, b.t))}${changeMark(b.i, p.id)}${
-        changeLines(b.i, p.id)}</td>${cells}</tr>`;
+        changeLines(b.i, p.id)}${razonLines(b.i, p.id)}</td>${cells}</tr>`;
     });
   });
   if(!rows) return "";
@@ -13074,6 +13160,15 @@ body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;
 .bnr-r{padding:8px 14px;text-align:center;min-width:130px}
 .bnr-r span{display:block;font-size:8pt;color:#5a6b7d}
 .bnr-r b{font-size:12pt}
+/* Lo escrito por el inspector, bajo el nombre del punto en la tabla: el motivo
+   de un N/A en gris, y la descripción de una falla en rojo. El color es lo que
+   permite recorrer la columna con la vista y encontrar las fallas sin leerla
+   entera. */
+.na-l{font-size:8pt;color:#5a6b7d;line-height:1.45;margin:2px 0 0;
+  padding-left:9px;border-left:2px solid #d5dde6}
+.na-l>b{color:#33475b;font-weight:700}
+.na-l.f{color:#7a5a52;border-left-color:#c0392b}
+.na-l.f>b{color:#a3271b}
 /* La franja del documento de prueba (código 123). Roja, con relleno, y no una
    línea de texto más: tiene que leerse antes que el membrete. */
 .tstbnr{border:2pt solid #c0392b;background:#fdf3f1;padding:9px 13px;
@@ -13991,7 +14086,24 @@ function reportCsv(){
         if(v === "FAIL"){ code = p.code || ""; desc = codeText(p.code); }
         // A failed point carries its own count and its own note; anything else
         // reports the test-level evidence.
-        if(v !== "FAIL"){ photos = r.media.filter(m => !m.slot).length; note = ""; }
+        /* Y el N/A también carga la suya, desde el plan 187. Esta línea borraba
+           la nota de todo punto que no fuera FAIL, y se escribió cuando la nota
+           de un punto sólo podía ser la descripción de una falla. El motivo del
+           N/A reutiliza ese mismo campo a propósito —así no se duplican la
+           traducción, la ficha ni las columnas—, de modo que al llegar aquí se
+           borraba: la app lo exigía, el inspector lo escribía, la pantalla lo
+           mostraba, y el CSV salía en blanco.
+
+           Se vio en un archivo de Producto con cinco órdenes de YISION: los
+           puntos de micrófono, el selector de batería y el texto de SD figuran
+           «sin razón escrita», mientras que TARJETA SD sí la trae — porque ahí
+           la prueba entera iba en N/A y el motivo vive en el comentario de la
+           prueba, que esta línea no toca y que el `|| r.comment` de abajo
+           rescata. */
+        if(v !== "FAIL"){
+          photos = r.media.filter(m => !m.slot).length;
+          if(v !== "NA") note = "";
+        }
       }
 
       // Both columns describe the same note: the original as the inspector

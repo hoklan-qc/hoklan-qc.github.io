@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="20.8">
+<meta name="app-version" content="20.9">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -1006,7 +1006,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 187,
+      "plan_version": 188,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -9476,7 +9476,8 @@ const T = {
   videos_n:"%n video(s) recorded, held on the phone and not embedded in this report.",
   concl_fail:"%n point(s) failed. See sections III and IV.",
   nc_found:"NONCONFORMITIES FOUND",
-  tests_ok:"TESTS PASSED", test_evidence:"evidence of the test",
+  tests_ok:"TESTS PASSED", tests_run:"TESTS CARRIED OUT",
+  test_evidence:"evidence of the test",
   speaker_short:"S%n", speaker_short_les:"Set %n",
   time_start:"Start time", time_end:"End time", duration:"Duration",
   dur_hm:"%h h %m min", dur_m:"%m min",
@@ -9774,7 +9775,8 @@ const T = {
   videos_n:"%n video(s) grabados, guardados en el teléfono y no incrustados en este informe.",
   concl_fail:"%n punto(s) fallaron. Véanse las secciones III y IV.",
   nc_found:"NO CONFORMIDADES ENCONTRADAS",
-  tests_ok:"PRUEBAS APROBADAS", test_evidence:"evidencia de la prueba",
+  tests_ok:"PRUEBAS APROBADAS", tests_run:"PRUEBAS REALIZADAS",
+  test_evidence:"evidencia de la prueba",
   speaker_short:"P%n", speaker_short_les:"Juego %n",
   time_start:"Hora de inicio", time_end:"Hora de finalización", duration:"Duración",
   dur_hm:"%h h %m min", dur_m:"%m min",
@@ -10055,7 +10057,8 @@ const T = {
   videos_n:"已录制 %n 个视频，保存在手机中，未嵌入本报告。",
   concl_fail:"共 %n 项异常，详见第 III、IV 节。",
   nc_found:"发现的异常项",
-  tests_ok:"合格的测试", test_evidence:"该测试的证据",
+  tests_ok:"合格的测试", tests_run:"已执行的测试",
+  test_evidence:"该测试的证据",
   speaker_short:"%n 号", speaker_short_les:"第 %n 套",
   time_start:"开始时间", time_end:"结束时间", duration:"用时",
   dur_hm:"%h 小时 %m 分", dur_m:"%m 分",
@@ -13752,15 +13755,29 @@ ${runId()}
      was printed under the heading TESTS PASSED. A speaker with no SD slot came
      out of the inspection with its SD test certified. Not applicable is not a
      result, and it now has a list of its own below. */
-  const okV = blocksV.filter(b =>
-    b.verdict && b.verdict !== "FAIL" && b.verdict !== "N/A");
-  const naV = blocksV.filter(b => b.verdict === "N/A");
+  /* Desde el plan 188 esta sección lista también las pruebas con falla, y por
+     eso dejó de llamarse «pruebas conformes».
 
-  if(okV.length){
+     La tabla de puntos cuelga de aquí y de ningún otro sitio. Mientras las
+     pruebas con falla quedaron fuera, sus puntos no se imprimían en ninguna
+     parte del informe: de una prueba no conforme se veía qué falló —en III y en
+     IV, con su código y sus fotos— y nada más. Lo que pasó, lo que no aplicaba
+     y por qué, se quedaba sin imprimir. Y es justamente la prueba que alguien
+     va a discutir.
+
+     Lo que sigue sin repetirse es la evidencia: las fotos y los videos de una
+     prueba con falla ya están en IV, y `detailV` se arma sólo con las que
+     pasaron. Lo que entra aquí es el renglón de la prueba y su tabla de puntos,
+     que no existían en otro lado. */
+  const runV = blocksV.filter(b => b.verdict && b.verdict !== "N/A");
+  const okV  = runV.filter(b => b.verdict !== "FAIL");
+  const naV  = blocksV.filter(b => b.verdict === "N/A");
+
+  if(runV.length){
     h += `<div class="brk"></div>${runId()}
-      <div class="sec"><i>V</i><b>${tr("tests_ok")}</b></div>`;
+      <div class="sec"><i>V</i><b>${tr("tests_run")}</b></div>`;
 
-    okV.forEach(b => {
+    runV.forEach(b => {
       /* Everything the test carries, across every speaker. A test with no
          evidence at all still gets its line: the reader has to be able to see
          that it was run and what it came out at. */
@@ -13782,7 +13799,13 @@ ${runId()}
         <td class="k">${testTag(b.t)}${esc(L(b.t.label))}${
           okTime ? `<div class="ttime">${esc(okTime)}</div>` : ""}</td>
         <td class="v">
-          <div><span class="${verdictClass(b.verdict === "PASS" ? "PASS" : "N/A")}">${
+          ${/* NO CONFORME se pinta como lo que es desde el plan 188. Antes
+                cualquier cosa que no fuera PASS caía en el estilo de N/A, y
+                como aquí no entraban las pruebas con falla, daba igual. Ahora
+                entran: un rótulo rojo marcado como «no aplica» en gris sería
+                peor que no listarlas. */""}
+          <div><span class="${verdictClass(
+            b.verdict === "PASS" ? "PASS" : b.verdict === "FAIL" ? "FAIL" : "N/A")}">${
             verdictText(b.verdict)}</span>${bits.length ? " · " + bits.join(" · ") : ""}</div>
           ${b.reads.map(x => `<div>${esc(x.label)}${
             S.units>1 ? " · " + fmt("speaker_n",{n:x.u+1}) : ""

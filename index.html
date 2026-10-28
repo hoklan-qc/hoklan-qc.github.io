@@ -12,7 +12,7 @@
      truth — APP_VERSION reads it — so there is one number to bump, not two.
      It is not printed anywhere: neither on screen nor in the report. This tag
      is where it is meant to be read. -->
-<meta name="app-version" content="20.9">
+<meta name="app-version" content="21.0">
 <title>HOKLAN QC</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1a2c'/><text y='68' x='50' font-size='52' text-anchor='middle' fill='%232ea3f2' font-family='sans-serif' font-weight='bold'>QC</text></svg>">
 <style>
@@ -1006,7 +1006,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 188,
+      "plan_version": 189,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -4464,7 +4464,23 @@ const CONFIG = {
            lo dejaban fuera. El KAP208 sigue excluido a propósito — se probará
            primero en el 206, y cuando sirva se le quita también.
            ------------------------------------------------------------------ */
-        {/* Video en cada punto, y ninguno general al final. Vale para las doce
+        {/* Plan 189. Sólo existe en las órdenes de `only_po`, para cualquier referencia.
+    El sonido de referencia se sube como audio/sonido_encendido_<orden>.mp3 o .wav. */
+ "id":"PWR_SOUND","optional":false,"numbered":true,"no_comment":true,"only_factory":["RHY","YIS"],"evidence":[],
+ "only_po":["1718","1719"],
+ "label":{"en":"POWER-ON SOUND","zh":"开机提示音","es":"SONIDO DE ENCENDIDO"},
+ "steps":[
+  {"en":"Play the reference sound below","zh":"先播放下方的参考声音","es":"Reproduzca el sonido de referencia de abajo"},
+  {"en":"With the speaker off and plugged in, switch it on and listen to the whole start-up from one metre","zh":"音箱关机并接通电源，开机后在一米处听完整个开机过程","es":"Con el parlante apagado y conectado, enciéndalo y escuche todo el arranque a un metro"},
+  {"en":"Switch it off and on a second time to confirm","zh":"关机后再开机一次以确认","es":"Apáguelo y enciéndalo una segunda vez para confirmar"}],
+ "points":[
+  {"id":"snd_on_plays","tag":"ON/OFF","code":"PWR-020",
+   "label":{"en":"A sound plays at power-on","zh":"开机时有提示音","es":"Suena un sonido al encender"},
+   "help":{"en":"From off, switch the speaker on. A sound must play on its own, without pressing anything else.","zh":"在关机状态下开机，应自动播放提示音，无需按其他按键。","es":"Desde apagado, encienda el parlante. Debe sonar un sonido por sí solo, sin pulsar nada más."}},
+  {"id":"snd_on_match","tag":"ON/OFF","code":"PWR-021","audio_po":"sonido_encendido","video":true,
+   "label":{"en":"It is the same sound as the reference","zh":"与参考声音一致","es":"Es el mismo sonido de la referencia"},
+   "help":{"en":"Play the reference here, then switch the speaker on and compare: same melody or voice, similar length. Any sound is not enough: a speaker with the wrong firmware also starts with one. Record the power-on from one metre, speaker in frame, until the sound ends: HOKLAN compares it against the reference.","zh":"先在此播放参考声音，再开机比对：旋律或语音相同，时长相近。有声音并不代表合格：固件错误的音箱开机同样会有声音。请在一米处录制开机过程，音箱入镜，直到提示音结束：HOKLAN 将与参考声音比对。","es":"Reproduzca aquí la referencia, encienda el parlante y compare: misma melodía o voz y duración parecida. No basta con que suene algo: un parlante con el firmware equivocado también arranca con un sonido. Grabe el encendido a un metro, con el parlante en cuadro, hasta que termine el sonido: HOKLAN lo compara con la referencia."}}]},
+{/* Video en cada punto, y ninguno general al final. Vale para las doce
               secciones de este plan, a petición de HOKLAN: un clip por prueba
               dice qué se hizo en esa prueba, y uno solo al final del bloque no
               dice de cuál de las seis habla. `point_video` lo pide para todos
@@ -9398,7 +9414,7 @@ const T = {
      unit already in hand — the long version was skipped. */
   ask_video_les:"one continuous take, no cuts, going through the points in the order above. Frame the microphone, your hands and the LED.",
   need_video_les:"A video of the microphone is required, pass or fail: one take covering the points above.",
-  po_ph:"Order number this shipment belongs to",
+  po_ph:"Order number this shipment belongs to", po_extra:"This order has %n additional HOKLAN test(s).",
   operator_ph:"Who is running the inspection", next_po:"Order no. %p · %o",
   acct_admin:"HOKLAN ADMIN",
   dev_group:"IN DEVELOPMENT · not in production",
@@ -9691,7 +9707,7 @@ const T = {
   ask_photo:"el proceso y las herramientas usadas: memoria USB, tarjeta SD, batería, cables, teléfono.",
   ask_video_les:"una sola toma continua, sin cortes, recorriendo los puntos en el orden de arriba. Encuadre el micrófono, sus manos y el LED.",
   need_video_les:"Se requiere un video del micrófono, apruebe o falle: una toma que recorra los puntos de arriba.",
-  po_ph:"Número de orden al que pertenece el despacho",
+  po_ph:"Número de orden al que pertenece el despacho", po_extra:"Esta orden tiene %n prueba(s) adicional(es) de HOKLAN.",
   operator_ph:"Quién ejecuta la inspección", next_po:"OC %p · %o",
   acct_admin:"ADMIN HOKLAN",
   dev_group:"EN DESARROLLO · sin producción",
@@ -9979,7 +9995,7 @@ const T = {
   ask_photo:"拍摄操作过程和所用工具：U 盘、SD 卡、电池、线材、手机。",
   ask_video_les:"一镜到底，中途不停，按上方顺序逐项演示。画面需拍到麦克风、双手和指示灯。",
   need_video_les:"无论合格与否，本项需一段麦克风的视频：一镜拍完上方各检查项。",
-  po_ph:"本批货所属的订单号",
+  po_ph:"本批货所属的订单号", po_extra:"本订单另有 %n 项 HOKLAN 附加测试。",
   operator_ph:"由谁执行本次检验", next_po:"订单号 %p · %o",
   acct_admin:"HOKLAN 管理端",
   dev_group:"开发中 · 尚未量产",
@@ -10438,11 +10454,11 @@ const TEST_NO = {
   KAP_MODULE_AUDIO:104, KAP_FM_MODULE:105, LEAK_CURRENT:106,
   OUT_120HZ:107, MIC_POS:108, EPS15_PREV:109,
   GS_POWER:110, GS_DRIVERS:111, GS_BATTERY:112, GS_RF:113, GS_MECH:114,
-  GS_FW:115, GS_LAB:116, GS_DOCS:117, KNOB_ALIGN:118, PHONE_TEST:119
+  GS_FW:115, GS_LAB:116, GS_DOCS:117, KNOB_ALIGN:118, PHONE_TEST:119, PWR_SOUND:120
 };
 /* El siguiente número libre. Está aquí para que quien agregue una prueba no
    tenga que contar: es 79 y sube de uno en uno. */
-const NEXT_TEST_NO = 120;
+const NEXT_TEST_NO = 121;
 
 /* En las referencias de desarrollo la numeración es otra, y a propósito.
 
@@ -10471,7 +10487,7 @@ const testTag = t => { const n = testNo(t); return n ? "#" + n + " · " : ""; };
    tercera sección. Sólo en desarrollo, que es donde se pide un punto por su
    número; en producción los puntos se nombran por lo que dicen. */
 function pointNo(t, p){
-  if(!t || !p || !p.id || !isDevRef(S.model)) return "";
+  if(!t || !p || !p.id || !(isDevRef(S.model) || t.numbered)) return "";
   const n = testNo(t);
   if(!n) return "";
   const i = realPoints(t).indexOf(p);
@@ -10492,6 +10508,8 @@ function pointNo(t, p){
 const wantsPhoto = (p, t) => !!(p && (p.photo || (t && t.point_photo)));
 const wantsVideo = (p, t) => !!(p && (p.video || (t && t.point_video)));
 
+/* Los dígitos de una orden, para comparar órdenes escritas de formas distintas. */
+const orderDigits = v => String(v || "").replace(/\D/g, "");
 function fits(o){
   /* `golden` marca lo que sólo existe bajo el código 205. No se resuelve por
      fábrica porque no es de una fábrica: es de un momento — la muestra patrón,
@@ -10515,6 +10533,11 @@ function fits(o){
      aparece. Va antes que todo lo demás: si el producto no lleva la pieza, no
      hay fábrica ni código que la haga aparecer. */
   if(puntoFuera(o.id)) return false;
+  /* Pruebas que sólo existen para ciertas órdenes de compra, plan 189. La
+     orden se compara por sus dígitos, igual que la guarda start(): «1718»,
+     «PO-1718» y «OC 1718» son la misma. Sin orden escrita todavía —la pantalla
+     de inicio, una asignación del 800, el código 205— la prueba no existe. */
+  if(o.only_po && o.only_po.map(orderDigits).indexOf(orderDigits(S.po)) < 0) return false;
   if(o.only && o.only.indexOf(S.model) < 0) return false;
   if(o.skip && o.skip.indexOf(S.model) >= 0) return false;
   /* Bajo el código de golden samples la fábrica que filtra no es la que tecleó
@@ -16148,11 +16171,12 @@ function renderSetup(){
         style="color:var(--muted);background:#0a1523">`
       : `<input id="po" value="${esc(S.po)}" placeholder="${tr("po_ph")}"
         inputmode="numeric" maxlength="12" minlength="${PO_MIN}" autocomplete="off"
-        oninput="onlyDigits(this)">
+        oninput="onlyDigits(this);poExtra(this.value)">
       ${/* Said before the operator types, not only after pressing START. An
             alert that explains a rule nobody was told is a rule discovered by
             being stopped. */""}
-      <p class="hint" style="margin-top:6px">${fmt("po_min_hint",{n:PO_MIN})}</p>`}
+      <p class="hint" style="margin-top:6px">${fmt("po_min_hint",{n:PO_MIN})}</p>
+      <p class="hint" id="poExtra" style="margin-top:4px;color:var(--amber)">${poExtraText(S.po)}</p>`}
       ${enGolden() || enTest() ? "" : `<label>${tr("operator")}</label>
       <input id="operator" value="${esc(S.operator)}" maxlength="40"
         placeholder="${tr("operator_ph")}"
@@ -16231,6 +16255,18 @@ function filterInput(el, re){
   try{ el.setSelectionRange(Math.max(0, at - back), Math.max(0, at - back)); }
   catch(e){}
 }
+/* El aviso debajo del campo de la orden. Una orden mal escrita no da error:
+   simplemente la prueba no aparece. Por eso se dice en voz alta cuando sí la
+   tiene, antes de EMPEZAR: si el inspector no ve el aviso, sabe que algo no
+   cuadra. Cuenta las pruebas por orden de todo el catálogo, no de la
+   referencia elegida, porque el campo se llena antes o después del selector. */
+function poExtraText(v){
+  const d = orderDigits(v);
+  if(!d) return "";
+  const n = plan().tests.filter(t => t.only_po && t.only_po.map(orderDigits).indexOf(d) >= 0).length;
+  return n ? fmt("po_extra",{n}) : "";
+}
+function poExtra(v){ const el = document.getElementById("poExtra"); if(el) el.textContent = poExtraText(v); }
 function onlyDigits(el){ filterInput(el, /[^0-9]/g); }
 // Letters of any script, plus what a person's name legitimately contains.
 function onlyLetters(el){ filterInput(el, /[^\p{L}\p{M} .'’-]/gu); }
@@ -16631,11 +16667,17 @@ function mediaBlock(r){
    está, el navegador deja el control muerto en vez de romper nada — pero eso no
    debería pasar: los nombres se comprueban en la auditoría, como las imágenes. */
 function audioBox(p){
-  if(!p.audio) return "";
+  /* `audio_po` nombra el sonido por la orden: el archivo es
+     audio/<nombre>_<orden>.mp3 (o .wav), porque el sonido de encendido puede ser
+     distinto en cada orden. Si dos órdenes usan el mismo, se sube dos veces.
+     Desde el plan 189 se acepta WAV además de mp3: el navegador prueba las dos
+     fuentes en orden y usa la primera que exista. */
+  const name = p.audio_po ? p.audio_po + "_" + orderDigits(S.po) : p.audio;
+  if(!name) return "";
+  const base = REF_AUDIO_DIR + encodeURIComponent(name);
   return `<div class="aud">
     <b>${tr("audio_ref")}</b>
-    <audio controls preload="metadata"
-      src="${REF_AUDIO_DIR}${encodeURIComponent(p.audio)}.mp3"></audio>
+    <audio controls preload="metadata"><source src="${base}.mp3" type="audio/mpeg"><source src="${base}.wav" type="audio/wav"></audio>
   </div>`;
 }
 function sampleBox(p){
@@ -17094,7 +17136,7 @@ function renderTest(){
         (shared.comment||"").trim()?tr("na_why_ready"):tr("na_why_required")}</div>
       <div class="pna-undo"><button onclick="toggleTestNA()">${
         tr("na_undo_test")}</button></div>
-    </div>` : `<div class="card">
+    </div>` : t.no_comment ? "" : `<div class="card">
       <label style="margin-top:0">${tr("notes")} ${tr("optional")}</label>
       <textarea id="comment" placeholder="${tr("notes_ph")}"
         oninput="commentTyped(this.value)">${esc(shared.comment)}</textarea>
@@ -17530,7 +17572,7 @@ function renderPhotoTest(t, r, done, total){
         (r.comment||"").trim()?tr("na_why_ready"):tr("na_why_required")}</div>
       <div class="pna-undo"><button onclick="toggleTestNA()">${
         tr("na_undo_test")}</button></div>
-    </div>` : `<div class="card">
+    </div>` : t.no_comment ? "" : `<div class="card">
       <label style="margin-top:0">${tr("notes")} ${tr("optional")}</label>
       <textarea id="comment" placeholder="${tr("notes_ph")}"
         oninput="commentTyped(this.value)">${esc(r.comment)}</textarea>

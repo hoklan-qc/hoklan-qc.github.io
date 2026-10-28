@@ -1006,7 +1006,7 @@ const CONFIG = {
 
   "plans": {
     "default": {
-      "plan_version": 189,
+      "plan_version": 190,
       "tests": [
         /* ------------------------------------------------------------------
            RHYME: mains-powered cabinets.
@@ -4464,7 +4464,7 @@ const CONFIG = {
            lo dejaban fuera. El KAP208 sigue excluido a propósito — se probará
            primero en el 206, y cuando sirva se le quita también.
            ------------------------------------------------------------------ */
-        {/* Plan 189. Sólo existe en las órdenes de `only_po`, para cualquier referencia.
+        {/* Plan 189; desde el plan 190 con un solo punto, el de la comparación con video. Sólo existe en las órdenes de `only_po`, para cualquier referencia.
     El sonido de referencia se sube como audio/sonido_encendido_<orden>.mp3 o .wav. */
  "id":"PWR_SOUND","optional":false,"numbered":true,"no_comment":true,"only_factory":["RHY","YIS"],"evidence":[],
  "only_po":["1718","1719"],
@@ -4474,9 +4474,6 @@ const CONFIG = {
   {"en":"With the speaker off and plugged in, switch it on and listen to the whole start-up from one metre","zh":"音箱关机并接通电源，开机后在一米处听完整个开机过程","es":"Con el parlante apagado y conectado, enciéndalo y escuche todo el arranque a un metro"},
   {"en":"Switch it off and on a second time to confirm","zh":"关机后再开机一次以确认","es":"Apáguelo y enciéndalo una segunda vez para confirmar"}],
  "points":[
-  {"id":"snd_on_plays","tag":"ON/OFF","code":"PWR-020",
-   "label":{"en":"A sound plays at power-on","zh":"开机时有提示音","es":"Suena un sonido al encender"},
-   "help":{"en":"From off, switch the speaker on. A sound must play on its own, without pressing anything else.","zh":"在关机状态下开机，应自动播放提示音，无需按其他按键。","es":"Desde apagado, encienda el parlante. Debe sonar un sonido por sí solo, sin pulsar nada más."}},
   {"id":"snd_on_match","tag":"ON/OFF","code":"PWR-021","audio_po":"sonido_encendido","video":true,
    "label":{"en":"It is the same sound as the reference","zh":"与参考声音一致","es":"Es el mismo sonido de la referencia"},
    "help":{"en":"Play the reference here, then switch the speaker on and compare: same melody or voice, similar length. Any sound is not enough: a speaker with the wrong firmware also starts with one. Record the power-on from one metre, speaker in frame, until the sound ends: HOKLAN compares it against the reference.","zh":"先在此播放参考声音，再开机比对：旋律或语音相同，时长相近。有声音并不代表合格：固件错误的音箱开机同样会有声音。请在一米处录制开机过程，音箱入镜，直到提示音结束：HOKLAN 将与参考声音比对。","es":"Reproduzca aquí la referencia, encienda el parlante y compare: misma melodía o voz y duración parecida. No basta con que suene algo: un parlante con el firmware equivocado también arranca con un sonido. Grabe el encendido a un metro, con el parlante en cuadro, hasta que termine el sonido: HOKLAN lo compara con la referencia."}}]},
